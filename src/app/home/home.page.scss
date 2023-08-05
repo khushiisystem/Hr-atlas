@@ -1,0 +1,149 @@
+button {
+    background-color: #fafafa;
+    color: #0a0a0a;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+button.running {
+    background-color: #0d0c0c;
+}
+
+ion-icon.running {
+    color: rgb(255, 106, 0);
+}
+
+span.stopwatch-time {
+    color: #0c0c0c;
+}
+
+.add-employees-button {
+    color: white;
+}
+
+ion-row {
+    ion-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .icon-title {
+        margin-top: 5px;
+        font-size: 14px;
+    }
+}
+
+ion-row {
+    ion-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        text-align: center;
+        height: 100%;
+    }
+    .icon-title {
+        margin-top: 5px;
+        font-size: 14px;
+    }
+    .box {
+        width: 40px;
+        height: 4px;
+        background-color: #000;
+        margin-top: 5px;
+    }
+}
+
+.icon-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    /* Align items at the bottom */
+    text-align: center;
+    /* Adjust alignment as per your requirement */
+    height: 10%;
+    /* Set a fixed height for the columns */
+    padding: 0;
+}
+
+.icon-button:focus {
+    outline: none;
+}
+
+.icon-button ion-icon {
+    color: #000;
+    /* Set the desired color for the icons */
+}
+
+.box {
+    width: 40px;
+    /* Adjust width as per your requirement */
+    height: 4px;
+    /* Adjust height as per your requirement */
+    background-color: #e5d5d5;
+    /* Adjust background color as per your requirement */
+    margin-top: 5px;
+    /* Add margin to adjust spacing between title and box */
+}
+
+
+/* your-component.scss */
+
+.horizontal-line {
+    height: 1px;
+    /* Set the height of the line */
+    background-color: #000;
+    /* Set the color of the line */
+    margin: 10px 0;
+    /* Set the margin to create spacing around the line */
+}
+
+.bottom-buttons-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.bottom-buttons-row {
+    display: flex;
+    width: 100%;
+}
+
+.bottom-button {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.icon-title {
+    margin-top: 5px;
+    /* Add margin to adjust spacing between icon and title */
+    font-size: 3px;
+    /* Adjust font size as per your requirement */
+}
+
+.custom-button {
+    --background: rgb(255, 106, 0);
+    --color: #fff;
+}
+
+.bottom-card {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: rgb(255, 255, 255);
+    height: center;
+    box-sizing: border-box;
+}
