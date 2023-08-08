@@ -1,110 +1,127 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-
-
+import { AddempPage } from './components/addemp/addemp.page';
+import { AttendancePage } from './components/attendance/attendance.page';
+import { LeavesPage } from './components/leaves/leaves.page';
+import { PayrollPage } from './components/payroll/payroll.page';
+import { ProfilePage } from './components/profile/profile.page';
+import { SettingsPage } from './components/settings/settings.page';
+import { DirectoryPage } from './components/directory/directory.page';
+import { BiopagePage } from './components/biopage/biopage.page';
+import { PersonalpagePage } from './components/personalpage/personalpage.page';
+import { WorkpagePage } from './components/workpage/workpage.page';
+import { TeampagePage } from './components/teampage/teampage.page';
+import { WeekpagePage } from './components/weekpage/weekpage.page';
+import { UserPage } from './components/user/user.page';
+import { AttendanceSetupPage } from './components/attendance-setup/attendance-setup.page';
+import { LeaveSetupPage } from './components/leave-setup/leave-setup.page';
+import { PayrollSetupPage } from './components/payroll-setup/payroll-setup.page';
+import { AdditionalSetupPage } from './components/additional-setup/additional-setup.page';
+import { LOGSPage } from './components/logs/logs.page';
+import { LeaveadminPage } from './components/leaveadmin/leaveadmin.page';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    path: '',
+    loadChildren: () => import('./share/share.module').then( m => m.SharePageModule)
   },
- 
   {
-    path: 'login',
-    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+    path: '',
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
     path: 'addemp',
-    loadChildren: () => import('./addemp/addemp.module').then( m => m.AddempPageModule)
+    component: AddempPage
   },
   {
     path: 'attendance',
-    loadChildren: () => import('./attendance/attendance.module').then( m => m.AttendancePageModule)
+    component: AttendancePage
   },
   {
     path: 'leaves',
-    loadChildren: () => import('./leaves/leaves.module').then( m => m.LeavesPageModule)
+    component: LeavesPage
   },
   {
     path: 'payroll',
-    loadChildren: () => import('./payroll/payroll.module').then( m => m.PayrollPageModule)
+    component: PayrollPage
   },
   {
     path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+    component: ProfilePage
   },
   {
     path: 'settings',
-    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+    component: SettingsPage
   },
   {
     path: 'directory',
-    loadChildren: () => import('./directory/directory.module').then( m => m.DirectoryPageModule)
+    component: DirectoryPage
   },
   {
     path: 'biopage',
-    loadChildren: () => import('./biopage/biopage.module').then( m => m.BiopagePageModule)
+    component: BiopagePage
   },
   {
     path: 'personalpage',
-    loadChildren: () => import('./personalpage/personalpage.module').then( m => m.PersonalpagePageModule)
+    component: PersonalpagePage
   },
   {
     path: 'workpage',
-    loadChildren: () => import('./workpage/workpage.module').then( m => m.WorkpagePageModule)
+    component: WorkpagePage
   },
   {
     path: 'teampage',
-    loadChildren: () => import('./teampage/teampage.module').then( m => m.TeampagePageModule)
+    component: TeampagePage
   },
   {
     path: 'weekpage',
-    loadChildren: () => import('./weekpage/weekpage.module').then( m => m.WeekpagePageModule)
+    component: WeekpagePage
   },
   {
     path: 'personalpage',
-    loadChildren: () => import('./personalpage/personalpage.module').then( m => m.PersonalpagePageModule)
+    component: PersonalpagePage
   },{
     path: 'user',
-    loadChildren: () => import('./user/user.module').then( m => m.UserPageModule)
+    component: UserPage
   },
   {
     path: 'attendance-setup',
-    loadChildren: () => import('./attendance-setup/attendance-setup.module').then( m => m.AttendanceSetupPageModule)
+    component: AttendanceSetupPage
   },
   {
     path: 'leave-setup',
-    loadChildren: () => import('./leave-setup/leave-setup.module').then( m => m.LeaveSetupPageModule)
+    component: LeaveSetupPage
   },
   {
     path: 'payroll-setup',
-    loadChildren: () => import('./payroll-setup/payroll-setup.module').then( m => m.PayrollSetupPageModule)
+    component: PayrollSetupPage
   },
   {
     path: 'additional-setup',
-    loadChildren: () => import('./additional-setup/additional-setup.module').then( m => m.AdditionalSetupPageModule)
+    component: AdditionalSetupPage
   },
   {
     path: 'logs',
-    loadChildren: () => import('./logs/logs.module').then( m => m.LOGSPageModule)
+    component: LOGSPage
   },
   {
     path: 'leaveadmin',
-    loadChildren: () => import('./leaveadmin/leaveadmin.module').then( m => m.LeaveadminPageModule)
+    component: LeaveadminPage
   },
- 
-  
+  {
+    path: 'tab4',
+    loadChildren: () => import('./tab4/tab4.module').then( m => m.Tab4PageModule)
+  },
 ];
-
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

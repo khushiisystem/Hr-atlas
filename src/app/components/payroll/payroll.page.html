@@ -1,0 +1,68 @@
+<ion-content>
+    <ion-header [translucent]="true">
+        <ion-toolbar color="dark">
+            <ion-buttons slot="start" (click)="goBackpage()">
+                <ion-button>
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
+            <ion-title>Payroll</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true" color="dark">
+        <ion-content color="dark">
+            <ion-list style="background-color: aliceblue;">
+                <ion-item color="dark">
+                    <ion-label>Select Year and Month</ion-label>
+                    <!-- <ion-select [(ngModel)]="selectedYear" (ionChange)="calculateSalary()">
+                        <ion-select-option value="2023">2023</ion-select-option>
+                        <ion-select-option value="2024">2024</ion-select-option>
+                    </ion-select>
+                    <ion-select [(ngModel)]="selectedMonth" (ionChange)="calculateSalary()">
+                        <ion-select-option value="1">January</ion-select-option>
+                        <ion-select-option value="2">February</ion-select-option>
+                        <ion-select-option value="3">March</ion-select-option>
+                        <ion-select-option value="4">April</ion-select-option>
+                        <ion-select-option value="5">May</ion-select-option>
+                        <ion-select-option value="6">June</ion-select-option>
+                        <ion-select-option value="7">July</ion-select-option>
+                        <ion-select-option value="8">August</ion-select-option>
+                        <ion-select-option value="9">September</ion-select-option>
+                        <ion-select-option value="10">October</ion-select-option>
+                        <ion-select-option value="11">November</ion-select-option>
+                        <ion-select-option value="12">December</ion-select-option>
+                    </ion-select> -->
+                </ion-item>
+            </ion-list>
+
+            <ion-card *ngIf="salaryReceipt" color="dark">
+                <ion-card-header>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col size="2">
+                                <img src="./assets/images/5.png" alt="Photo">
+                            </ion-col>
+                            <ion-col>
+                                <ion-card-title>Spundan Consultancy & IT Solutions Pvt Ltd</ion-card-title>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <ion-card-subtitle>
+                        3rd Floor, 315.Sai, Ram Plaza, 63 Mangal Nagar Road, Vishru Pari Colony Indor, Madhya Pradesh-152001
+                    </ion-card-subtitle>
+                    <ion-card-subtitle>CIN: U72200MP2011PTC025132</ion-card-subtitle>
+
+                    <ion-card-content>{{ selectedMonthName }} {{ selectedYear }}</ion-card-content>
+                </ion-card-header>
+
+                <ion-card-content style="background-color: aliceblue;">
+                    <p>Working Days: {{ workingDays }}</p>
+                    <p>Salary: {{ salary }}</p>
+                </ion-card-content>
+            </ion-card>
+
+            <ion-button (click)="downloadReceipt()" expand="full">Download Receipt</ion-button>
+        </ion-content>
+    </ion-content>
+</ion-content>

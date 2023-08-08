@@ -1,0 +1,46 @@
+<ion-content>
+    <ion-header [translucent]="true">
+        <ion-toolbar color="dark">
+            <ion-buttons slot="start" (click)="goBack()">
+                <ion-button>
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+
+                </ion-button>
+            </ion-buttons>
+            <ion-title>Attendance setup
+            </ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content [fullscreen]="true" color="dark">
+        <ion-header collapse="condense">
+
+        </ion-header>
+        <ion-card>
+            <ion-card-header>
+                <ion-card-title>Attendance</ion-card-title>
+            </ion-card-header>
+            <!-- <ion-card-content>
+                <ion-list>
+                    <ion-item>
+                        <ion-label> Clock In: {{ clockInTime | date: 'HH:mm' }}</ion-label>
+
+                        <ion-input [(ngModel)]="clockInTime"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label> Clock Out: {{ clockOutTime | date: 'HH:mm' }}</ion-label>
+                        <ion-input [(ngModel)]="clockOutTime"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label> Work Duration: {{ workDuration }}</ion-label>
+                        <ion-input [(ngModel)]="workDuration"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Grace period</ion-label>
+                        <ion-input [(ngModel)]="gracePeriod"></ion-input>
+                    </ion-item>
+                </ion-list>
+            </ion-card-content> -->
+        </ion-card>
+    </ion-content>
+</ion-content>

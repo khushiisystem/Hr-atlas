@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="header-toolbar">
+        <ion-buttons slot="start">
+            <ion-button (click)="gooooooBack()">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Attendance</ion-title>
+        <!-- <ion-toggle slot="end" [(ngModel)]="toggleChecked" (ionChange)="toggleChanged()" color="dark"></ion-toggle> -->
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" color="dark">
+    <ion-list>
+        <ion-item *ngFor="let week of weeks">
+            <ion-label>{{ week }}</ion-label>
+            <!-- <ion-datetime display-format="MMM DD, YYYY" [(ngModel)]="selectedDate" (ionChange)="onDateSelected()"></ion-datetime> -->
+        </ion-item>
+    </ion-list>
+
+    <div *ngIf="selectedDate">
+        <h3>{{ selectedDate | date:'longDate' }}:</h3>
+
+        <ion-card *ngFor="let attendanceData of attendanceDataList">
+            <ion-card-header>
+                <ion-card-title>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                {{ attendanceData.name }}
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-label>Status:</ion-label>
+                                <!-- <ion-select [(ngModel)]="attendanceData.status" (ionChange)="onStatusChange(attendanceData)">
+                                    <ion-select-option value="present">Present</ion-select-option>
+                                    <ion-select-option value="absent">Absent</ion-select-option>
+                                    <ion-select-option value="leave">Leave</ion-select-option>
+                                </ion-select> -->
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</ion-content>

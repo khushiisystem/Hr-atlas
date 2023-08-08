@@ -1,0 +1,130 @@
+<ion-header [translucent]="true">
+    <ion-toolbar class="header-toolbar">
+        <ion-buttons slot="start">
+            <ion-button (click)="gooooooBack()">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>Leaves</ion-title>
+        <!-- <ion-toggle slot="end" [(ngModel)]="toggleChecked" (ionChange)="toggleChanged()" color="dark"></ion-toggle> -->
+        <ion-segment value="all" color="dark">
+            <ion-segment-button value="all">
+                <ion-label>Stats</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="favorites">
+                <ion-label>LOGS</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content color="dark">
+    <!-- First card -->
+    <ion-card class="leave-card">
+        <ion-card-header>
+            <ion-card-title>Casual Leave
+                <ion-button *ngIf="!showApplyFormForCasualLeave" shape="round" color="primary" (click)="openApplyCard('Casual Leave')" class="apply-button">Apply</ion-button>
+            </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <div class="leave-info">
+                            <div class="leave-label">Total:</div>
+                            <div class="leave-value">{{ calculateCreditedLeaves() }}</div>
+                        </div>
+                    </ion-col>
+                    <ion-col>
+                        <div class="leave-info">
+                            <div class="leave-label">Credited Leaves:</div>
+                            <div class="leave-value">{{ getCreditedData() }}</div>
+                        </div>
+                    </ion-col>
+                    <ion-col>
+                        <div class="leave-info">
+                            <div class="leave-label">Applied:</div>
+                            <div class="leave-value">{{ getAppliedLeaves() }}</div>
+                        </div>
+                    </ion-col>
+                    <ion-col>
+                        <div class="leave-info">
+                            <div class="leave-label">Penalty:</div>
+                            <div class="leave-value">{{ getPenalty() }}</div>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+
+    <!-- Second card -->
+    <ion-card class="loss-of-pay-card">
+        <ion-card-header>
+            <ion-card-title>Loss of Pay
+                <ion-button *ngIf="!showApplyFormForLossOfPay" shape="round" color="primary" (click)="openApplyCard('Loss of Pay')" class="apply-button">Apply</ion-button>
+            </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-grid>
+                <ion-row>
+                    <ion-col>
+                        <div class="leave-info">
+                            <div class="leave-label">Total:</div>
+                            <div class="leave-value">{{ getCreditedDataForLossOfPay() }}</div>
+                        </div>
+                    </ion-col>
+                    <ion-col>
+                        <div class="leave-info">
+                            <div class="leave-label">Credited:</div>
+                            <div class="leave-value">{{ getCreditedDataForLossOfPay() }}</div>
+                        </div>
+                    </ion-col>
+                    <ion-col>
+                        <div class="leave-info">
+                            <div class="leave-label">Applied:</div>
+                            <div class="leave-value">{{ getAppliedDataForLossOfPay() }}</div>
+                        </div>
+                    </ion-col>
+                    <ion-col>
+                        <div class="leave-info">
+                            <div class="leave-label">Penalty:</div>
+                            <div class="leave-value">{{ getPenaltyForLossOfPay() }}</div>
+                        </div>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-card-content>
+    </ion-card>
+
+    <!-- Leave application card -->
+    <ion-card *ngIf="showApplyForm" class="apply-card" color="dark">
+        <ion-card-header>
+            <ion-card-title>Apply {{ applyCardTitle }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-item>
+                <ion-label position="floating">Start Date</ion-label>
+                <!-- <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="startDate" [min]="getToday()"></ion-datetime> -->
+            </ion-item>
+            <ion-item>
+                <ion-label>Leave Type</ion-label>
+                <!-- <ion-select [(ngModel)]="leaveType">
+                    <ion-select-option value="fullDay">Full Day</ion-select-option>
+                    <ion-select-option value="firstHalf">First Half</ion-select-option>
+                    <ion-select-option value="secondHalf">Second Half</ion-select-option>
+                </ion-select> -->
+            </ion-item>
+            <ion-item *ngIf="leaveType === 'fullDay'">
+                <ion-label position="floating">End Date</ion-label>
+                <!-- <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="endDate" [min]="startDate"></ion-datetime> -->
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="floating">Purpose (Max 1000 characters)</ion-label>
+                <!-- <ion-textarea rows="6" maxlength="1000" [(ngModel)]="purpose" placeholder="Enter the purpose of your leave"></ion-textarea> -->
+            </ion-item>
+            <ion-button expand="block" color="primary" (click)="submitLeave()">Submit</ion-button>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
