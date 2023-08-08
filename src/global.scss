@@ -24,3 +24,34 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+
+.header-toolbar {
+    --ion-toolbar-background: rgb(255, 106, 0);
+    --ion-color-base: black;
+}
+.form-input {
+    position: relative;
+    width: 100%;
+
+    & .password_input input {
+        padding-right: 35px;
+    }
+
+    & .toggleBtn {
+        position: absolute;
+        right: 0;
+        z-index: 2;
+        top: 0;
+        bottom: 0;
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+.error_txt {
+    display: block;
+    margin: 5px;
+    font-size: clamp(10px, 0.75rem, 12px);
+}
