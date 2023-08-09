@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { AddEmployeePage } from '../tabs/components/add-employee/add-employee.page';
 
 @Component({
   selector: 'app-tab1',
@@ -13,9 +15,13 @@ export class Tab1Page implements OnInit {
   isRunning: boolean = false;
   stopwatchInterval: any;
   stopwatchTime: string = '00:00:00';
-  buttonLabel: string = 'Clock in 00:00:00';
+  buttonLabel: string = 'Clock in';
+  userRole: string = "Employee";
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private modalCtrl: ModalController,
+  ) {}
 
   ngOnInit() {
     const directoryIcon = document.getElementById('directoryIcon');
@@ -31,7 +37,7 @@ export class Tab1Page implements OnInit {
       this.clockIn();
     } else {
       this.isRunning = false;
-      this.buttonLabel = 'Clock in   00:00:00';
+      this.buttonLabel = 'Clock in';
       this.clockOut();
     }
   }
@@ -73,13 +79,33 @@ export class Tab1Page implements OnInit {
     return num.toString().padStart(2, '0');
   }
 
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      window.location.reload();
+      event.target.complete();
+    }, 2000);
+  }
+
   showdirectory() {
     this.router.navigate(['./directory']);
   }
 
-  onAddEmployeesClick() {
-    this.router.navigate(['./addemp']);
+  async addEmployee(){
+    const employeeModel = this.modalCtrl.create({
+      component: AddEmployeePage,
+      componentProps: {
+        action: 'add',
+        employeeId: ""
+      },
+    });
+
+    (await employeeModel).present();
+
+    (await employeeModel).onDidDismiss().then(result => {
+      console.log(result, "result");
+    });
   }
+
   showattendance() {
     this.router.navigate(['./attendance']);
   }

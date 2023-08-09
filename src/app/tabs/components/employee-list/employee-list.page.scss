@@ -1,0 +1,18 @@
+.list-item {
+    --ripple-color: var(--ion-color-primary-tint)
+}
+.employee_data{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+
+    & .role{
+        color: var(--ion-color-primary);
+    }
+}
+
+ion-list-header ion-label {
+    font-weight: 600;
+    line-height: 1.5;
+    font-size: 1rem;
+}

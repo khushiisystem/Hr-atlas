@@ -17,6 +17,6 @@ export class AuthGuard {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     const token = this.authServ.getToken();
 
-    return token || token.trim() !== '' ? true : this.router.navigateByUrl('/');
+    return token && token.trim() !== '' ? true : this.router.navigateByUrl('/login');
   }
 }
