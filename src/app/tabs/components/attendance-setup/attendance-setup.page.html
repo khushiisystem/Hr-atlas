@@ -1,0 +1,93 @@
+<ion-header [translucent]="true" mode="md">
+  <ion-toolbar>
+    <ion-button slot="start" fill="clear" class="noBg noRipple" (click)="close()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title>Attendance Setup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+    <form [formGroup]="attendanceForm">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <div class="form-input" (click)="openTimeModal('inTime')">
+              <ion-input labelPlacement="floating" fill="outline" [value]="getDate('inTime') | date:'shortTime'" placeholder="In Time" [readonly]="true">
+                <div slot="label">In Time <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <div class="toggleBtn">
+                <ion-button slot="end" fill="clear">
+                  <ion-icon name="time-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+            <ion-text color="danger" class="error_txt" *ngIf="attendanceForm.controls['inTime'].touched && attendanceForm.controls['inTime'].errors"
+            >In Time is required</ion-text>
+          </ion-col>
+
+          <ion-col size="12">
+            <div class="form-input" (click)="openTimeModal('outTime')">
+              <ion-input labelPlacement="floating" fill="outline" [value]="getDate('outTime') | date:'shortTime'" placeholder="Out Time" [readonly]="true">
+                <div slot="label">Out Time <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <div class="toggleBtn">
+                <ion-button slot="end" fill="clear">
+                  <ion-icon name="time-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+            <ion-text color="danger" class="error_txt" *ngIf="attendanceForm.controls['outTime'].touched && attendanceForm.controls['outTime'].errors"
+            >Out time is required</ion-text>
+          </ion-col>
+
+          <ion-col size="12">
+            <div class="form-input">
+              <ion-input labelPlacement="floating" fill="outline" formControlName="gracePeriod" placeholder="Grace Period" type="number" [max]="4" [min]="0">
+                <div slot="label">Grace Period <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <div class="toggleBtn">
+                <ion-button slot="end" fill="clear">
+                  <ion-icon name="time-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+            <ion-text color="danger" class="error_txt" *ngIf="attendanceForm.controls['gracePeriod'].touched && attendanceForm.controls['gracePeriod'].errors"
+            >Grace period is required</ion-text>
+          </ion-col>
+
+          <ion-col size="12">
+            <div class="form-input">
+              <ion-input labelPlacement="floating" fill="outline" formControlName="workDuration" placeholder="Work Duration" [readonly]="true">
+                <div slot="label">Work Duration <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <div class="toggleBtn">
+                <ion-button slot="end" fill="clear">
+                  <ion-icon name="time-outline"></ion-icon>
+                </ion-button>
+              </div>
+            </div>
+            <ion-text color="danger" class="error_txt" *ngIf="attendanceForm.controls['workDuration'].touched && attendanceForm.controls['workDuration'].errors"
+            >Work duration is required</ion-text>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <div class="btn_div">
+          <ion-button color="primary" type="submit" [expand]="'block'" [shape]="'round'" [disabled]="attendanceForm.invalid" (click)="saveSetup()" class="submitBtn">Save</ion-button>
+      </div>
+    </form>
+
+    <ion-modal [isOpen]="isOpenTimeModal" [initialBreakpoint]="0.7" [showBackdrop]="true" [keepContentsMounted]="true" [backdropDismiss]="false">
+      <ng-template>
+          <ion-datetime [presentation]="'time'" mode="md" [size]="'cover'" (ionChange)="selectTime($any($event))" [value]="getDate(activeTrigger.control).toISOString()" #dateTime>
+              <ion-buttons slot="buttons">
+                  <ion-button color="danger" (click)="dateTime.cancel(); isOpenTimeModal = false">Cancel</ion-button>
+                  <ion-button color="primary" (click)="dateTime.confirm(); isOpenTimeModal = false">Set</ion-button>
+              </ion-buttons>
+          </ion-datetime>
+      </ng-template>
+    </ion-modal>
+</div>
+</ion-content>
