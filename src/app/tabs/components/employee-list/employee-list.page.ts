@@ -1,7 +1,7 @@
 import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
 import { IonInfiniteScroll, ModalController } from '@ionic/angular';
 import { AdminService } from 'src/app/services/admin.service';
-import { AddEmployeePage } from '../add-employee/add-employee.page';
+import { AddEmployeePage } from '../../../admin/add-employee/add-employee.page';
 import { ShareService } from 'src/app/services/share.service';
 
 interface InfiniteScrollCustomEvent extends CustomEvent {

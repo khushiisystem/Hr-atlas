@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
+import * as moment from 'moment';
 import { AdminService } from 'src/app/services/admin.service';
 import { ShareService } from 'src/app/services/share.service';
 
@@ -9,6 +10,7 @@ interface DatetimeCustomEvent extends CustomEvent {
   detail: DatetimeChangeEventDetail;
   target: HTMLIonDatetimeElement;
 }
+
 
 @Component({
   selector: 'app-add-employee',
@@ -55,7 +57,7 @@ export class AddEmployeePage implements OnInit {
 
   selectDate(event: DatetimeCustomEvent){
     this.employeeForm.patchValue({
-      dateOfBirth: event.detail.value
+      dateOfBirth: moment.utc(event.detail.value).format()
     });
     this.getDate();
     console.log(this.employeeForm.value);
@@ -83,5 +85,4 @@ export class AddEmployeePage implements OnInit {
   }
 
   goBack(){this.modalCtrl.dismiss();}
-
 }

@@ -6,7 +6,7 @@ import { AttendancePage } from '../components/attendance/attendance.page';
 import { ProfilePage } from '../components/profile/profile.page';
 import { Tab1Page } from '../tab1/tab1.page';
 import { AuthGuard } from '../core/auth.guard';
-import { AddEmployeePage } from './components/add-employee/add-employee.page';
+import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { EmployeeListPage } from './components/employee-list/employee-list.page';
 import { SettingsPage } from './components/settings/settings.page';
 

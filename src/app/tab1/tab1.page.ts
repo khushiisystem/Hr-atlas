@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { AddEmployeePage } from '../tabs/components/add-employee/add-employee.page';
+import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 
 @Component({
   selector: 'app-tab1',

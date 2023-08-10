@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-import { AddempPage } from "./components/addemp/addemp.page";
 import { AttendancePage } from "./components/attendance/attendance.page";
 import { LeavesPage } from "./components/leaves/leaves.page";
 import { PayrollPage } from "./components/payroll/payroll.page";
@@ -19,7 +18,6 @@ import { WorkpagePage } from "./components/workpage/workpage.page";
 import { TeampagePage } from "./components/teampage/teampage.page";
 import { WeekpagePage } from "./components/weekpage/weekpage.page";
 import { UserPage } from "./components/user/user.page";
-import { LeaveSetupPage } from "./components/leave-setup/leave-setup.page";
 import { PayrollSetupPage } from "./components/payroll-setup/payroll-setup.page";
 import { AdditionalSetupPage } from "./components/additional-setup/additional-setup.page";
 import { LOGSPage } from "./components/logs/logs.page";
@@ -30,11 +28,11 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AuthGuard } from "./core/auth.guard";
 import { TokenInterceptor } from "./core/token.interceptor";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { LeaveSetupPage } from "./admin/leave-setup/leave-setup.page";
 
 @NgModule({
   declarations: [
     AppComponent,
-    AddempPage,
     AttendancePage,
     LeavesPage,
     PayrollPage,
@@ -46,11 +44,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     TeampagePage,
     WeekpagePage,
     UserPage,
-    LeaveSetupPage,
     PayrollSetupPage,
     AdditionalSetupPage,
     LOGSPage,
     LeaveadminPage,
+    LeaveSetupPage,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,67 @@
+<ion-header [translucent]="true" mode="md">
+  <ion-toolbar>
+    <ion-button slot="start" fill="clear" (click)="goBack()" class="noBg noRipple">
+      <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-title>Leave Setup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="leaveSetupForm">
+    <ion-grid>
+      <ion-row class="row_one">
+        <ion-col size="12" sizeSm="6">
+          <div class="form-input">
+            <ion-select labelPlacement="floating" fill="outline" formControlName="creditCycle" placeholder="Select" interface="action-sheet">
+              <div slot="label">Credit Cycle <ion-text color="danger">*</ion-text></div>
+              <ion-select-option value="Yearly">Yearly</ion-select-option>
+              <ion-select-option value="Half Yearly">Half Yearly</ion-select-option>
+              <ion-select-option value="Monthly">Monthly</ion-select-option>
+            </ion-select>
+          </div>
+          <ion-text color="danger" class="error_txt" *ngIf="leaveSetupForm.controls['creditCycle'].touched && leaveSetupForm.controls['creditCycle'].errors">
+            Credit cycle is required
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="12" sizeSm="6">
+          <div class="form-input">
+            <ion-select labelPlacement="floating" fill="outline" formControlName="creditPeriod" placeholder="Select" interface="action-sheet">
+              <div slot="label">Credit Period <ion-text color="danger">*</ion-text></div>
+              <ion-select-option value="Start">Start</ion-select-option>
+              <ion-select-option value="End">End</ion-select-option>
+            </ion-select>
+          </div>
+          <ion-text color="danger" class="error_txt" *ngIf="leaveSetupForm.controls['creditPeriod'].touched && leaveSetupForm.controls['creditPeriod'].errors">
+            Credit period is required
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="form-input">
+            <ion-input labelPlacement="floating" fill="outline" formControlName="annualLeave" placeholder="Mobile Number" type="number" [min]="0" [max]="25">
+              <div slot="label">Annual Leave <ion-text color="danger">*</ion-text></div>
+            </ion-input>
+          </div>
+          <ion-text color="danger" class="error_txt" *ngIf="leaveSetupForm.controls['annualLeave'].touched && leaveSetupForm.controls['annualLeave'].errors">
+            Annual leave is required
+          </ion-text>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="form-input">
+            <ion-input labelPlacement="floating" fill="outline" formControlName="creditLeave" placeholder="1.5" type="number">
+              <div slot="label">Credit Leave <ion-text color="danger">*</ion-text></div>
+            </ion-input>
+          </div>
+          <ion-text color="danger" class="error_txt" *ngIf="leaveSetupForm.controls['creditLeave'].touched && leaveSetupForm.controls['annualLeave'].errors">
+            Credit leave is required
+          </ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-button type="submit" size="large" class="submitBtn ion-margin" [disabled]="leaveSetupForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Save</ion-button>
+  </form>
+</ion-content>

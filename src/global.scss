@@ -42,10 +42,10 @@
 
     & .toggleBtn {
         position: absolute;
-        right: 0;
+        right: 2px;
         z-index: 2;
-        top: 0;
-        bottom: 0;
+        top: 2px;
+        bottom: 2px;
         width: 50px;
         display: flex;
         align-items: center;
@@ -59,3 +59,15 @@
 }
 .noRipple{--ripple-color: transparent}
 .noBg {--background: transparent; --background-color: transparent;}
+
+.sc-ion-loading-md-h {
+    &.fullHide {
+        --backdrop-opacity: 1;
+        --background: #fff;
+        --max-width: 100%;
+
+        & ion-backdrop {background-color: #fff;}
+        & .loading-wrapper{box-shadow: none;}
+        & ion-spinner {width: 5rem; height: 5rem;}
+    }
+}
