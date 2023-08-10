@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
+import { AttendanceSetupRequest } from "../interfaces/request/IAttendanceSetup";
 
 @Injectable({
     providedIn: 'root'
@@ -23,5 +24,16 @@ export class AdminService {
     }
     deleteEmployee(employeeId: string): Observable<any>{
         return this.http.delete<any>(environment.Api + `api/employee/${employeeId}`);
+    }
+
+    // attendance setup
+    saveAttendanceSetup(data: AttendanceSetupRequest): Observable<any>{
+        return this.http.post<AttendanceSetupRequest>(environment.Api + 'api/attendaceSetup', data);
+    }
+    updateAttendanceSetup(setupId: string, data: AttendanceSetupRequest): Observable<any>{
+        return this.http.put<AttendanceSetupRequest>(environment.Api + `api/attendaceSetup/${setupId}`, data);
+    }
+    getAttendanceSetup(): Observable<any>{
+        return this.http.get<any>(environment.Api + `api/attendaceSetup`);
     }
 }

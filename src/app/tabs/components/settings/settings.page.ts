@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { AttendanceSetupPage } from '../attendance-setup/attendance-setup.page';
+import { AttendanceSetupPage } from 'src/app/admin/attendance-setup/attendance-setup.page';
+import { LeaveSetupPage } from 'src/app/admin/leave-setup/leave-setup.page';
 
 @Component({
   selector: 'app-settings',
@@ -34,10 +35,21 @@ export class SettingsPage implements OnInit {
       console.log(result);
     });
   }
-  goToPage2(){
-    this.router.navigate(['./leave-setup']);
 
+  async leaveSetupModal(){
+    const leaveModal = this.modalCtrl.create({
+      component: LeaveSetupPage,
+      mode: 'md',
+      initialBreakpoint: 1
+    });
+
+    (await leaveModal).present();
+
+    (await leaveModal).onDidDismiss().then(result => {
+      console.log(result, "result");
+    });
   }
+
   goToPage3(){
     this.router.navigate(['./payroll-setup']);
 
