@@ -8,116 +8,170 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-list-header>
-      <ion-label>Our Employee</ion-label>
-    </ion-list-header>
+  <div class="container ion-padding-top"  *ngIf="userRole === 'Admin'">
+    <ion-row class="ion-padding-horizontal">
+      <ion-col size="12">
+        <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round"></ion-input>
+      </ion-col>
+      <ion-col size="12" *ngIf="lastRoute === 'setting'">
+        <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === 3" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
+      </ion-col>
+    </ion-row>
 
-    <ion-item-sliding #editSlide>
-      <ion-item-options side="start">
-        <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal('', 'edit'); editSlide.closeOpened();">
-          <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
+    <ion-list>
+      <ion-item-sliding #editSlide [disabled]="lastRoute === 'setting'">
+        <ion-item-options side="start">
+          <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal('', 'edit'); editSlide.closeOpened();">
+            <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
 
-      <ion-item lines="full" [button]="true" [detail]="true" class="list-item">
-        <ion-avatar class="employee_img" slot="start">
-          <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-        </ion-avatar>
+        <ion-item lines="full" [button]="true" [detail]="true" class="list-item">
+          <div slot="start" class="check_container" (click)="selectEmployee('Pokémon')">
+            <ion-avatar class="employee_img">
+              <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </ion-avatar>
+            <div class="custom_checkbox" *ngIf="isChecked('Pokémon')">
+              <span class="checkmark"></span>
+            </div>
+          </div>
+          <div class="employee_data" (click)="viewProfile('1545411daf')">
+            <ion-label>Pokémon Yellow</ion-label>
+            <ion-text class="emp_salary"><small>Net Pay</small> <span class="amount">450000</span></ion-text>
+          </div>
+        </ion-item>
+    
+        <ion-item-options side="end">
+          <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(''); editSlide.closeOpened();">
+            <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+
+      <ion-item-sliding #editSlide [disabled]="lastRoute === 'setting'">
+        <ion-item-options side="start">
+          <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal('', 'edit'); editSlide.closeOpened();">
+            <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+        <ion-item lines="full" [button]="true" [detail]="true" class="list-item">
+          <div slot="start" class="check_container" (click)="selectEmployee('Soniya')">
+            <ion-avatar class="employee_img">
+              <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </ion-avatar>
+            <div class="custom_checkbox" *ngIf="isChecked('Soniya')">
+              <span class="checkmark"></span>
+            </div>
+          </div>
+          <div class="employee_data" (click)="viewProfile('1545411daf')">
+            <ion-label>Soniya singh</ion-label>
+            <ion-text class="emp_salary"><small>Net Pay</small> <span class="amount">450000</span></ion-text>
+          </div>
+        </ion-item>
+    
+        <ion-item-options side="end">
+          <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(''); editSlide.closeOpened();">
+            <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+
+      <ion-item-sliding #editSlide [disabled]="lastRoute === 'setting'">
+        <ion-item-options side="start">
+          <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal('', 'edit'); editSlide.closeOpened();">
+            <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+        <ion-item lines="full" [button]="true" [detail]="true" class="list-item">
+          <div slot="start" class="check_container" (click)="selectEmployee('Arjun')">
+            <ion-avatar class="employee_img">
+              <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </ion-avatar>
+            <div class="custom_checkbox" *ngIf="isChecked('Arjun')">
+              <span class="checkmark"></span>
+            </div>
+          </div>
+          <div class="employee_data" (click)="viewProfile('1545411daf')">
+            <ion-label>Arjun Singh</ion-label>
+            <ion-text class="emp_salary"><small>Net Pay</small> <span class="amount">15000</span></ion-text>
+          </div>
+        </ion-item>
+    
+        <ion-item-options side="end">
+          <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(''); editSlide.closeOpened();">
+            <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </ion-list>
+  </div>
+  
+  <div class="container" *ngIf="userRole === 'User' && lastRoute === 'home'">
+    <ion-list>
+      <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile('1545411daf')">
+          <div slot="start" class="check_container">
+            <ion-avatar class="employee_img">
+            <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+        </div>
         <div class="employee_data">
           <ion-label>Pokémon Yellow</ion-label>
           <ion-text class="role"><small>Frontend Developer</small></ion-text>
         </div>
       </ion-item>
-  
-      <ion-item-options side="end">
-        <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(''); editSlide.closeOpened();">
-          <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-    <ion-item-sliding #editSlide>
-      <ion-item-options side="start">
-        <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal('', 'edit'); editSlide.closeOpened();">
-          <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
 
-      <ion-item lines="full" [button]="true" [detail]="true" class="list-item">
-        <ion-avatar class="employee_img" slot="start">
+      <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile('1545411daf')">
+        <div slot="start" class="check_container">
+          <ion-avatar class="employee_img">
           <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
         </ion-avatar>
+      </div>
         <div class="employee_data">
           <ion-label>Soniya singh</ion-label>
           <ion-text class="role"><small>Frontend Developer</small></ion-text>
         </div>
       </ion-item>
-  
-      <ion-item-options side="end">
-        <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(''); editSlide.closeOpened();">
-          <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
 
-    <ion-item-sliding #editSlide>
-      <ion-item-options side="start">
-        <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal('', 'edit'); editSlide.closeOpened();">
-          <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-
-      <ion-item lines="full" [button]="true" [detail]="true" class="list-item">
-        <ion-avatar class="employee_img" slot="start">
-          <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-        </ion-avatar>
+      <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile('1545411daf')">
+        <div slot="start" class="check_container">
+          <ion-avatar class="employee_img">
+            <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+        </div>
         <div class="employee_data">
           <ion-label>Arjun Singh</ion-label>
           <ion-text class="role"><small>Frontend Developer</small></ion-text>
         </div>
       </ion-item>
-  
-      <ion-item-options side="end">
-        <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(''); editSlide.closeOpened();">
-          <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
 
-
-    <ion-item-sliding *ngFor="let employeeItem of employeeList" #editSlide>
-      <ion-item-options side="start">
-        <ion-item-option color="primary" aria-label="Edit" (click)="employeeMoal(employeeItem, 'edit'); editSlide.closeOpened();" type="button">
-          <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-
-      <ion-item lines="full" [button]="true" [detail]="true" class="list-item">
-        <ion-avatar class="employee_img" slot="start">
-          <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-        </ion-avatar>
+      <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile('1545411daf')">
+        <div slot="start" class="check_container">
+          <ion-avatar class="employee_img">
+            <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+          </ion-avatar>
+        </div>
         <div class="employee_data">
           <ion-label>Pokémon Yellow</ion-label>
           <ion-text class="role"><small>Frontend Developer</small></ion-text>
         </div>
       </ion-item>
+    </ion-list>
+  </div>
   
-      <ion-item-options side="end">
-        <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(employeeItem); editSlide.closeOpened();">
-          <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>  
-  </ion-list>
   
   <ion-infinite-scroll #infiniteScroll (ionInfinite)="isMoreData ? loadData($any($event)) : ''" [position]="'bottom'">
     <ion-infinite-scroll-content *ngIf="isMoreData" loadingSpinner="bubbles" loadingText="Loading more data...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'">
+  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="userRole === 'Admin' && lastRoute === 'home'">
     <ion-fab-button (click)="employeeMoal('', 'add')" aria-label="Add Employee">
       <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
+<ion-footer *ngIf="userRole === 'Admin' && lastRoute === 'setting' && selectedEmployee.length > 0">
+  <ion-button type="button" color="primary" size="large" expand="block" shape="round" class="ion-margin-horizontal sendPayBtn">Send Payslip</ion-button>
+</ion-footer>

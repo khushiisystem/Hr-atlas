@@ -28,6 +28,7 @@ export class Tab1Page implements OnInit {
     if (directoryIcon) {
       directoryIcon.addEventListener('click', this.showdirectory.bind(this));
     }
+    localStorage.setItem('lastRoute', 'home');
   }
 
   toggleStopwatch() {

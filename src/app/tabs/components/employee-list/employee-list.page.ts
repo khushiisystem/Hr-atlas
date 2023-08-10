@@ -3,6 +3,7 @@ import { IonInfiniteScroll, ModalController } from '@ionic/angular';
 import { AdminService } from 'src/app/services/admin.service';
 import { AddEmployeePage } from '../../../admin/add-employee/add-employee.page';
 import { ShareService } from 'src/app/services/share.service';
+import { Router } from '@angular/router';
 
 interface InfiniteScrollCustomEvent extends CustomEvent {
   target: HTMLIonInfiniteScrollElement;
@@ -18,14 +19,20 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
   employeeList: any[] = [];
   isMoreData: boolean = true;
   pageIndex: number = 0;
+  lastRoute: string = "";
+  userRole: string = "";
+  selectedEmployee: any[] = [];
 
   constructor(
     private adminServ: AdminService,
     private modelCtrl: ModalController,
     private shareServ: ShareService,
+    public router: Router,
   ) { }
 
   ngOnInit() {
+    this.lastRoute = localStorage.getItem('lastRoute') || "";
+    this.userRole = localStorage.getItem('userRole') || "";
     this.getEmployeeList();
   }
   
@@ -34,7 +41,6 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
     setTimeout(() => {
       this.infiniteScroll.complete();
     }, 2000);
-
   }
 
   getEmployeeList(){
@@ -90,6 +96,34 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
       }
     }, (error) => {})
   }
+
+  selectAll(event: CustomEvent) {
+    console.log(event, "event");
+    if(event.detail.checked === true){
+      this.selectedEmployee = [1,2,3];
+    } else if(event.detail.checked === false) {
+      this.selectedEmployee = [];
+    }
+  }
+
+  selectEmployee(employee: string) {
+    const index = this.selectedEmployee.findIndex((e: string) => e === employee);
+    if(index !== -1){
+      this.selectedEmployee.splice(index, 1);
+    } else {
+      this.selectedEmployee.push(employee);
+    }
+    console.log(this.selectedEmployee.length);
+  }
+
+  isChecked(employee: any) {
+    return this.selectedEmployee.includes(employee);
+  }
+
+  viewProfile(empId: string) {
+    this.router.navigate([`/tabs/employee-profile/${empId}`]);
+  }
+
 
   goBack(){history.back();}
 }
