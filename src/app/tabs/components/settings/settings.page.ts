@@ -17,6 +17,7 @@ export class SettingsPage implements OnInit {
  
 
   ngOnInit() {
+    localStorage.setItem('lastRoute', 'setting');
   }
   
   goBack() {history.back();}
@@ -50,10 +51,10 @@ export class SettingsPage implements OnInit {
     });
   }
 
-  goToPage3(){
-    this.router.navigate(['./payroll-setup']);
-
+  payrollSetup(){
+    this.router.navigate(['/tabs/employee-list']);
   }
+
   goToPage4(){
     this.router.navigate(['./additional-setup']);
 

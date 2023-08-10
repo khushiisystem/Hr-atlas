@@ -11,9 +11,11 @@ import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { EmployeeListPage } from './components/employee-list/employee-list.page';
 import { SettingsPage } from './components/settings/settings.page';
 import { AttendanceSetupPage } from '../admin/attendance-setup/attendance-setup.page';
+import { EmployeeProfilePage } from '../employee/employee-profile/employee-profile.page';
+import { EditProfilePage } from '../employee/edit-profile/edit-profile.page';
 
 @NgModule({
-  declarations: [TabsPage, AddEmployeePage, EmployeeListPage, SettingsPage, AttendanceSetupPage, ],
+  declarations: [TabsPage, AddEmployeePage, EmployeeListPage, SettingsPage, AttendanceSetupPage, EmployeeProfilePage, EditProfilePage ],
   imports: [
     IonicModule,
     CommonModule,

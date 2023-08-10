@@ -18,7 +18,6 @@ import { WorkpagePage } from "./components/workpage/workpage.page";
 import { TeampagePage } from "./components/teampage/teampage.page";
 import { WeekpagePage } from "./components/weekpage/weekpage.page";
 import { UserPage } from "./components/user/user.page";
-import { PayrollSetupPage } from "./components/payroll-setup/payroll-setup.page";
 import { AdditionalSetupPage } from "./components/additional-setup/additional-setup.page";
 import { LOGSPage } from "./components/logs/logs.page";
 import { LeaveadminPage } from "./components/leaveadmin/leaveadmin.page";
@@ -29,6 +28,7 @@ import { AuthGuard } from "./core/auth.guard";
 import { TokenInterceptor } from "./core/token.interceptor";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LeaveSetupPage } from "./admin/leave-setup/leave-setup.page";
+import { PayrollSetupPage } from "./admin/payroll-setup/payroll-setup.page";
 
 @NgModule({
   declarations: [
@@ -44,11 +44,11 @@ import { LeaveSetupPage } from "./admin/leave-setup/leave-setup.page";
     TeampagePage,
     WeekpagePage,
     UserPage,
-    PayrollSetupPage,
     AdditionalSetupPage,
     LOGSPage,
     LeaveadminPage,
     LeaveSetupPage,
+    PayrollSetupPage,
   ],
   imports: [
     BrowserModule,

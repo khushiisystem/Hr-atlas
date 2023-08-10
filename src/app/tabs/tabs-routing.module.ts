@@ -9,6 +9,8 @@ import { AuthGuard } from '../core/auth.guard';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { EmployeeListPage } from './components/employee-list/employee-list.page';
 import { SettingsPage } from './components/settings/settings.page';
+import { EditProfilePage } from '../employee/edit-profile/edit-profile.page';
+import { EmployeeProfilePage } from '../employee/employee-profile/employee-profile.page';
 
 const routes: Routes = [
   {
@@ -56,6 +58,16 @@ const routes: Routes = [
         path: 'settings',
         title: "Settings",
         component: SettingsPage
+      },
+      {
+        path: 'edit-profile/:employeeId',
+        title: "Edit Profile",
+        component: EditProfilePage
+      },
+      {
+        path: 'employee-profile/:employeeId',
+        title: "Edit Profile",
+        component: EmployeeProfilePage
       },
     ],
     // canActivate: [AuthGuard]

@@ -11,7 +11,6 @@ import { WorkpagePage } from './components/workpage/workpage.page';
 import { TeampagePage } from './components/teampage/teampage.page';
 import { WeekpagePage } from './components/weekpage/weekpage.page';
 import { UserPage } from './components/user/user.page';
-import { PayrollSetupPage } from './components/payroll-setup/payroll-setup.page';
 import { LOGSPage } from './components/logs/logs.page';
 import { LeaveadminPage } from './components/leaveadmin/leaveadmin.page';
 const routes: Routes = [
@@ -75,10 +74,6 @@ const routes: Routes = [
   },{
     path: 'user',
     component: UserPage
-  },
-  {
-    path: 'payroll-setup',
-    component: PayrollSetupPage
   },
   {
     path: 'logs',
