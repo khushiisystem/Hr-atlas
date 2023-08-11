@@ -28,7 +28,7 @@ import { AuthGuard } from "./core/auth.guard";
 import { TokenInterceptor } from "./core/token.interceptor";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LeaveSetupPage } from "./admin/leave-setup/leave-setup.page";
-import { PayrollSetupPage } from "./admin/payroll-setup/payroll-setup.page";
+import { EmployeeWorkWeekPage } from "./employee/employee-work-week/employee-work-week.page";
 
 @NgModule({
   declarations: [
@@ -48,7 +48,7 @@ import { PayrollSetupPage } from "./admin/payroll-setup/payroll-setup.page";
     LOGSPage,
     LeaveadminPage,
     LeaveSetupPage,
-    PayrollSetupPage,
+    EmployeeWorkWeekPage,
   ],
   imports: [
     BrowserModule,
