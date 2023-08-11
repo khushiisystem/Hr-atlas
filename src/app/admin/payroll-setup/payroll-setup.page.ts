@@ -60,6 +60,6 @@ export class PayrollSetupPage implements OnInit {
     }
   }
 
-  goBack(){this.modalCtrl.dismiss();}
+  goBack(){history.back();}
 
 }

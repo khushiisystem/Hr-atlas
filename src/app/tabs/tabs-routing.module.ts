@@ -11,6 +11,7 @@ import { EmployeeListPage } from './components/employee-list/employee-list.page'
 import { SettingsPage } from './components/settings/settings.page';
 import { EditProfilePage } from '../employee/edit-profile/edit-profile.page';
 import { EmployeeProfilePage } from '../employee/employee-profile/employee-profile.page';
+import { PayrollSetupPage } from '../admin/payroll-setup/payroll-setup.page';
 
 const routes: Routes = [
   {
@@ -66,8 +67,13 @@ const routes: Routes = [
       },
       {
         path: 'employee-profile/:employeeId',
-        title: "Edit Profile",
+        title: "Employee Profile",
         component: EmployeeProfilePage
+      },
+      {
+        path: 'payroll-setup/:employeeId',
+        title: "Payroll Setup",
+        component: PayrollSetupPage
       },
     ],
     // canActivate: [AuthGuard]

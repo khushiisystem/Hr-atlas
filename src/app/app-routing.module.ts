@@ -13,6 +13,7 @@ import { WeekpagePage } from './components/weekpage/weekpage.page';
 import { UserPage } from './components/user/user.page';
 import { LOGSPage } from './components/logs/logs.page';
 import { LeaveadminPage } from './components/leaveadmin/leaveadmin.page';
+import { EmployeeWorkWeekPage } from './employee/employee-work-week/employee-work-week.page';
 const routes: Routes = [
   {
     path: '',
@@ -86,6 +87,11 @@ const routes: Routes = [
   {
     path: 'tab4',
     loadChildren: () => import('./tab4/tab4.module').then( m => m.Tab4PageModule)
+  },
+  {
+    path: 'employee-work-week/:employeeId',
+    title: "Work Week",
+    component: EmployeeWorkWeekPage,
   },
 ];
 @NgModule({

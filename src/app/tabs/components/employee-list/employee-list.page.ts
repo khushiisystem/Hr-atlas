@@ -121,7 +121,11 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
   }
 
   viewProfile(empId: string) {
-    this.router.navigate([`/tabs/employee-profile/${empId}`]);
+    if(this.lastRoute === 'setting'){
+      this.router.navigate([`/tabs/payroll-setup/${empId}`]);
+    } else {
+      this.router.navigate([`/tabs/employee-profile/${empId}`]);
+    }
   }
 
 

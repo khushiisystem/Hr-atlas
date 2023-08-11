@@ -17,10 +17,12 @@ export class SettingsPage implements OnInit {
  
 
   ngOnInit() {
-    localStorage.setItem('lastRoute', 'setting');
   }
   
-  goBack() {history.back();}
+  goBack() {
+    localStorage.setItem('lastRoute', 'home');
+    history.back();
+  }
 
   async attendanceSetup(){
     const attendanceModal = this.modalCtrl.create({
@@ -52,10 +54,12 @@ export class SettingsPage implements OnInit {
   }
 
   payrollSetup(){
+    localStorage.setItem('lastRoute', 'setting');
     this.router.navigate(['/tabs/employee-list']);
   }
-
+  
   goToPage4(){
+    localStorage.setItem('lastRoute', 'setting');
     this.router.navigate(['./additional-setup']);
 
   }
