@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import * as moment from 'moment';
 import { IPayrollSetupRequest } from 'src/app/interfaces/request/IPayrollSetup';
 import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -13,10 +15,14 @@ import { ShareService } from 'src/app/services/share.service';
 })
 export class PayrollSetupPage implements OnInit {
   earningForm!: FormGroup;
+  deductionForm!: FormGroup;
   inProgress: boolean = false;
+  dateModal: boolean = false;
   today: Date = new Date();
+  payslipDate: Date = new Date();
   leaveId: string = '';
-  action: string = 'add';
+  employeeId: string = '';
+  activeTab: string = 'earning';
 
   constructor(
     private fb: FormBuilder,
@@ -24,31 +30,66 @@ export class PayrollSetupPage implements OnInit {
     private modalCtrl: ModalController,
     private shareServ: ShareService,
     private loaderServ: LoaderService,
+    private activeRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
     this.loaderServ.present('');
+    this.employeeId = this.activeRoute.snapshot.params?.['employeeId'];
     this.today = new Date();
 
     this.earningForm = this.fb.group({
-      creditCycle: ['', Validators.required],
-      creditPeriod: ['', Validators.required],
-      annualLeave: ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(365)])],
-      creditLeave: ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(365)])],
+      ctc: [0, Validators.compose([Validators.required, Validators.min(0)])],
+      hra: [0, Validators.compose([Validators.min(0)])],
+      basics: [0, Validators.compose([Validators.min(0)])],
+      salary: [0, Validators.compose([Validators.required, Validators.min(0)])],
+      specialAllowance: [0, Validators.compose([Validators.min(0)])],
+      payslipDate: [moment.utc(this.payslipDate).format(), Validators.required]
+    });
+
+    this.deductionForm = this.fb.group({
+      lop: [0, Validators.compose([Validators.required, Validators.min(0), Validators.max(365)])],
+      incomeTax: [0, Validators.compose([Validators.required, Validators.min(0)])],
+      pt: [0, Validators.compose([Validators.required, Validators.min(0)])],
+      comment: ['', Validators.compose([Validators.maxLength(1000)])]
     });
 
     console.log(this.earningForm.value, "form");
-    console.warn(this.action, "action");
-    console.warn(this.leaveId, "empId");
+    console.log(this.deductionForm.value, "form");
     this.loaderServ.dismiss();
   }
 
+  selectPayslipDate(event: any){
+    console.log(event.detail.value, "event");
+    if(this.payslipDate){
+      this.earningForm.patchValue({
+        payslipDate: moment.utc(this.payslipDate).format()
+      });
+    }
+  }
+
+  getMonthYear(){
+    let customDate = '';
+    let monthArray = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    if(this.payslipDate){
+      customDate = `${monthArray[new Date(this.payslipDate).getMonth()]} ${new Date(this.payslipDate).getFullYear()}`;
+    }
+    return customDate;
+  }
+
+  saveEarnings(){
+    console.log(this.earningForm.value, "earnign from");
+    this.activeTab = 'deductions';
+  }
+
   submit(){
-    if(this.earningForm.invalid){
+    if(this.earningForm.invalid || this.deductionForm.invalid){
       return;
     } else {
-      const formData: IPayrollSetupRequest = {...this.earningForm.value}
-      console.log(this.earningForm.value, "form");
+      let formData: IPayrollSetupRequest = {...this.earningForm.value, ...this.deductionForm.value};
+      formData.employeeId = this.employeeId;
+      formData.currency = 'INR';
+      console.log(formData, "formData");
       this.adminServ.addEmployees(this.earningForm.value).subscribe(res => {
         if(res){
           this.shareServ.presentToast('Employee added successfully.', 'top', 'success');

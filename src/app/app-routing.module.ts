@@ -2,13 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AttendancePage } from './components/attendance/attendance.page';
 import { LeavesPage } from './components/leaves/leaves.page';
-import { PayrollPage } from './components/payroll/payroll.page';
-import { ProfilePage } from './components/profile/profile.page';
 import { DirectoryPage } from './components/directory/directory.page';
-import { BiopagePage } from './components/biopage/biopage.page';
-import { PersonalpagePage } from './components/personalpage/personalpage.page';
 import { WorkpagePage } from './components/workpage/workpage.page';
-import { TeampagePage } from './components/teampage/teampage.page';
 import { WeekpagePage } from './components/weekpage/weekpage.page';
 import { UserPage } from './components/user/user.page';
 import { LOGSPage } from './components/logs/logs.page';
@@ -38,41 +33,18 @@ const routes: Routes = [
     component: LeavesPage
   },
   {
-    path: 'payroll',
-    component: PayrollPage
-  },
-  {
-    path: 'profile',
-    component: ProfilePage
-  },
-  {
     path: 'directory',
     component: DirectoryPage
-  },
-  {
-    path: 'biopage',
-    component: BiopagePage
-  },
-  {
-    path: 'personalpage',
-    component: PersonalpagePage
   },
   {
     path: 'workpage',
     component: WorkpagePage
   },
   {
-    path: 'teampage',
-    component: TeampagePage
-  },
-  {
     path: 'weekpage',
     component: WeekpagePage
   },
   {
-    path: 'personalpage',
-    component: PersonalpagePage
-  },{
     path: 'user',
     component: UserPage
   },

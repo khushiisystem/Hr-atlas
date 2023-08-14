@@ -1,8 +1,10 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button slot="start" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
-      <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
-    </ion-button>
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+        <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Employee List</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -108,7 +110,7 @@
     </ion-list>
   </div>
   
-  <div class="container" *ngIf="userRole === 'User' && lastRoute === 'home'">
+  <div class="container" *ngIf="userRole === 'User' ">
     <ion-list>
       <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile('1545411daf')">
           <div slot="start" class="check_container">

@@ -1,0 +1,44 @@
+.container {
+    padding: 20px 0px;
+}
+.row_one {
+    row-gap: 10px;
+}
+.submitBtn {
+    height: 45px;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.img-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 120px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    position: relative;
+
+    & img {
+        max-width: 100%;
+        object-fit: contain;
+        border-radius: 50%;
+    }
+
+    & .camera_btn {
+        display: grid;
+        place-items: center;
+        padding: 5px;
+        background-color: #fff;
+        border-radius: 50px;
+        width: 35px;
+        height: 35px;
+        cursor: pointer;
+        position: absolute;
+        bottom: 0;
+        right: 5px;
+        border: 2px solid var(--ion-color-medium);
+    }
+}

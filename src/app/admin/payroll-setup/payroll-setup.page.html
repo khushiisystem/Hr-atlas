@@ -1,67 +1,163 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button slot="start" fill="clear" (click)="goBack()" class="noBg noRipple">
-      <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
-    </ion-button>
-    <ion-title>payroll_setup</ion-title>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="goBack()" class="noBg noRipple">
+        <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Payroll Setup</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form [formGroup]="earningForm">
-    <ion-grid>
-      <ion-row class="row_one">
-        <ion-col size="12" sizeSm="6">
-          <div class="form-input">
-            <ion-select labelPlacement="floating" fill="outline" formControlName="creditCycle" placeholder="Select" interface="action-sheet">
-              <div slot="label">Credit Cycle <ion-text color="danger">*</ion-text></div>
-              <ion-select-option value="Yearly">Yearly</ion-select-option>
-              <ion-select-option value="Half Yearly">Half Yearly</ion-select-option>
-              <ion-select-option value="Monthly">Monthly</ion-select-option>
-            </ion-select>
-          </div>
-          <ion-text color="danger" class="error_txt" *ngIf="earningForm.controls['creditCycle'].touched && earningForm.controls['creditCycle'].errors">
-            Credit cycle is required
-          </ion-text>
-        </ion-col>
+  <ion-item [lines]="'full'" class="ion-margin-bottom">
+    <div class="emp_avatar" slot="start">
+      <ion-avatar class="employee_img">
+        <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+      </ion-avatar>
+    </div>
 
-        <ion-col size="12" sizeSm="6">
-          <div class="form-input">
-            <ion-select labelPlacement="floating" fill="outline" formControlName="creditPeriod" placeholder="Select" interface="action-sheet">
-              <div slot="label">Credit Period <ion-text color="danger">*</ion-text></div>
-              <ion-select-option value="Start">Start</ion-select-option>
-              <ion-select-option value="End">End</ion-select-option>
-            </ion-select>
-          </div>
-          <ion-text color="danger" class="error_txt" *ngIf="earningForm.controls['creditPeriod'].touched && earningForm.controls['creditPeriod'].errors">
-            Credit period is required
-          </ion-text>
-        </ion-col>
+    <ion-label class="emp_name">Arjun Kumar</ion-label>
 
-        <ion-col size="12">
-          <div class="form-input">
-            <ion-input labelPlacement="floating" fill="outline" formControlName="annualLeave" placeholder="Mobile Number" type="number" [min]="0" [max]="25">
-              <div slot="label">Annual Leave <ion-text color="danger">*</ion-text></div>
+    <div class="emp_salary text-end" slot="end">
+      <ion-text><small>Net Pay</small><br></ion-text>
+      <ion-label class="net_salary" color="danger">{{2000 | currency: "INR"}}</ion-label>
+    </div>
+  </ion-item>
+
+  <div class="text-end ion-padding-horizontal ion-margin-bottom">
+    <ion-button color="primary" shape="round" type="button" (click)="dateModal = true">
+      {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}
+      <ion-icon name="chevron-down-outline" aria-hidden="true" slot="end"></ion-icon>
+    </ion-button>
+  </div>
+  <ion-modal [isOpen]="dateModal" [initialBreakpoint]=".5" [breakpoints]="[0.5, 0.75, 1]" [keepContentsMounted]="true" mode="md" [backdropDismiss]="false" [showBackdrop]="true">
+    <ng-template>
+      <ion-content>
+        <ion-datetime presentation="month-year" size="cover" mode="md" [(ngModel)]="payslipDate" #yearMonth (ionChange)="selectPayslipDate($any($event))">
+          <ion-label slot="title">Select Year and Month</ion-label>
+          <ion-buttons slot="buttons">
+            <ion-button color="danger" (click)="yearMonth.cancel(); dateModal = false;">Cancel</ion-button>
+            <ion-button color="primary" [disabled]="!payslipDate" (click)="yearMonth.confirm(); dateModal = false;">Done</ion-button>
+          </ion-buttons>
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-segment [scrollable]="true" [(ngModel)]="activeTab" class="tab_segement">
+    <ion-segment-button value="earning">
+      <ion-label>Earning</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="deductions" [disabled]="earningForm.invalid" (click)="saveEarnings()">
+      <ion-label>Deductions</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="payslip" [disabled]="earningForm.invalid || deductionForm.invalid">
+      <ion-label>Payslip</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="activeTab">
+    <div *ngSwitchCase="'earning'">
+      <form [formGroup]="earningForm" class="ion-padding">
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-input type="number" labelPlacement="floating" label="CTC" aria-label="CTC" formControlName="ctc" [min]="0"></ion-input>
+          </ion-item>
+
+          <!-- <ion-text color="danger" class="error_txt" *ngIf="earningForm.controls['creditCycle'].touched && earningForm.controls['creditCycle'].errors">
+            CTC is required
+          </ion-text> -->
+        </div>
+        
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-input type="number" labelPlacement="floating" label="HRA" aria-label="HRA" formControlName="hra" [min]="0"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-input type="number" labelPlacement="floating" label="basics" aria-label="basics" formControlName="basics" [min]="0"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-input type="number" labelPlacement="floating" label="Salary" aria-label="Salary" formControlName="salary" [min]="0"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-input type="number" labelPlacement="floating" label="Special Allowance" aria-label="Special Allowance" formControlName="specialAllowance" [min]="0"></ion-input>
+          </ion-item>
+        </div>
+
+        <ion-buttons class="btn-group ion-margin-vertical ion-padding-top">
+          <ion-button color="danger" fill="solid" shape="round" (click)="earningForm.reset()">Reset</ion-button>
+          <ion-button color="primary" fill="solid" shape="round" [disabled]="earningForm.invalid" (click)="saveEarnings()">Next</ion-button>
+        </ion-buttons>
+      </form>
+      
+      <div class="sum_earning_item">
+        <ion-item [lines]="'none'" color="primary" [button]="false">
+          <ion-label>Sum of Earnings</ion-label>
+          <div slot="end" class="sum_earnings">
+            <span>200000</span>
+          </div>
+        </ion-item>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'deductions'">
+      <form [formGroup]="deductionForm" class="ion-padding">
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-input type="number" aria-label="Loss of Pay" labelPlacement="floating" formControlName="lop" [min]="0">
+              <ion-label slot="label" color="danger">Loss of Pay</ion-label>
             </ion-input>
-          </div>
-          <ion-text color="danger" class="error_txt" *ngIf="earningForm.controls['annualLeave'].touched && earningForm.controls['annualLeave'].errors">
-            Annual leave is required
-          </ion-text>
-        </ion-col>
+            <ion-text slot="end">Days</ion-text>
+          </ion-item>
+        </div>
 
-        <ion-col size="12">
-          <div class="form-input">
-            <ion-input labelPlacement="floating" fill="outline" formControlName="creditLeave" placeholder="1.5" type="number">
-              <div slot="label">Credit Leave <ion-text color="danger">*</ion-text></div>
-            </ion-input>
-          </div>
-          <ion-text color="danger" class="error_txt" *ngIf="earningForm.controls['creditLeave'].touched && earningForm.controls['annualLeave'].errors">
-            Credit leave is required
-          </ion-text>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-textarea labelPlacement="floating" label="Comment" aria-label="Comment" formControlName="comment" rows="1"></ion-textarea>
+          </ion-item>
+        </div>
 
-    <ion-button type="submit" size="large" class="submitBtn ion-margin" [disabled]="earningForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Save</ion-button>
-  </form>
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-input type="number" labelPlacement="floating" label="Income Tax" aria-label="Income Tax" formControlName="incomeTax" [min]="0"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="form-input">
+          <ion-item [lines]="'full'" [button]="false" [detail]="false">
+            <ion-input type="number" labelPlacement="floating" label="PT" aria-label="PT" formControlName="pt" [min]="0"></ion-input>
+          </ion-item>
+        </div>
+
+        <ion-buttons class="btn-group ion-margin-vertical ion-padding-top">
+          <ion-button color="danger" fill="solid" shape="round" (click)="activeTab = 'earning';deductionForm.reset()">Back</ion-button>
+          <ion-button color="primary" fill="solid" shape="round" [disabled]="deductionForm.invalid" (click)="submit()">Save</ion-button>
+        </ion-buttons>
+      </form>
+
+      <div class="sum_earning_item">
+        <ion-item [lines]="'none'" color="primary" [button]="false">
+          <ion-label>Sum of Deductions</ion-label>
+          <div slot="end" class="sum_earnings">
+            <span>0</span>
+          </div>
+        </ion-item>
+      </div>
+    </div>
+
+    <div *ngSwitchCase="'payslip'"></div>
+    
+    <div *ngSwitchDefault></div>
+  </div>
+
 </ion-content>

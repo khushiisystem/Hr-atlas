@@ -9,13 +9,8 @@ import { AppComponent } from "./app.component";
 
 import { AttendancePage } from "./components/attendance/attendance.page";
 import { LeavesPage } from "./components/leaves/leaves.page";
-import { PayrollPage } from "./components/payroll/payroll.page";
-import { ProfilePage } from "./components/profile/profile.page";
 import { DirectoryPage } from "./components/directory/directory.page";
-import { BiopagePage } from "./components/biopage/biopage.page";
-import { PersonalpagePage } from "./components/personalpage/personalpage.page";
 import { WorkpagePage } from "./components/workpage/workpage.page";
-import { TeampagePage } from "./components/teampage/teampage.page";
 import { WeekpagePage } from "./components/weekpage/weekpage.page";
 import { UserPage } from "./components/user/user.page";
 import { AdditionalSetupPage } from "./components/additional-setup/additional-setup.page";
@@ -35,13 +30,8 @@ import { EmployeeWorkWeekPage } from "./employee/employee-work-week/employee-wor
     AppComponent,
     AttendancePage,
     LeavesPage,
-    PayrollPage,
-    ProfilePage,
     DirectoryPage,
-    BiopagePage,
-    PersonalpagePage,
     WorkpagePage,
-    TeampagePage,
     WeekpagePage,
     UserPage,
     AdditionalSetupPage,
