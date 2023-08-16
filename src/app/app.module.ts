@@ -24,6 +24,7 @@ import { TokenInterceptor } from "./core/token.interceptor";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LeaveSetupPage } from "./admin/leave-setup/leave-setup.page";
 import { EmployeeWorkWeekPage } from "./employee/employee-work-week/employee-work-week.page";
+import { NgOtpInputModule } from "ng-otp-input";
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { EmployeeWorkWeekPage } from "./employee/employee-work-week/employee-wor
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    NgOtpInputModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

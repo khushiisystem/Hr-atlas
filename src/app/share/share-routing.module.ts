@@ -16,14 +16,17 @@ const routes: Routes = [
     children: [
       {
         path: 'login',
+        title: 'Login | HR Payroll - Spundan',
         component: LoginPage
       },
       {
         path: 'forgot-password',
+        title: 'Forgot Password',
         component: ForgotPasswordPage
       },
       {
         path: 'change-password',
+        title: 'Change Password',
         component: ChangePasswordPage
       },
       {

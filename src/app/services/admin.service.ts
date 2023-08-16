@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AttendanceSetupRequest } from "../interfaces/request/IAttendanceSetup";
+import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 
 @Injectable({
     providedIn: 'root'
@@ -13,10 +14,10 @@ export class AdminService {
     getEmployees(pageIndex: number, pageSize: number): Observable<any>{
         return this.http.get<any>(environment.Api + `api/employee?skip=${pageIndex}&limit=${pageSize}`);
     }
-    addEmployees(employeeData: any): Observable<any>{
+    addEmployees(employeeData: IEmployeeRequest): Observable<any>{
         return this.http.post<any>(environment.Api + `api/employee`, employeeData);
     }
-    updateEmployees(employeeId: string, employeeData: any): Observable<any>{
+    updateEmployees(employeeId: string, employeeData: IEmployeeRequest): Observable<any>{
         return this.http.put<any>(environment.Api + `api/employee/${employeeId}`, employeeData);
     }
     getEmployeeById(employeeId: string): Observable<any>{

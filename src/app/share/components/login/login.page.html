@@ -9,7 +9,7 @@
 
     <img src="./assets/images/5.png" alt="Spundan Logo" class="logo_img" />
   
-    <form [formGroup]="loginForm">
+    <form [formGroup]="loginForm" (keyup)="formSubmit($event)">
       <ion-row class="row_one">
         <ion-col size="12">
           <div class="form-input">
