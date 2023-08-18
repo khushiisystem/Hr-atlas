@@ -9,16 +9,16 @@
 
     <img src="./assets/images/5.png" alt="Spundan Logo" class="logo_img" />
   
-    <form [formGroup]="loginForm" (keyup)="formSubmit($event)">
+    <form [formGroup]="loginForm">
       <ion-row class="row_one">
         <ion-col size="12">
           <div class="form-input">
-            <ion-input labelPlacement="floating" fill="outline" formControlName="email" placeholder="Enter email/phone number">
+            <ion-input labelPlacement="floating" fill="outline" formControlName="emailOrPhone" placeholder="Enter email/phone number">
               <div slot="label">Email/Mobile <ion-text color="danger">*</ion-text></div>
             </ion-input>
           </div>
-          <ion-text color="danger" class="error_txt" *ngIf="loginForm.controls['email'].touched && loginForm.controls['email'].errors">
-            {{loginForm.controls['email'].value ? 'Please enter a valid email.' : 'Email is required'}}
+          <ion-text color="danger" class="error_txt" *ngIf="loginForm.controls['emailOrPhone'].touched && loginForm.controls['emailOrPhone'].errors">
+            {{loginForm.controls['emailOrPhone'].value ? 'Please enter a valid email.' : 'Email is required'}}
           </ion-text>
         </ion-col>
   
@@ -29,7 +29,7 @@
             </ion-input>
   
             <div class="toggleBtn">
-              <ion-button slot="end" fill="clear" (click)="showPassword = !showPassword">
+              <ion-button mode="md" slot="end" fill="clear" (click)="showPassword = !showPassword">
                 <ion-icon name="eye-outline" *ngIf="showPassword"></ion-icon>
                 <ion-icon name="eye-off-outline" *ngIf="!showPassword"></ion-icon>
               </ion-button>
@@ -45,7 +45,7 @@
         </ion-col>
         
         <ion-col size="12">
-          <ion-button expand="full" class="loginBtn" shape="round" [disabled]="loginForm.invalid" (click)="login()">Login</ion-button>
+          <ion-button mode="md" expand="full" class="loginBtn" shape="round" [disabled]="loginForm.invalid" (click)="login()">Login</ion-button>
         </ion-col>
       </ion-row>
     </form>

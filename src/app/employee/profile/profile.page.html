@@ -1,13 +1,13 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button type="button" (click)="goBack()" fill="clear" class="noBg noRipple">
+      <ion-button mode="md" type="button" (click)="goBack()" fill="clear" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>Profile</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" color="danger" fill="clear">
+      <ion-button mode="md" (click)="logout()" color="danger" fill="clear">
         <ion-icon name="log-out-outline" slot="icon-only" aria-hidden="true"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,7 +16,7 @@
 
 <ion-content [fullscreen]="true">
     <div class="container">
-        <ion-card class="profile_card ion-margin-vertical">
+        <ion-card mode="md" class="profile_card ion-margin-vertical">
           <ion-item lines="none" class="noBg">
             <div class="emp_avatar" slot="start">
               <ion-avatar class="employee_img">
@@ -34,7 +34,7 @@
           </ion-item>
         </ion-card>
     
-        <ion-card class="action_list_card">
+        <ion-card mode="md" class="action_list_card">
           <ion-accordion-group #accordionGroup mode="md">
             <ion-accordion value="Personal" mode="md">
               <ion-item slot="header" class="accordion_head_item">

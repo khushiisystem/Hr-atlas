@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button fill="clear" (click)="goBack()" class="noBg noRipple">
+      <ion-button mode="md" fill="clear" (click)="goBack()" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -26,7 +26,7 @@
   </ion-item>
 
   <div class="text-end ion-padding-horizontal ion-margin-bottom">
-    <ion-button color="primary" shape="round" type="button" (click)="dateModal = true">
+    <ion-button mode="md" color="primary" shape="round" type="button" (click)="dateModal = true">
       {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}
       <ion-icon name="chevron-down-outline" aria-hidden="true" slot="end"></ion-icon>
     </ion-button>
@@ -37,8 +37,8 @@
         <ion-datetime presentation="month-year" size="cover" mode="md" [(ngModel)]="payslipDate" #yearMonth (ionChange)="selectPayslipDate($any($event))">
           <ion-label slot="title">Select Year and Month</ion-label>
           <ion-buttons slot="buttons">
-            <ion-button color="danger" (click)="yearMonth.cancel(); dateModal = false;">Cancel</ion-button>
-            <ion-button color="primary" [disabled]="!payslipDate" (click)="yearMonth.confirm(); dateModal = false;">Done</ion-button>
+            <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateModal = false;">Cancel</ion-button>
+            <ion-button mode="md" color="primary" [disabled]="!payslipDate" (click)="yearMonth.confirm(); dateModal = false;">Done</ion-button>
           </ion-buttons>
         </ion-datetime>
       </ion-content>
@@ -95,8 +95,8 @@
         </div>
 
         <ion-buttons class="btn-group ion-margin-vertical ion-padding-top">
-          <ion-button color="danger" fill="solid" shape="round" (click)="earningForm.reset()">Reset</ion-button>
-          <ion-button color="primary" fill="solid" shape="round" [disabled]="earningForm.invalid" (click)="saveEarnings()">Next</ion-button>
+          <ion-button mode="md" color="danger" fill="solid" shape="round" (click)="earningForm.reset()">Reset</ion-button>
+          <ion-button mode="md" color="primary" fill="solid" shape="round" [disabled]="earningForm.invalid" (click)="saveEarnings()">Next</ion-button>
         </ion-buttons>
       </form>
       
@@ -140,8 +140,8 @@
         </div>
 
         <ion-buttons class="btn-group ion-margin-vertical ion-padding-top">
-          <ion-button color="danger" fill="solid" shape="round" (click)="activeTab = 'earning';deductionForm.reset()">Back</ion-button>
-          <ion-button color="primary" fill="solid" shape="round" [disabled]="deductionForm.invalid" (click)="submit()">Save</ion-button>
+          <ion-button mode="md" color="danger" fill="solid" shape="round" (click)="activeTab = 'earning';deductionForm.reset()">Back</ion-button>
+          <ion-button mode="md" color="primary" fill="solid" shape="round" [disabled]="deductionForm.invalid" (click)="submit()">Save</ion-button>
         </ion-buttons>
       </form>
 

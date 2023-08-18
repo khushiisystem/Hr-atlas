@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+      <ion-button mode="md" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
         <ion-icon name="close" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -25,7 +25,7 @@
       <ion-card mode="md" class="personal_card">
         <ion-card-header class="card_header" (click)="expandCard('personal_card')">
           <ion-card-title>Personal Information</ion-card-title>
-          <ion-button fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
             <ion-icon [name]="isExpanded('personal_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-card-header>
@@ -79,7 +79,7 @@
       <ion-card mode="md" class="contact_card ion-margin-top">
         <ion-card-header class="card_header" (click)="expandCard('contact_card')">
           <ion-card-title>Contact Information</ion-card-title>
-          <ion-button fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
             <ion-icon [name]="isExpanded('contact_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-card-header>
@@ -130,7 +130,7 @@
       <ion-card mode="md" class="address_card ion-margin-top">
         <ion-card-header class="card_header" (click)="expandCard('address_card')">
           <ion-card-title>Addresses</ion-card-title>
-          <ion-button fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
             <ion-icon [name]="isExpanded('address_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-card-header>
@@ -256,7 +256,7 @@
       <ion-card mode="md" class="social_card ion-margin-top">
         <ion-card-header class="card_header" (click)="expandCard('social_card')">
           <ion-card-title>Social Profile</ion-card-title>
-          <ion-button fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
             <ion-icon [name]="isExpanded('social_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
           </ion-button>
         </ion-card-header>
@@ -288,5 +288,5 @@
 </ion-content>
 
 <ion-footer>
-  <ion-button type="submit" class="submitBtn" [disabled]="employeeForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Update</ion-button>
+  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Update</ion-button>
 </ion-footer>

@@ -108,7 +108,7 @@ export class Tab1Page implements OnInit {
   }
 
   showattendance() {
-    this.router.navigate(['./attendance']);
+    this.router.navigate(['/tabs/attendance']);
   }
   showleaves() {
     this.router.navigate(['./leaves']);

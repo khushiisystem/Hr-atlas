@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button slot="start" fill="clear" (click)="goBack()" class="noBg noRipple">
+    <ion-button mode="md" slot="start" fill="clear" (click)="goBack()" class="noBg noRipple">
       <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
     </ion-button>
     <ion-title>Leave Setup</ion-title>
@@ -62,6 +62,6 @@
       </ion-row>
     </ion-grid>
 
-    <ion-button type="submit" size="large" class="submitBtn ion-margin" [disabled]="leaveSetupForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Save</ion-button>
+    <ion-button mode="md" type="submit" size="large" class="submitBtn ion-margin" [disabled]="leaveSetupForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Save</ion-button>
   </form>
 </ion-content>

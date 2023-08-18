@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-buttons slot="start" (click)="goBack()">
-      <ion-button fill="clear" class="noBg noRipple">
+    <ion-buttons slot="start">
+      <ion-button mode="md" fill="clear" class="noBg noRipple" (click)="goBack()">
         <ion-icon name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -31,15 +31,15 @@
             <ion-datetime presentation="month-year" size="cover" mode="md" [(ngModel)]="payslipDate" #yearMonth (ionChange)="selectPayslipDate($any($event))">
               <ion-label slot="title">Select Year and Month</ion-label>
               <ion-buttons slot="buttons">
-                <ion-button color="danger" (click)="yearMonth.cancel(); dateModal = false;">Cancel</ion-button>
-                <ion-button color="primary" [disabled]="!payslipDate" (click)="yearMonth.confirm(); dateModal = false;">Done</ion-button>
+                <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateModal = false;">Cancel</ion-button>
+                <ion-button mode="md" color="primary" [disabled]="!payslipDate" (click)="yearMonth.confirm(); dateModal = false;">Done</ion-button>
               </ion-buttons>
             </ion-datetime>
           </ion-content>
         </ng-template>
       </ion-modal>
 
-      <ion-card *ngIf="salaryReceipt" class="payslipCard">
+      <ion-card mode="md" *ngIf="salaryReceipt" class="payslipCard">
         <ion-card-content>
             <ion-row>
               <ion-col size="3">
@@ -75,7 +75,7 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-button (click)="downloadReceipt()" size="large" expand="block" class="downloadBtn ion-margin-vertical">
+      <ion-button mode="md" (click)="downloadReceipt()" size="large" expand="block" class="downloadBtn ion-margin-vertical">
         <ion-icon name="download" aria-hidden="true" slot="start"></ion-icon>
         <span>Download</span>
       </ion-button>

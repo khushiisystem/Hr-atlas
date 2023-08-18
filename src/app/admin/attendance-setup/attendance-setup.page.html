@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button slot="start" fill="clear" class="noBg noRipple" (click)="close()">
+    <ion-button mode="md" slot="start" fill="clear" class="noBg noRipple" (click)="close()">
       <ion-icon name="chevron-back-outline"></ion-icon>
     </ion-button>
     <ion-title>Attendance Setup</ion-title>
@@ -18,7 +18,7 @@
                 <div slot="label">In Time <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <div class="toggleBtn">
-                <ion-button slot="end" fill="clear" color="medium">
+                <ion-button mode="md" slot="end" fill="clear" color="medium">
                   <ion-icon name="time-outline"></ion-icon>
                 </ion-button>
               </div>
@@ -33,7 +33,7 @@
                 <div slot="label">Out Time <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <div class="toggleBtn">
-                <ion-button slot="end" fill="clear" color="medium">
+                <ion-button mode="md" slot="end" fill="clear" color="medium">
                   <ion-icon name="time-outline"></ion-icon>
                 </ion-button>
               </div>
@@ -48,7 +48,7 @@
                 <div slot="label">Grace Period <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <div class="toggleBtn">
-                <ion-button slot="end" fill="clear" color="medium">
+                <ion-button mode="md" slot="end" fill="clear" color="medium">
                   <ion-icon name="time-outline"></ion-icon>
                 </ion-button>
               </div>
@@ -63,7 +63,7 @@
                 <div slot="label">Work Duration <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <div class="toggleBtn">
-                <ion-button slot="end" fill="clear" color="medium">
+                <ion-button mode="md" slot="end" fill="clear" color="medium">
                   <ion-icon name="time-outline"></ion-icon>
                 </ion-button>
               </div>
@@ -75,7 +75,7 @@
       </ion-grid>
 
       <div class="btn_div">
-          <ion-button color="primary" type="submit" [expand]="'block'" [shape]="'round'" [disabled]="attendanceForm.invalid" (click)="saveSetup()" class="submitBtn">Save</ion-button>
+          <ion-button mode="md" color="primary" type="submit" [expand]="'block'" [shape]="'round'" [disabled]="attendanceForm.invalid" (click)="saveSetup()" class="submitBtn">Save</ion-button>
       </div>
     </form>
 
@@ -85,8 +85,8 @@
           <ion-datetime [presentation]="'time'" mode="md" [size]="'cover'" (ionChange)="selectTime($any($event))" [value]="currentControl.trim() !== '' ? getDate(currentControl).toISOString() : ''" #dateTime>
             <ion-label slot="title" *ngIf="currentControl.trim() !== ''">{{currentControl === 'inTime' ? 'Set In Time' : 'Set Out Time'}}</ion-label>
             <ion-buttons slot="buttons">
-              <ion-button color="danger" (click)="dateTime.cancel(); isOpenTimeModal = false">Cancel</ion-button>
-              <ion-button color="primary" (click)="dateTime.confirm(); isOpenTimeModal = false">Set</ion-button>
+              <ion-button mode="md" color="danger" (click)="dateTime.cancel(); isOpenTimeModal = false">Cancel</ion-button>
+              <ion-button mode="md" color="primary" (click)="dateTime.confirm(); isOpenTimeModal = false">Set</ion-button>
             </ion-buttons>
           </ion-datetime>
         </ion-content>

@@ -48,7 +48,7 @@ export class ShareService {
 
   // sharable APIs
   getOTP(data: IOTPRequest): Observable<any> {
-    return this.http.post<any>(environment.Api + `api/getOTP`, data);
+    return this.http.post<any>(environment.Api + `api/user/sendOtp`, data);
   }
   verifyOTP(data: {otp: string}): Observable<any> {
     return this.http.post<any>(environment.Api + `api/verifyOTP/`, data);

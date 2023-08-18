@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+      <ion-button mode="md" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
         <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -175,5 +175,5 @@
   </ion-fab>
 </ion-content>
 <ion-footer *ngIf="userRole === 'Admin' && lastRoute === 'setting' && selectedEmployee.length > 0">
-  <ion-button type="button" color="primary" size="large" expand="block" shape="round" class="ion-margin-horizontal sendPayBtn">Send Payslip</ion-button>
+  <ion-button mode="md" type="button" color="primary" size="large" expand="block" shape="round" class="ion-margin-horizontal sendPayBtn">Send Payslip</ion-button>
 </ion-footer>

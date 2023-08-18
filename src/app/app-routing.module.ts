@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { AttendancePage } from './components/attendance/attendance.page';
 import { LeavesPage } from './components/leaves/leaves.page';
 import { DirectoryPage } from './components/directory/directory.page';
 import { WorkpagePage } from './components/workpage/workpage.page';
@@ -23,10 +22,6 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
     // canActivate: [AuthGuard]
-  },
-  {
-    path: 'attendance',
-    component: AttendancePage
   },
   {
     path: 'leaves',

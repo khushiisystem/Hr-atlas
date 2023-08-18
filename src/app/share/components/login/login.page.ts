@@ -27,7 +27,8 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
+      emailOrPhone: ['', Validators.required],
+      // isEmail: true,
       password: ['', Validators.required]
     });
   }
@@ -43,16 +44,17 @@ export class LoginPage implements OnInit {
       this.authServ.emailLogin(this.loginForm.value).subscribe(res => {
         if(res){
           this.shareServ.presentToast('Login successful.', 'top', 'success');
+          this.isInProgress = false;
+          this.loginForm.reset();
           this.router.navigateByUrl('/tabs/home');
           this.loader.dismiss();
-          this.isInProgress = false;
         }
       }, (error) => {
         this.shareServ.presentToast('Something is wrong.', 'top', 'danger');
         this.loader.dismiss();
         this.isInProgress = false;
       })
-      this.router.navigateByUrl('/tabs/home');
+      // this.router.navigateByUrl('/tabs/home');
     }
   }
 

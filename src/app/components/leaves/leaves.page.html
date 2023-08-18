@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
     <ion-toolbar class="header-toolbar">
         <ion-buttons slot="start">
-            <ion-button (click)="gooooooBack()">
+            <ion-button mode="md" (click)="gooooooBack()">
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -23,7 +23,7 @@
     <ion-card class="leave-card">
         <ion-card-header>
             <ion-card-title>Casual Leave
-                <ion-button *ngIf="!showApplyFormForCasualLeave" shape="round" color="primary" (click)="openApplyCard('Casual Leave')" class="apply-button">Apply</ion-button>
+                <ion-button mode="md" *ngIf="!showApplyFormForCasualLeave" shape="round" color="primary" (click)="openApplyCard('Casual Leave')" class="apply-button">Apply</ion-button>
             </ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -62,7 +62,7 @@
     <ion-card class="loss-of-pay-card">
         <ion-card-header>
             <ion-card-title>Loss of Pay
-                <ion-button *ngIf="!showApplyFormForLossOfPay" shape="round" color="primary" (click)="openApplyCard('Loss of Pay')" class="apply-button">Apply</ion-button>
+                <ion-button mode="md" *ngIf="!showApplyFormForLossOfPay" shape="round" color="primary" (click)="openApplyCard('Loss of Pay')" class="apply-button">Apply</ion-button>
             </ion-card-title>
         </ion-card-header>
         <ion-card-content>
@@ -124,7 +124,7 @@
                 <ion-label position="floating">Purpose (Max 1000 characters)</ion-label>
                 <!-- <ion-textarea rows="6" maxlength="1000" [(ngModel)]="purpose" placeholder="Enter the purpose of your leave"></ion-textarea> -->
             </ion-item>
-            <ion-button expand="block" color="primary" (click)="submitLeave()">Submit</ion-button>
+            <ion-button mode="md" expand="block" color="primary" (click)="submitLeave()">Submit</ion-button>
         </ion-card-content>
     </ion-card>
 </ion-content>

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
 import { DirectoryPage } from '../components/directory/directory.page';
-import { AttendancePage } from '../components/attendance/attendance.page';
+import { AttendancePage } from '../employee/attendance/attendance.page';
 import { ProfilePage } from '../employee/profile/profile.page';
 import { Tab1Page } from '../tab1/tab1.page';
 import { AuthGuard } from '../core/auth.guard';

@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button slot="start" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+    <ion-button mode="md" slot="start" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
       <ion-icon name="close" slot="icon-only"></ion-icon>
     </ion-button>
     <ion-title>Add Employee</ion-title>
@@ -72,7 +72,7 @@
                 <div slot="label">Date of birth <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <div class="toggleBtn">
-                <ion-button fill="clear" (click)="openCalendar = true">
+                <ion-button mode="md" fill="clear" (click)="openCalendar = true">
                   <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
                 </ion-button>
               </div>
@@ -80,7 +80,7 @@
           </ion-col>
 
           <ion-col size="12">
-            <ion-button type="submit" class="submitBtn" [disabled]="employeeForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Add Employee</ion-button>
+            <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Add Employee</ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -91,8 +91,8 @@
             <ion-datetime presentation="date" mode="md" [size]="'cover'" #datetime (ionChange)="selectDate($any($event))" [value]="getDate().toISOString()">
               <span slot="title">Date of Birth</span>
               <ion-buttons slot="buttons">
-                <ion-button color="danger" (click)="datetime.cancel();openCalendar = false">Cancel</ion-button>
-                <ion-button color="primary" (click)="datetime.confirm();openCalendar = false">Done</ion-button>
+                <ion-button mode="md" color="danger" (click)="datetime.cancel();openCalendar = false">Cancel</ion-button>
+                <ion-button mode="md" color="primary" (click)="datetime.confirm();openCalendar = false">Done</ion-button>
               </ion-buttons>
             </ion-datetime>
           </ion-content>
