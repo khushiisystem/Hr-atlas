@@ -10,80 +10,280 @@
 <ion-content [fullscreen]="true">
   <div class="container">
     <form [formGroup]="employeeForm">
-      <ion-grid>
-        <ion-row class="row_one">
-          <ion-col size="12" sizeSm="6">
-            <div class="form-input">
-              <ion-input labelPlacement="floating" fill="outline" formControlName="firstName" placeholder="First Name" type="text">
-                <div slot="label">First Name <ion-text color="danger">*</ion-text></div>
-              </ion-input>
-            </div>
-            <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
-              {{employeeForm.controls['firstName'].value ? 'Please enter a valid name.' : 'First name is required'}}
-            </ion-text>
-          </ion-col>
-
-          <ion-col size="12" sizeSm="6">
-            <div class="form-input">
-              <ion-input labelPlacement="floating" fill="outline" formControlName="lastName" placeholder="Last Name" type="text">
-                <div slot="label">Last Name</div>
-              </ion-input>
-            </div>
-            <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['lastName'].errors">
-              Please enter a valid name.
-            </ion-text>
-          </ion-col>
-
-          <ion-col size="12">
-            <div class="form-input">
-              <ion-input labelPlacement="floating" fill="outline" formControlName="email" placeholder="Enter Email" type="email">
-                <div slot="label">Email <ion-text color="danger">*</ion-text></div>
-              </ion-input>
-            </div>
-            <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['email'].touched && employeeForm.controls['email'].errors">
-              {{employeeForm.controls['email'].value ? 'Please enter a valid email.' : 'Email is required'}}
-            </ion-text>
-          </ion-col>
-
-          <ion-col size="12">
-            <div class="form-input">
-              <ion-input labelPlacement="floating" fill="outline" formControlName="mobileNumber" placeholder="Mobile Number" type="tel">
-                <div slot="label">Mobile Number <ion-text color="danger">*</ion-text></div>
-              </ion-input>
-            </div>
-            <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['mobileNumber'].touched && employeeForm.controls['mobileNumber'].errors">
-              {{employeeForm.controls['mobileNumber'].value ? 'Please enter a valid number.' : 'Mobile number is required'}}
-            </ion-text>
-          </ion-col>
-
-          <ion-col size="12" sizeSm="6">
-            <div class="form-input">
-              <ion-select labelPlacement="floating" fill="outline" formControlName="gender" placeholder="Select" interface="action-sheet">
-                <div slot="label">Gender <ion-text color="danger">*</ion-text></div>
-                <ion-select-option value="Male">Male</ion-select-option>
-                <ion-select-option value="Female">Female</ion-select-option>
-              </ion-select>
-            </div>
-          </ion-col>
-
-          <ion-col size="12" sizeSm="6">
-            <div class="form-input">
-              <ion-input labelPlacement="floating" fill="outline" [readonly]="true" [value]="getDate() | date" (ionFocus)="openCalendar = true" (ionActive)="openCalendar = true">
-                <div slot="label">Date of birth <ion-text color="danger">*</ion-text></div>
-              </ion-input>
-              <div class="toggleBtn">
-                <ion-button mode="md" fill="clear" (click)="openCalendar = true">
-                  <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
-                </ion-button>
+      <ion-card mode="md" class="personal_card">
+        <ion-card-header class="card_header" (click)="expandCard('personal_card')">
+          <ion-card-title>Personal Information</ion-card-title>
+          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+            <ion-icon [name]="isExpanded('personal_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-card-header>
+        <ion-card-content *ngIf="isExpanded('personal_card')">
+          <ion-row class="row_one">
+            <ion-col size="12" sizeSm="6">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="firstName" placeholder="First Name" type="text">
+                  <div slot="label">First Name <ion-text color="danger">*</ion-text></div>
+                </ion-input>
               </div>
-            </div>
-          </ion-col>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
+                {{employeeForm.controls['firstName'].value ? 'Please enter a valid name.' : 'First name is required'}}
+              </ion-text>
+            </ion-col>
+  
+            <ion-col size="12" sizeSm="6">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="lastName" placeholder="Last Name" type="text">
+                  <div slot="label">Last Name</div>
+                </ion-input>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['lastName'].errors">
+                Please enter a valid name.
+              </ion-text>
+            </ion-col>
 
-          <ion-col size="12">
-            <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Add Employee</ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+            <ion-col size="12" sizeSm="6">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" [readonly]="true" [value]="getDate() | date" (ionFocus)="openCalendar = true" (ionActive)="openCalendar = true">
+                  <div slot="label">Date of birth <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+                <div class="toggleBtn">
+                  <ion-button mode="md" fill="clear" (click)="openCalendar = true">
+                    <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+                  </ion-button>
+                </div>
+              </div>
+            </ion-col>
+  
+            <ion-col size="12" sizeSm="6">
+              <div class="form-input">
+                <ion-select labelPlacement="floating" fill="outline" formControlName="gender" placeholder="Select" interface="action-sheet">
+                  <div slot="label">Gender <ion-text color="danger">*</ion-text></div>
+                  <ion-select-option value="Male">Male</ion-select-option>
+                  <ion-select-option value="Female">Female</ion-select-option>
+                </ion-select>
+              </div>
+            </ion-col>
+  
+            <ion-col size="12" sizeSm="6">
+              <div class="form-input">
+                <ion-select labelPlacement="floating" fill="outline" formControlName="maritalStatus" placeholder="Select" interface="action-sheet">
+                  <div slot="label">Marital Status</div>
+                  <ion-select-option value="Married">Married</ion-select-option>
+                  <ion-select-option value="Unmarried">Unmarried</ion-select-option>
+                </ion-select>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card mode="md" class="contact_card ion-margin-top">
+        <ion-card-header class="card_header" (click)="expandCard('contact_card')">
+          <ion-card-title>Contact Information</ion-card-title>
+          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+            <ion-icon [name]="isExpanded('contact_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-card-header>
+        <ion-card-content *ngIf="isExpanded('contact_card')">
+          <ion-row class="row_one">
+            <ion-col size="12">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="mobileNumber" placeholder="Mobile Number" type="tel">
+                  <div slot="label">Mobile Number <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['mobileNumber'].touched && employeeForm.controls['mobileNumber'].errors">
+                {{employeeForm.controls['mobileNumber'].value ? 'Please enter a valid number.' : 'Mobile number is required'}}
+              </ion-text>
+            </ion-col>
+            
+            <ion-col size="12">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="alternateMobileNumber" placeholder="Alternate Mobile Number" type="tel">
+                  <div slot="label">Alternate Mobile Number </div>
+                </ion-input>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['alternateMobileNumber'].touched && employeeForm.controls['alternateMobileNumber'].errors">Please enter a valid number.</ion-text>
+            </ion-col>
+
+            <ion-col size="12">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="email" placeholder="Enter Email" type="email">
+                  <div slot="label">Personal Email <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['email'].touched && employeeForm.controls['email'].errors">
+                {{employeeForm.controls['email'].value ? 'Please enter a valid email.' : 'Email is required'}}
+              </ion-text>
+            </ion-col>
+
+            <ion-col size="12">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="officialEmail" placeholder="Enter Email" type="email">
+                  <div slot="label">Official Email</div>
+                </ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card mode="md" class="address_card ion-margin-top">
+        <ion-card-header class="card_header" (click)="expandCard('address_card')">
+          <ion-card-title>Addresses</ion-card-title>
+          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+            <ion-icon [name]="isExpanded('address_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-card-header>
+        <ion-card-content *ngIf="isExpanded('address_card')">
+          <ion-row class="row_one ion-margin-bottom ion-padding-bottom" formGroupName="currentAddress">
+            <ion-col size="12">
+              <h2>Current Address</h2>
+            </ion-col>
+            <ion-col size="12" sizeMd="6">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine1" placeholder="Address Line 1" type="text">
+                  <div slot="label">Address Line 1 <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
+                {{employeeForm.controls['firstName'].value ? 'Please enter a valid name.' : 'First name is required'}}
+              </ion-text>
+            </ion-col>
+  
+            <ion-col size="12" sizeMd="6">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine2" placeholder="Address Line 2" type="text">
+                  <div slot="label">Address Line 2 <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+
+            <ion-col size="6" sizeMd="4">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="city" placeholder="City" type="text">
+                  <div slot="label">City <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+  
+            <ion-col size="6" sizeMd="4">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="state" placeholder="State" type="text">
+                  <div slot="label">State <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+  
+            <ion-col size="6" sizeMd="4">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="country" placeholder="Country" type="text">
+                  <div slot="label">Country <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+  
+            <ion-col size="6" sizeMd="4">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="zipCode" placeholder="Zip Code" type="text">
+                  <div slot="label">Zip Code <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+
+          <!-- ---------------------------------- permanent address ------------------------- -->
+          <ion-row class="row_one" formGroupName="permanentAddress">
+            <ion-col size="12">
+              <h2>Permanent Address</h2>
+            </ion-col>
+            <ion-col size="12">
+              <ion-checkbox labelPlacement="end" color="primary" [checked]="isSameAddress" (ionChange)="sameAddress($any($event))">Same as current address</ion-checkbox>
+            </ion-col>
+            <ion-col size="12" sizeMd="6">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine1" placeholder="Address Line 1" type="text">
+                  <div slot="label">Address Line 1 <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
+                {{employeeForm.controls['firstName'].value ? 'Please enter a valid name.' : 'First name is required'}}
+              </ion-text>
+            </ion-col>
+  
+            <ion-col size="12" sizeMd="6">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine2" placeholder="Address Line 2" type="text">
+                  <div slot="label">Address Line 2 <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+
+            <ion-col size="6" sizeMd="4">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="city" placeholder="City" type="text">
+                  <div slot="label">City <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+  
+            <ion-col size="6" sizeMd="4">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="state" placeholder="State" type="text">
+                  <div slot="label">State <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+  
+            <ion-col size="6" sizeMd="4">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="country" placeholder="Country" type="text">
+                  <div slot="label">Country <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+  
+            <ion-col size="6" sizeMd="4">
+              <div class="form-input">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="zipCode" placeholder="Zip Code" type="text">
+                  <div slot="label">Zip Code <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card mode="md" class="social_card ion-margin-top">
+        <ion-card-header class="card_header" (click)="expandCard('social_card')">
+          <ion-card-title>Social Profile</ion-card-title>
+          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+            <ion-icon [name]="isExpanded('social_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-card-header>
+        <ion-card-content *ngIf="isExpanded('social_card')">
+          <div class="social_items">
+            <div class="social_icons linkedin">
+              <ion-icon name="logo-linkedin" aria-hidden="true" size="large"></ion-icon>
+            </div>
+            <ion-input label="Linkedin" labelPlacement="floating" fill="outline" formControlName="linkedinUrl" placeholder="Linkedin" type="url"></ion-input>
+          </div>
+
+          <div class="social_items">
+            <div class="social_icons fb">
+              <ion-icon name="logo-facebook" aria-hidden="true" size="large"></ion-icon>
+            </div>
+            <ion-input label="Facebook" labelPlacement="floating" fill="outline" formControlName="facebookUrl" placeholder="Facebook" type="url"></ion-input>
+          </div>
+
+          <div class="social_items">
+            <div class="social_icons twitter">
+              <ion-icon name="logo-twitter" aria-hidden="true" size="large"></ion-icon>
+            </div>
+            <ion-input label="Twitter" labelPlacement="floating" fill="outline" formControlName="twitterUrl" placeholder="Twitter" type="url"></ion-input>
+          </div>
+        </ion-card-content>
+      </ion-card>
 
       <ion-modal [isOpen]="openCalendar" [initialBreakpoint]="1">
         <ng-template>        
@@ -99,6 +299,11 @@
         </ng-template>
       </ion-modal>
     </form>
-
   </div>
 </ion-content>
+<ion-footer>
+  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">
+    <ion-icon name="person-add-outline" aria-hidden="true" slot="start"></ion-icon>
+    Add Employee
+  </ion-button>
+</ion-footer>

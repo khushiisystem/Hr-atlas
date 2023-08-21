@@ -13,6 +13,7 @@ import { EditProfilePage } from '../employee/edit-profile/edit-profile.page';
 import { EmployeeProfilePage } from '../employee/employee-profile/employee-profile.page';
 import { PayrollSetupPage } from '../admin/payroll-setup/payroll-setup.page';
 import { PayrollPage } from '../employee/payroll/payroll.page';
+import { AdditionalSetupPage } from '../admin/additional-setup/additional-setup.page';
 
 const routes: Routes = [
   {
@@ -35,6 +36,12 @@ const routes: Routes = [
         title: "Attendance",
         component: AttendancePage,
         canActivate: [AuthGuard]
+      },
+      {
+        path: 'additional-setup',
+        title: "Additional Setup",
+        component: AdditionalSetupPage,
+        // canActivate: [AuthGuard]s
       },
       {
         path: 'profile',

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
+import { ShareService } from '../services/share.service';
 
 @Component({
   selector: 'app-tab1',
@@ -16,19 +17,42 @@ export class Tab1Page implements OnInit {
   stopwatchInterval: any;
   stopwatchTime: string = '00:00:00';
   buttonLabel: string = 'Clock in';
-  userRole: string = "Employee";
+  userRole: string = "";
+  userId: string = '';
+  isDataLoaded: boolean = false;
+  userDetails: any;
+  demoCard: any[] = [];
 
   constructor(
     private router: Router,
     private modalCtrl: ModalController,
+    private shareServ: ShareService,
   ) {}
 
   ngOnInit() {
+    this.userId = localStorage.getItem("userId") || "";
+    this.userRole = localStorage.getItem("userRole") || "Employee";
     const directoryIcon = document.getElementById('directoryIcon');
     if (directoryIcon) {
       directoryIcon.addEventListener('click', this.showdirectory.bind(this));
     }
-    localStorage.setItem('lastRoute', 'home');
+    localStorage.setItem('lastRoute', this.router.url);
+    if(this.userId.trim() !== '') {
+      this.getProfile();
+    }
+    this.demoCard.length = 12;
+  }
+
+  getProfile(){
+    this.shareServ.getEmployeeById(this.userId).subscribe(res => {
+      if(res) {
+        this.userDetails = res;
+        this.isDataLoaded = true;
+      }
+    }, (error) => {
+      console.log(error);
+      this.isDataLoaded = true;
+    })
   }
 
   toggleStopwatch() {

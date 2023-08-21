@@ -32,7 +32,7 @@ export class ShareService {
     return this.http.get<any>(environment.Api + `api/employee?skip=${pageIndex}&limit=${pageSize}`);
   }
   getEmployeeById(empId: string): Observable<any>{
-    return this.http.get<any>(environment.Api + `api/employee/${empId}`);
+    return this.http.get<any>(environment.Api + `api/user/${empId}`);
   }
   updateEmployeeById(empId: string, empData: any): Observable<any>{
     return this.http.put<any>(environment.Api + `api/employee/${empId}`, empData);

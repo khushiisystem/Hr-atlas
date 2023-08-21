@@ -1,13 +1,124 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-title>additionalSetup</ion-title>
+    <ion-buttons slot="start">
+      <ion-button mode="md" fill="clear" class="noBg noRipple" (click)="goBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Additional Setup</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">additionalSetup</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="container ion-padding-vertical">
+    <ion-title class="text-center ion-margin-bottom">Work Week</ion-title>
+
+    <ion-segment [(ngModel)]="activeTab" class="tab_segement">
+      <ion-segment-button value="create_work_week">Create Work Week</ion-segment-button>
+      <ion-segment-button value="assign_work_week">Assign Work Week</ion-segment-button>
+    </ion-segment>
+
+    <div class="tab_content">
+      <div class="create_work_week" *ngIf="activeTab === 'create_work_week'">
+        <ng-container *ngIf="!isDataLoaded">
+          <ion-card mode="md" type="button" button="true" class="ion-margin-bottom" *ngFor="let card of randomCard">
+            <ion-item [lines]="'none'" [button]="false" [detail]="false">
+              <div>
+                <h3>
+                  <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+                </h3>
+                <p>
+                  <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+                </p>
+              </div>
+            </ion-item>
+          </ion-card>
+        </ng-container>
+
+        <ng-container *ngIf="isDataLoaded">
+          <ion-card mode="md" type="button" button="true" class="ion-margin-bottom sso">
+            <ion-item [lines]="'none'" [button]="true" [detail]="true" [detailIcon]="expandedCard === 'sso' ? 'chevron-down-outline' : 'chevron-forward-outline'" (click)="expandCard('sso')">
+              <div>
+                <ion-label>Saturday Sunday Off</ion-label>
+                <ion-text><strong>4</strong> Employees</ion-text>
+              </div>
+            </ion-item>
+            <ion-card-content *ngIf="expandedCard === 'sso'">
+              <ion-chip color="primary">Akash Sharma</ion-chip>
+              <ion-chip color="tertiary">Ambikesh kumar</ion-chip>
+            </ion-card-content>
+          </ion-card>
+  
+          <ion-card mode="md" type="button" button="true" class="ion-margin-bottom so">
+            <ion-item [lines]="'none'" [button]="true" [detail]="true" [detailIcon]="expandedCard === 'so' ? 'chevron-down-outline' : 'chevron-forward-outline'" (click)="expandCard('so')">
+              <div>
+                <ion-label>Sunday Off</ion-label>
+                <ion-text>No Employees</ion-text>
+              </div>
+            </ion-item>
+            <ion-card-content *ngIf="expandedCard === 'so'">
+              <ion-chip color="primary">Akash Sharma</ion-chip>
+              <ion-chip color="tertiary">Ambikesh kumar</ion-chip>
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+      </div>
+
+      <div class="assign_work_week" *ngIf="activeTab === 'assign_work_week'">
+        <ion-row class="ion-padding">
+          <ion-col size="12">
+            <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round"></ion-input>
+          </ion-col>
+          <ion-col size="12">
+            <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === 2" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
+          </ion-col>
+        </ion-row>
+
+        <ion-list>
+          <ion-item lines="full" [button]="true" [detail]="false" class="list-item">
+            <div slot="start" class="check_container" (click)="selectEmployee('Arjun')">
+              <ion-avatar class="employee_img">
+                <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+              </ion-avatar>
+              <div class="custom_checkbox" *ngIf="isChecked('Arjun')">
+                <span class="checkmark"></span>
+              </div>
+            </div>
+            <div class="employee_data" (click)="selectWrokWeek(['Arjun'])">
+              <ion-label>Arjun Singh</ion-label>
+              <ion-text class="role"><small>Frontend Developer</small></ion-text>
+            </div>
+          </ion-item>
+
+          <ion-item lines="full" [button]="true" [detail]="false" class="list-item">
+            <div slot="start" class="check_container" (click)="selectEmployee('Pritam')">
+              <ion-avatar class="employee_img">
+                <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+              </ion-avatar>
+              <div class="custom_checkbox" *ngIf="isChecked('Pritam')">
+                <span class="checkmark"></span>
+              </div>
+            </div>
+            <div class="employee_data" (click)="selectWrokWeek(['Pritam'])">
+              <ion-label>Pritam Singh</ion-label>
+              <ion-text class="role"><small>Frontend Developer</small></ion-text>
+            </div>
+          </ion-item>
+        </ion-list>
+
+        <ion-buttons class="paginator_btns">
+          <ion-button mode="md" fill="solid" [color]="!isMoreEmployee ? 'medium' : 'primary'" class="ion-text-wrap paginateBtn" [disabled]="pageIndex < 1" (click)="prev()">Previous</ion-button>
+          <ion-button mode="md" fill="solid" [color]="!isMoreEmployee ? 'medium' : 'primary'" class="ion-text-wrap paginateBtn" [disabled]="!isMoreEmployee" (click)="next()">Next</ion-button>
+        </ion-buttons>
+
+        <ion-button class="ion-margin big_assign_btn" shape="round" mode="md" fill="solid" expand="block" *ngIf="selectedEmployee.length >= 2" (click)="selectWrokWeek(selectedEmployee)">Assign Week</ion-button>
+
+        <!-- action sheet for week section -->
+        <!-- <ion-action-sheet></ion-action-sheet> -->
+      </div>
+    </div>
+  </div>
 </ion-content>

@@ -37,4 +37,9 @@ export class AdminService {
     getAttendanceSetup(): Observable<any>{
         return this.http.get<any>(environment.Api + `api/attendaceSetup`);
     }
+
+    // assign work week
+    assignWorkWeek(data: any): Observable<any> {
+        return this.http.post<any>(environment.Api + `/api/assignWorkWeek`, data);
+    }
 }

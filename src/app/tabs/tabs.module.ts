@@ -16,6 +16,8 @@ import { EditProfilePage } from "../employee/edit-profile/edit-profile.page";
 import { PayrollSetupPage } from "../admin/payroll-setup/payroll-setup.page";
 import { PayrollPage } from "../employee/payroll/payroll.page";
 import { AttendancePage } from "../employee/attendance/attendance.page";
+import { AdditionalSetupPage } from "../admin/additional-setup/additional-setup.page";
+import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { AttendancePage } from "../employee/attendance/attendance.page";
     PayrollSetupPage,
     PayrollPage,
     AttendancePage,
+    AdditionalSetupPage,
   ],
   imports: [
     IonicModule,
@@ -36,6 +39,7 @@ import { AttendancePage } from "../employee/attendance/attendance.page";
     FormsModule,
     ReactiveFormsModule,
     TabsPageRoutingModule,
+    RouterModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard],

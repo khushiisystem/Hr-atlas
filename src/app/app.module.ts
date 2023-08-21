@@ -12,7 +12,6 @@ import { DirectoryPage } from "./components/directory/directory.page";
 import { WorkpagePage } from "./components/workpage/workpage.page";
 import { WeekpagePage } from "./components/weekpage/weekpage.page";
 import { UserPage } from "./components/user/user.page";
-import { AdditionalSetupPage } from "./components/additional-setup/additional-setup.page";
 import { LOGSPage } from "./components/logs/logs.page";
 import { LeaveadminPage } from "./components/leaveadmin/leaveadmin.page";
 import { FileSaverModule } from "ngx-filesaver";
@@ -34,7 +33,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     WorkpagePage,
     WeekpagePage,
     UserPage,
-    AdditionalSetupPage,
     LOGSPage,
     LeaveadminPage,
     LeaveSetupPage,
