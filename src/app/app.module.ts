@@ -1,50 +1,38 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
-import { RouteReuseStrategy } from "@angular/router";
+import { RouteReuseStrategy, RouterModule } from "@angular/router";
 
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-import { AttendancePage } from "./components/attendance/attendance.page";
 import { LeavesPage } from "./components/leaves/leaves.page";
-import { PayrollPage } from "./components/payroll/payroll.page";
-import { ProfilePage } from "./components/profile/profile.page";
 import { DirectoryPage } from "./components/directory/directory.page";
-import { BiopagePage } from "./components/biopage/biopage.page";
-import { PersonalpagePage } from "./components/personalpage/personalpage.page";
 import { WorkpagePage } from "./components/workpage/workpage.page";
-import { TeampagePage } from "./components/teampage/teampage.page";
 import { WeekpagePage } from "./components/weekpage/weekpage.page";
 import { UserPage } from "./components/user/user.page";
-import { AdditionalSetupPage } from "./components/additional-setup/additional-setup.page";
 import { LOGSPage } from "./components/logs/logs.page";
 import { LeaveadminPage } from "./components/leaveadmin/leaveadmin.page";
 import { FileSaverModule } from "ngx-filesaver";
-import { DatePipe } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AuthGuard } from "./core/auth.guard";
 import { TokenInterceptor } from "./core/token.interceptor";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { LeaveSetupPage } from "./admin/leave-setup/leave-setup.page";
 import { EmployeeWorkWeekPage } from "./employee/employee-work-week/employee-work-week.page";
+import { NgOtpInputModule } from "ng-otp-input";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AttendancePage,
     LeavesPage,
-    PayrollPage,
-    ProfilePage,
     DirectoryPage,
-    BiopagePage,
-    PersonalpagePage,
     WorkpagePage,
-    TeampagePage,
     WeekpagePage,
     UserPage,
-    AdditionalSetupPage,
     LOGSPage,
     LeaveadminPage,
     LeaveSetupPage,
@@ -56,8 +44,11 @@ import { EmployeeWorkWeekPage } from "./employee/employee-work-week/employee-wor
     AppRoutingModule,
     FileSaverModule,
     HttpClientModule,
+    RouterModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    NgOtpInputModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

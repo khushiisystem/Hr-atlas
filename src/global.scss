@@ -72,3 +72,12 @@
     }
 }
 .btn_item {--detail-icon-opacity: 0.6;}
+
+// otp input style
+.otp_input_container {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.action_week_btn{--ripple-color: var(--ion-color-primary);}

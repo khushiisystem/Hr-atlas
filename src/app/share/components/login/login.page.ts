@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/auth.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { ShareService } from 'src/app/services/share.service';
 
 @Component({
   selector: 'app-login',
@@ -12,25 +15,46 @@ export class LoginPage implements OnInit {
   inputValue!: string;
   loginForm!: FormGroup;
   showPassword: boolean = false;
+  isInProgress: boolean = false;
 
   constructor(
     public router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private authServ: AuthService,
+    private shareServ: ShareService,
+    private loader: LoaderService,
   ) {}
 
   ngOnInit() {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
+      emailOrPhone: ['', Validators.required],
+      // isEmail: true,
       password: ['', Validators.required]
     });
   }
 
   login(){
+    console.log(this.loginForm.value);
     if(this.loginForm.invalid){
+      this.shareServ.presentToast('Form is not completed.', 'top', 'danger');
       return;
     } else {
-      console.log(this.loginForm.value);
-      this.router.navigateByUrl('/tabs/home');
+      this.loader.present('');
+      this.isInProgress = true;
+      this.authServ.emailLogin(this.loginForm.value).subscribe(res => {
+        if(res){
+          this.shareServ.presentToast('Login successful.', 'top', 'success');
+          this.isInProgress = false;
+          this.loginForm.reset();
+          this.router.navigateByUrl('/tabs/home');
+          this.loader.dismiss();
+        }
+      }, (error) => {
+        this.shareServ.presentToast('Something is wrong.', 'top', 'danger');
+        this.loader.dismiss();
+        this.isInProgress = false;
+      })
+      // this.router.navigateByUrl('/tabs/home');
     }
   }
 
@@ -48,6 +72,12 @@ export class LoginPage implements OnInit {
       this.router.navigate(['./home']);
     } else {
       console.log('Invalid input');
+    }
+  }
+
+  formSubmit(event: KeyboardEvent){
+    if(this.loginForm.valid && event.key === 'Enter'){
+      this.login();
     }
   }
 }

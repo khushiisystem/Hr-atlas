@@ -54,14 +54,13 @@ export class SettingsPage implements OnInit {
   }
 
   payrollSetup(){
-    localStorage.setItem('lastRoute', 'setting');
+    localStorage.setItem('lastRoute', this.router.url);
     this.router.navigate(['/tabs/employee-list']);
   }
   
-  goToPage4(){
-    localStorage.setItem('lastRoute', 'setting');
-    this.router.navigate(['./additional-setup']);
-
+  additionalsetup(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate(['/tabs/additional-setup']);
   }
  
 }

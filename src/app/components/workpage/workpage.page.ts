@@ -41,11 +41,7 @@ export class WorkpagePage implements OnInit {
   }
   ngOnInit() {
   }
-  toggleEditMode() {
-    this.isEditMode = !this.isEditMode;
-  }
-  goBackpage() {
-    this.router.navigate(['./profile']);
-  }
+
+  goBack() {history.back();}
 
 }

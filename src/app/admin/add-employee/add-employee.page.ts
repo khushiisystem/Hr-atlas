@@ -25,6 +25,8 @@ export class AddEmployeePage implements OnInit {
   birthDate: any;
   employeeId: string = '';
   action: string = '';
+  isSameAddress: boolean = false;
+  expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card']
 
   constructor(
     private fb: FormBuilder,
@@ -42,10 +44,33 @@ export class AddEmployeePage implements OnInit {
       firstName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
       lastName: ['', Validators.compose([Validators.maxLength(50)])],
       email: ['', Validators.compose([Validators.required, Validators.email])],
-      mobileNumber: ['', Validators.compose([Validators.required, Validators.maxLength(10)])],
       dateOfBirth: ['', Validators.compose([Validators.required])],
       address: [''],
-      gender: ['Male']
+      gender: ['Male'],
+      officialEmail: ['', Validators.compose([Validators.email])],
+      mobileNumber: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
+      alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10)])],
+      maritalStatus: [''],
+      imageUrl: [''],
+      currentAddress: this.fb.group({
+        addressLine1: ['', Validators.compose([Validators.required])],
+        addressLine2: ['', Validators.compose([Validators.required])],
+        city: ['', Validators.compose([Validators.required])],
+        state: ['', Validators.compose([Validators.required])],
+        country: ['', Validators.compose([Validators.required])],
+        zipCode: ['', Validators.compose([Validators.required])]
+      }),
+      permanentAddress: this.fb.group({
+        addressLine1: ['', Validators.compose([Validators.required])],
+        addressLine2: ['', Validators.compose([Validators.required])],
+        city: ['', Validators.compose([Validators.required])],
+        state: ['', Validators.compose([Validators.required])],
+        country: ['', Validators.compose([Validators.required])],
+        zipCode: ['', Validators.compose([Validators.required])]
+      }),
+      linkedinUrl: [''],
+      facebookUrl: [''],
+      twitterUrl: ['']
     });
 
     this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
@@ -68,6 +93,40 @@ export class AddEmployeePage implements OnInit {
     return new Date(formDate != '' ? formDate : this.maxDate);
   }
 
+  expandCard(cardName: string) {
+    const index = this.expandedCard.findIndex((e: string) => e === cardName);
+    if(index != -1){
+      this.expandedCard.splice(index, 1);
+    } else {
+      this.expandedCard.push(cardName);
+    }
+  }
+  isExpanded(cardName: string){
+    return this.expandedCard.includes(cardName);
+  }
+
+  sameAddress(event: CustomEvent){
+    console.log(event, "event");
+    this.isSameAddress = event.detail.checked;
+    console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
+    console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
+    if(this.isSameAddress){
+      (this.employeeForm.controls['permanentAddress'] as FormGroup).patchValue((this.employeeForm.controls['currentAddress'] as FormGroup).value);
+      console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
+      console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
+    } else {
+      (this.employeeForm.controls['permanentAddress'] as FormGroup).reset();
+      console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
+      console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
+    }
+  }
+
+  checkSameAddress(){
+    const permanentAdd = (this.employeeForm.controls['permanentAddress'] as FormGroup).value;
+    const currentAdd = (this.employeeForm.controls['currentAddress'] as FormGroup).value;
+    return permanentAdd || currentAdd ? JSON.stringify(currentAdd) === JSON.stringify(permanentAdd) : false;
+  }
+  
   submit(){
     if(this.employeeForm.invalid){
       return;

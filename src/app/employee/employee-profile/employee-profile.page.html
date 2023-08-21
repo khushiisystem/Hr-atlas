@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button slot="start" fill="clear" (click)="goBack()" class="noBg noRipple">
+    <ion-button mode="md" slot="start" fill="clear" (click)="goBack()" class="noBg noRipple">
       <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
     </ion-button>
     <ion-title>Employee Profile</ion-title>
@@ -9,7 +9,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="container">
-    <ion-card class="profile_card ion-margin-vertical">
+    <ion-card mode="md" class="profile_card ion-margin-vertical">
       <ion-item lines="none" class="noBg">
         <div class="emp_avatar" slot="start">
           <ion-avatar class="employee_img">
@@ -27,7 +27,7 @@
       </ion-item>
     </ion-card>
 
-    <ion-card class="action_list_card">
+    <ion-card mode="md" class="action_list_card">
       <ion-accordion-group #accordionGroup mode="md">
         <ion-accordion value="Personal" mode="md">
           <ion-item slot="header" class="accordion_head_item">
@@ -128,8 +128,8 @@
                     </ion-col>
   
                     <ion-col size="12">
-                      <ion-label>Alternate Phone Number</ion-label>
-                      <ion-input aria-label="Alternate Phone Number" [value]="'-'"></ion-input>
+                      <ion-label>Permanent Address</ion-label>
+                      <ion-input aria-label="Permanent Address" [value]="'-'"></ion-input>
                     </ion-col>
                   </ion-row>
                 </div>

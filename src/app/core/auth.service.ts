@@ -43,7 +43,7 @@ export class AuthService {
   }
 
   emailLogin(login: any): Observable<any> {
-    return this.http.post<any>(environment.Api + 'auth/login', login).pipe(
+    return this.http.post<any>(environment.Api + 'api/login', login).pipe(
       map((user: any) => {
         return this.saveToken(user);
       })
@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   addUser(data: any): Observable<any> {
-    return this.http.post<any>(environment.Api + 'auth/user', data);
+    return this.http.post<any>(environment.Api + 'api/user', data);
   }
   
 
@@ -60,7 +60,7 @@ export class AuthService {
     localStorage.setItem('payload', JSON.stringify(user.payload));
     localStorage.setItem('userRole', user.payload.role);
     localStorage.setItem('email', user.payload.email);
-    localStorage.setItem('userId', user.payload.uuid);
+    localStorage.setItem('userId', user.payload.guid);
     this.currentUserSubject.next(user.access_token);
     this.currentUserPayload.next(user.payload);
     return user;

@@ -8,4 +8,5 @@ export interface IPayrollSetupRequest {
     totalSalary: number,
     currency: string,
     comment: string,
+    payslipDate: string | Date,
 }

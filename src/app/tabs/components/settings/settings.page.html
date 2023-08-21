@@ -1,34 +1,40 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button slot="start" fill="clear" (click)="goBack()" class="noBg noRipple">
-      <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
-    </ion-button>
+    <ion-buttons slot="start">
+      <ion-button mode="md" fill="clear" (click)="goBack()" class="noBg noRipple">
+        <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-card type="button" button="true" mode="md" (click)="attendanceSetup()">
-    <ion-card-header>
-      <ion-title>Attendance setup</ion-title>
-    </ion-card-header>
+    <ion-item [detail]="true" type="button" button="true">
+      <ion-icon name="hand-right-outline" aria-hidden="true" slot="start" aria-label="Attendance setup"></ion-icon>
+      <ion-label>Attendance setup</ion-label>
+    </ion-item>
   </ion-card>
 
   <ion-card type="button" button="true" mode="md" (click)="leaveSetupModal()">
-    <ion-card-header>
-      <ion-title> Leave setup</ion-title>
-    </ion-card-header>
+    <ion-item [detail]="true" type="button" button="true">
+      <ion-icon name="fast-food-outline" aria-hidden="true" slot="start" aria-label="Leave setup"></ion-icon>
+      <ion-label>Leave setup</ion-label>
+    </ion-item>
   </ion-card>
 
   <ion-card type="button" button="true" mode="md" (click)="payrollSetup()">
-    <ion-card-header>
-      <ion-title> Payroll setup</ion-title>
-    </ion-card-header>
+    <ion-item [detail]="true" type="button" button="true">
+      <ion-icon name="wallet-outline" aria-hidden="true" slot="start" aria-label="Payroll setup"></ion-icon>
+      <ion-label>Payroll setup</ion-label>
+    </ion-item>
   </ion-card>
 
-  <ion-card (click)="goToPage4()">
-    <ion-card-header>
-      <ion-title> Additional setup </ion-title>
-    </ion-card-header>
+  <ion-card type="button" button="true" mode="md" (click)="additionalsetup()">
+    <ion-item [detail]="true" type="button" button="true">
+      <ion-icon name="construct-outline" aria-hidden="true" slot="start" aria-label="Additional setup"></ion-icon>
+      <ion-label>Additional setup</ion-label>
+    </ion-item>
   </ion-card>
 </ion-content>

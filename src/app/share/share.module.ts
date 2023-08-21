@@ -10,6 +10,7 @@ import { LoginPage } from './components/login/login.page';
 import { ForgotPasswordPage } from './components/forgot-password/forgot-password.page';
 import { ChangePasswordPage } from './components/change-password/change-password.page';
 import { CommonModule } from '@angular/common';
+import { NgOtpInputModule } from 'ng-otp-input';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { CommonModule } from '@angular/common';
     SharePageRoutingModule,
     ReactiveFormsModule,
     CommonModule,
+    NgOtpInputModule,
   ],
   exports: [ChangePasswordPage],
   declarations: [SharePage, LoginPage, ForgotPasswordPage, ChangePasswordPage],

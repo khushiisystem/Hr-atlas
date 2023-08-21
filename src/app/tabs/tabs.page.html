@@ -6,13 +6,13 @@
       <ion-label>Home</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="directory">
+    <ion-tab-button tab="employee-list" (click)="clearLastRoute()">
       <ion-icon aria-hidden="true" name="file-tray-stacked-outline"></ion-icon>
       <ion-label>Directory</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="attendance">
-      <ion-icon aria-hidden="true" name="people-outline"></ion-icon>
+    <ion-tab-button tab="attendance" *ngIf="userRole === 'Employee'">
+      <ion-icon aria-hidden="true" name="hand-right-outline"></ion-icon>
       <ion-label>Attendance</ion-label>
     </ion-tab-button>
 

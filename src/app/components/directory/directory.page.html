@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
     <ion-toolbar class="header-toolbar">
         <ion-buttons slot="start">
-            <ion-button (click)="gooooooBack()">
+            <ion-button mode="md" (click)="gooooooBack()">
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -30,7 +30,7 @@
                         <ion-label><strong style="color: black;">Phone Number:</strong> {{ data.phoneNumber }}</ion-label>
                     </ion-col>
                     <ion-col class="ion-text-end">
-                        <ion-button color="danger" (click)="deleteEmployeeData(data)">Delete</ion-button>
+                        <ion-button mode="md" color="danger" (click)="deleteEmployeeData(data)">Delete</ion-button>
                     </ion-col>
                 </ion-row>
             </ion-label>

@@ -6,7 +6,12 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
+  userRole: string = "";
 
-  constructor() {}
+  constructor() {
+    this.userRole = localStorage.getItem("userRole") || "Employee";
+  }
+
+  clearLastRoute(){localStorage.removeItem('lastRoute');}
 
 }

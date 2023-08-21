@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
 import { DirectoryPage } from '../components/directory/directory.page';
-import { AttendancePage } from '../components/attendance/attendance.page';
-import { ProfilePage } from '../components/profile/profile.page';
+import { AttendancePage } from '../employee/attendance/attendance.page';
+import { ProfilePage } from '../employee/profile/profile.page';
 import { Tab1Page } from '../tab1/tab1.page';
 import { AuthGuard } from '../core/auth.guard';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
@@ -12,6 +12,8 @@ import { SettingsPage } from './components/settings/settings.page';
 import { EditProfilePage } from '../employee/edit-profile/edit-profile.page';
 import { EmployeeProfilePage } from '../employee/employee-profile/employee-profile.page';
 import { PayrollSetupPage } from '../admin/payroll-setup/payroll-setup.page';
+import { PayrollPage } from '../employee/payroll/payroll.page';
+import { AdditionalSetupPage } from '../admin/additional-setup/additional-setup.page';
 
 const routes: Routes = [
   {
@@ -36,9 +38,14 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'additional-setup',
+        title: "Additional Setup",
+        component: AdditionalSetupPage,
+        // canActivate: [AuthGuard]s
+      },
+      {
         path: 'profile',
-        component: ProfilePage,
-        canActivate: [AuthGuard]
+        loadChildren: () => import('../employee/profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
         path: '',
@@ -74,6 +81,11 @@ const routes: Routes = [
         path: 'payroll-setup/:employeeId',
         title: "Payroll Setup",
         component: PayrollSetupPage
+      },
+      {
+        path: 'payroll',
+        title: "Payroll",
+        component: PayrollPage
       },
     ],
     // canActivate: [AuthGuard]

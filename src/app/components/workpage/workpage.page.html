@@ -1,106 +1,101 @@
-<ion-header [translucent]="true">
-    <ion-toolbar color="danger">
-        <ion-buttons slot="end">
-            <ion-button (click)="toggleEditMode()">
-                <ion-icon name="create-outline"></ion-icon>
+<ion-header [translucent]="true" mode="md">
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button mode="md" (click)="goBack()" fill="clear" class="noBg noRipple">
+                <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
             </ion-button>
         </ion-buttons>
         <ion-title>Work</ion-title>
-        <ion-buttons slot="start">
-            <ion-button (click)="goBackpage()">
-                <ion-icon name="chevron-back-outline"></ion-icon>
-            </ion-button>
-        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" color="dark">
-
-
-    <!-- <ion-card color="dark">
+<ion-content [fullscreen]="true">
+    <ion-card>
         <ion-card-header>
             <ion-card-title>Basic Information</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            <ion-item>
-                <ion-label>Employee ID:</ion-label>
-                <ion-input [(ngModel)]="Employeeid" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-
-            <ion-item>
-                <ion-label>Employee Type:</ion-label>
-                <ion-input [(ngModel)]="Employeetype" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-
-            <ion-item>
-                <ion-label>Status:</ion-label>
-                <ion-input [(ngModel)]="Status" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-
-            <ion-item>
-                <ion-label>Date of joining:</ion-label>
-                <ion-input [(ngModel)]="Dateofjoining" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-
-            <ion-item>
-                <ion-label>Work location:</ion-label>
-                <ion-input [(ngModel)]="Worklocation" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>Work Experience:</ion-label>
-                <ion-input [(ngModel)]="Workexperience" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>Probation period:</ion-label>
-                <ion-input [(ngModel)]=" Probationperiod" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-
-
-
+            <ion-list class="list">
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Employee ID:</ion-label>
+                    <ion-input [(ngModel)]="Employeeid" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+    
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Employee Type:</ion-label>
+                    <ion-input [(ngModel)]="Employeetype" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+    
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Status:</ion-label>
+                    <ion-input [(ngModel)]="Status" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+    
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Date of joining:</ion-label>
+                    <ion-input [(ngModel)]="Dateofjoining" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+    
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Work location:</ion-label>
+                    <ion-input [(ngModel)]="Worklocation" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Work Experience:</ion-label>
+                    <ion-input [(ngModel)]="Workexperience" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+                <ion-item [lines]="'none'" [button]="false">
+                    <ion-label>Probation period:</ion-label>
+                    <ion-input [(ngModel)]=" Probationperiod" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+            </ion-list>
         </ion-card-content>
     </ion-card>
 
-    <ion-card color="dark">
+    <ion-card>
         <ion-card-header>
             <ion-card-title>Work Information:</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            <ion-item>
-                <ion-label>Designation:</ion-label>
-                <ion-input [(ngModel)]="Designation" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
+            <ion-list class="list">
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Designation:</ion-label>
+                    <ion-input [(ngModel)]="Designation" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
 
-            <ion-item>
-                <ion-label>Job title:</ion-label>
-                <ion-input [(ngModel)]="Jobtitle" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Job title:</ion-label>
+                    <ion-input [(ngModel)]="Jobtitle" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
 
-            <ion-item>
-                <ion-label>Department:</ion-label>
-                <ion-input [(ngModel)]="Department" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
+                <ion-item [lines]="'full'" [button]="false">
+                    <ion-label>Department:</ion-label>
+                    <ion-input [(ngModel)]="Department" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
 
-            <ion-item>
-                <ion-label>sub-department:</ion-label>
-                <ion-input [(ngModel)]="Subdepartment" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
+                <ion-item [lines]="'none'" [button]="false">
+                    <ion-label>sub-department:</ion-label>
+                    <ion-input [(ngModel)]="Subdepartment" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+            </ion-list>
         </ion-card-content>
     </ion-card>
 
-    <ion-card color="dark">
+    <ion-card>
         <ion-card-header>
             <ion-card-title>Work History:</ion-card-title>
         </ion-card-header>
         <ion-card-content>
-            <ion-item>
-                <ion-label>Department:</ion-label>
-                <ion-input [(ngModel)]="Department" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-            <ion-item>
-                <ion-label>Designation:</ion-label>
-                <ion-input [(ngModel)]="Designation" [readonly]="!isEditMode"></ion-input>
-            </ion-item>
-
+            <ion-list class="list">
+                <ion-item [lines]="'none'" [button]="false">
+                    <ion-label>Department:</ion-label>
+                    <ion-input [(ngModel)]="Department" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+                <ion-item [lines]="'none'" [button]="false">
+                    <ion-label>Designation:</ion-label>
+                    <ion-input [(ngModel)]="Designation" [readonly]="!isEditMode"></ion-input>
+                </ion-item>
+            </ion-list>
         </ion-card-content>
-    </ion-card> -->
+    </ion-card>
 </ion-content>

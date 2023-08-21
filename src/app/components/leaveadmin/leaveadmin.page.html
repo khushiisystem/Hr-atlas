@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
     <ion-toolbar class="header-toolbar">
         <ion-buttons slot="start">
-            <ion-button (click)="gooooooBack()">
+            <ion-button mode="md" (click)="gooooooBack()">
                 <ion-icon name="chevron-back-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -45,8 +45,8 @@
                     </ion-col>
                 </ion-row>
             </ion-grid>
-            <ion-button *ngIf="leaveRequest.status === 'PENDING'" expand="block" color="success" (click)="approveLeave(leaveRequest)">Approved</ion-button>
-            <ion-button *ngIf="leaveRequest.status === 'PENDING'" expand="block" color="danger" (click)="rejectLeave(leaveRequest)">Reject</ion-button>
+            <ion-button mode="md" *ngIf="leaveRequest.status === 'PENDING'" expand="block" color="success" (click)="approveLeave(leaveRequest)">Approved</ion-button>
+            <ion-button mode="md" *ngIf="leaveRequest.status === 'PENDING'" expand="block" color="danger" (click)="rejectLeave(leaveRequest)">Reject</ion-button>
             <ion-item *ngIf="leaveRequest.status === 'REJECTED'">
                 <ion-label position="stacked">Rejection Reason</ion-label>
                 <!-- <ion-textarea [(ngModel)]="leaveRequest.rejectionReason" rows="6" maxlength="1000"></ion-textarea> -->
