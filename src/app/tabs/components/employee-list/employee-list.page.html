@@ -10,6 +10,9 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div class="container ion-padding-top"  *ngIf="userRole === 'Admin'">
     <ion-row class="ion-padding-horizontal">
       <ion-col size="12">

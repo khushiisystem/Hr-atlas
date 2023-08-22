@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { ShareService } from '../services/share.service';
+import { IEmployeeResponse } from '../interfaces/response/IEmployee';
 
 @Component({
   selector: 'app-tab1',
@@ -20,7 +21,7 @@ export class Tab1Page implements OnInit {
   userRole: string = "";
   userId: string = '';
   isDataLoaded: boolean = false;
-  userDetails: any;
+  userDetails!: IEmployeeResponse;
   demoCard: any[] = [];
 
   constructor(

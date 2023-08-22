@@ -5,6 +5,11 @@ import { IJWTPayload } from '../interfaces/request/IPayload';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 
+export const ROLES = {
+  ADMIN: 'Admin',
+  EMPLOYEE: 'Employee'
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,6 +19,7 @@ export class AuthService {
   currentUser!: Observable<string>;
   private currentUserSubject!: BehaviorSubject<string>;
   private currentUserPayload!: BehaviorSubject<IJWTPayload>;
+  userRole: string = ROLES.EMPLOYEE;
 
   constructor(private http: HttpClient, public router: Router) {
     this.currentUserSubject = new BehaviorSubject<string>(
@@ -32,6 +38,10 @@ export class AuthService {
     });
 
     this.currentUser = this.currentUserSubject.asObservable();
+  }
+
+  hasRole(role: string): boolean{
+    return this.userRole === role;
   }
 
   getToken(): string {

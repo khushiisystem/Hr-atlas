@@ -1,10 +1,10 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-avatar slot="start" class="user_avatar">
-      <img *ngIf="userDetails" alt="user" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+      <img *ngIf="userDetails" alt="user" [src]="userDetails && userDetails.imageUrl.trim() !== '' ? userDetails.imageUrl: 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
       <ion-skeleton-text *ngIf="!userDetails" [animated]="true"></ion-skeleton-text>
     </ion-avatar>
-    <ion-title>Home</ion-title>
+    <ion-title>HR Payroll - Spundan</ion-title>
     <ion-button mode="md" slot="end" shape="round" color="primary" fill="solid" class="ion-padding-horizontal clock_in_btn" (click)="toggleStopwatch()" [ngClass]="{ 'running': isRunning }" *ngIf="userRole === 'Employee'">
       {{ buttonLabel }}
       <span *ngIf="isRunning" class="stopwatch-time">{{ stopwatchTime }}</span>

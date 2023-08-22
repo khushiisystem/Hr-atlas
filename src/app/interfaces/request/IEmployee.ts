@@ -1,4 +1,5 @@
 import { IGender, IMaritalStatus } from "../enums/IGenderType";
+import { IRoles } from "../enums/IRoles";
 
 export interface IEmployeeRequest {
   firstName: string;
@@ -17,6 +18,7 @@ export interface IEmployeeRequest {
   linkedinUrl: string;
   facebookUrl: string;
   twitterUrl: string;
+  role: IRoles;
 }
 
 export interface IAddress {

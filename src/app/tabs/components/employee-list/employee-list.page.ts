@@ -128,6 +128,12 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
     }
   }
 
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      window.location.reload();
+      event.target.complete();
+    }, 2000);
+  }
 
   goBack(){history.back();}
 }

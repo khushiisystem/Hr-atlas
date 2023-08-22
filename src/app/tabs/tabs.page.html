@@ -16,7 +16,12 @@
       <ion-label>Attendance</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="profile">
+    <ion-tab-button tab="profile" *ngIf="userRole === 'Employee'">
+      <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
+      <ion-label>Profile</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="admin-profile" *ngIf="userRole === 'Admin'">
       <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
       <ion-label>Profile</ion-label>
     </ion-tab-button>
