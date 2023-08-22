@@ -18,10 +18,13 @@ import { PayrollPage } from "../employee/payroll/payroll.page";
 import { AttendancePage } from "../employee/attendance/attendance.page";
 import { AdditionalSetupPage } from "../admin/additional-setup/additional-setup.page";
 import { RouterModule } from "@angular/router";
+import { AdminProfilePage } from "../admin/admin-profile/admin-profile.page";
+import { Tab1Page } from "../tab1/tab1.page";
 
 @NgModule({
   declarations: [
     TabsPage,
+    Tab1Page,
     AddEmployeePage,
     EmployeeListPage,
     SettingsPage,
@@ -32,6 +35,7 @@ import { RouterModule } from "@angular/router";
     PayrollPage,
     AttendancePage,
     AdditionalSetupPage,
+    AdminProfilePage,
   ],
   imports: [
     IonicModule,

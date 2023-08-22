@@ -17,7 +17,7 @@ export class EditProfilePage implements OnInit {
   today: Date = new Date();
   maxDate: Date = new Date();
   birthDate: any;
-  employeeId: string = '';
+  userId: string = '';
   imgUrl: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   isSameAddress: boolean = false;
   expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card']
@@ -69,12 +69,12 @@ export class EditProfilePage implements OnInit {
 
     this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
     
-    if(this.employeeId.trim() !== '') {this.getEmployeeDetail();}
+    if(this.userId.trim() !== '') {this.getEmployeeDetail();}
   }
 
   getEmployeeDetail(){
     this.loader.present('fullHide');
-    this.shareServ.getEmployeeById(this.employeeId).subscribe(res => {
+    this.shareServ.getEmployeeById(this.userId).subscribe(res => {
       if(res) {
         this.employeeForm.patchValue(res);
         this.loader.dismiss();

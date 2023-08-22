@@ -16,7 +16,7 @@
 
 <ion-content [fullscreen]="true">
     <div class="container">
-        <ion-card mode="md" class="profile_card ion-margin-vertical">
+        <ion-card mode="md" class="profile_card ion-margin">
           <ion-item lines="none" class="noBg">
             <div class="emp_avatar" slot="start">
               <ion-avatar class="employee_img">
@@ -34,309 +34,307 @@
           </ion-item>
         </ion-card>
     
-        <ion-card mode="md" class="action_list_card">
-          <ion-accordion-group #accordionGroup mode="md">
-            <ion-accordion value="Personal" mode="md">
-              <ion-item slot="header" class="accordion_head_item">
-                <div>
-                  <ion-label>Personal</ion-label>
-                  <ion-text class="sub-header">Personal info, contact info, address, social info</ion-text>
+        <ion-accordion-group expand="inset" #accordionGroup mode="md">
+          <ion-accordion value="Personal" mode="md">
+            <ion-item slot="header" class="accordion_head_item">
+              <div>
+                <ion-label>Personal</ion-label>
+                <ion-text class="sub-header">Personal info, contact info, address, social info</ion-text>
+              </div>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              
+              <ion-item-divider>
+                <div class="personal_info">
+                  <div class="nested_item ion-margin-bottom">
+                    <ion-label>Personal Information</ion-label>
+                    <div class="toggle_btn" slot="end">
+                      <ion-icon></ion-icon>
+                    </div>
+                    <ion-ripple-effect></ion-ripple-effect>
+                  </div>
+    
+                  <div class="personal_info_content table_row">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-label>Full Name</ion-label>
+                        <ion-input aria-label="Full Name" [readonly]="true" [value]="'Aushman singh'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Date of Birth</ion-label>
+                        <ion-input aria-label="Date of Birth" [readonly]="true" [value]="'26 April, 1997'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Gender</ion-label>
+                        <ion-input aria-label="Gender" [readonly]="true" [value]="'Male'">
+                          <!-- <div slot="label">Gender</div> -->
+                        </ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Blood Group</ion-label>
+                        <ion-input aria-label="Blood Group" [readonly]="true" [value]="'-'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Marital Status</ion-label>
+                        <ion-input aria-label="Marital Status" [readonly]="true" [value]="'-'"></ion-input>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+              </ion-item-divider>
+  
+              <ion-item-divider>
+                <div class="contact_info ion-margin-top ion-padding-top">
+                  <div class="nested_item ion-margin-bottom">
+                    <ion-label>Contact Information</ion-label>
+                    <div class="toggle_btn" slot="end">
+                      <ion-icon></ion-icon>
+                    </div>
+                  </div>
+    
+                  <div class="contact_info_content table_row">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-label>Phone Number</ion-label>
+                        <ion-input aria-label="Phone Number" [value]="'874567454'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="12">
+                        <ion-label>Alternate Phone Number</ion-label>
+                        <ion-input aria-label="Alternate Phone Number" [value]="'-'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="12">
+                        <ion-label>Personal Email</ion-label>
+                        <ion-input aria-label="Personal Email" [value]="'example@gmail.com'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="12">
+                        <ion-label>Official Email</ion-label>
+                        <ion-input aria-label="Official Email" [value]="'-'"></ion-input>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+              </ion-item-divider>
+  
+              <ion-item-divider>
+                <div class="address_info ion-margin-top ion-padding-top">
+                  <div class="nested_item ion-margin-bottom">
+                    <ion-label>Address</ion-label>
+                    <div class="toggle_btn" slot="end">
+                      <ion-icon></ion-icon>
+                    </div>
+                  </div>
+    
+                  <div class="address_info_content table_row">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-label>Current Address</ion-label>
+                        <ion-input aria-label="Phon" [value]="'874567454'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="12">
+                        <ion-label>Permanent Address</ion-label>
+                        <ion-input aria-label="Permanent Address" [value]="'-'"></ion-input>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+              </ion-item-divider>
+  
+              <ion-item [lines]="'none'" [button]="false">
+                <div class="social_info ion-margin-top ion-padding-top">
+                  <div class="nested_item ion-margin-bottom">
+                    <ion-label>Social Information</ion-label>
+                    <div class="toggle_btn" slot="end">
+                      <ion-icon></ion-icon>
+                    </div>
+                  </div>
+                  
+                  <div class="social_info_content">
+                    <div class="social_links">
+                      <div class="link_item linkedin">
+                        <ion-icon name="logo-linkedin" aria-hidden="true" size="large"></ion-icon>
+                      </div>
+                      <div class="link_item fb">
+                        <ion-icon name="logo-facebook" aria-hidden="true" size="large"></ion-icon>
+                      </div>
+                      <div class="link_item twitter">
+                        <ion-icon name="logo-twitter" aria-hidden="true" size="large"></ion-icon>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </ion-item>
-              <div class="ion-padding" slot="content">
-                
-                <ion-item-divider>
-                  <div class="personal_info">
-                    <div class="nested_item ion-margin-bottom">
-                      <ion-label>Personal Information</ion-label>
-                      <div class="toggle_btn" slot="end">
-                        <ion-icon></ion-icon>
-                      </div>
-                      <ion-ripple-effect></ion-ripple-effect>
-                    </div>
-      
-                    <div class="personal_info_content table_row">
-                      <ion-row>
-                        <ion-col size="12">
-                          <ion-label>Full Name</ion-label>
-                          <ion-input aria-label="Full Name" [readonly]="true" [value]="'Aushman singh'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Date of Birth</ion-label>
-                          <ion-input aria-label="Date of Birth" [readonly]="true" [value]="'26 April, 1997'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Gender</ion-label>
-                          <ion-input aria-label="Gender" [readonly]="true" [value]="'Male'">
-                            <!-- <div slot="label">Gender</div> -->
-                          </ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Blood Group</ion-label>
-                          <ion-input aria-label="Blood Group" [readonly]="true" [value]="'-'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Marital Status</ion-label>
-                          <ion-input aria-label="Marital Status" [readonly]="true" [value]="'-'"></ion-input>
-                        </ion-col>
-                      </ion-row>
-                    </div>
-                  </div>
-                </ion-item-divider>
-    
-                <ion-item-divider>
-                  <div class="contact_info ion-margin-top ion-padding-top">
-                    <div class="nested_item ion-margin-bottom">
-                      <ion-label>Contact Information</ion-label>
-                      <div class="toggle_btn" slot="end">
-                        <ion-icon></ion-icon>
-                      </div>
-                    </div>
-      
-                    <div class="contact_info_content table_row">
-                      <ion-row>
-                        <ion-col size="12">
-                          <ion-label>Phone Number</ion-label>
-                          <ion-input aria-label="Phone Number" [value]="'874567454'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="12">
-                          <ion-label>Alternate Phone Number</ion-label>
-                          <ion-input aria-label="Alternate Phone Number" [value]="'-'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="12">
-                          <ion-label>Personal Email</ion-label>
-                          <ion-input aria-label="Personal Email" [value]="'example@gmail.com'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="12">
-                          <ion-label>Official Email</ion-label>
-                          <ion-input aria-label="Official Email" [value]="'-'"></ion-input>
-                        </ion-col>
-                      </ion-row>
-                    </div>
-                  </div>
-                </ion-item-divider>
-    
-                <ion-item-divider>
-                  <div class="address_info ion-margin-top ion-padding-top">
-                    <div class="nested_item ion-margin-bottom">
-                      <ion-label>Address</ion-label>
-                      <div class="toggle_btn" slot="end">
-                        <ion-icon></ion-icon>
-                      </div>
-                    </div>
-      
-                    <div class="address_info_content table_row">
-                      <ion-row>
-                        <ion-col size="12">
-                          <ion-label>Current Address</ion-label>
-                          <ion-input aria-label="Phon" [value]="'874567454'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="12">
-                          <ion-label>Permanent Address</ion-label>
-                          <ion-input aria-label="Permanent Address" [value]="'-'"></ion-input>
-                        </ion-col>
-                      </ion-row>
-                    </div>
-                  </div>
-                </ion-item-divider>
-    
-                <ion-item [lines]="'none'" [button]="false">
-                  <div class="social_info ion-margin-top ion-padding-top">
-                    <div class="nested_item ion-margin-bottom">
-                      <ion-label>Social Information</ion-label>
-                      <div class="toggle_btn" slot="end">
-                        <ion-icon></ion-icon>
-                      </div>
-                    </div>
-                    
-                    <div class="social_info_content">
-                      <div class="social_links">
-                        <div class="link_item linkedin">
-                          <ion-icon name="logo-linkedin" aria-hidden="true" size="large"></ion-icon>
-                        </div>
-                        <div class="link_item fb">
-                          <ion-icon name="logo-facebook" aria-hidden="true" size="large"></ion-icon>
-                        </div>
-                        <div class="link_item twitter">
-                          <ion-icon name="logo-twitter" aria-hidden="true" size="large"></ion-icon>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </ion-item>
-              </div>
-            </ion-accordion>
-            
-            <ion-accordion value="Team" mode="md">
-                <ion-item slot="header" class="accordion_head_item">
-                    <div>
-                        <ion-label>Team</ion-label>
-                        <!-- <ion-text class="sub-header">Basic infor, work info, work history</ion-text> -->
-                    </div>
-                </ion-item>
-                <div class="ion-padding" slot="content">
-                  <ion-label>Comming Soon!</ion-label>
-                </div>
-            </ion-accordion>
-            
-            <ion-accordion value="Work" mode="md">
+            </div>
+          </ion-accordion>
+          
+          <ion-accordion value="Team" mode="md">
               <ion-item slot="header" class="accordion_head_item">
-                <div>
-                  <ion-label>Work</ion-label>
-                  <ion-text class="sub-header">Basic infor, work info, work history</ion-text>
-                </div>
-              </ion-item>
-              <div class="ion-padding" slot="content">
-                
-                <ion-item-divider>
-                  <div class="basic_info">
-                    <div class="nested_item ion-margin-bottom">
-                      <ion-label>Basic Information</ion-label>
-                      <div class="toggle_btn" slot="end">
-                        <ion-icon></ion-icon>
-                      </div>
-                    </div>
-      
-                    <div class="basic_info_content table_row">
-                      <ion-row>
-                        <ion-col size="12">
-                          <ion-label>Employee ID</ion-label>
-                          <ion-input aria-label="Employee ID" [value]="'15412adfs4f5a'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Employee Type</ion-label>
-                          <ion-input aria-label="Employee Type" [value]="'Full Time'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Status</ion-label>
-                          <ion-input aria-label="Status" [value]="'Active'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Date of Joining</ion-label>
-                          <ion-input aria-label="Date of Joining" [value]="'26 April, 1997'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Work Experience</ion-label>
-                          <ion-input aria-label="Work Experience" [value]="'-'"></ion-input>
-                        </ion-col>                  
-      
-                        <ion-col size="12">
-                          <ion-label>Work Location</ion-label>
-                          <ion-input aria-label="Work Location" [value]="'Registered Office'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Probation Period</ion-label>
-                          <ion-input aria-label="Probation Period" [value]="'-'"></ion-input>
-                        </ion-col>
-                      </ion-row>
-                    </div>
-                  </div>
-                </ion-item-divider>
-    
-                <ion-item-divider>
-                  <div class="work_info ion-margin-top ion-padding-top">
-                    <div class="nested_item ion-margin-bottom">
-                      <ion-label>Work Information</ion-label>
-                      <div class="toggle_btn" slot="end">
-                        <ion-icon></ion-icon>
-                      </div>
-                    </div>
-      
-                    <div class="work_info_content table_row">
-                      <ion-row>
-                        <ion-col size="12">
-                          <ion-label>Designation</ion-label>
-                          <ion-input aria-label="Designation" [value]="'Associate Software Enginner'"></ion-input>
-                        </ion-col>
-    
-                        <ion-col size="12">
-                          <ion-label>Job Title</ion-label>
-                          <ion-input aria-label="Job Title" [value]="'Associate Software Enginner'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Department</ion-label>
-                          <ion-input aria-label="Department" [value]="'-'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="6">
-                          <ion-label>Sub Department</ion-label>
-                          <ion-input aria-label="Sub Department" [value]="'-'"></ion-input>
-                        </ion-col>
-                      </ion-row>
-                    </div>
-                  </div>
-                </ion-item-divider>
-    
-                <ion-item [lines]="'none'" [button]="false">
-                  <div class="work_history_info ion-margin-top ion-padding-top">
-                    <div class="nested_item ion-margin-bottom">
-                      <ion-label>Work History</ion-label>
-                      <div class="toggle_btn" slot="end">
-                        <ion-icon></ion-icon>
-                      </div>
-                    </div>
-      
-                    <div class="work_history_info_content table_row">
-                      <ion-row>
-                        <ion-col size="12">
-                          <ion-label>Department</ion-label>
-                          <ion-input aria-label="Department" [value]="'-'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="12">
-                          <ion-label>Designation</ion-label>
-                          <ion-input aria-label="Designation" [value]="'Associate Software Engineer'"></ion-input>
-                        </ion-col>
-      
-                        <ion-col size="12">
-                          <ion-label>From - To</ion-label>
-                          <ion-input aria-label="Work Duration" [value]="'15/11/2021 - Present'"></ion-input>
-                        </ion-col>
-                      </ion-row>
-                    </div>
-                  </div>
-                </ion-item>
-              </div>
-            </ion-accordion>
-
-            <ion-accordion value="Settings" mode="md">
-                <ion-item slot="header" class="accordion_head_item">
                   <div>
-                    <ion-label>Settings</ion-label>
-                    <ion-text class="sub-header">Edit profile, Change Password</ion-text>
+                      <ion-label>Team</ion-label>
+                      <!-- <ion-text class="sub-header">Basic info, work info, work history</ion-text> -->
                   </div>
+              </ion-item>
+              <div class="ion-padding" slot="content">
+                <ion-label>Comming Soon!</ion-label>
+              </div>
+          </ion-accordion>
+          
+          <ion-accordion value="Work" mode="md">
+            <ion-item slot="header" class="accordion_head_item">
+              <div>
+                <ion-label>Work</ion-label>
+                <ion-text class="sub-header">Basic info, work info, work history</ion-text>
+              </div>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              
+              <ion-item-divider>
+                <div class="basic_info">
+                  <div class="nested_item ion-margin-bottom">
+                    <ion-label>Basic Information</ion-label>
+                    <div class="toggle_btn" slot="end">
+                      <ion-icon></ion-icon>
+                    </div>
+                  </div>
+    
+                  <div class="basic_info_content table_row">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-label>Employee ID</ion-label>
+                        <ion-input aria-label="Employee ID" [value]="'15412adfs4f5a'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Employee Type</ion-label>
+                        <ion-input aria-label="Employee Type" [value]="'Full Time'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Status</ion-label>
+                        <ion-input aria-label="Status" [value]="'Active'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Date of Joining</ion-label>
+                        <ion-input aria-label="Date of Joining" [value]="'26 April, 1997'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Work Experience</ion-label>
+                        <ion-input aria-label="Work Experience" [value]="'-'"></ion-input>
+                      </ion-col>                  
+    
+                      <ion-col size="12">
+                        <ion-label>Work Location</ion-label>
+                        <ion-input aria-label="Work Location" [value]="'Registered Office'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Probation Period</ion-label>
+                        <ion-input aria-label="Probation Period" [value]="'-'"></ion-input>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+              </ion-item-divider>
+  
+              <ion-item-divider>
+                <div class="work_info ion-margin-top ion-padding-top">
+                  <div class="nested_item ion-margin-bottom">
+                    <ion-label>Work Information</ion-label>
+                    <div class="toggle_btn" slot="end">
+                      <ion-icon></ion-icon>
+                    </div>
+                  </div>
+    
+                  <div class="work_info_content table_row">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-label>Designation</ion-label>
+                        <ion-input aria-label="Designation" [value]="'Associate Software Enginner'"></ion-input>
+                      </ion-col>
+  
+                      <ion-col size="12">
+                        <ion-label>Job Title</ion-label>
+                        <ion-input aria-label="Job Title" [value]="'Associate Software Enginner'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Department</ion-label>
+                        <ion-input aria-label="Department" [value]="'-'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="6">
+                        <ion-label>Sub Department</ion-label>
+                        <ion-input aria-label="Sub Department" [value]="'-'"></ion-input>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+              </ion-item-divider>
+  
+              <ion-item [lines]="'none'" [button]="false">
+                <div class="work_history_info ion-margin-top ion-padding-top">
+                  <div class="nested_item ion-margin-bottom">
+                    <ion-label>Work History</ion-label>
+                    <div class="toggle_btn" slot="end">
+                      <ion-icon></ion-icon>
+                    </div>
+                  </div>
+    
+                  <div class="work_history_info_content table_row">
+                    <ion-row>
+                      <ion-col size="12">
+                        <ion-label>Department</ion-label>
+                        <ion-input aria-label="Department" [value]="'-'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="12">
+                        <ion-label>Designation</ion-label>
+                        <ion-input aria-label="Designation" [value]="'Associate Software Engineer'"></ion-input>
+                      </ion-col>
+    
+                      <ion-col size="12">
+                        <ion-label>From - To</ion-label>
+                        <ion-input aria-label="Work Duration" [value]="'15/11/2021 - Present'"></ion-input>
+                      </ion-col>
+                    </ion-row>
+                  </div>
+                </div>
+              </ion-item>
+            </div>
+          </ion-accordion>
+
+          <ion-accordion value="Settings" mode="md">
+              <ion-item slot="header" class="accordion_head_item">
+                <div>
+                  <ion-label>Settings</ion-label>
+                  <ion-text class="sub-header">Edit profile, Change Password</ion-text>
+                </div>
+              </ion-item>
+
+              <div class="ion-padding" slot="content">                  
+                <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" (click)="editProfile()" class="settingBtns_item">
+                  <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" slot="start" color="primary"></ion-icon>
+                  <ion-label color="primary">Edit Profile</ion-label>
                 </ion-item>
 
-                <div class="ion-padding" slot="content">                  
-                  <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" (click)="editProfile()" class="settingBtns_item">
-                    <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" slot="start" color="primary"></ion-icon>
-                    <ion-label color="primary">Edit Profile</ion-label>
-                  </ion-item>
-
-                  <ion-item [lines]="'full'" type="button" routerLink="/change-password" [detail]="true" class="settingBtns_item">
-                    <ion-icon name="key" aria-hidden="true" aria-label="Change Password" slot="start" color="primary"></ion-icon>
-                    <ion-label color="primary">Change Password</ion-label>
-                  </ion-item>
-                </div>
-            </ion-accordion>
-          </ion-accordion-group>
-        </ion-card>
+                <ion-item [lines]="'full'" type="button" routerLink="/change-password" [detail]="true" class="settingBtns_item">
+                  <ion-icon name="key" aria-hidden="true" aria-label="Change Password" slot="start" color="primary"></ion-icon>
+                  <ion-label color="primary">Change Password</ion-label>
+                </ion-item>
+              </div>
+          </ion-accordion>
+        </ion-accordion-group>
         
-        <ion-card>
+        <ion-card type="button" mode="md" class="ion-margin">
           <ion-item [lines]="'none'" [detail]="true" [button]="true" [mode]="'md'" class="accordion_head_item btn_item" (click)="workWeek()">
             <div>
               <ion-label>Work-week</ion-label>
@@ -345,11 +343,11 @@
           </ion-item>
         </ion-card>
 
-        <ion-card color="danger" type="button" mode="md">
-            <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger">
-                <ion-label>Logout</ion-label>
-                <ion-icon slot="end" name="log-out-outline" aria-hidden="true"></ion-icon>
-            </ion-item>
+        <ion-card color="danger" type="button" mode="md" class="ion-margin">
+          <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger">
+            <ion-label>Log Out</ion-label>
+            <ion-icon slot="end" name="log-out-outline" aria-hidden="true"></ion-icon>
+          </ion-item>
         </ion-card>
         <!-- <ion-card (click)="openWorkPage() ">
           <ion-card-header color="danger "> Work </ion-card-header>

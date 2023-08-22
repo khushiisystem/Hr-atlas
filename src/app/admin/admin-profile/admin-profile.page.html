@@ -1,0 +1,216 @@
+<ion-header [translucent]="true" mode="md" class="main-header">
+  <ion-toolbar>
+    <ion-button slot="start" mode="md" color="light" type="button" (click)="goBack()" fill="clear" class="noBg noRipple backBtn">
+      <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
+    </ion-button>
+    <img src="../../../assets/images/logo.png" alt="Spundan - The IT Pulse" class="logoImg">
+    <!-- <ion-title color="light">Admin Profile</ion-title> -->
+    <ion-buttons slot="end">
+      <ion-button mode="md" (click)="logout()" color="danger" fill="solid" shape="round" size="small" class="smLogoutBtn">
+        <!-- <ion-icon name="log-out-outline" slot="icon-only" aria-hidden="true"></ion-icon> -->
+        <ion-label>Log out</ion-label>
+      </ion-button>
+    </ion-buttons>
+    <ion-progress-bar color="light" type="inderminate" *ngIf="!dataLoaded && !adminDetail"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <div class="container loadingContent" *ngIf="!adminDetail">
+    <ion-card mode="md">
+      <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
+        <div slot="start" class="ion-margin-top">
+          <ion-avatar>
+            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+          </ion-avatar>
+        </div>
+  
+        <div class="emp_name_role">
+          <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+        </div>
+      </ion-item>
+    </ion-card>
+
+    <ion-card mode="md" *ngFor="let item of randomList">
+      <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
+        <div class="emp_name_role">
+          <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+        </div>
+      </ion-item>
+    </ion-card>
+  </div>
+
+  <div class="container" *ngIf="adminDetail">
+    <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
+      <div class="emp_avatar" slot="start">
+        <ion-avatar class="employee_img">
+          <img alt="Employee" [src]="adminDetail.imageUrl.trim() != '' ? adminDetail.imageUrl : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+        </ion-avatar>
+      </div>
+
+      <div class="emp_name_role">
+        <ion-label class="emp_name">{{adminDetail.firstName | titlecase}} {{adminDetail.lastName || "" | titlecase}}</ion-label>
+        <ion-text class="emp_role">{{adminDetail.role}}</ion-text>
+      </div>
+    </ion-item>
+
+    <ion-accordion-group expand="inset" #accordionGroup mode="md" [value]="activeTab" (ionChange)="accordionChange($any($event))">
+      <ion-accordion value="Personal" mode="md">
+        <ion-item slot="header" class="accordion_head_item">
+          <div>
+            <ion-label>Personal Info</ion-label>
+            <ion-text class="sub-header">Name, Gender, Date of Brith, Marital status</ion-text>
+          </div>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <div class="personal_info_content table_row">
+            <ion-row>
+              <ion-col size="12">
+                <ion-label>Full Name</ion-label>
+                <ion-input aria-label="Full Name" [readonly]="true" [value]="adminDetail.firstName + ' '+ adminDetail.lastName || '-'"></ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-label>Date of Birth</ion-label>
+                <ion-input aria-label="Date of Birth" [readonly]="true" [value]="adminDetail.dateOfBirth || '-' | date"></ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-label>Gender</ion-label>
+                <ion-input aria-label="Gender" [readonly]="true" [value]="adminDetail.gender || '-'">
+                  <!-- <div slot="label">Gender</div> -->
+                </ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-label>Blood Group</ion-label>
+                <ion-input aria-label="Blood Group" [readonly]="true" [value]="'-'"></ion-input>
+              </ion-col>
+
+              <ion-col size="6">
+                <ion-label>Marital Status</ion-label>
+                <ion-input aria-label="Marital Status" [readonly]="true" [value]="adminDetail.maritalStatus || '-'"></ion-input>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
+      </ion-accordion>
+
+      <ion-accordion value="Contact" mode="md">
+        <ion-item slot="header" class="accordion_head_item">
+          <div>
+            <ion-label>Contact Info</ion-label>
+            <ion-text class="sub-header">Mobile Number, Email</ion-text>
+          </div>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <div class="contact_info_content table_row">
+            <ion-row>
+              <ion-col size="12">
+                <ion-label>Phone Number</ion-label>
+                <ion-input aria-label="Phone Number" [value]="adminDetail.mobileNumber || '-'"></ion-input>
+              </ion-col>
+
+              <ion-col size="12">
+                <ion-label>Alternate Phone Number</ion-label>
+                <ion-input aria-label="Alternate Phone Number" [value]="adminDetail.alternateMobileNumber || '-'"></ion-input>
+              </ion-col>
+
+              <ion-col size="12">
+                <ion-label>Personal Email</ion-label>
+                <ion-input aria-label="Personal Email" [value]="adminDetail.email || '-'"></ion-input>
+              </ion-col>
+
+              <ion-col size="12">
+                <ion-label>Official Email</ion-label>
+                <ion-input aria-label="Official Email" [value]="adminDetail.officialEmail || '-'"></ion-input>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
+      </ion-accordion>
+
+      <ion-accordion value="Address" mode="md">
+        <ion-item slot="header" class="accordion_head_item">
+          <div>
+            <ion-label>Address</ion-label>
+            <ion-text class="sub-header">Current Address, Permanent Address</ion-text>
+          </div>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          <div class="address_info_content table_row">
+            <ion-row>
+              <ion-col size="12">
+                <ion-label>Current Address</ion-label>
+                <ion-input aria-label="Current Address" [value]="adminDetail.permanentAddress ? getAddress(adminDetail.currentAddress) : '-'"></ion-input>
+              </ion-col>
+
+              <ion-col size="12">
+                <ion-label>Permanent Address</ion-label>
+                <ion-input aria-label="Permanent Address" [value]="adminDetail.permanentAddress ? getAddress(adminDetail.permanentAddress) : '-'"></ion-input>
+              </ion-col>
+            </ion-row>
+          </div>
+        </div>
+      </ion-accordion>
+
+      <ion-accordion value="Social_info" mode="md" *ngIf="adminDetail.linkedinUrl || adminDetail.facebookUrl || adminDetail.twitterUrl">
+        <ion-item slot="header" class="accordion_head_item">
+          <div>
+            <ion-label>Social Media</ion-label>
+            <ion-text class="sub-header">Facebook, LinkedIn, Twitter</ion-text>
+          </div>
+          </ion-item>
+        <div class="ion-padding" slot="content">
+          <div class="social_info_content">
+            <div class="social_links">
+              <a class="link_item linkedin" [href]="adminDetail.linkedinUrl" rel="noopener" target="_blank" *ngIf="adminDetail.linkedinUrl">
+                <ion-icon name="logo-linkedin" aria-hidden="true" size="large"></ion-icon>
+              </a>
+              <a class="link_item fb" [href]="adminDetail.facebookUrl" rel="noopener" target="_blank" *ngIf="adminDetail.facebookUrl">
+                <ion-icon name="logo-facebook" aria-hidden="true" size="large"></ion-icon>
+              </a>
+              <a class="link_item twitter" [href]="adminDetail.twitterUrl" rel="noopener" target="_blank" *ngIf="adminDetail.twitterUrl">
+                <ion-icon name="logo-twitter" aria-hidden="true" size="large"></ion-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+      </ion-accordion>
+      
+      <ion-accordion value="Settings" mode="md">
+          <ion-item slot="header" class="accordion_head_item">
+            <div>
+              <ion-label>Settings</ion-label>
+              <ion-text class="sub-header">Edit profile, Change Password</ion-text>
+            </div>
+          </ion-item>
+
+          <div class="ion-padding" slot="content">                  
+            <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" (click)="editProfile()" class="settingBtns_item">
+              <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" slot="start" color="primary"></ion-icon>
+              <ion-label color="primary">Edit Profile</ion-label>
+            </ion-item>
+
+            <ion-item [lines]="'none'" type="button" routerLink="/change-password" [detail]="true" class="settingBtns_item">
+              <ion-icon name="key" aria-hidden="true" aria-label="Change Password" slot="start" color="primary"></ion-icon>
+              <ion-label color="primary">Change Password</ion-label>
+            </ion-item>
+          </div>
+      </ion-accordion>
+    </ion-accordion-group>
+    
+    <ion-card color="danger" type="button" mode="md" class="ion-margin">
+        <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger">
+            <ion-label>Log out</ion-label>
+            <ion-icon slot="end" name="log-out-outline" aria-hidden="true"></ion-icon>
+        </ion-item>
+    </ion-card>
+  </div>
+</ion-content>

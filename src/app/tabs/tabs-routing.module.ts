@@ -14,6 +14,7 @@ import { EmployeeProfilePage } from '../employee/employee-profile/employee-profi
 import { PayrollSetupPage } from '../admin/payroll-setup/payroll-setup.page';
 import { PayrollPage } from '../employee/payroll/payroll.page';
 import { AdditionalSetupPage } from '../admin/additional-setup/additional-setup.page';
+import { AdminProfilePage } from '../admin/admin-profile/admin-profile.page';
 
 const routes: Routes = [
   {
@@ -22,8 +23,9 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        // canActivate: [AuthGuard],
-        loadChildren: () => import('../tab1/tab1.module').then(m => m.Tab1PageModule)
+        title: 'HR Payroll | Spundan',
+        component: Tab1Page,
+        canActivate: [AuthGuard],
       },
       {
         path: 'directory',
@@ -46,6 +48,12 @@ const routes: Routes = [
       {
         path: 'profile',
         loadChildren: () => import('../employee/profile/profile.module').then(m => m.ProfilePageModule)
+      },
+      {
+        path: 'admin-profile',
+        title: 'Admin Profile',
+        component: AdminProfilePage,
+        canActivate: [AuthGuard]
       },
       {
         path: '',
