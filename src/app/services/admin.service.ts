@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AttendanceSetupRequest } from "../interfaces/request/IAttendanceSetup";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
+import { IEmployeeResponse } from "../interfaces/response/IEmployee";
 
 @Injectable({
     providedIn: 'root'
@@ -11,20 +12,20 @@ import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 export class AdminService {
     constructor(private http: HttpClient){}
 
-    getEmployees(pageIndex: number, pageSize: number): Observable<any>{
-        return this.http.get<any>(environment.Api + `api/employee?skip=${pageIndex}&limit=${pageSize}`);
+    getEmployees(): Observable<any>{
+        return this.http.get<any>(environment.Api + `api/user`);
     }
-    addEmployees(employeeData: IEmployeeRequest): Observable<any>{
-        return this.http.post<any>(environment.Api + `api/employee`, employeeData);
+    addEmployees(employeeData: IEmployeeRequest): Observable<IEmployeeResponse>{
+        return this.http.post<IEmployeeResponse>(environment.Api + `api/user`, employeeData);
     }
-    updateEmployees(employeeId: string, employeeData: IEmployeeRequest): Observable<any>{
-        return this.http.put<any>(environment.Api + `api/employee/${employeeId}`, employeeData);
+    updateEmployee(employeeId: string, employeeData: IEmployeeRequest): Observable<IEmployeeResponse>{
+        return this.http.put<IEmployeeResponse>(environment.Api + `api/user/${employeeId}`, employeeData);
     }
-    getEmployeeById(employeeId: string): Observable<any>{
-        return this.http.get<any>(environment.Api + `api/employee/${employeeId}`);
+    getEmployeeById(employeeId: string): Observable<IEmployeeResponse>{
+        return this.http.get<IEmployeeResponse>(environment.Api + `api/user/${employeeId}`);
     }
     deleteEmployee(employeeId: string): Observable<any>{
-        return this.http.delete<any>(environment.Api + `api/employee/${employeeId}`);
+        return this.http.delete<any>(environment.Api + `api/user/${employeeId}`);
     }
 
     // attendance setup

@@ -7,6 +7,7 @@ import { IAddress } from 'src/app/interfaces/request/IEmployee';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
+import { AddEmployeePage } from '../add-employee/add-employee.page';
 
 @Component({
   selector: 'app-admin-profile',
@@ -50,18 +51,20 @@ export class AdminProfilePage implements OnInit {
 
   async editProfile(){
     const profileModal = this.modalCtrl.create({
-      component: EditProfilePage,
+      component: AddEmployeePage,
       mode: 'md',
       showBackdrop: true,
       backdropDismiss: false,
       initialBreakpoint: 1,
-      componentProps: {userId: this.userId}
+      componentProps: {action: "edit", employeeId: this.userId}
     });
 
     (await profileModal).present();
 
     (await profileModal).onDidDismiss().then(result => {
-      console.log(result, "result");
+      if(result.data && result.role === 'confirm'){
+        this.getAdminProfile();
+      }
     });
   }
 

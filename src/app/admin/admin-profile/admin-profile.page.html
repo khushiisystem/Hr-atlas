@@ -207,7 +207,7 @@
     </ion-accordion-group>
     
     <ion-card color="danger" type="button" mode="md" class="ion-margin">
-        <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger">
+        <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger" (click)="logout()">
             <ion-label>Log out</ion-label>
             <ion-icon slot="end" name="log-out-outline" aria-hidden="true"></ion-icon>
         </ion-item>

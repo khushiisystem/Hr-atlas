@@ -26,6 +26,8 @@ export class AddEmployeePage implements OnInit {
   employeeId: string = '';
   action: string = '';
   isSameAddress: boolean = false;
+  isDataLoaded: boolean = false;
+  isInProgress: boolean = false;
   expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card']
 
   constructor(
@@ -45,7 +47,6 @@ export class AddEmployeePage implements OnInit {
       lastName: ['', Validators.compose([Validators.maxLength(50)])],
       email: ['', Validators.compose([Validators.required, Validators.email])],
       dateOfBirth: ['', Validators.compose([Validators.required])],
-      address: [''],
       gender: ['Male'],
       officialEmail: ['', Validators.compose([Validators.email])],
       mobileNumber: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
@@ -78,6 +79,23 @@ export class AddEmployeePage implements OnInit {
     console.log(this.birthDate);
     console.warn(this.action, "action");
     console.warn(this.employeeId, "empId");
+    if(this.action === 'edit' && this.employeeId.trim() !== ''){
+      this.getProfile();
+    } else {this.isDataLoaded = true;}
+  }
+
+
+  getProfile(){
+    this.adminServ.getEmployeeById(this.employeeId).subscribe(res => {
+      if(res){
+        this.employeeForm.patchValue(res);
+        this.isDataLoaded = true;
+        console.log(this.employeeForm.value, "path form");
+      }
+    }, (error) => {
+      console.log(error, "get error");
+      this.isDataLoaded = true;
+    });
   }
 
   selectDate(event: DatetimeCustomEvent){
@@ -131,16 +149,36 @@ export class AddEmployeePage implements OnInit {
     if(this.employeeForm.invalid){
       return;
     } else {
+      this.isInProgress = true;
       console.log(this.employeeForm.value, "form");
-      this.adminServ.addEmployees(this.employeeForm.value).subscribe(res => {
-        if(res){
-          this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
-          this.modalCtrl.dismiss(res, 'confirm');
-        }
-      }, (error) =>{
-        this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
-      });
+      this.action === 'add' ? this.addEmployee() : this.updateEmployee();
     }
+  }
+
+  addEmployee(){
+    this.adminServ.addEmployees(this.employeeForm.value).subscribe(res => {
+      if(res){
+        this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
+        this.modalCtrl.dismiss(res, 'confirm');
+        this.isInProgress = false;
+      }
+    }, (error) =>{
+      this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
+      this.isInProgress = false;
+    });
+  }
+
+  updateEmployee(){
+    this.adminServ.updateEmployee(this.employeeId, this.employeeForm.value).subscribe(res => {
+      if(res){
+        this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
+        this.modalCtrl.dismiss(res, 'confirm');
+        this.isInProgress = false;
+      }
+    }, (error) =>{
+      this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
+      this.isInProgress = false;
+    });
   }
 
   goBack(){this.modalCtrl.dismiss();}
