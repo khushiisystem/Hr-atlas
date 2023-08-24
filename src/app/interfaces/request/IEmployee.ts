@@ -9,7 +9,6 @@ export interface IEmployeeRequest {
   mobileNumber: string;
   alternateMobileNumber: string;
   dateOfBirth: string | Date;
-  address: "";
   gender: IGender;
   maritalStatus: IMaritalStatus;
   imageUrl: string;

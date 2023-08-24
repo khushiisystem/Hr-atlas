@@ -4,12 +4,13 @@
       <ion-icon name="close" slot="icon-only"></ion-icon>
     </ion-button>
     <ion-title>Add Employee</ion-title>
+    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="container">
-    <form [formGroup]="employeeForm">
+    <form [formGroup]="employeeForm" *ngIf="isDataLoaded">
       <ion-card mode="md" class="personal_card">
         <ion-card-header class="card_header" (click)="expandCard('personal_card')">
           <ion-card-title>Personal Information</ion-card-title>
@@ -301,8 +302,8 @@
     </form>
   </div>
 </ion-content>
-<ion-footer>
-  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">
+<ion-footer *ngIf="isDataLoaded">
+  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid || isInProgress" color="primary" (click)="submit()" expand="full" shape="round">
     <ion-icon name="person-add-outline" aria-hidden="true" slot="start"></ion-icon>
     Add Employee
   </ion-button>

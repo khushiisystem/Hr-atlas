@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { ShareService } from '../services/share.service';
 import { IEmployeeResponse } from '../interfaces/response/IEmployee';
+import { RoleStateService } from '../services/roleState.service';
 
 @Component({
   selector: 'app-tab1',
@@ -28,11 +29,14 @@ export class Tab1Page implements OnInit {
     private router: Router,
     private modalCtrl: ModalController,
     private shareServ: ShareService,
+    private roleStateServ: RoleStateService,
   ) {}
 
   ngOnInit() {
+    this.roleStateServ.getState().subscribe(res => {
+      this.userRole = res || "";
+    });
     this.userId = localStorage.getItem("userId") || "";
-    this.userRole = localStorage.getItem("userRole") || "Employee";
     const directoryIcon = document.getElementById('directoryIcon');
     if (directoryIcon) {
       directoryIcon.addEventListener('click', this.showdirectory.bind(this));
@@ -49,6 +53,7 @@ export class Tab1Page implements OnInit {
       if(res) {
         this.userDetails = res;
         this.isDataLoaded = true;
+        this.roleStateServ.updateState(this.userDetails.role);
       }
     }, (error) => {
       console.log(error);

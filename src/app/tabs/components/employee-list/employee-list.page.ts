@@ -1,9 +1,12 @@
-import { AfterContentInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IonInfiniteScroll, ModalController } from '@ionic/angular';
 import { AdminService } from 'src/app/services/admin.service';
 import { AddEmployeePage } from '../../../admin/add-employee/add-employee.page';
 import { ShareService } from 'src/app/services/share.service';
 import { Router } from '@angular/router';
+import { Subject, debounceTime } from 'rxjs';
+import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
+import { RoleStateService } from 'src/app/services/roleState.service';
 
 interface InfiniteScrollCustomEvent extends CustomEvent {
   target: HTMLIonInfiniteScrollElement;
@@ -14,50 +17,63 @@ interface InfiniteScrollCustomEvent extends CustomEvent {
   templateUrl: './employee-list.page.html',
   styleUrls: ['./employee-list.page.scss'],
 })
-export class EmployeeListPage implements OnInit, AfterContentInit {
+export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
-  employeeList: any[] = [];
+  employeeList: IEmployeeResponse[] = [];
+  isDataLoaded: boolean = false;
   isMoreData: boolean = true;
   pageIndex: number = 0;
   lastRoute: string = "";
   userRole: string = "";
+  searchString: string = "";
   selectedEmployee: any[] = [];
+  private searchSubject = new Subject<string>();
+  private readonly debounceTimeMs = 3000;
 
   constructor(
     private adminServ: AdminService,
     private modelCtrl: ModalController,
     private shareServ: ShareService,
     public router: Router,
+    private roleStateServ: RoleStateService,
   ) { }
 
   ngOnInit() {
+    this.roleStateServ.getState().subscribe(res => {
+      this.userRole = res || "";
+    });
     this.lastRoute = localStorage.getItem('lastRoute') || "";
-    this.userRole = localStorage.getItem('userRole') || "";
     this.getEmployeeList();
+    this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
+      this.searchEmployee(searchValue);
+    });
   }
   
   ngAfterContentInit(): void {
-    console.log(this.infiniteScroll, "after");
     setTimeout(() => {
       this.infiniteScroll.complete();
     }, 2000);
   }
 
   getEmployeeList(){
+    this.isDataLoaded = false;
     if(this.pageIndex < 1){
       this.employeeList = [];
     }
-    this.adminServ.getEmployees(this.pageIndex * 15, 15).subscribe(res => {
+    this.adminServ.getEmployees().subscribe(res => {
       if(res){
-        for(let i=0; i<res.results; i++){
-          this.employeeList.push(res.results[i]);
+        const data: IEmployeeResponse[] = res;
+        for(let i=0; i<data.length; i++){
+          this.employeeList.push(res[i]);
         }
-
-        this.isMoreData = this.employeeList.length < res.total;
+        
+        this.isMoreData = this.employeeList.length < 10;
         this.infiniteScroll.complete();
+        this.isDataLoaded = true;
       }
     }, (error) => {
       this.isMoreData = false;
+      this.isDataLoaded = true;
       this.infiniteScroll.complete();
     });
   }
@@ -69,7 +85,7 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
     }
   }
 
-  async employeeMoal(employeeItem: any, action: "add" | "edit"){
+  async employeeMoal(employeeItem: string, action: "add" | "edit"){
     const employeeModel = this.modelCtrl.create({
       component: AddEmployeePage,
       componentProps: {
@@ -83,7 +99,9 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
     (await employeeModel).present();
 
     (await employeeModel).onDidDismiss().then(result => {
-      console.log(result, "result");
+      if(result.data) {
+        this.getEmployeeList();
+      }
     });
   }
 
@@ -100,7 +118,11 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
   selectAll(event: CustomEvent) {
     console.log(event, "event");
     if(event.detail.checked === true){
-      this.selectedEmployee = [1,2,3];
+      this.employeeList.forEach((e: IEmployeeResponse, index) => {
+        if(!this.selectedEmployee.includes(e.guid)){
+          this.selectedEmployee.push(e.guid);
+        }
+      });
     } else if(event.detail.checked === false) {
       this.selectedEmployee = [];
     }
@@ -126,6 +148,35 @@ export class EmployeeListPage implements OnInit, AfterContentInit {
     } else {
       this.router.navigate([`/tabs/employee-profile/${empId}`]);
     }
+  }
+
+  searchEmployee(searchValue: string){
+    if(searchValue.trim().length > 3){
+      this.isDataLoaded = false;
+      const data = {
+        searchString: searchValue
+      }
+      this.employeeList = [];
+      this.shareServ.searchEmployee(data).subscribe(res => {
+        if(res){
+          this.employeeList = res;
+          this.isDataLoaded = true;
+        }
+      }, (error) => {
+        console.log(error, "search error");
+        this.isDataLoaded = true;
+      });
+    } else {
+      this.getEmployeeList();
+    }
+  }
+
+  onSearch() {
+    this.searchSubject.next(this.searchString);
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubject.complete();
   }
 
   handleRefresh(event: any) {

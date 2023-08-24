@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, map } from 'rxjs';
 import { IJWTPayload } from '../interfaces/request/IPayload';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { RoleStateService } from '../services/roleState.service';
 
 export const ROLES = {
   ADMIN: 'Admin',
@@ -19,9 +20,9 @@ export class AuthService {
   currentUser!: Observable<string>;
   private currentUserSubject!: BehaviorSubject<string>;
   private currentUserPayload!: BehaviorSubject<IJWTPayload>;
-  userRole: string = ROLES.EMPLOYEE;
+  userRole: string = ROLES.EMPLOYEE || ROLES.ADMIN;
 
-  constructor(private http: HttpClient, public router: Router) {
+  constructor(private http: HttpClient, public router: Router, private roleStatServ: RoleStateService,) {
     this.currentUserSubject = new BehaviorSubject<string>(
       localStorage.getItem('token') || ''
     );
@@ -71,6 +72,7 @@ export class AuthService {
     localStorage.setItem('userRole', user.payload.role);
     localStorage.setItem('email', user.payload.email);
     localStorage.setItem('userId', user.payload.guid);
+    this.roleStatServ.updateState(user.payload.role);
     this.currentUserSubject.next(user.access_token);
     this.currentUserPayload.next(user.payload);
     return user;
@@ -80,6 +82,7 @@ export class AuthService {
     this.currentUserSubject.next(null as any);
     this.currentUserPayload.next(null as any);
     localStorage.clear();
+    this.roleStatServ.updateState("");
     this.router.navigate(['/login']);
   }
 }
