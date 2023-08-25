@@ -5,6 +5,7 @@ import { environment } from "src/environments/environment";
 import { AttendanceSetupRequest } from "../interfaces/request/IAttendanceSetup";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse } from "../interfaces/response/IEmployee";
+import { IAttendanceSetupResponse } from "../interfaces/response/IAttendanceSetup";
 
 @Injectable({
     providedIn: 'root'
@@ -29,14 +30,11 @@ export class AdminService {
     }
 
     // attendance setup
-    saveAttendanceSetup(data: AttendanceSetupRequest): Observable<any>{
-        return this.http.post<AttendanceSetupRequest>(environment.Api + 'api/attendaceSetup', data);
+    saveAttendanceSetup(data: AttendanceSetupRequest): Observable<IAttendanceSetupResponse>{
+        return this.http.post<IAttendanceSetupResponse>(environment.Api + 'api/attendancesetup', data);
     }
-    updateAttendanceSetup(setupId: string, data: AttendanceSetupRequest): Observable<any>{
-        return this.http.put<AttendanceSetupRequest>(environment.Api + `api/attendaceSetup/${setupId}`, data);
-    }
-    getAttendanceSetup(): Observable<any>{
-        return this.http.get<any>(environment.Api + `api/attendaceSetup`);
+    getAttendanceSetup(): Observable<IAttendanceSetupResponse>{
+        return this.http.get<IAttendanceSetupResponse>(environment.Api + `api/attendancesetup`);
     }
 
     // assign work week

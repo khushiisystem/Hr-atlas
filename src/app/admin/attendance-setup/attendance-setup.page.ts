@@ -4,6 +4,7 @@ import { DatetimeChangeEventDetail, ModalController } from "@ionic/angular";
 import { AdminService } from "src/app/services/admin.service";
 import { ShareService } from "src/app/services/share.service";
 import * as moment from "moment";
+import { LoaderService } from "src/app/services/loader.service";
 
 interface DatetimeCustomEvent extends CustomEvent {
   detail: DatetimeChangeEventDetail;
@@ -27,6 +28,7 @@ export class AttendanceSetupPage implements OnInit {
     private shareServ: ShareService,
     private adminServ: AdminService,
     private fb: FormBuilder,
+    private loader: LoaderService,
   ) {}
 
   ngOnInit() {
@@ -35,14 +37,14 @@ export class AttendanceSetupPage implements OnInit {
       outTime: ['', Validators.required],
       gracePeriod: ['', Validators.required],
       workDuration: ['', Validators.required],
+      guid: [''],
     });
 
-    // this.getSetups();
-    this.defualtSetups();
+    this.getSetups();
+    // this.defualtSetups();
     this.currentControl = 'inTime';
     
     // this.currentDate = `${this.padNumber(now.getDate())}/${this.padNumber(now.getMonth() + 1)}/${now.getFullYear().toString().substr(-2)}`;
-    console.log(this.attendanceForm.value, "form");
   }
   
   defualtSetups(){
@@ -63,14 +65,14 @@ export class AttendanceSetupPage implements OnInit {
 
   getSetups(){
     this.adminServ.getAttendanceSetup().subscribe(async res => {
-      console.log(res, "res");
       if(res) {
-        this.setupId = res.uuid;
+        this.setupId = res.guid;
         await this.attendanceForm.patchValue(res);
         this.calculateWorkDuration();
       }
     }, (error) => {
       console.error(error.error, "get error");
+      this.defualtSetups();
     });
   }
 
@@ -81,35 +83,34 @@ export class AttendanceSetupPage implements OnInit {
 
 
   selectTime(event: DatetimeCustomEvent){
-    const formDate = event.detail.value as string;
+    const formDate = new Date(event.detail.value as string);
     this.attendanceForm.controls[this.currentControl].setValue(moment.utc(formDate).format());
-    console.log(this.attendanceForm.value, "form");
     this.calculateWorkDuration();
   }
 
   getDate(frmCtrl: string){
-    console.log(frmCtrl, "frmCtrl");
-    console.log(this.attendanceForm.value, "form");
     let formDate: string = '';
     if(frmCtrl.trim() !== ''){
       formDate = this.attendanceForm.controls[frmCtrl].value;
     }
-    return formDate != '' ? new Date(formDate) : new Date();
+    return formDate != '' ? moment(formDate).format() : new Date();
   }
 
   saveSetup(){
-    console.log(this.attendanceForm.value);
     if(this.attendanceForm.invalid){
       this.shareServ.presentToast("Please complete the from.", 'top', 'danger');
       return;
     } else {
+      this.loader.present('');
       this.adminServ.saveAttendanceSetup(this.attendanceForm.value).subscribe(res => {
         if(res){
           this.shareServ.presentToast("Attendance setup successfully.", 'top', 'success');
           this.modalCtrl.dismiss('done', 'confirm');
+          this.loader.dismiss();
         }
       }, (error) => {
         this.shareServ.presentToast("Something is wrong.", 'top', 'danger');
+        this.loader.dismiss();
       });
     }
   }

@@ -20,6 +20,7 @@ import { AdditionalSetupPage } from "../admin/additional-setup/additional-setup.
 import { RouterModule } from "@angular/router";
 import { AdminProfilePage } from "../admin/admin-profile/admin-profile.page";
 import { Tab1Page } from "../tab1/tab1.page";
+import { NameImgPageModule } from "../share/components/name-img/name-img.module";
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { Tab1Page } from "../tab1/tab1.page";
     ReactiveFormsModule,
     TabsPageRoutingModule,
     RouterModule,
+    NameImgPageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard],

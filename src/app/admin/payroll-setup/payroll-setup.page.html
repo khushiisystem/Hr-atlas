@@ -1,11 +1,12 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" fill="clear" (click)="goBack()" class="noBg noRipple">
+      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>Payroll Setup</ion-title>
+    <img src="../../../assets/images/logo.png" height="25" alt="Spundan" class="logo_img ion-margin-end" slot="end">
   </ion-toolbar>
 </ion-header>
 

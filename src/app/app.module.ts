@@ -24,6 +24,7 @@ import { LeaveSetupPage } from "./admin/leave-setup/leave-setup.page";
 import { EmployeeWorkWeekPage } from "./employee/employee-work-week/employee-work-week.page";
 import { NgOtpInputModule } from "ng-otp-input";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NameImgPageModule } from "./share/components/name-img/name-img.module";
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     FormsModule,
     ReactiveFormsModule,
     NgOtpInputModule,
+    NameImgPageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [

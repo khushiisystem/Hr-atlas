@@ -1,10 +1,11 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" fill="clear" (click)="goBack()" class="noBg noRipple">
+      <ion-button mode="md" fill="clear"  [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <img src="../../../assets/images/logo.png" height="25" alt="Spundan" class="logo_img ion-margin-end" slot="end">
     <ion-title>Leave Setup</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -42,7 +43,7 @@
 
         <ion-col size="12">
           <div class="form-input">
-            <ion-input labelPlacement="floating" fill="outline" formControlName="annualLeave" placeholder="Mobile Number" type="number" [min]="0" [max]="25">
+            <ion-input labelPlacement="floating" fill="outline" formControlName="annualLeave" placeholder="Annual Leave" type="number" [min]="0" [max]="25">
               <div slot="label">Annual Leave <ion-text color="danger">*</ion-text></div>
             </ion-input>
           </div>
@@ -64,6 +65,6 @@
       </ion-row>
     </ion-grid>
 
-    <ion-button mode="md" type="submit" size="large" class="submitBtn ion-margin" [disabled]="leaveSetupForm.invalid" color="primary" (click)="submit()" expand="full" shape="round">Save</ion-button>
+    <ion-button mode="md" type="submit" class="submitBtn ion-text-wrap ion-margin" [expand]="'block'" [shape]="'round'" [strong]="true" [disabled]="leaveSetupForm.invalid" (click)="submit()">Save Setup</ion-button>
   </form>
 </ion-content>

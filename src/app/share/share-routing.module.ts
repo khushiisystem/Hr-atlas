@@ -40,6 +40,10 @@ const routes: Routes = [
     path: '',
     redirectTo: '/login',
     pathMatch: 'full'
+  },
+  {
+    path: 'name-img',
+    loadChildren: () => import('./components/name-img/name-img.module').then( m => m.NameImgPageModule)
   }
 ];
 

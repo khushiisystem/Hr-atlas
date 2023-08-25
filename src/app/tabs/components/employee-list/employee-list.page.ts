@@ -116,7 +116,6 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
   }
 
   selectAll(event: CustomEvent) {
-    console.log(event, "event");
     if(event.detail.checked === true){
       this.employeeList.forEach((e: IEmployeeResponse, index) => {
         if(!this.selectedEmployee.includes(e.guid)){
@@ -126,6 +125,7 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
     } else if(event.detail.checked === false) {
       this.selectedEmployee = [];
     }
+    console.log(this.selectedEmployee);
   }
 
   selectEmployee(employee: string) {
@@ -135,7 +135,7 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
     } else {
       this.selectedEmployee.push(employee);
     }
-    console.log(this.selectedEmployee.length);
+    console.log(this.selectedEmployee);
   }
 
   isChecked(employee: any) {
@@ -168,6 +168,14 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
       });
     } else {
       this.getEmployeeList();
+    }
+  }
+
+  getName(employee: IEmployeeResponse) {
+    if(employee.lastName && employee.lastName.trim() !== ''){
+      return `${employee.firstName.slice(0,1)}${employee.lastName.slice(0,1)}`;
+    } else {
+      return `${employee.firstName.slice(0,2)}`;
     }
   }
 

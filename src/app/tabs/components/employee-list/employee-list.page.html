@@ -1,11 +1,12 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+      <ion-button mode="md" [routerDirection]="'back'" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
         <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>Employee List</ion-title>
+    <img src="../../../assets/images/logo.png" height="25" alt="Spundan" class="logo_img ion-margin-end" slot="end">
     <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
@@ -39,7 +40,8 @@
         <ion-item lines="full" [button]="true" [detail]="true" class="list-item">
           <div slot="start" class="check_container" (click)="selectEmployee(employee.guid)">
             <ion-avatar class="employee_img">
-              <img alt="imployee" [src]="employee.imageUrl.trim() != '' ? employee.imageUrl : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+              <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+              <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
             </ion-avatar>
             <div class="custom_checkbox" *ngIf="isChecked(employee.guid)">
               <span class="checkmark"></span>

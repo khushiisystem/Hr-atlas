@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/core/auth.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
@@ -26,7 +26,9 @@ export class ChangePasswordPage implements OnInit {
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       newPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
-    });
+    },
+    {validators:this.passwordValidator} as AbstractControlOptions
+    );
   }
 
   isSamePassword(){
@@ -66,6 +68,15 @@ export class ChangePasswordPage implements OnInit {
     if(this.changePasswordForm.valid && event.key === 'Enter'){
       this.submit();
     }
+  }
+
+  passwordValidator: ValidatorFn = (contorl: AbstractControl): Validators | null => {
+    const oldPassword = contorl.get('oldPassword');
+    const newPassword = contorl.get('newPassword');
+
+    if(oldPassword && newPassword && (oldPassword.value && newPassword.value) && (oldPassword.value === newPassword.value)){
+      return {passwordmatcherror: true}
+    } else {return false}
   }
 
 }

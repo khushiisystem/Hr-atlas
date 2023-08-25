@@ -38,7 +38,7 @@
     </ion-row>
   </ion-grid>
 
-  <ion-grid>
+  <ion-grid *ngIf="isDataLoaded">
     <ion-row class="row_one">
       <ion-col size="12" class="ion-margin-bottom" *ngIf="userRole === 'Admin'">
         <ion-button mode="md" shape="round" class="add_emp_btn" (click)="addEmployee()">
@@ -47,11 +47,11 @@
         </ion-button>
       </ion-col>
 
-      <ion-col size="4" sizeSm="3">
+      <ion-col [size]="userRole === 'Admin' ? 6 : 4" [sizeSm]="userRole === 'Admin' ? 4 : 3" [sizeLg]="userRole === 'Admin' ? 4 : 3">
         <ion-card mode="md" type="button" [routerLink]="['/tabs/employee-list']">
           <ion-card-content>
             <div class="icon_card">
-              <ion-icon name="file-tray-stacked-outline" aria-hidden="true" size="large"></ion-icon>
+              <ion-icon name="file-tray-full-outline" aria-hidden="true" size="large"></ion-icon>
             </div>
             <ion-label>Directory</ion-label>
           </ion-card-content>
@@ -69,11 +69,11 @@
         </ion-card>
       </ion-col>
 
-      <ion-col size="4" sizeSm="3">
+      <ion-col size="4" sizeSm="3" *ngIf="userRole === 'Employee'">
         <ion-card mode="md" type="button" (click)="showleaves()">
           <ion-card-content>
             <div class="icon_card">
-              <ion-icon name="analytics-outline" aria-hidden="true" size="large"></ion-icon>
+              <ion-icon name="fast-food-outline" aria-hidden="true" size="large"></ion-icon>
             </div>
             <ion-label>Leaves</ion-label>
           </ion-card-content>
@@ -91,11 +91,11 @@
         </ion-card>
       </ion-col>
 
-      <ion-col size="4" sizeSm="3">
+      <ion-col size="6" sizeSm="4" sizeLg="3" *ngIf="userRole === 'Admin'">
         <ion-card mode="md" type="button" [routerLink]="['/tabs/settings']">
           <ion-card-content>
             <div class="icon_card">
-              <ion-icon name="settings-outline" aria-hidden="true" size="large"></ion-icon>
+              <ion-icon name="cog-outline" aria-hidden="true" size="large"></ion-icon>
             </div>
             <ion-label>Settings</ion-label>
           </ion-card-content>

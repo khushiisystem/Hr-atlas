@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatetimeCustomEvent, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
+import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
@@ -13,6 +14,7 @@ import { ShareService } from 'src/app/services/share.service';
 })
 export class EditProfilePage implements OnInit {
   employeeForm!: FormGroup;
+  employeeDetail!: IEmployeeResponse;
   openCalendar: boolean = false;
   today: Date = new Date();
   maxDate: Date = new Date();
@@ -76,6 +78,7 @@ export class EditProfilePage implements OnInit {
     this.loader.present('fullHide');
     this.shareServ.getEmployeeById(this.userId).subscribe(res => {
       if(res) {
+        this.employeeDetail = res;
         this.employeeForm.patchValue(res);
         this.loader.dismiss();
       }
@@ -123,7 +126,7 @@ export class EditProfilePage implements OnInit {
     this.loader.present('');
     event.preventDefault();
     event.stopPropagation();
-    console.log(event.target, "file input");
+    console.log(event, "file input");
 
     const file = (event.target as any).files[0];
 
@@ -160,5 +163,12 @@ export class EditProfilePage implements OnInit {
   }
 
   goBack(){this.modalCtrl.dismiss();}
+  getName() {
+    if(this.employeeDetail.lastName && this.employeeDetail.lastName.trim() !== ''){
+      return `${this.employeeDetail.firstName.slice(0,1)}${this.employeeDetail.lastName.slice(0,1)}`;
+    } else {
+      return `${this.employeeDetail.firstName.slice(0,2)}`;
+    }
+  }
 
 }
