@@ -53,6 +53,7 @@ export class AddEmployeePage implements OnInit {
       alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10)])],
       maritalStatus: [''],
       imageUrl: [''],
+      role: 'Employee',
       currentAddress: this.fb.group({
         addressLine1: ['', Validators.compose([Validators.required])],
         addressLine2: ['', Validators.compose([Validators.required])],
@@ -76,9 +77,6 @@ export class AddEmployeePage implements OnInit {
 
     this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
     console.log(this.employeeForm.value, "form");
-    console.log(this.birthDate);
-    console.warn(this.action, "action");
-    console.warn(this.employeeId, "empId");
     if(this.action === 'edit' && this.employeeId.trim() !== ''){
       this.getProfile();
     } else {this.isDataLoaded = true;}

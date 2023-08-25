@@ -13,7 +13,7 @@ export class TabsPage {
 
   constructor(private roleStateServ: RoleStateService, private adminServ: AdminService,) {
     roleStateServ.getState().subscribe(res => {
-      this.userRole = res || "";
+      this.userRole = res || localStorage.getItem('userRole') || "";
     });
     this.userId = localStorage.getItem("userId") || "";
 

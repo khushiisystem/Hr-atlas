@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+      <ion-button mode="md" [routerDirection]="'back'" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
         <ion-icon name="close" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -13,7 +13,8 @@
   <div class="container">
     <div class="img-div" onclick="document.querySelector('#profileInput').click();">
       <div class="img-container">
-        <img [src]="imgUrl" alt="Employee">
+          <app-name-img [name]="getName()" *ngIf="imgUrl.trim() === ''"></app-name-img>
+          <img [src]="imgUrl" alt="Employee">
       </div>
       <span class="camera_btn">
         <ion-icon name="camera" aria-hidden="true"></ion-icon>

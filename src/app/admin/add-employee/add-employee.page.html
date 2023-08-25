@@ -1,9 +1,9 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button mode="md" slot="start" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+    <ion-button mode="md" slot="start" [routerDirection]="'back'" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
       <ion-icon name="close" slot="icon-only"></ion-icon>
     </ion-button>
-    <ion-title>Add Employee</ion-title>
+    <ion-title>{{action === 'add' ? 'Add' : 'Update'}} {{isDataLoaded && employeeForm.controls['role'].value === 'Admin' ? 'Profile' : 'Employee'}}</ion-title>
     <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
@@ -304,7 +304,7 @@
 </ion-content>
 <ion-footer *ngIf="isDataLoaded">
   <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid || isInProgress" color="primary" (click)="submit()" expand="full" shape="round">
-    <ion-icon name="person-add-outline" aria-hidden="true" slot="start"></ion-icon>
-    Add Employee
+    <ion-icon name="person-add-outline" aria-hidden="true" slot="start" *ngIf="action === 'add'"></ion-icon>
+    {{action === 'add' ? 'Add' : 'update' | titlecase}} {{isDataLoaded && employeeForm.controls['role'].value === 'Employee' ? 'Employee' : 'Profile'}}
   </ion-button>
 </ion-footer>

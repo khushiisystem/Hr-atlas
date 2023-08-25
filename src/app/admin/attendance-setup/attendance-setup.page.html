@@ -6,6 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Attendance Setup</ion-title>
+    <img src="../../../assets/images/logo.png" height="25" alt="Spundan" class="logo_img ion-margin-end" slot="end">
   </ion-toolbar>
 </ion-header>
 
@@ -77,14 +78,14 @@
       </ion-grid>
 
       <div class="btn_div">
-          <ion-button mode="md" color="primary" type="submit" [expand]="'block'" [shape]="'round'" [disabled]="attendanceForm.invalid" (click)="saveSetup()" class="submitBtn">Save</ion-button>
-      </div>
+          <ion-button mode="md" type="submit" class="submitBtn ion-text-wrap" [expand]="'block'" [shape]="'round'" [strong]="true" [disabled]="attendanceForm.invalid" (click)="saveSetup()">Save Setup</ion-button>
+        </div>
     </form>
 
     <ion-modal [isOpen]="isOpenTimeModal" [initialBreakpoint]="0.7" [showBackdrop]="true" [keepContentsMounted]="true" [backdropDismiss]="false">
       <ng-template>
         <ion-content>
-          <ion-datetime [presentation]="'time'" mode="md" [size]="'cover'" (ionChange)="selectTime($any($event))" [value]="currentControl.trim() !== '' ? getDate(currentControl).toISOString() : ''" #dateTime>
+          <ion-datetime [presentation]="'time'" mode="md" [size]="'cover'" (ionChange)="selectTime($any($event))" #dateTime>
             <ion-label slot="title" *ngIf="currentControl.trim() !== ''">{{currentControl === 'inTime' ? 'Set In Time' : 'Set Out Time'}}</ion-label>
             <ion-buttons slot="buttons">
               <ion-button mode="md" color="danger" (click)="dateTime.cancel(); isOpenTimeModal = false">Cancel</ion-button>

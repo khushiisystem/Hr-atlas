@@ -1,6 +1,6 @@
 <ion-header [translucent]="true" mode="md" class="main-header">
   <ion-toolbar>
-    <ion-button slot="start" mode="md" color="light" type="button" (click)="goBack()" fill="clear" class="noBg noRipple backBtn">
+    <ion-button slot="start" mode="md" color="light" type="button" [routerDirection]="'back'" (click)="goBack()" fill="clear" class="noBg noRipple backBtn">
       <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
     </ion-button>
     <img src="../../../assets/images/logo.png" alt="Spundan - The IT Pulse" class="logoImg">

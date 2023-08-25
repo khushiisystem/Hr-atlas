@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" type="button" (click)="goBack()" fill="clear" class="noBg noRipple">
+      <ion-button mode="md" type="button" [routerDirection]="'back'" (click)="goBack()" fill="clear" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
       </ion-button>
     </ion-buttons>

@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" fill="clear" class="noBg noRipple" (click)="goBack()">
+      <ion-button mode="md" fill="clear" class="noBg noRipple" [routerDirection]="'back'" [routerDirection]="'back'" (click)="goBack()">
         <ion-icon name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -70,49 +70,37 @@
       <div class="assign_work_week" *ngIf="activeTab === 'assign_work_week'">
         <ion-row class="ion-padding">
           <ion-col size="12">
-            <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round"></ion-input>
+            <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
           </ion-col>
-          <ion-col size="12">
+          <ion-col size="12" *ngIf="employeeList.length > 0">
             <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === 2" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
+          </ion-col>
+          <ion-col size="12" *ngIf="!isDataLoaded" class="ion-text-center">
+            <ion-spinner color="medium"></ion-spinner>
           </ion-col>
         </ion-row>
 
-        <ion-list>
-          <ion-item lines="full" [button]="true" [detail]="false" class="list-item">
-            <div slot="start" class="check_container" (click)="selectEmployee('Arjun')">
+        <ion-list *ngIf="employeeList.length > 0">
+          <ion-item lines="full" type="button" [button]="true" [detail]="false" class="list-item" *ngFor="let employee of employeeList; index as i;">
+            <div slot="start" class="check_container" (click)="selectEmployee(employee.guid)">
               <ion-avatar class="employee_img">
-                <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+                <img alt="imployee" [src]="employee.imageUrl ? employee.imageUrl :'https://ionicframework.com/docs/img/demos/avatar.svg'" />
               </ion-avatar>
-              <div class="custom_checkbox" *ngIf="isChecked('Arjun')">
+              <div class="custom_checkbox" *ngIf="isChecked(employee.guid)">
                 <span class="checkmark"></span>
               </div>
             </div>
-            <div class="employee_data" (click)="selectWrokWeek(['Arjun'])">
-              <ion-label>Arjun Singh</ion-label>
-              <ion-text class="role"><small>Frontend Developer</small></ion-text>
-            </div>
-          </ion-item>
-
-          <ion-item lines="full" [button]="true" [detail]="false" class="list-item">
-            <div slot="start" class="check_container" (click)="selectEmployee('Pritam')">
-              <ion-avatar class="employee_img">
-                <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-              </ion-avatar>
-              <div class="custom_checkbox" *ngIf="isChecked('Pritam')">
-                <span class="checkmark"></span>
-              </div>
-            </div>
-            <div class="employee_data" (click)="selectWrokWeek(['Pritam'])">
-              <ion-label>Pritam Singh</ion-label>
+            <div class="employee_data" (click)="selectWrokWeek([employee.guid])">
+              <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || "" | titlecase}}</ion-label>
               <ion-text class="role"><small>Frontend Developer</small></ion-text>
             </div>
           </ion-item>
         </ion-list>
 
-        <ion-buttons class="paginator_btns">
+        <!-- <ion-buttons class="paginator_btns">
           <ion-button mode="md" fill="solid" [color]="!isMoreEmployee ? 'medium' : 'primary'" class="ion-text-wrap paginateBtn" [disabled]="pageIndex < 1" (click)="prev()">Previous</ion-button>
           <ion-button mode="md" fill="solid" [color]="!isMoreEmployee ? 'medium' : 'primary'" class="ion-text-wrap paginateBtn" [disabled]="!isMoreEmployee" (click)="next()">Next</ion-button>
-        </ion-buttons>
+        </ion-buttons> -->
 
         <ion-button class="ion-margin big_assign_btn" shape="round" mode="md" fill="solid" expand="block" *ngIf="selectedEmployee.length >= 2" (click)="selectWrokWeek(selectedEmployee)">Assign Week</ion-button>
 

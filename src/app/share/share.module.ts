@@ -21,8 +21,8 @@ import { NgOtpInputModule } from 'ng-otp-input';
     CommonModule,
     NgOtpInputModule,
   ],
-  exports: [ChangePasswordPage],
-  declarations: [SharePage, LoginPage, ForgotPasswordPage, ChangePasswordPage],
+  exports: [ChangePasswordPage,],
+  declarations: [SharePage, LoginPage, ForgotPasswordPage, ChangePasswordPage,],
   providers: []
 })
 export class SharePageModule {}

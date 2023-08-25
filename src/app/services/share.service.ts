@@ -4,7 +4,7 @@ import { ToastController } from "@ionic/angular";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { IPayrollSetupRequest } from "../interfaces/request/IPayrollSetup";
-import { IOTPRequest, IResetPasswordRequest } from "../interfaces/request/IOtpRequest";
+import { IOTPRequest, IOptVerifyRequest, IResetPasswordRequest } from "../interfaces/request/IOtpRequest";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse } from "../interfaces/response/IEmployee";
 
@@ -30,8 +30,8 @@ export class ShareService {
 
 
   // APIs for employee
-  getAllEmployee(pageIndex: number, pageSize: number): Observable<any>{
-    return this.http.get<any>(environment.Api + `api/user?skip=${pageIndex}&limit=${pageSize}`);
+  getAllEmployee(): Observable<any>{
+    return this.http.get<any>(environment.Api + `api/user`);
   }
   getEmployeeById(empId: string): Observable<IEmployeeResponse>{
     return this.http.get<IEmployeeResponse>(environment.Api + `api/user/${empId}`);
@@ -55,13 +55,13 @@ export class ShareService {
   getOTP(data: IOTPRequest): Observable<any> {
     return this.http.post<any>(environment.Api + `api/user/sendOtp`, data);
   }
-  verifyOTP(data: {otp: string}): Observable<any> {
-    return this.http.post<any>(environment.Api + `api/verifyOTP/`, data);
+  verifyOTP(data: IOptVerifyRequest): Observable<any> {
+    return this.http.post<any>(environment.Api + `api/user/verifyOtp`, data);
   }
   resetPassword(data: IResetPasswordRequest): Observable<any> {
     return this.http.post<any>(environment.Api + `api/resetPassword`, data);
   }
   changePassword(data: any): Observable<any> {
-    return this.http.post<any>(environment.Api + `api/changePassword`, data);
+    return this.http.post<any>(environment.Api + `api/user/changePassword`, data);
   }
 }

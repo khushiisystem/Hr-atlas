@@ -73,4 +73,12 @@ export class EmployeeProfilePage implements OnInit {
     return fullAddress;
   }
 
+  getName() {
+    if(this.employeeDetail.lastName && this.employeeDetail.lastName.trim() !== ''){
+      return `${this.employeeDetail.firstName.slice(0,1)}${this.employeeDetail.lastName.slice(0,1)}`;
+    } else {
+      return `${this.employeeDetail.firstName.slice(0,2)}`;
+    }
+  }
+
 }

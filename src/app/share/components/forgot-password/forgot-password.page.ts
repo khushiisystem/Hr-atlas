@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgOtpInputConfig } from 'ng-otp-input';
+import { IOptVerifyRequest } from 'src/app/interfaces/request/IOtpRequest';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 
@@ -38,6 +39,8 @@ export class ForgotPasswordPage implements OnInit {
       isEmail: true
     });
     this.passwordForm = this.fb.group({
+      emailOrPhone: ['', Validators.compose([Validators.required, Validators.email])],
+      isEmail: true,
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     });
@@ -59,6 +62,8 @@ export class ForgotPasswordPage implements OnInit {
   getOtp(){
     if(this.getOTPForm.valid){
       this.isInProgress = true;
+      this.passwordForm.patchValue(this.getOTPForm.value);
+      console.log(this.passwordForm.value, "email patch");
       this.loader.present('');
       this.shareServ.getOTP(this.getOTPForm.value).subscribe(res => {
         if(res) {
@@ -78,9 +83,12 @@ export class ForgotPasswordPage implements OnInit {
 
   verifyOtp(){
     console.log(this.otpCtrl.value, "value");
+    console.log(this.getOTPForm.value, "email form");
     this.loader.present('');
     this.isInProgress = true;
-    const data = {
+    const data: IOptVerifyRequest = {
+      emailOrPhone: this.getOTPForm.controls['emailOrPhone'].value,
+      isEmail: true,
       otp: this.otpCtrl.value
     };
     this.shareServ.verifyOTP(data).subscribe(res => {
