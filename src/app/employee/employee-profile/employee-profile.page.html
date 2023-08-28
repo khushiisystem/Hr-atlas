@@ -325,6 +325,26 @@
             </ion-item>
           </div>
         </ion-accordion>
+
+        <ion-accordion value="Setting" mode="md">
+          <ion-item slot="header" class="accordion_head_item">
+            <div>
+              <ion-label>Setting</ion-label>
+              <ion-text class="sub-header">Personal info, work info</ion-text>
+            </div>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" class="btn_item">
+              <ion-icon name="person-outline" aria-hidden="true" slot="start" color="primary"></ion-icon>
+              <ion-label color="primary">Edit Profile</ion-label>
+            </ion-item>
+
+            <ion-item [lines]="'none'" type="button" [button]="true" [detail]="true" class="btn_item" (click)="openWorkModal(employeeDetail.employeeId)">
+              <ion-icon name="construct-outline" aria-hidden="true" slot="start" color="primary"></ion-icon>
+              <ion-label color="primary">Update Work</ion-label>
+            </ion-item>
+          </div>
+        </ion-accordion>
       </ion-accordion-group>
     </ion-card>
     

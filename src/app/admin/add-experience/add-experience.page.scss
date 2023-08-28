@@ -1,0 +1,38 @@
+.container {
+    padding: 20px 0px;
+}
+.row_one {
+    row-gap: 10px;
+    margin-left: -5px;
+    margin-right: -5px;
+}
+.submitBtn {
+    height: 45px;
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 10px;
+}
+.card_header {
+    flex-direction: row;
+    gap: 10px;
+     
+    & ion-card-title{margin-top: 5px;}
+
+    & ion-button {
+        align-self: flex-start;
+        margin: 0 -10px 0 auto;
+        width: 40px;
+        --padding-end: 0;
+        --padding-start: 0;
+    }
+}
+
+.workExp_btnGroup {
+    gap: 10px;
+    justify-content: flex-end;
+
+    ion-button {min-width: 110px;}
+}
+
+
+ion-footer {background-color: #fff;}

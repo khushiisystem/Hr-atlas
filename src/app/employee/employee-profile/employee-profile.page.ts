@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonAccordionGroup } from '@ionic/angular';
+import { IonAccordionGroup, ModalController } from '@ionic/angular';
 import { IAddress } from 'src/app/interfaces/request/IEmployee';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { LoaderService } from 'src/app/services/loader.service';
+import { RoleStateService } from 'src/app/services/roleState.service';
 import { ShareService } from 'src/app/services/share.service';
+import { AddExperiencePage } from 'src/app/admin/add-experience/add-experience.page';
 
 @Component({
   selector: 'app-employee-profile',
@@ -18,10 +20,13 @@ export class EmployeeProfilePage implements OnInit {
   expandedAccordion: string = "Personal";
   dataLoaded: boolean = false;
   randomList: any[] = [];
+  userRole: string | null = "";
 
   constructor(
     private activeRoute: ActivatedRoute,
     private shareServ: ShareService,
+    private roleStateServ: RoleStateService,
+    private modalCtrl: ModalController,
   ) {
     this.employeeId = activeRoute.snapshot.params?.['employeeId'];
     this.randomList.length = 7;
@@ -31,6 +36,9 @@ export class EmployeeProfilePage implements OnInit {
     if(this.employeeId.trim() !== ''){
       this.getEmployeeDetails();
     }
+    this.roleStateServ.getState().subscribe(res => {
+      this.userRole = res || localStorage.getItem('userRole');
+    });
   }
 
   getEmployeeDetails(){
@@ -79,6 +87,22 @@ export class EmployeeProfilePage implements OnInit {
     } else {
       return `${this.employeeDetail.firstName.slice(0,2)}`;
     }
+  }
+
+  async openWorkModal(employeeId: string) {
+    const workModal = this.modalCtrl.create({
+      component: AddExperiencePage,
+      initialBreakpoint: 1,
+      backdropDismiss: false,
+      mode: 'md',
+      animated: true,
+      componentProps: {employeeId: employeeId, action: 'add'}
+    });
+    
+    (await workModal).present();
+    (await workModal).onDidDismiss().then(res => {
+      console.log(res, "res");
+    });
   }
 
 }

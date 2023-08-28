@@ -39,31 +39,43 @@
         </ng-container>
 
         <ng-container *ngIf="isDataLoaded">
-          <ion-card mode="md" type="button" button="true" class="ion-margin-bottom sso">
-            <ion-item [lines]="'none'" [button]="true" [detail]="true" [detailIcon]="expandedCard === 'sso' ? 'chevron-down-outline' : 'chevron-forward-outline'" (click)="expandCard('sso')">
+          <ion-card mode="md" type="button" button="true" class="ion-margin-bottom sso" *ngFor="let workWeekItem of workWeekList">
+            <ion-item [lines]="'none'" [button]="true" [detail]="true" [detailIcon]="expandedCard === workWeekItem.title ? 'chevron-down-outline' : 'chevron-forward-outline'" (click)="expandCard(workWeekItem.title)">
               <div>
-                <ion-label>Saturday Sunday Off</ion-label>
-                <ion-text><strong>4</strong> Employees</ion-text>
+                <ion-label>{{workWeekItem.title}}</ion-label>
+                <ion-text><strong>{{workWeekItem.employees ? workWeekItem.employees.length : 'No'}}</strong> Employees</ion-text>
               </div>
             </ion-item>
-            <ion-card-content *ngIf="expandedCard === 'sso'">
+            <ion-card-content *ngIf="expandedCard === workWeekItem.title">
               <ion-chip color="primary">Akash Sharma</ion-chip>
               <ion-chip color="tertiary">Ambikesh kumar</ion-chip>
             </ion-card-content>
           </ion-card>
-  
-          <ion-card mode="md" type="button" button="true" class="ion-margin-bottom so">
-            <ion-item [lines]="'none'" [button]="true" [detail]="true" [detailIcon]="expandedCard === 'so' ? 'chevron-down-outline' : 'chevron-forward-outline'" (click)="expandCard('so')">
-              <div>
-                <ion-label>Sunday Off</ion-label>
-                <ion-text>No Employees</ion-text>
-              </div>
+
+          <ion-card mode="md" class="ion-margin-bottom">
+            <ion-item [lines]="'none'" [button]="true" [detail]="true" [detailIcon]="expandedCard === 'new' ? 'chevron-down-outline' : 'chevron-forward-outline'" (click)="expandCard('new')">
+              <ion-label>Create New</ion-label>
             </ion-item>
-            <ion-card-content *ngIf="expandedCard === 'so'">
-              <ion-chip color="primary">Akash Sharma</ion-chip>
-              <ion-chip color="tertiary">Ambikesh kumar</ion-chip>
+            <ion-card-content *ngIf="expandedCard === 'new'" [formGroup]="workWeekForm">
+              <div class="form-input ion-margin-bottom">
+                <ion-input label="Title" labelPlacement="floating" fill="outline" placeholder="Title" formControlName="title" required="true"></ion-input>
+                <ion-text color="danger" class="error_txt" *ngIf="workWeekForm.controls['title'].touched && workWeekForm.controls['title'].errors">
+                  {{workWeekForm.controls['title'].value ? 'Please enter a valid title.' : 'Title is required'}}
+                </ion-text>
+              </div>
+              <div class="form-input">
+                <ion-select label="Week Off" label-placement="floating" fill="outline" [interface]="'action-sheet'" [multiple]="true" formControlName="weekOff" [required]="true" [compareWith]="compareWeek">
+                  <ion-select-option *ngFor="let week of weekArray" [value]="week">{{week}}</ion-select-option>
+                </ion-select>
+                <ion-text color="danger" class="error_txt" *ngIf="workWeekForm.controls['weekOff'].touched && workWeekForm.controls['weekOff'].errors">
+                  Weeks are required.
+                </ion-text>
+              </div>
             </ion-card-content>
+            <ion-button type="reset" color="danger" fill="clear" *ngIf="expandedCard === 'new'" (click)="expandedCard = ''; workWeekForm.reset()">Cancel</ion-button>
+            <ion-button type="submit" color="primary" fill="clear" *ngIf="expandedCard === 'new'" [disabled]="workWeekForm.invalid" (click)="createNewWorks()">Save</ion-button>
           </ion-card>
+
         </ng-container>
       </div>
 
@@ -84,7 +96,8 @@
           <ion-item lines="full" type="button" [button]="true" [detail]="false" class="list-item" *ngFor="let employee of employeeList; index as i;">
             <div slot="start" class="check_container" (click)="selectEmployee(employee.guid)">
               <ion-avatar class="employee_img">
-                <img alt="imployee" [src]="employee.imageUrl ? employee.imageUrl :'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+                <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+                <img alt="imployee" *ngIf="employee.imageUrl.trim() !== ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
               </ion-avatar>
               <div class="custom_checkbox" *ngIf="isChecked(employee.guid)">
                 <span class="checkmark"></span>
@@ -92,7 +105,7 @@
             </div>
             <div class="employee_data" (click)="selectWrokWeek([employee.guid])">
               <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || "" | titlecase}}</ion-label>
-              <ion-text class="role"><small>Frontend Developer</small></ion-text>
+              <ion-text class="role"><small>{{employeeWorkWeek(employee.workWeek)}}</small></ion-text>
             </div>
           </ion-item>
         </ion-list>

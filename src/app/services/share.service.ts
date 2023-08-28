@@ -30,8 +30,8 @@ export class ShareService {
 
 
   // APIs for employee
-  getAllEmployee(): Observable<any>{
-    return this.http.get<any>(environment.Api + `api/user`);
+  getAllEmployee(): Observable<IEmployeeResponse[]>{
+    return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user`);
   }
   getEmployeeById(empId: string): Observable<IEmployeeResponse>{
     return this.http.get<IEmployeeResponse>(environment.Api + `api/user/${empId}`);
