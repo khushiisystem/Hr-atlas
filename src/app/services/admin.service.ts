@@ -6,6 +6,8 @@ import { AttendanceSetupRequest } from "../interfaces/request/IAttendanceSetup";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse } from "../interfaces/response/IEmployee";
 import { IAttendanceSetupResponse } from "../interfaces/response/IAttendanceSetup";
+import { IAssignWorkWeek, IWorkWeek } from "../interfaces/request/IAssignWorks";
+import { IWorkWeekResponse } from "../interfaces/response/IWorkWeek";
 
 @Injectable({
     providedIn: 'root'
@@ -38,7 +40,16 @@ export class AdminService {
     }
 
     // assign work week
-    assignWorkWeek(data: any): Observable<any> {
-        return this.http.post<any>(environment.Api + `/api/assignWorkWeek`, data);
+    createWorkWeek(data: IWorkWeek): Observable<any> {
+        return this.http.post<any>(environment.Api + `api/workWeek`, data);
+    }
+    getWorkWeek(): Observable<IWorkWeekResponse[]> {
+        return this.http.get<IWorkWeekResponse[]>(environment.Api + `api/workWeek`);
+    }
+    deletetWorkWeek(workWeekID: string): Observable<any> {
+        return this.http.delete<any>(environment.Api + `api/workWeek/${workWeekID}`);
+    }
+    assignWorkWeek(data: IAssignWorkWeek): Observable<any> {
+        return this.http.post<any>(environment.Api + `api/workWeek/assignWorkweek`, data);
     }
 }

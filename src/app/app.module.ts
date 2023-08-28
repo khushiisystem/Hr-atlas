@@ -25,6 +25,7 @@ import { EmployeeWorkWeekPage } from "./employee/employee-work-week/employee-wor
 import { NgOtpInputModule } from "ng-otp-input";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NameImgPageModule } from "./share/components/name-img/name-img.module";
+import { AddExperiencePageModule } from "./admin/add-experience/add-experience.module";
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { NameImgPageModule } from "./share/components/name-img/name-img.module";
     ReactiveFormsModule,
     NgOtpInputModule,
     NameImgPageModule,
+    AddExperiencePageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
