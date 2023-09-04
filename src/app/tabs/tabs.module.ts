@@ -21,6 +21,8 @@ import { RouterModule } from "@angular/router";
 import { AdminProfilePage } from "../admin/admin-profile/admin-profile.page";
 import { Tab1Page } from "../tab1/tab1.page";
 import { NameImgPageModule } from "../share/components/name-img/name-img.module";
+import { LeavesPage } from "../employee/leaves/leaves.page";
+import { LeaveApplyFormPage } from "../employee/leaves/leave-apply-form/leave-apply-form.page";
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { NameImgPageModule } from "../share/components/name-img/name-img.module"
     AttendancePage,
     AdditionalSetupPage,
     AdminProfilePage,
+    LeavesPage,
+    LeaveApplyFormPage,
   ],
   imports: [
     IonicModule,

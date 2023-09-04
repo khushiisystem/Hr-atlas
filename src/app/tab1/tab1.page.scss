@@ -1,7 +1,7 @@
 .user_avatar{
     width: 40px;
     height: 40px;
-    margin: 6px 16px;
+    margin: 6px 0 6px 16px;
 }
 .logo_img {
     display: block;
@@ -10,6 +10,7 @@
 }
 .clock_in_btn {
     --box-shadow: none;
+    text-transform: capitalize;
 }
 .row_one {
     row-gap: 5px;
@@ -30,3 +31,15 @@
 }
 .add_emp_btn {margin-left: auto; display: block; max-width: 250px; height: 45px; font-size: 1rem; font-weight: 600;}
 .skeleton_avatar{margin: 0 auto 10px;}
+
+.time_card {
+    ion-card-header {flex-direction: row; justify-content: space-between; gap: 16px; align-items: center;}
+    ion-button {text-transform: capitalize;}
+    & .flex_div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+}

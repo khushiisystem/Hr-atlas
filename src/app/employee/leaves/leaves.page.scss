@@ -13,12 +13,21 @@
     /* Set a fixed height for the columns */
     padding: 0;
 }
+.leave_card {
+    ion-card-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
 
-.header-toolbar {
-    --ion-toolbar-background: rgb(255, 106, 0);
-    --ion-color-base: black;
+        & .apply-button {
+            margin-inline: 0;
+            margin: 0 0 0 5px;
+            text-transform: capitalize;
+        }
+    }
+
+    & ion-row{margin-left: -5px; margin-right: -5px;}
 }
-
 ion-card-header {
     text-align: center;
 }
@@ -29,10 +38,6 @@ ion-card-header {
     padding-top: 10px;
 }
 
-.apply-button {
-    font-size: 12px;
-    padding: 6px;
-}
 
 .leave-card,
 .loss-of-pay-card {

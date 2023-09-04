@@ -33,36 +33,42 @@
 
     <!-- ------------ attendance list ----------------- -->
     <div class="attendance_list">
-      <ion-card class="attendance_Card" mode="md">
-        <ion-card-header>
-          <ion-card-title>{{getWeek(attendanceDate)}}</ion-card-title>
-          <ion-text class="attendance_status" [color]="'success'">{{attendanceStatus[0]}}</ion-text>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-row class="sort_desc ion-margin-top">
-            <ion-col size="6">
-              <ion-text>In Time</ion-text>
-            </ion-col>
-            <ion-col size="6">
-              <ion-label>11: 04 AM</ion-label>
-            </ion-col>
-            <ion-col size="6">
-              <ion-text>Out Time</ion-text>
-            </ion-col>
-            <ion-col size="6">
-              <ion-label>08: 04 PM</ion-label>
-            </ion-col>
-            <ion-col size="6">
-              <ion-text>Work Duration</ion-text>
-            </ion-col>
-            <ion-col size="6">
-              <ion-label>09:00</ion-label>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
+      <div class="ion-text-center" *ngIf="dataLoaded && attendanceList.length < 1">
+        <ion-label>Attendance not available of this month.</ion-label>
+      </div>
+      <ng-container *ngFor="let attendanceItem of attendanceList; index as i;">
+        <ion-card class="attendance_Card" mode="md" *ngIf="!isWeekOff(attendanceItem.clockIn)">
+          <ion-card-header (click)="collapseCard(i)">
+            <ion-card-title>{{getWeek(attendanceItem.clockIn)}}</ion-card-title>
+            <ion-text class="attendance_status" [color]="getStatus(attendanceItem.status)">{{attendanceItem.status}}</ion-text>
+          </ion-card-header>
+          <ion-card-content *ngIf="expandedCards.includes(i)">
+            <ion-row class="sort_desc ion-margin-top">
+              <ion-col size="6">
+                <ion-text>In Time</ion-text>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label>{{attendanceItem.clockIn | date:'mediumTime'}}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-text>Out Time</ion-text>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label *ngIf="!attendanceItem.clockOut">--</ion-label>
+                <ion-label *ngIf="attendanceItem.clockOut">{{attendanceItem.clockOut | date:'mediumTime'}}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-text>Work Duration</ion-text>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label>{{attendanceItem.workingTime ? attendanceItem.workingTime : '--'}}</ion-label>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ng-container>
 
-      <ng-container *ngFor="let dateItem of attendanceDateList; index as i;">
+      <!-- <ng-container *ngFor="let dateItem of attendanceDateList; index as i;">
         <ion-card class="attendance_Card" mode="md" *ngIf="dateItem.getDay() !== 0">
           <ion-card-header (click)="collapseCard(i)">
             <ion-card-title>{{getWeek(dateItem)}}</ion-card-title>
@@ -91,7 +97,7 @@
             </ion-row>
           </ion-card-content>
         </ion-card>
-      </ng-container>
+      </ng-container> -->
     </div>
   </div>
 </ion-content>

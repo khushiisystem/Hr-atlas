@@ -15,6 +15,7 @@ import { PayrollSetupPage } from '../admin/payroll-setup/payroll-setup.page';
 import { PayrollPage } from '../employee/payroll/payroll.page';
 import { AdditionalSetupPage } from '../admin/additional-setup/additional-setup.page';
 import { AdminProfilePage } from '../admin/admin-profile/admin-profile.page';
+import { LeavesPage } from '../employee/leaves/leaves.page';
 
 const routes: Routes = [
   {
@@ -94,6 +95,11 @@ const routes: Routes = [
         path: 'payroll',
         title: "Payroll",
         component: PayrollPage
+      },
+      {
+        path: 'leaves',
+        title: "Apply Leave",
+        component: LeavesPage
       },
     ],
     // canActivate: [AuthGuard]

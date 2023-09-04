@@ -43,19 +43,6 @@ export class LeaveSetupPage implements OnInit {
     this.loaderServ.dismiss();
   }
 
-  selectDate(event: DatetimeCustomEvent){
-    this.leaveSetupForm.patchValue({
-      dateOfBirth: moment.utc(event.detail.value).format()
-    });
-    this.getDate();
-    console.log(this.leaveSetupForm.value);
-  }
-
-  getDate(){
-    const formDate = this.leaveSetupForm.controls['dateOfBirth'].value;
-    return new Date(formDate != '' ? formDate : new Date());
-  }
-
   submit(){
     if(this.leaveSetupForm.invalid){
       return;

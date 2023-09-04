@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { IClockInResponce } from 'src/app/interfaces/response/IAttendanceSetup';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 
@@ -11,6 +12,7 @@ import { ShareService } from 'src/app/services/share.service';
 })
 export class AttendancePage implements OnInit {
   attendanceDateList: Date[] = [];
+  attendanceList: IClockInResponce[] = [];
   dataLoaded: boolean = false;
   dateModal: boolean = false;
   attendanceDate: Date = new Date();
@@ -37,10 +39,30 @@ export class AttendancePage implements OnInit {
     this.shareServ.getEmployeeById(this.userId).subscribe(res => {
       if(res){
         this.setStartEndDate(this.attendanceDate);
-        this.dataLoaded = false;
+        this.getEmployeeAttendance();
+        this.dataLoaded = true;
       }
     }, (error) => {
       this.dataLoaded = false;
+    })
+  }
+
+  getEmployeeAttendance() {
+    this.loader.present('');
+    const data = {
+      employeeId: this.userId,
+      date: moment(this.attendanceDate).format()
+    }
+    console.log(data, "data");
+    this.shareServ.employeeAttendance(data).subscribe(res => {
+      if(res) {
+        this.attendanceList = res;
+        console.log(this.attendanceList, "list");
+        this.loader.dismiss();
+      }
+    }, (error) => {
+      console.log(error, "error");
+      this.loader.dismiss();
     })
   }
 
@@ -66,10 +88,10 @@ export class AttendancePage implements OnInit {
 
   selectAttendanceDate(event: CustomEvent) {
     if(event.detail.value){
-      if(!this.attendanceDate){
-        this.attendanceDate = new Date(moment(event.detail.value).format());
-        this.setStartEndDate(this.attendanceDate);
-      }
+      this.attendanceDate = new Date(moment(event.detail.value).format());
+      this.attendanceList = [];
+      this.getEmployeeAttendance();
+      // this.setStartEndDate(this.attendanceDate);
     }
   }
   
@@ -97,6 +119,27 @@ export class AttendancePage implements OnInit {
       this.attendanceDateList.push(newDate);
       lastDate--;
     }
+  }
+
+  isWeekOff(dateTime: string | Date){
+    return new Date(moment(dateTime).format()).getDay() === 0;
+  }
+  getStatus(status: string){
+    let color = '';
+    switch (status) {
+      case 'Present':
+        color = 'success'
+        break;
+
+      case 'Leave':
+        color = 'warning'
+        break;
+    
+      default:
+        color = 'danger'
+        break;
+    }
+    return color;
   }
 
   collapseCard(index: number) {
