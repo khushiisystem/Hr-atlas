@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title>Profile</ion-title>
     <ion-buttons slot="end">
-      <ion-button mode="md" (click)="logout()" color="danger" fill="clear">
+      <ion-button mode="md" (click)="logout()" color="danger" fill="clear" *ngIf="employeeDetail">
         <ion-icon name="log-out-outline" slot="icon-only" aria-hidden="true"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -15,12 +15,13 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-    <div class="container">
+    <div class="container" *ngIf="employeeDetail">
         <ion-card mode="md" class="profile_card ion-margin">
           <ion-item lines="none" class="noBg">
             <div class="emp_avatar" slot="start">
               <ion-avatar class="employee_img">
-                <img alt="Employee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+                <app-name-img [name]="getName()" *ngIf="employeeDetail.imageUrl.trim() === ''"></app-name-img>
+                <img *ngIf="employeeDetail.imageUrl.trim() != ''" alt="Employee" [src]="employeeDetail.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
               </ion-avatar>
               <span class="edit_btn">
                 <ion-icon name="pencil" aria-hidden="true"></ion-icon>
@@ -28,8 +29,8 @@
             </div>
     
             <div class="emp_name_role">
-              <ion-label class="emp_name">Arjun Kumar</ion-label>
-              <ion-text class="emp_role">Associate Software Engineer</ion-text>
+              <ion-label class="emp_name">{{employeeDetail.firstName | titlecase}} {{employeeDetail.lastName || "" | titlecase}}</ion-label>
+              <ion-text class="emp_role">{{employeeDetail.role}}</ion-text>
             </div>
           </ion-item>
         </ion-card>
@@ -58,29 +59,29 @@
                     <ion-row>
                       <ion-col size="12">
                         <ion-label>Full Name</ion-label>
-                        <ion-input aria-label="Full Name" [readonly]="true" [value]="'Aushman singh'"></ion-input>
+                        <ion-input aria-label="Full Name" [readonly]="true" [value]="employeeDetail.firstName + ' '+ employeeDetail.lastName || '-'"></ion-input>
                       </ion-col>
-    
+        
                       <ion-col size="6">
                         <ion-label>Date of Birth</ion-label>
-                        <ion-input aria-label="Date of Birth" [readonly]="true" [value]="'26 April, 1997'"></ion-input>
+                        <ion-input aria-label="Date of Birth" [readonly]="true" [value]="employeeDetail.dateOfBirth || '-' | date"></ion-input>
                       </ion-col>
-    
+        
                       <ion-col size="6">
                         <ion-label>Gender</ion-label>
-                        <ion-input aria-label="Gender" [readonly]="true" [value]="'Male'">
+                        <ion-input aria-label="Gender" [readonly]="true" [value]="employeeDetail.gender || '-'">
                           <!-- <div slot="label">Gender</div> -->
                         </ion-input>
                       </ion-col>
-    
+        
                       <ion-col size="6">
                         <ion-label>Blood Group</ion-label>
                         <ion-input aria-label="Blood Group" [readonly]="true" [value]="'-'"></ion-input>
                       </ion-col>
-    
+        
                       <ion-col size="6">
                         <ion-label>Marital Status</ion-label>
-                        <ion-input aria-label="Marital Status" [readonly]="true" [value]="'-'"></ion-input>
+                        <ion-input aria-label="Marital Status" [readonly]="true" [value]="employeeDetail.maritalStatus || '-'"></ion-input>
                       </ion-col>
                     </ion-row>
                   </div>

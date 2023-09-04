@@ -1,14 +1,15 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-avatar slot="start" class="user_avatar">
-      <img *ngIf="userDetails" alt="user" [src]="userDetails && userDetails.imageUrl.trim() !== '' ? userDetails.imageUrl: 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+    <ion-avatar slot="start" class="user_avatar" *ngIf="userDetails">
+      <app-name-img [name]="getName()" [classes]="'sm'" *ngIf="userDetails.imageUrl.trim() === ''"></app-name-img>
+      <img *ngIf="userDetails.imageUrl.trim() !== ''" alt="user" [src]="userDetails && userDetails.imageUrl.trim() !== '' ? userDetails.imageUrl: 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
       <ion-skeleton-text *ngIf="!userDetails" [animated]="true"></ion-skeleton-text>
     </ion-avatar>
     <ion-title>HR Payroll - Spundan</ion-title>
-    <ion-button mode="md" slot="end" shape="round" color="primary" fill="solid" class="ion-padding-horizontal clock_in_btn" (click)="toggleStopwatch()" [ngClass]="{ 'running': isRunning }" *ngIf="userRole === 'Employee'">
-      {{ buttonLabel }}
-      <span *ngIf="isRunning" class="stopwatch-time">{{ stopwatchTime }}</span>
-      <ion-icon *ngIf="isRunning" slot="end" icon="time"></ion-icon>
+
+    <ion-button mode="md" slot="end" shape="round" [color]="isRunning ? 'success' : 'primary'" fill="solid" class="ion-padding-horizontal ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
+      <span class="stopwatch-time">{{ buttonLabel }}</span>
+      <ion-icon slot="end" icon="time"></ion-icon>
     </ion-button>
     <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
@@ -19,11 +20,24 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <img src="../../assets/images/logo.png" alt="Photo" class="logo_img" />
+  <!-- <img src="../../assets/images/logo.png" alt="Photo" class="logo_img" /> -->
 
   <!-- <div class="ion-text-center"><ion-spinner color="medium" *ngIf="!isDataLoaded || !userDetails" name="circular"></ion-spinner></div> -->
 
-  <ion-grid *ngIf="!isDataLoaded">
+  <ion-card mode="ios" color="success" class="time_card" *ngIf="userDetails && userRole === 'Employee' && isRunning">
+    <ion-card-header>
+      <ion-card-title>Work Duration</ion-card-title>
+      <ion-icon name="time" size="large"></ion-icon>
+    </ion-card-header>
+    <ion-card-content>
+      <div class="flex_div">
+        <ion-label class="stopwatch-time">{{ stopwatchTime }}</ion-label>
+        <ion-button mode="ios" [shape]="'round'" [strong]="true" color="danger" (click)="toggleStopwatch()">Clock Out</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-grid *ngIf="!isDataLoaded" class="ion-margin-top">
     <ion-row class="row_one">
       <ion-col size="4" sizeSm="3" *ngFor="let card of demoCard">
         <ion-card mode="md">
@@ -38,7 +52,7 @@
     </ion-row>
   </ion-grid>
 
-  <ion-grid *ngIf="isDataLoaded">
+  <ion-grid *ngIf="isDataLoaded && userDetails" class="ion-margin-top">
     <ion-row class="row_one">
       <ion-col size="12" class="ion-margin-bottom" *ngIf="userRole === 'Admin'">
         <ion-button mode="md" shape="round" class="add_emp_btn" (click)="addEmployee()">
@@ -103,4 +117,5 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-title class="ion-text-center ion-margin-vertical" *ngIf="isDataLoaded && !userDetails">Please Login First</ion-title>
 </ion-content>

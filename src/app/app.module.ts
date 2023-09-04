@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-import { LeavesPage } from "./components/leaves/leaves.page";
 import { DirectoryPage } from "./components/directory/directory.page";
 import { WorkpagePage } from "./components/workpage/workpage.page";
 import { WeekpagePage } from "./components/weekpage/weekpage.page";
@@ -30,7 +29,6 @@ import { AddExperiencePageModule } from "./admin/add-experience/add-experience.m
 @NgModule({
   declarations: [
     AppComponent,
-    LeavesPage,
     DirectoryPage,
     WorkpagePage,
     WeekpagePage,

@@ -7,6 +7,8 @@ import { IPayrollSetupRequest } from "../interfaces/request/IPayrollSetup";
 import { IOTPRequest, IOptVerifyRequest, IResetPasswordRequest } from "../interfaces/request/IOtpRequest";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse } from "../interfaces/response/IEmployee";
+import { ILeaveApplyrequest } from "../interfaces/request/ILeaveApply";
+import { IClockInResponce } from "../interfaces/response/IAttendanceSetup";
 
 @Injectable({
   providedIn: "root",
@@ -63,5 +65,22 @@ export class ShareService {
   }
   changePassword(data: any): Observable<any> {
     return this.http.post<any>(environment.Api + `api/user/changePassword`, data);
+  }
+
+  // APIs related to attendance
+  clockIn(): Observable<IClockInResponce> {
+    return this.http.post<IClockInResponce>(environment.Api + `api/attendence/clockIn`, {});
+  }
+  clockOut(clockinId: string): Observable<IClockInResponce> {
+    return this.http.put<IClockInResponce>(environment.Api + `api/attendence/clockOut/${clockinId}`, '');
+  }
+  leaveApply(leaveData: ILeaveApplyrequest): Observable<ILeaveApplyrequest> {
+    return this.http.post<ILeaveApplyrequest>(environment.Api + `api/applyLeave`, leaveData);
+  }
+  employeeAttendance(filterData : {"employeeId": string, date: string}): Observable<any> {
+    return this.http.post<any>(environment.Api + `api/attendence/employeeId`, filterData);
+  }
+  todayAttendance(): Observable<any> {
+    return this.http.get<any>(environment.Api + `api/attendence/todayAttendance`);
   }
 }

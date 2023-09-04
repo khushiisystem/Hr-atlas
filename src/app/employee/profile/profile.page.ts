@@ -4,6 +4,9 @@ import { IonAccordionGroup, ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/core/auth.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { EditProfilePage } from '../edit-profile/edit-profile.page';
+import { IAddress } from 'src/app/interfaces/request/IEmployee';
+import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
+import { ShareService } from 'src/app/services/share.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,19 +16,47 @@ import { EditProfilePage } from '../edit-profile/edit-profile.page';
 export class ProfilePage implements OnInit {
   @ViewChild('accordionGroup', { static: true }) accordionGroup!: IonAccordionGroup;
   employeeId: string = "";
-  employeeDetail: any;
+  employeeDetail!: IEmployeeResponse;
   activeTab: string = "";
+  dataLoaded: boolean = false;
+  expandedAccordion: string = "Personal";
 
   constructor(
     private router: Router,
     private authServ: AuthService,
+    private shareServ: ShareService,
     private loadingServ: LoaderService,
     private modalCtrl: ModalController,
   ) { }
 
   ngOnInit() {
-    this.employeeId = localStorage.getItem('userId') || "67243bhj23b45hjb";
+    this.employeeId = localStorage.getItem('userId') || "";
+    if(this.employeeId.trim() !== ''){
+      this.getEmployeeDetails();
+    }
   }
+
+  getEmployeeDetails(){
+    this.dataLoaded = false;
+    this.shareServ.getEmployeeById(this.employeeId).subscribe(res => {
+      if(res){
+        this.employeeDetail = res;
+        this.dataLoaded = true;
+      }
+    }, (error) => {
+      console.log(error, "error");
+      this.dataLoaded = true;
+    });
+  }
+
+  toggleAccordion = (accordionvalue: string) => {
+    const nativeEl = this.accordionGroup;
+    if (nativeEl.value === accordionvalue) {
+      nativeEl.value = undefined;
+    } else {
+      nativeEl.value = accordionvalue;
+    }
+  };
 
   async editProfile(){
     const profileModal = this.modalCtrl.create({
@@ -42,6 +73,19 @@ export class ProfilePage implements OnInit {
     (await profileModal).onDidDismiss().then(result => {
       console.log(result, "result");
     });
+  }
+
+  getAddress(add: IAddress){
+    const fullAddress = `${add.addressLine1}, ${add.addressLine2}, ${add.city}, ${add.state}, ${add.country}, ${add.zipCode}`;
+    return fullAddress;
+  }
+
+  getName() {
+    if(this.employeeDetail.lastName && this.employeeDetail.lastName.trim() !== ''){
+      return `${this.employeeDetail.firstName.slice(0,1)}${this.employeeDetail.lastName.slice(0,1)}`;
+    } else {
+      return `${this.employeeDetail.firstName.slice(0,2)}`;
+    }
   }
 
   goBack() {history.back();}
