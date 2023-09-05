@@ -6,9 +6,10 @@ import { environment } from "src/environments/environment";
 import { IPayrollSetupRequest } from "../interfaces/request/IPayrollSetup";
 import { IOTPRequest, IOptVerifyRequest, IResetPasswordRequest } from "../interfaces/request/IOtpRequest";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
-import { IEmployeeResponse } from "../interfaces/response/IEmployee";
+import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response/IEmployee";
 import { ILeaveApplyrequest } from "../interfaces/request/ILeaveApply";
 import { IClockInResponce } from "../interfaces/response/IAttendanceSetup";
+import { ILeaveLogsResponse, ILeaveSetupResponse } from "../interfaces/response/ILeave";
 
 @Injectable({
   providedIn: "root",
@@ -44,6 +45,9 @@ export class ShareService {
   searchEmployee(empData: any): Observable<any>{
     return this.http.post<any>(environment.Api + `api/user/search`, empData);
   }
+  getWorkByEmployeeId(employeeId: string): Observable<IEmployeeWrokResponse[]>{
+    return this.http.post<IEmployeeWrokResponse[]>(environment.Api + `api/employeeWork/userId`, {userId: employeeId});
+  }
 
   // payroll APIs
   getEmployeePayroll(empId: string, session: string | Date): Observable<any>{
@@ -76,6 +80,9 @@ export class ShareService {
   }
   leaveApply(leaveData: ILeaveApplyrequest): Observable<ILeaveApplyrequest> {
     return this.http.post<ILeaveApplyrequest>(environment.Api + `api/applyLeave`, leaveData);
+  }
+  getLeaveList(filterData: any): Observable<ILeaveLogsResponse[]> {
+    return this.http.post<ILeaveLogsResponse[]>(environment.Api + `api/applyLeave/allLeaves`, filterData);
   }
   employeeAttendance(filterData : {"employeeId": string, date: string}): Observable<any> {
     return this.http.post<any>(environment.Api + `api/attendence/employeeId`, filterData);

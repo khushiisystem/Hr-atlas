@@ -1,0 +1,20 @@
+
+.leave_card {
+    ion-card-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        & .apply-button {
+            margin-inline: 0;
+            margin: 0 0 0 5px;
+            text-transform: capitalize;
+        }
+    }
+
+    & ion-row{margin-left: -5px; margin-right: -5px;}
+}
+
+.log_card {
+    color: var(--ion-color-dark-tint);
+}

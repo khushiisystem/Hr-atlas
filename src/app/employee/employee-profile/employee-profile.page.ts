@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonAccordionGroup, ModalController } from '@ionic/angular';
 import { IAddress } from 'src/app/interfaces/request/IEmployee';
-import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
+import { IEmployeeResponse, IEmployeeWrokResponse } from 'src/app/interfaces/response/IEmployee';
 import { LoaderService } from 'src/app/services/loader.service';
 import { RoleStateService } from 'src/app/services/roleState.service';
 import { ShareService } from 'src/app/services/share.service';
 import { AddExperiencePage } from 'src/app/admin/add-experience/add-experience.page';
+import { AddEmployeePage } from 'src/app/admin/add-employee/add-employee.page';
 
 @Component({
   selector: 'app-employee-profile',
@@ -17,6 +18,7 @@ export class EmployeeProfilePage implements OnInit {
   @ViewChild('accordionGroup', { static: true }) accordionGroup!: IonAccordionGroup;
   employeeId: string = "";
   employeeDetail!: IEmployeeResponse;
+  workDetail!: IEmployeeWrokResponse;
   expandedAccordion: string = "Personal";
   dataLoaded: boolean = false;
   randomList: any[] = [];
@@ -35,6 +37,7 @@ export class EmployeeProfilePage implements OnInit {
   ngOnInit() {
     if(this.employeeId.trim() !== ''){
       this.getEmployeeDetails();
+      this.getWorkDetails();
     }
     this.roleStateServ.getState().subscribe(res => {
       this.userRole = res || localStorage.getItem('userRole');
@@ -51,6 +54,15 @@ export class EmployeeProfilePage implements OnInit {
     }, (error) => {
       console.log(error, "error");
       this.dataLoaded = true;
+    });
+  }
+
+  getWorkDetails(){
+    this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
+      if(res) {
+        this.workDetail = res[0];
+        console.log(this.workDetail);
+      }
     });
   }
 
@@ -89,19 +101,42 @@ export class EmployeeProfilePage implements OnInit {
     }
   }
 
-  async openWorkModal(employeeId: string) {
+  async openWorkModal() {
     const workModal = this.modalCtrl.create({
       component: AddExperiencePage,
       initialBreakpoint: 1,
       backdropDismiss: false,
       mode: 'md',
       animated: true,
-      componentProps: {employeeId: employeeId, action: 'add'}
+      componentProps: {employeeId: this.employeeDetail.employeeId, userId: this.employeeDetail.guid, action: this.workDetail ? 'edit' : 'add'}
     });
     
     (await workModal).present();
     (await workModal).onDidDismiss().then(res => {
       console.log(res, "res");
+      if(res.data && res.role === 'confirm'){
+        this.getWorkDetails();
+      }
+    });
+  }
+  
+  async editProfile(){
+    const employeeModel = this.modalCtrl.create({
+      component: AddEmployeePage,
+      componentProps: {
+        action: "edit",
+        employeeId: this.employeeDetail.guid
+      },
+      mode: 'md',
+      initialBreakpoint: 1
+    });
+
+    (await employeeModel).present();
+
+    (await employeeModel).onDidDismiss().then(result => {
+      if(result.data) {
+        this.getEmployeeDetails();
+      }
     });
   }
 

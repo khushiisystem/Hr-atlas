@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatetimeCustomEvent } from '@ionic/angular';
 import { ILeaveApplyrequest } from 'src/app/interfaces/request/ILeaveApply';
+import { ILeaveLogsResponse } from 'src/app/interfaces/response/ILeave';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 
@@ -23,6 +24,8 @@ export class LeavesPage implements OnInit {
   openCalendar: boolean = false;
   platformType: string = "";
   platformBtn: string = "";
+  activeTab: string = 'status'
+  leaveLogs: ILeaveLogsResponse[] = [];
 
   constructor(
     private router: Router,
@@ -32,6 +35,7 @@ export class LeavesPage implements OnInit {
 
   ngOnInit() {
     this.selectedDates = history.state.selectedDates || [];
+    this.getLogs();
   }
 
   goBack() {history.back();}
@@ -131,6 +135,55 @@ export class LeavesPage implements OnInit {
       this.shareServ.presentToast('Something went wrong', 'top', 'danger');
       this.loader.dismiss();
     })
+  }
+
+  getLogs(){
+    const data = {};
+    this.shareServ.getLeaveList(data).subscribe(res => {
+      if(res) {
+        this.leaveLogs = res;
+      }
+    });
+  }
+
+  getStatus(status: string) {
+    let leaveStatus;
+    let color;
+    switch (status) {
+      case 'Reject':
+        leaveStatus = 'Rejected';
+        color = 'danger';
+        break;
+
+      case 'Accept':
+        leaveStatus = 'Accepted';
+        color = 'success';
+        break;
+
+      case 'Pending':
+        leaveStatus = 'Pending';
+        color = 'warning';
+        break;
+
+      case 'Cancel':
+        leaveStatus = 'Canceled';
+        color = 'danger';
+        break;
+    
+      default:
+        leaveStatus = 'Pending';
+        color = 'warning';
+        break;
+    }
+
+    return {leaveStatus: leaveStatus, color: color};
+  }
+
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      window.location.reload();
+      event.target.complete();
+    }, 2000);
   }
 
 }

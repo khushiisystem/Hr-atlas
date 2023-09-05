@@ -4,10 +4,13 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { AttendanceSetupRequest } from "../interfaces/request/IAttendanceSetup";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
-import { IEmployeeResponse } from "../interfaces/response/IEmployee";
+import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response/IEmployee";
 import { IAttendanceSetupResponse } from "../interfaces/response/IAttendanceSetup";
 import { IAssignWorkWeek, IWorkWeek } from "../interfaces/request/IAssignWorks";
 import { IWorkWeekResponse } from "../interfaces/response/IWorkWeek";
+import { ILeaveSetupRequest } from "../interfaces/request/ILeaveSetup";
+import { ILeaveSetupResponse } from "../interfaces/response/ILeave";
+import { IEmployeeWorkRequest } from "../interfaces/request/IEmployeeWork";
 
 @Injectable({
     providedIn: 'root'
@@ -31,6 +34,19 @@ export class AdminService {
         return this.http.delete<any>(environment.Api + `api/user/${employeeId}`);
     }
 
+    addEmployeesWork(workData: IEmployeeWorkRequest): Observable<IEmployeeWorkRequest>{
+        return this.http.post<IEmployeeWorkRequest>(environment.Api + `api/employeeWork`, workData);
+    }
+    updateEmployeeWork(employeeWorkId: string, employeeWorkData: IEmployeeRequest): Observable<IEmployeeWrokResponse>{
+        return this.http.put<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/${employeeWorkId}`, employeeWorkData);
+    }
+    getWorkByEmployeeId(employeeId: string): Observable<IEmployeeWrokResponse[]>{
+        return this.http.post<IEmployeeWrokResponse[]>(environment.Api + `api/employeeWork/userId`, {userId: employeeId});
+    }
+    deleteEmployeeWork(employeeId: string): Observable<IEmployeeWrokResponse>{
+        return this.http.delete<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/${employeeId}`);
+    }
+
     // attendance setup
     saveAttendanceSetup(data: AttendanceSetupRequest): Observable<IAttendanceSetupResponse>{
         return this.http.post<IAttendanceSetupResponse>(environment.Api + 'api/attendancesetup', data);
@@ -51,5 +67,19 @@ export class AdminService {
     }
     assignWorkWeek(data: IAssignWorkWeek): Observable<any> {
         return this.http.post<any>(environment.Api + `api/workWeek/assignWorkweek`, data);
+    }
+
+    // leave setup
+    addLeaveSetup(leaveData: ILeaveSetupRequest): Observable<ILeaveSetupRequest> {
+        return this.http.post<ILeaveSetupRequest>(environment.Api + `api/leaveSetup`, leaveData);
+    }
+    deleteLeaveSetup(leaveId: string): Observable<any> {
+        return this.http.delete<any>(environment.Api + `api/leaveSetup/${leaveId}`);
+    }
+    getLeaveSetup(): Observable<ILeaveSetupResponse> {
+        return this.http.get<ILeaveSetupResponse>(environment.Api + `api/leaveSetup/getLeaveSetup`);
+    }
+    leaveApprove(leaveData: {leaveGuid: string, aproveLeave: string}): Observable<any> {
+        return this.http.put<any>(environment.Api + `api/applyLeave/aproveLeave`, leaveData);
     }
 }

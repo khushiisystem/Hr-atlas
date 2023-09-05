@@ -23,6 +23,9 @@ import { Tab1Page } from "../tab1/tab1.page";
 import { NameImgPageModule } from "../share/components/name-img/name-img.module";
 import { LeavesPage } from "../employee/leaves/leaves.page";
 import { LeaveApplyFormPage } from "../employee/leaves/leave-apply-form/leave-apply-form.page";
+import { DirectoryPage } from "./components/directory/directory.page";
+import { RoleGuard } from "../core/role.guard";
+import { AdminLeavesPageModule } from "../admin/admin-leaves/admin-leaves.module";
 
 @NgModule({
   declarations: [
@@ -41,6 +44,7 @@ import { LeaveApplyFormPage } from "../employee/leaves/leave-apply-form/leave-ap
     AdminProfilePage,
     LeavesPage,
     LeaveApplyFormPage,
+    DirectoryPage,
   ],
   imports: [
     IonicModule,
@@ -50,8 +54,9 @@ import { LeaveApplyFormPage } from "../employee/leaves/leave-apply-form/leave-ap
     TabsPageRoutingModule,
     RouterModule,
     NameImgPageModule,
+    AdminLeavesPageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [AuthGuard],
+  providers: [AuthGuard, RoleGuard],
 })
 export class TabsPageModule {}

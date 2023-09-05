@@ -1,0 +1,99 @@
+.list-item {
+    --ripple-color: var(--ion-color-primary-tint);
+    & .employee_img {width: 50px; height: 50px;}
+}
+.employee_data{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    width: 100%;
+
+    & .role{
+        color: var(--ion-color-primary);
+    }
+}
+
+ion-list-header ion-label {
+    font-weight: 600;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.check_container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+.custom_checkbox {
+    position: absolute;
+    top: 9px;
+    bottom: 9px;
+    right: 0;
+    left: 0;
+    background-color: var(--ion-color-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+
+    & span {
+        width: 45%;
+        height: 12px;
+        border-left: 3px solid #fff;
+        border-bottom: 3px solid #fff;
+        transform: rotate(-40deg);
+        transform-origin: center;
+    }
+}
+.sendPayBtn {text-transform: capitalize;}.list-item {
+    --ripple-color: var(--ion-color-primary-tint);
+    & .employee_img {width: 50px; height: 50px;}
+}
+.employee_data{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    width: 100%;
+
+    & .role{
+        color: var(--ion-color-primary);
+    }
+}
+
+ion-list-header ion-label {
+    font-weight: 600;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.check_container {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+.custom_checkbox {
+    position: absolute;
+    top: 9px;
+    bottom: 9px;
+    right: 0;
+    left: 0;
+    background-color: var(--ion-color-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+
+    & span {
+        width: 45%;
+        height: 12px;
+        border-left: 3px solid #fff;
+        border-bottom: 3px solid #fff;
+        transform: rotate(-40deg);
+        transform-origin: center;
+    }
+}
+.sendPayBtn {text-transform: capitalize;}

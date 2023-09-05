@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { DirectoryPage } from './components/directory/directory.page';
 import { WorkpagePage } from './components/workpage/workpage.page';
 import { WeekpagePage } from './components/weekpage/weekpage.page';
 import { UserPage } from './components/user/user.page';
 import { LOGSPage } from './components/logs/logs.page';
-import { LeaveadminPage } from './components/leaveadmin/leaveadmin.page';
 import { EmployeeWorkWeekPage } from './employee/employee-work-week/employee-work-week.page';
 import { AuthGuard } from './core/auth.guard';
 const routes: Routes = [
@@ -24,10 +22,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'directory',
-    component: DirectoryPage
-  },
-  {
     path: 'workpage',
     component: WorkpagePage
   },
@@ -44,13 +38,13 @@ const routes: Routes = [
     component: LOGSPage
   },
   {
-    path: 'leaveadmin',
-    component: LeaveadminPage
-  },
-  {
     path: 'employee-work-week/:employeeId',
     title: "Work Week",
     component: EmployeeWorkWeekPage,
+  },
+  {
+    path: 'admin-leaves',
+    loadChildren: () => import('./admin/admin-leaves/admin-leaves.module').then( m => m.AdminLeavesPageModule)
   },
 ];
 @NgModule({

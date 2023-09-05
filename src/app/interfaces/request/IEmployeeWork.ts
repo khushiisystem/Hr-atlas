@@ -1,12 +1,12 @@
 import { IEmplpoyeeType } from "../enums/IGenderType";
 
-export interface IEmploeeyWorks {
+export interface IEmployeeWorkRequest {
     employeeId: string;
-    EmployeeType: IEmplpoyeeType | string;
-    status: boolean;
+    employeeType: IEmplpoyeeType | string;
+    status: string;
     joiningDate: string | Date;
     resignationDate: string | Date;
-    Work_experience: number;
+    work_experience: number;
     workLocation: string;
     probationPeriod: number;
     designation: string;
@@ -17,6 +17,8 @@ export interface IEmploeeyWorks {
 }
 
 export interface IExperience {
+    employeeType: IEmplpoyeeType | string;
+    work_experience: number;
     designation: string;
     jobTitle: string;
     department: string;
