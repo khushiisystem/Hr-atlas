@@ -5,7 +5,7 @@ import { AuthService } from 'src/app/core/auth.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { EditProfilePage } from '../edit-profile/edit-profile.page';
 import { IAddress } from 'src/app/interfaces/request/IEmployee';
-import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
+import { IEmployeeResponse, IEmployeeWrokResponse } from 'src/app/interfaces/response/IEmployee';
 import { ShareService } from 'src/app/services/share.service';
 
 @Component({
@@ -17,6 +17,7 @@ export class ProfilePage implements OnInit {
   @ViewChild('accordionGroup', { static: true }) accordionGroup!: IonAccordionGroup;
   employeeId: string = "";
   employeeDetail!: IEmployeeResponse;
+  workDetail!: IEmployeeWrokResponse;
   activeTab: string = "";
   dataLoaded: boolean = false;
   expandedAccordion: string = "Personal";
@@ -33,6 +34,7 @@ export class ProfilePage implements OnInit {
     this.employeeId = localStorage.getItem('userId') || "";
     if(this.employeeId.trim() !== ''){
       this.getEmployeeDetails();
+      this.getWorkDetails();
     }
   }
 
@@ -46,6 +48,15 @@ export class ProfilePage implements OnInit {
     }, (error) => {
       console.log(error, "error");
       this.dataLoaded = true;
+    });
+  }
+
+  getWorkDetails(){
+    this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
+      if(res) {
+        this.workDetail = res[0];
+        console.log(this.workDetail);
+      }
     });
   }
 
