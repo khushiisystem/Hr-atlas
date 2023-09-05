@@ -7,12 +7,10 @@ import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-import { DirectoryPage } from "./components/directory/directory.page";
 import { WorkpagePage } from "./components/workpage/workpage.page";
 import { WeekpagePage } from "./components/weekpage/weekpage.page";
 import { UserPage } from "./components/user/user.page";
 import { LOGSPage } from "./components/logs/logs.page";
-import { LeaveadminPage } from "./components/leaveadmin/leaveadmin.page";
 import { FileSaverModule } from "ngx-filesaver";
 import { CommonModule, DatePipe } from "@angular/common";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
@@ -29,12 +27,10 @@ import { AddExperiencePageModule } from "./admin/add-experience/add-experience.m
 @NgModule({
   declarations: [
     AppComponent,
-    DirectoryPage,
     WorkpagePage,
     WeekpagePage,
     UserPage,
     LOGSPage,
-    LeaveadminPage,
     LeaveSetupPage,
     EmployeeWorkWeekPage,
   ],

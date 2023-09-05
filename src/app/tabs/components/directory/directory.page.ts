@@ -1,28 +1,25 @@
-import { AfterContentInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { IonInfiniteScroll, ModalController } from '@ionic/angular';
-import { AdminService } from 'src/app/services/admin.service';
-import { AddEmployeePage } from '../../../admin/add-employee/add-employee.page';
-import { ShareService } from 'src/app/services/share.service';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonInfiniteScroll, ModalController, NavController } from '@ionic/angular';
 import { Subject, debounceTime } from 'rxjs';
+import { AddEmployeePage } from 'src/app/admin/add-employee/add-employee.page';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
+import { AdminService } from 'src/app/services/admin.service';
 import { RoleStateService } from 'src/app/services/roleState.service';
-
-interface InfiniteScrollCustomEvent extends CustomEvent {
-  target: HTMLIonInfiniteScrollElement;
-}
+import { ShareService } from 'src/app/services/share.service';
 
 @Component({
-  selector: 'app-employee-list',
-  templateUrl: './employee-list.page.html',
-  styleUrls: ['./employee-list.page.scss'],
+  selector: 'app-directory',
+  templateUrl: './directory.page.html',
+  styleUrls: ['./directory.page.scss'],
 })
-export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
+export class DirectoryPage implements OnInit, OnDestroy {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   employeeList: IEmployeeResponse[] = [];
   isDataLoaded: boolean = false;
   isMoreData: boolean = true;
   pageIndex: number = 0;
+  lastRoute: string = "";
   userRole: string = "";
   searchString: string = "";
   selectedEmployee: any[] = [];
@@ -41,6 +38,7 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
     this.roleStateServ.getState().subscribe(res => {
       this.userRole = res || "";
     });
+    this.lastRoute = localStorage.getItem('lastRoute') || "";
     this.getEmployeeList();
     this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
       this.searchEmployee(searchValue);
@@ -140,8 +138,12 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
     return this.selectedEmployee.includes(employee);
   }
 
-  goToSetup(empId: string) {
-    this.router.navigate([`/tabs/payroll-setup/${empId}`]);
+  viewProfile(empId: string) {
+    if(this.lastRoute === '/tabs/settings'){
+      this.router.navigate([`/tabs/payroll-setup/${empId}`]);
+    } else {
+      this.router.navigate([`/tabs/employee-profile/${empId}`]);
+    }
   }
 
   searchEmployee(searchValue: string){

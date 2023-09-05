@@ -10,6 +10,11 @@ interface DatetimeCustomEvent extends CustomEvent {
   target: HTMLIonDatetimeElement;
 }
 
+interface Department {
+  name: string,
+  subDepartment: string[]
+}
+
 @Component({
   selector: 'app-add-experience',
   templateUrl: './add-experience.page.html',
@@ -20,14 +25,37 @@ export class AddExperiencePage implements OnInit {
   openCalendar: boolean = false;
   today: Date = new Date();
   maxDate: Date = new Date();
+  minDate: Date = new Date();
+  formIndex: number = 0;
   birthDate: any;
   employeeId: string = '';
+  userId: string = '';
+  employeeWorkId: string = '';
   action: string = '';
   activeControl: string = '';
+  activeNestedControl: string = '';
   isSameAddress: boolean = false;
   isDataLoaded: boolean = false;
   isInProgress: boolean = false;
-  expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card']
+  expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card'];
+  deparmentList: Department[] = [
+    {
+      name: 'HR Department',
+      subDepartment: ['Human Resources']
+    }, {
+      name: 'Administration Department',
+      subDepartment: ['Project Management']
+    }, {
+      name: 'Development Department',
+      subDepartment: ['Frontend Development', 'Backend Development', 'UI / UX', 'DevOps']
+    }, {
+      name: 'Sales Department',
+      subDepartment: ['Bussiness Development']
+    // }, {
+    //   name: ' Department',
+    //   subDepartment: ['']
+    }
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -40,16 +68,16 @@ export class AddExperiencePage implements OnInit {
     this.today = new Date();
     this.maxDate.setFullYear(this.today.getFullYear() - 10);
     this.formSetup();
-    console.log(this.workInfoForm.value, "form");
-    if(this.action === 'edit' && this.employeeId.trim() !== ''){
-      this.getProfile();
+    if(this.action === 'edit' && this.userId){
+      this.getWorkDetail();
     } else {this.isDataLoaded = true;}
   }
 
   formSetup(){
     this.workInfoForm = this.fb.group({
       employeeId: [this.employeeId, Validators.required],
-      EmployeeType: ['', Validators.required],
+      userId: [this.userId, Validators.required],
+      employeeType: ['', Validators.required],
       status: ['', Validators.required],
       joiningDate: ['', Validators.required],
       resignationDate: [''],
@@ -69,7 +97,7 @@ export class AddExperiencePage implements OnInit {
   }
   createWorkHistoryForm(){
     return this.fb.group({
-      EmployeeType: ['', Validators.required],
+      employeeType: ['', Validators.required],
       designation: ['', Validators.required],
       jobTitle: ['', Validators.required],
       work_experience: [''],
@@ -85,12 +113,13 @@ export class AddExperiencePage implements OnInit {
     this.newWorkHistory().removeAt(index);
   }
 
-  getProfile(){
-    this.adminServ.getEmployeeById(this.employeeId).subscribe(res => {
+  getWorkDetail(){
+    this.adminServ.getWorkByEmployeeId(this.userId).subscribe(res => {
       if(res){
-        this.workInfoForm.patchValue(res);
+        this.workInfoForm.patchValue(res[0]);
+        this.employeeWorkId = res[0].guid;
         this.isDataLoaded = true;
-        console.log(this.workInfoForm.value, "path form");
+        console.log(this.workInfoForm.value, "patch form");
       }
     }, (error) => {
       console.log(error, "get error");
@@ -111,26 +140,38 @@ export class AddExperiencePage implements OnInit {
         });
       }
     } else {
+
     }
     // this.getDate();
     console.log(this.workInfoForm.value);
   }
-
-  getNestedCtrl(childCtrl: string, ctrlName: string, isArray: boolean, index?: number) {
-    if(isArray && index){
-      return ((this.workInfoForm.controls[childCtrl] as FormArray).controls[index] as FormGroup).controls[ctrlName];
-    } else {
-      return (this.workInfoForm.controls[childCtrl] as FormGroup).controls[ctrlName];
+  
+  selectExpDate(event: DatetimeCustomEvent){
+    const nesteCtrls : string[] = ['from', 'to'];
+    if(this.activeControl === nesteCtrls[0]){
+      ((this.workInfoForm.controls['workHistory'] as FormArray).controls[this.formIndex] as FormGroup).patchValue({
+        from: moment.utc(event.detail.value).format()
+      });
+      this.minDate = new Date((event.detail.value as string));
+    } else if(this.activeControl === nesteCtrls[1]) {
+      ((this.workInfoForm.controls['workHistory'] as FormArray).controls[this.formIndex] as FormGroup).patchValue({
+        to: moment.utc(event.detail.value).format()
+      });
     }
+    console.log(this.workInfoForm.value);
   }
 
-  getBasicDate(ctrlName: string){
-    const formDate = this.workInfoForm.controls[ctrlName].value;
-    return new Date(formDate != '' ? formDate : this.maxDate);
+  getNestedCtrl(ctrlName: string, index: number) {
+    return ((this.workInfoForm.controls['workHistory'] as FormArray).controls[index] as FormGroup).controls[ctrlName];
   }
-  getDate(){
-    const formDate = this.workInfoForm.controls['dateOfBirth'].value;
-    return new Date(formDate != '' ? formDate : this.maxDate);
+
+  getDate(ctrlName: string){
+    const formDate = this.workInfoForm.controls[ctrlName].value;
+    return formDate ? new Date(moment(formDate).format()) : '';
+  }
+  getExpDate(ctrlName: string, index: number){
+    const formDate = ((this.workInfoForm.controls['workHistory'] as FormArray).controls[index] as FormGroup).controls[ctrlName].value;
+    return formDate ? new Date(moment(formDate).format()) : '';
   }
 
   expandCard(cardName: string) {
@@ -145,6 +186,14 @@ export class AddExperiencePage implements OnInit {
     return this.expandedCard.includes(cardName);
   }
 
+  getSubDeparments() {
+    const department = this.workInfoForm.controls['department'].value;
+    if(department) {
+      const index = this.deparmentList.find((e: Department, index) => e.name === department);
+      return index ? index.subDepartment : [];
+    } else {return [];}
+  }
+
   
   submit(){
     console.log(this.workInfoForm.value, "form");
@@ -152,12 +201,12 @@ export class AddExperiencePage implements OnInit {
       return;
     } else {
       this.isInProgress = true;
-      this.action === 'add' ? this.addEmployee() : this.updateEmployee();
+      this.action === 'add' ? this.addEmployeeWork() : this.updateEmployeeWork();
     }
   }
 
-  addEmployee(){
-    this.adminServ.addEmployees(this.workInfoForm.value).subscribe(res => {
+  addEmployeeWork(){
+    this.adminServ.addEmployeesWork(this.workInfoForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
         this.modalCtrl.dismiss(res, 'confirm');
@@ -169,8 +218,8 @@ export class AddExperiencePage implements OnInit {
     });
   }
 
-  updateEmployee(){
-    this.adminServ.updateEmployee(this.employeeId, this.workInfoForm.value).subscribe(res => {
+  updateEmployeeWork(){
+    this.adminServ.updateEmployeeWork(this.employeeWorkId, this.workInfoForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
         this.modalCtrl.dismiss(res, 'confirm');

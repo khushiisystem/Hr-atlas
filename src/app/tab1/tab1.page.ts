@@ -233,7 +233,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
     this.router.navigate(['/tabs/attendance']);
   }
   showleaves() {
-    this.router.navigate(['./tabs/leaves']);
+    if(this.userRole === 'Admin'){
+      this.router.navigate(['./tabs/admin-leaves']);
+    } else {
+      this.router.navigate(['./tabs/leaves']);
+    }
   }
   showpayroll() {
     this.router.navigate(['./payroll']);

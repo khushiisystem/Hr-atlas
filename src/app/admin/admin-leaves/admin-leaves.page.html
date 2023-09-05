@@ -1,0 +1,59 @@
+<ion-header [translucent]="true" [mode]="'md'">
+  <ion-toolbar>
+      <ion-buttons slot="start">
+          <ion-button type="button" fill="clear" class="noBg noRipple" mode="md" (click)="goBack()">
+              <ion-icon name="chevron-back-outline" aria-hidden="true" aria-label="Back"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+      <ion-title>Leaves</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-segment [(ngModel)]="activeTab">
+      <ion-segment-button value="requests">
+          <ion-label>Requested Leaves</ion-label>
+      </ion-segment-button>
+      <!-- <ion-segment-button value="logs">
+          <ion-label>Logs</ion-label>
+      </ion-segment-button> -->
+  </ion-segment>
+
+  <div *ngIf="activeTab === 'requests'">
+    <ion-card class="log_card" *ngFor="let leaveItem of leaveLogs; index as a">
+      <ion-card-header>
+          <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+          <p><ion-label>{{leaveItem.dayType}}</ion-label></p>
+          <p><ion-label>From - </ion-label> <ion-text>{{leaveItem.startDate | date}}</ion-text></p>
+          <p *ngIf="leaveItem.endDate"><ion-label>To - </ion-label> <ion-text>{{leaveItem.endDate | date}}</ion-text></p>
+          <div class="ion-text-end">
+              <ion-chip [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-chip>
+          </div>
+      </ion-card-content>
+      <ion-button type="button" color="danger" fill="clear" (click)="leaveApprovel(leaveItem.guid, 'Reject')">Cancel</ion-button>
+      <ion-button type="button" color="primary" fill="clear" (click)="leaveApprovel(leaveItem.guid, 'Accept')">Approve</ion-button>
+    </ion-card>
+  </div>
+
+  <div *ngIf="activeTab === 'logs'">
+    <ion-card class="log_card" *ngFor="let leaveItem of leaveLogs; index as a">
+        <ion-card-header>
+            <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <p><ion-label>{{leaveItem.dayType}}</ion-label></p>
+            <p><ion-label>From - </ion-label> <ion-text>{{leaveItem.startDate | date}}</ion-text></p>
+            <p *ngIf="leaveItem.endDate"><ion-label>To - </ion-label> <ion-text>{{leaveItem.endDate | date}}</ion-text></p>
+            <div class="ion-text-end">
+                <ion-chip [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-chip>
+            </div>
+        </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

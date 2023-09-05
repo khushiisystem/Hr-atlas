@@ -15,8 +15,6 @@ export class LeaveSetupPage implements OnInit {
   leaveSetupForm!: FormGroup;
   inProgress: boolean = false;
   today: Date = new Date();
-  leaveId: string = '';
-  action: string = 'add';
 
   constructor(
     private fb: FormBuilder,
@@ -38,9 +36,19 @@ export class LeaveSetupPage implements OnInit {
     });
 
     console.log(this.leaveSetupForm.value, "form");
-    console.warn(this.action, "action");
-    console.warn(this.leaveId, "empId");
-    this.loaderServ.dismiss();
+    this.getSetup();
+  }
+  
+  getSetup(){
+    this.adminServ.getLeaveSetup().subscribe(res => {
+      if(res) {
+        console.log(res, "res");
+        this.leaveSetupForm.patchValue(res);
+        this.loaderServ.dismiss();
+      }
+    }, (error) => {
+      this.loaderServ.dismiss();
+    });
   }
 
   submit(){
@@ -48,9 +56,9 @@ export class LeaveSetupPage implements OnInit {
       return;
     } else {
       console.log(this.leaveSetupForm.value, "form");
-      this.adminServ.addEmployees(this.leaveSetupForm.value).subscribe(res => {
+      this.adminServ.addLeaveSetup(this.leaveSetupForm.value).subscribe(res => {
         if(res){
-          this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
+          this.shareServ.presentToast('Leave setup successfully.', 'top', 'success');
           this.modalCtrl.dismiss(res, 'confirm');
         }
       }, (error) =>{

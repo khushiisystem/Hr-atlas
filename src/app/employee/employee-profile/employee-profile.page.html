@@ -6,7 +6,6 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Employee Profile</ion-title>
-    <img src="../../../assets/images/logo.png" height="25" alt="Spundan" class="logo_img ion-margin-end" slot="end">
     <ion-progress-bar color="light" type="inderminate" *ngIf="!dataLoaded && !employeeDetail"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
@@ -221,12 +220,12 @@
                   <ion-row>
                     <ion-col size="12">
                       <ion-label>Employee ID</ion-label>
-                      <ion-input aria-label="Employee ID" [value]="'15412adfs4f5a'"></ion-input>
+                      <ion-input aria-label="Employee ID" [value]="workDetail ? workDetail.employeeId : '--'"></ion-input>
                     </ion-col>
   
                     <ion-col size="6">
                       <ion-label>Employee Type</ion-label>
-                      <ion-input aria-label="Employee Type" [value]="'Full Time'"></ion-input>
+                      <ion-input aria-label="Employee Type" [value]="workDetail ? workDetail.employeeType : '--'"></ion-input>
                     </ion-col>
   
                     <ion-col size="6">
@@ -333,14 +332,14 @@
             </div>
           </ion-item>
           <div class="ion-padding" slot="content">
-            <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" class="btn_item">
+            <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" class="btn_item" *ngIf="userRole === 'Admin'" (click)="editProfile()">
               <ion-icon name="person-outline" aria-hidden="true" slot="start" color="primary"></ion-icon>
               <ion-label color="primary">Edit Profile</ion-label>
             </ion-item>
 
-            <ion-item [lines]="'none'" type="button" [button]="true" [detail]="true" class="btn_item" (click)="openWorkModal(employeeDetail.employeeId)">
+            <ion-item [lines]="'none'" type="button" [button]="true" [detail]="true" class="btn_item" (click)="openWorkModal()">
               <ion-icon name="construct-outline" aria-hidden="true" slot="start" color="primary"></ion-icon>
-              <ion-label color="primary">Update Work</ion-label>
+              <ion-label color="primary">{{workDetail ? 'Update' : 'Add'}} Work</ion-label>
             </ion-item>
           </div>
         </ion-accordion>

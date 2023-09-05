@@ -54,7 +54,6 @@ export class SettingsPage implements OnInit {
   }
 
   payrollSetup(){
-    localStorage.setItem('lastRoute', this.router.url);
     this.router.navigate(['/tabs/employee-list']);
   }
   
