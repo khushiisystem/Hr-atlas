@@ -230,27 +230,28 @@
   
                     <ion-col size="6">
                       <ion-label>Status</ion-label>
-                      <ion-input aria-label="Status" [value]="'Active'"></ion-input>
+                      <ion-input aria-label="Status" [value]="workDetail ? workDetail.status : '--'"></ion-input>
                     </ion-col>
   
                     <ion-col size="6">
                       <ion-label>Date of Joining</ion-label>
-                      <ion-input aria-label="Date of Joining" [value]="'26 April, 1997'"></ion-input>
+                      <ion-input aria-label="Date of Joining" *ngIf="workDetail && workDetail.joiningDate" [value]="workDetail.joiningDate | date"></ion-input>
+                      <ion-input aria-label="Date of Joining" *ngIf="!workDetail || !workDetail.joiningDate" [value]="'--'"></ion-input>
                     </ion-col>
   
                     <ion-col size="6">
                       <ion-label>Work Experience</ion-label>
-                      <ion-input aria-label="Work Experience" [value]="'-'"></ion-input>
+                      <ion-input aria-label="Work Experience" [value]="workDetail ? workDetail.work_experience : '--'"></ion-input>
                     </ion-col>                  
   
                     <ion-col size="12">
                       <ion-label>Work Location</ion-label>
-                      <ion-input aria-label="Work Location" [value]="'Registered Office'"></ion-input>
+                      <ion-input aria-label="Work Location" [value]="workDetail ? workDetail.workLocation : '--'"></ion-input>
                     </ion-col>
   
                     <ion-col size="6">
                       <ion-label>Probation Period</ion-label>
-                      <ion-input aria-label="Probation Period" [value]="'-'"></ion-input>
+                      <ion-input aria-label="Probation Period" [value]="workDetail ? workDetail.probationPeriod : '--'"></ion-input>
                     </ion-col>
                   </ion-row>
                 </div>
@@ -270,29 +271,29 @@
                   <ion-row>
                     <ion-col size="12">
                       <ion-label>Designation</ion-label>
-                      <ion-input aria-label="Designation" [value]="'Associate Software Enginner'"></ion-input>
+                      <ion-input aria-label="Designation" [value]="workDetail ? workDetail.designation : '--'"></ion-input>
                     </ion-col>
 
                     <ion-col size="12">
                       <ion-label>Job Title</ion-label>
-                      <ion-input aria-label="Job Title" [value]="'Associate Software Enginner'"></ion-input>
+                      <ion-input aria-label="Job Title" [value]="workDetail ? workDetail.jobTitle : '--'"></ion-input>
                     </ion-col>
   
-                    <ion-col size="6">
+                    <ion-col size="12">
                       <ion-label>Department</ion-label>
-                      <ion-input aria-label="Department" [value]="'-'"></ion-input>
+                      <ion-input aria-label="Department" [value]="workDetail ? workDetail.department : '--'"></ion-input>
                     </ion-col>
   
-                    <ion-col size="6">
+                    <ion-col size="12">
                       <ion-label>Sub Department</ion-label>
-                      <ion-input aria-label="Sub Department" [value]="'-'"></ion-input>
+                      <ion-input aria-label="Sub Department" [value]="workDetail ? workDetail.subDepartment : '--'"></ion-input>
                     </ion-col>
                   </ion-row>
                 </div>
               </div>
             </ion-item-divider>
 
-            <ion-item [lines]="'none'" [button]="false">
+            <ion-item [lines]="'none'" [button]="false" *ngIf="workDetail && workDetail.workHistory.length > 0">
               <div class="work_history_info ion-margin-top ion-padding-top">
                 <div class="nested_item ion-margin-bottom">
                   <ion-label>Work History</ion-label>
@@ -301,21 +302,22 @@
                   </div>
                 </div>
   
-                <div class="work_history_info_content table_row">
+                <div class="work_history_info_content table_row" *ngFor="let history of workDetail.workHistory; index as a;">
                   <ion-row>
                     <ion-col size="12">
                       <ion-label>Department</ion-label>
-                      <ion-input aria-label="Department" [value]="'-'"></ion-input>
+                      <ion-input aria-label="Department" [value]="history.department ? history.department : '--'"></ion-input>
                     </ion-col>
   
                     <ion-col size="12">
                       <ion-label>Designation</ion-label>
-                      <ion-input aria-label="Designation" [value]="'Associate Software Engineer'"></ion-input>
+                      <ion-input aria-label="Designation" [value]="history.designation ? history.designation : '--'"></ion-input>
                     </ion-col>
   
                     <ion-col size="12">
                       <ion-label>From - To</ion-label>
-                      <ion-input aria-label="Work Duration" [value]="'15/11/2021 - Present'"></ion-input>
+                      <ion-input aria-label="Work Duration" *ngIf="history.from && history.to " [value]="(history.from | date) + ' - '+ (history.to | date) "></ion-input>
+                      <ion-input aria-label="Work Duration" *ngIf="!history.from || !history.to " [value]="'--'"></ion-input>
                     </ion-col>
                   </ion-row>
                 </div>
@@ -324,7 +326,7 @@
           </div>
         </ion-accordion>
 
-        <ion-accordion value="Setting" mode="md">
+        <ion-accordion value="Setting" mode="md" *ngIf="userRole === 'Admin'">
           <ion-item slot="header" class="accordion_head_item">
             <div>
               <ion-label>Setting</ion-label>
@@ -332,7 +334,7 @@
             </div>
           </ion-item>
           <div class="ion-padding" slot="content">
-            <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" class="btn_item" *ngIf="userRole === 'Admin'" (click)="editProfile()">
+            <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" class="btn_item" (click)="editProfile()">
               <ion-icon name="person-outline" aria-hidden="true" slot="start" color="primary"></ion-icon>
               <ion-label color="primary">Edit Profile</ion-label>
             </ion-item>

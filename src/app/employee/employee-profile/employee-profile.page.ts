@@ -61,7 +61,6 @@ export class EmployeeProfilePage implements OnInit {
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
       if(res) {
         this.workDetail = res[0];
-        console.log(this.workDetail);
       }
     });
   }
