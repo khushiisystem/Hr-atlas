@@ -6,6 +6,7 @@ import { ProfilePage } from './profile.page';
 const routes: Routes = [
   {
     path: '',
+    title: 'My Profile',
     component: ProfilePage
   }
 ];

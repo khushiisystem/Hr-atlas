@@ -17,7 +17,7 @@ const routes: Routes = [
       {
         path: 'login',
         title: 'Login | HR Payroll - Spundan',
-        component: LoginPage
+        component: LoginPage,
       },
       {
         path: 'forgot-password',

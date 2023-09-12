@@ -139,7 +139,8 @@
                 <p><ion-label>{{leaveItem.dayType}}</ion-label></p>
                 <p><ion-label>From - </ion-label> <ion-text>{{leaveItem.startDate | date}}</ion-text></p>
                 <p *ngIf="leaveItem.endDate"><ion-label>To - </ion-label> <ion-text>{{leaveItem.endDate | date}}</ion-text></p>
-                <div class="ion-text-end">
+                <div class="flexItem">
+                    <ion-button *ngIf="leaveItem.status === 'Pending'" color="danger" mode="md" fill="solid" [strong]="true" shape="round" class="cancelBtn" (click)="cancelLeave(leaveItem.guid)">Cancel Leave</ion-button>
                     <ion-chip [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-chip>
                 </div>
             </ion-card-content>

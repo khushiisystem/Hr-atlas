@@ -39,7 +39,7 @@ export class LoaderService {
       ? await this.loaderCtrl
           .dismiss()
           .then((response) => {
-            console.log("Loader closed!", response);
+            console.log("", response);
           })
           .catch((err) => {
             console.log("Error occured : ", err);

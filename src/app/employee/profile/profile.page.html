@@ -101,22 +101,22 @@
                     <ion-row>
                       <ion-col size="12">
                         <ion-label>Phone Number</ion-label>
-                        <ion-input aria-label="Phone Number" [value]="'874567454'"></ion-input>
+                        <ion-input aria-label="Phone Number" [value]="employeeDetail.mobileNumber || '-'"></ion-input>
                       </ion-col>
     
                       <ion-col size="12">
                         <ion-label>Alternate Phone Number</ion-label>
-                        <ion-input aria-label="Alternate Phone Number" [value]="'-'"></ion-input>
+                        <ion-input aria-label="Alternate Phone Number" [value]="employeeDetail.alternateMobileNumber || '-'"></ion-input>
                       </ion-col>
     
                       <ion-col size="12">
                         <ion-label>Personal Email</ion-label>
-                        <ion-input aria-label="Personal Email" [value]="'example@gmail.com'"></ion-input>
+                        <ion-input aria-label="Personal Email" [value]="employeeDetail.email || '-'"></ion-input>
                       </ion-col>
     
                       <ion-col size="12">
                         <ion-label>Official Email</ion-label>
-                        <ion-input aria-label="Official Email" [value]="'-'"></ion-input>
+                        <ion-input aria-label="Official Email" [value]="employeeDetail.officialEmail || '-'"></ion-input>
                       </ion-col>
                     </ion-row>
                   </div>
@@ -136,12 +136,12 @@
                     <ion-row>
                       <ion-col size="12">
                         <ion-label>Current Address</ion-label>
-                        <ion-input aria-label="Phon" [value]="'874567454'"></ion-input>
+                        <ion-input aria-label="Current Address" [value]="employeeDetail.permanentAddress ? getAddress(employeeDetail.currentAddress) : '-'"></ion-input>
                       </ion-col>
     
                       <ion-col size="12">
                         <ion-label>Permanent Address</ion-label>
-                        <ion-input aria-label="Permanent Address" [value]="'-'"></ion-input>
+                        <ion-input aria-label="Permanent Address" [value]="employeeDetail.permanentAddress ? getAddress(employeeDetail.permanentAddress) : '-'"></ion-input>
                       </ion-col>
                     </ion-row>
                   </div>
@@ -158,16 +158,16 @@
                   </div>
                   
                   <div class="social_info_content">
-                    <div class="social_links">
-                      <div class="link_item linkedin">
+                    <div class="social_links">                 
+                      <a class="link_item linkedin" [href]="employeeDetail.linkedinUrl" rel="noopener" target="_blank" *ngIf="employeeDetail.linkedinUrl">
                         <ion-icon name="logo-linkedin" aria-hidden="true" size="large"></ion-icon>
-                      </div>
-                      <div class="link_item fb">
+                      </a>
+                      <a class="link_item fb" [href]="employeeDetail.facebookUrl" rel="noopener" target="_blank" *ngIf="employeeDetail.facebookUrl">
                         <ion-icon name="logo-facebook" aria-hidden="true" size="large"></ion-icon>
-                      </div>
-                      <div class="link_item twitter">
+                      </a>
+                      <a class="link_item twitter" [href]="employeeDetail.twitterUrl" rel="noopener" target="_blank" *ngIf="employeeDetail.twitterUrl">
                         <ion-icon name="logo-twitter" aria-hidden="true" size="large"></ion-icon>
-                      </div>
+                      </a>
                     </div>
                   </div>
                 </div>

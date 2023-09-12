@@ -22,10 +22,12 @@ export class LeavesPage implements OnInit {
   purpose!: string; 
   applyCardTitle: string = '';
   openCalendar: boolean = false;
+  moreData: boolean = false;
   platformType: string = "";
   platformBtn: string = "";
   activeTab: string = 'status'
   leaveLogs: ILeaveLogsResponse[] = [];
+  pageNumber: number = 0;
 
   constructor(
     private router: Router,
@@ -35,6 +37,7 @@ export class LeavesPage implements OnInit {
 
   ngOnInit() {
     this.selectedDates = history.state.selectedDates || [];
+    this.getLeaveStatus();
     this.getLogs();
   }
 
@@ -129,6 +132,7 @@ export class LeavesPage implements OnInit {
       if(res){
         this.showApplyForm = false;
         this.shareServ.presentToast('Leave requested successfully', 'top', 'success');
+        this.getLogs();
         this.loader.dismiss();
       }
     }, (error) => {
@@ -139,10 +143,19 @@ export class LeavesPage implements OnInit {
 
   getLogs(){
     const data = {};
-    this.shareServ.getLeaveList(data).subscribe(res => {
+    this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
       if(res) {
         this.leaveLogs = res;
+        this.moreData = false;
       }
+    });
+  }
+
+  getLeaveStatus(){
+    this.shareServ.getLeaveStatus().subscribe(res => {
+      console.log(res, 'status');
+    }, (error) => {
+      console.log(error, "error status");
     });
   }
 
@@ -184,6 +197,27 @@ export class LeavesPage implements OnInit {
       window.location.reload();
       event.target.complete();
     }, 2000);
+  }
+
+  loadMore(){
+    this.pageNumber++;
+    this.getLogs();
+  }
+
+  cancelLeave(leaveId: string) {
+    this.loader.present('');
+    this.shareServ.cancelLeave(leaveId).subscribe(res => {
+      if(res){
+        console.log(res, 'cancel leave res');
+        this.shareServ.presentToast("Leave canceled.", 'top', 'success');
+        this.loader.dismiss();
+        this.getLogs();
+      }
+    }, (error) => {
+      console.log(error, "error");
+      this.shareServ.presentToast("Something went wrong.", 'top', 'danger');
+      this.loader.dismiss();
+    })
   }
 
 }

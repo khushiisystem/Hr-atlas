@@ -13,6 +13,9 @@
     /* Set a fixed height for the columns */
     padding: 0;
 }
+ion-segment {
+    box-shadow: 8px 0px 5px rgb(77 141 255);
+}
 .leave_card {
     ion-card-header {
         flex-direction: row;
@@ -31,6 +34,17 @@
 
 .log_card {
     color: var(--ion-color-dark-tint);
+
+    & .flexItem{
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: flex-end;
+        padding-top: 20px;
+    }
+
+    & .cancelBtn {text-transform: capitalize;}
 }
 
 .apply-button-row {

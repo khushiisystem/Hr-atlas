@@ -44,8 +44,8 @@ export class LeaveSetupPage implements OnInit {
       if(res) {
         console.log(res, "res");
         this.leaveSetupForm.patchValue(res);
-        this.loaderServ.dismiss();
       }
+      this.loaderServ.dismiss();
     }, (error) => {
       this.loaderServ.dismiss();
     });

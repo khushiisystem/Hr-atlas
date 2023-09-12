@@ -99,5 +99,10 @@
         </ion-card>
       </ng-container> -->
     </div>
+    
+    <ion-infinite-scroll #infiniteScroll (ionInfinite)="moreData ? loadData($any($event)) : ''" [position]="'bottom'">
+      <ion-infinite-scroll-content *ngIf="moreData" loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </div>
 </ion-content>

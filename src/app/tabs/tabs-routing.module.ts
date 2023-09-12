@@ -26,7 +26,7 @@ const routes: Routes = [
     children: [
       {
         path: 'home',
-        title: 'HR Payroll | Spundan',
+        title: 'HR Atlas',
         component: Tab1Page,
         canActivate: [AuthGuard],
       },
@@ -51,7 +51,8 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        loadChildren: () => import('../employee/profile/profile.module').then(m => m.ProfilePageModule)
+        loadChildren: () => import('../employee/profile/profile.module').then(m => m.ProfilePageModule),
+        canActivate: [AuthGuard]
       },
       {
         path: 'admin-profile',

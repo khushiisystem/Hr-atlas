@@ -7,14 +7,14 @@
 
   <div class="container">
 
-    <img src="./assets/images/5.png" alt="Spundan Logo" class="logo_img" />
+    <img src="../../../../assets/icon/hr_atlas.png" alt="HR-Atlas Logo" class="logo_img" />
   
     <form [formGroup]="loginForm">
       <ion-row class="row_one">
         <ion-col size="12">
           <div class="form-input">
-            <ion-input labelPlacement="floating" fill="outline" formControlName="emailOrPhone" placeholder="Enter email/phone number">
-              <div slot="label">Email/Mobile <ion-text color="danger">*</ion-text></div>
+            <ion-input labelPlacement="floating" fill="outline" formControlName="emailOrPhone" placeholder="Enter email">
+              <div slot="label">Email <ion-text color="danger">*</ion-text></div>
             </ion-input>
           </div>
           <ion-text color="danger" class="error_txt" *ngIf="loginForm.controls['emailOrPhone'].touched && loginForm.controls['emailOrPhone'].errors">

@@ -39,6 +39,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
       this.userRole = res || "";
     });
     this.lastRoute = localStorage.getItem('lastRoute') || "";
+    this.isDataLoaded = false;
     this.getEmployeeList();
     this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
       this.searchEmployee(searchValue);
@@ -52,20 +53,21 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   getEmployeeList(){
-    this.isDataLoaded = false;
     if(this.pageIndex < 1){
       this.employeeList = [];
     }
-    this.adminServ.getEmployees().subscribe(res => {
+    console.log(this.isMoreData, "before load");
+    this.adminServ.getEmployees(this.pageIndex * 10, 10).subscribe(res => {
       if(res){
         const data: IEmployeeResponse[] = res;
         for(let i=0; i<data.length; i++){
           this.employeeList.push(res[i]);
         }
         
-        this.isMoreData = this.employeeList.length < 10;
+        this.isMoreData = res.length > 9;
         this.infiniteScroll.complete();
         this.isDataLoaded = true;
+        console.log(this.isMoreData, "after load");
       }
     }, (error) => {
       this.isMoreData = false;
@@ -109,33 +111,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
         this.getEmployeeList();
       }
     }, (error) => {})
-  }
-
-  selectAll(event: CustomEvent) {
-    if(event.detail.checked === true){
-      this.employeeList.forEach((e: IEmployeeResponse, index) => {
-        if(!this.selectedEmployee.includes(e.guid)){
-          this.selectedEmployee.push(e.guid);
-        }
-      });
-    } else if(event.detail.checked === false) {
-      this.selectedEmployee = [];
-    }
-    console.log(this.selectedEmployee);
-  }
-
-  selectEmployee(employee: string) {
-    const index = this.selectedEmployee.findIndex((e: string) => e === employee);
-    if(index !== -1){
-      this.selectedEmployee.splice(index, 1);
-    } else {
-      this.selectedEmployee.push(employee);
-    }
-    console.log(this.selectedEmployee);
-  }
-
-  isChecked(employee: any) {
-    return this.selectedEmployee.includes(employee);
   }
 
   viewProfile(empId: string) {

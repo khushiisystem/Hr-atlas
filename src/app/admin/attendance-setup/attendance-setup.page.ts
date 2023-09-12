@@ -93,7 +93,7 @@ export class AttendanceSetupPage implements OnInit {
     if(frmCtrl.trim() !== ''){
       formDate = this.attendanceForm.controls[frmCtrl].value;
     }
-    return formDate != '' ? moment(formDate).format() : new Date();
+    return formDate != '' ? moment(formDate).format() : "";
   }
 
   saveSetup(){

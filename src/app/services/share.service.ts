@@ -33,8 +33,8 @@ export class ShareService {
 
 
   // APIs for employee
-  getAllEmployee(): Observable<IEmployeeResponse[]>{
-    return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user`);
+  getAllEmployee(pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
+    return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?skip=${pageIndex}&limit=${pageSize}`);
   }
   getEmployeeById(empId: string): Observable<IEmployeeResponse>{
     return this.http.get<IEmployeeResponse>(environment.Api + `api/user/${empId}`);
@@ -65,7 +65,7 @@ export class ShareService {
     return this.http.post<any>(environment.Api + `api/user/verifyOtp`, data);
   }
   resetPassword(data: IResetPasswordRequest): Observable<any> {
-    return this.http.post<any>(environment.Api + `api/resetPassword`, data);
+    return this.http.post<any>(environment.Api + `api/user/forgotPassword`, data);
   }
   changePassword(data: any): Observable<any> {
     return this.http.post<any>(environment.Api + `api/user/changePassword`, data);
@@ -76,15 +76,21 @@ export class ShareService {
     return this.http.post<IClockInResponce>(environment.Api + `api/attendence/clockIn`, {});
   }
   clockOut(clockinId: string): Observable<IClockInResponce> {
-    return this.http.put<IClockInResponce>(environment.Api + `api/attendence/clockOut/${clockinId}`, '');
+    return this.http.put<IClockInResponce>(environment.Api + `api/attendence/clockOut/${clockinId}`, {});
   }
   leaveApply(leaveData: ILeaveApplyrequest): Observable<ILeaveApplyrequest> {
     return this.http.post<ILeaveApplyrequest>(environment.Api + `api/applyLeave`, leaveData);
   }
-  getLeaveList(filterData: any): Observable<ILeaveLogsResponse[]> {
-    return this.http.post<ILeaveLogsResponse[]>(environment.Api + `api/applyLeave/allLeaves`, filterData);
+  cancelLeave(leaveId: string): Observable<any> {
+    return this.http.post<any>(environment.Api + `api/applyLeave/cancelLeave/${leaveId}`, {});
   }
-  employeeAttendance(filterData : {"employeeId": string, date: string}): Observable<any> {
+  getLeaveList(filterData: any, pageIndex: number, pageSize: number): Observable<ILeaveLogsResponse[]> {
+    return this.http.post<ILeaveLogsResponse[]>(environment.Api + `api/applyLeave/allLeaves?skip=${pageIndex}&limit=${pageSize}`, filterData);
+  }
+  getLeaveStatus(): Observable<any> {
+    return this.http.get<any>(environment.Api + `api/leaveStatus/getLeaveStatus`);
+  }
+  employeeAttendance(filterData : {employeeId: string, date: string}): Observable<any> {
     return this.http.post<any>(environment.Api + `api/attendence/employeeId`, filterData);
   }
   todayAttendance(): Observable<any> {

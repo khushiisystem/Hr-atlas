@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/auth.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
+import { UserStateService } from 'src/app/services/userState.service';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class LoginPage implements OnInit {
     private authServ: AuthService,
     private shareServ: ShareService,
     private loader: LoaderService,
+    private userStateServ: UserStateService,
   ) {}
 
   ngOnInit() {
@@ -41,20 +43,23 @@ export class LoginPage implements OnInit {
     } else {
       this.loader.present('');
       this.isInProgress = true;
-      this.authServ.emailLogin(this.loginForm.value).subscribe(res => {
+      this.authServ.emailLogin(this.loginForm.value).subscribe(async res => {
         if(res){
           this.shareServ.presentToast('Login successful.', 'top', 'success');
           this.isInProgress = false;
           this.loginForm.reset();
+          const userId = localStorage.getItem('userId') || "";
+          this.shareServ.getEmployeeById(userId).subscribe(async res => {
+            this.userStateServ.updateState(res);
+          });
           this.router.navigateByUrl('/tabs/home');
           this.loader.dismiss();
         }
       }, (error) => {
-        this.shareServ.presentToast('Something is wrong.', 'top', 'danger');
+        this.shareServ.presentToast(error.error.Message, 'top', 'danger');
         this.loader.dismiss();
         this.isInProgress = false;
-      })
-      // this.router.navigateByUrl('/tabs/home');
+      });
     }
   }
 
