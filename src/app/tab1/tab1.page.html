@@ -5,9 +5,9 @@
       <img *ngIf="userDetails.imageUrl.trim() !== ''" alt="user" [src]="userDetails && userDetails.imageUrl.trim() !== '' ? userDetails.imageUrl: 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
       <ion-skeleton-text *ngIf="!userDetails" [animated]="true"></ion-skeleton-text>
     </ion-avatar>
-    <ion-title>HR Payroll - Spundan</ion-title>
+    <ion-title>HR Atlas</ion-title>
 
-    <ion-button mode="md" slot="end" shape="round" [color]="isRunning ? 'success' : 'primary'" fill="solid" class="ion-padding-horizontal ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
+    <ion-button mode="md" slot="end" shape="round" [strong]="true" [color]="isRunning ? 'success' : 'primary'" fill="solid" class="ion-padding-horizontal ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
       <span class="stopwatch-time">{{ buttonLabel }}</span>
       <ion-icon slot="end" icon="time"></ion-icon>
     </ion-button>
@@ -62,7 +62,7 @@
       </ion-col>
 
       <ion-col [size]="userRole === 'Admin' ? 6 : 4" [sizeSm]="userRole === 'Admin' ? 4 : 3" [sizeLg]="userRole === 'Admin' ? 4 : 3">
-        <ion-card mode="md" type="button" [routerLink]="['/tabs/employee-list']">
+        <ion-card mode="md" type="button" [routerLink]="['/tabs/directory']">
           <ion-card-content>
             <div class="icon_card">
               <ion-icon name="file-tray-full-outline" aria-hidden="true" size="large"></ion-icon>

@@ -53,6 +53,14 @@ export class LeaveApplyFormPage implements OnInit {
     this.leaveApplyForm.patchValue({
       startDate: moment.utc(event.detail.value).format()
     });
+    if(this.leaveApplyForm.controls['endDate'].value){
+      const startDate = new Date(moment(event.detail.value).format());
+      const endDate = new Date(moment(this.leaveApplyForm.controls['endDate'].value).format());
+      if(startDate > endDate){
+        this.leaveApplyForm.patchValue({endDate: ''});
+      }
+    }
+    this.maxDate = new Date(event.detail.value as string);
     
     console.log(this.leaveApplyForm.value);
   }

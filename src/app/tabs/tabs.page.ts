@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RoleStateService } from '../services/roleState.service';
 import { AdminService } from '../services/admin.service';
+import { UserStateService } from '../services/userState.service';
 
 @Component({
   selector: 'app-tabs',
@@ -11,17 +12,22 @@ export class TabsPage {
   userRole: string = "";
   userId: string = "";
 
-  constructor(private roleStateServ: RoleStateService, private adminServ: AdminService,) {
+  constructor(private roleStateServ: RoleStateService, private adminServ: AdminService, private userStateServ: UserStateService) {
+    this.userId = localStorage.getItem("userId") || "";
+    
+    userStateServ.getState().subscribe(res => {
+      if(!res){
+        if(this.userId.trim() !== ""){
+          adminServ.getEmployeeById(this.userId).subscribe(res => {
+            userStateServ.updateState(res);
+            roleStateServ.updateState(res.role);
+          });
+        }    
+      }
+    })
     roleStateServ.getState().subscribe(res => {
       this.userRole = res || localStorage.getItem('userRole') || "";
     });
-    this.userId = localStorage.getItem("userId") || "";
-
-    if(this.userId.trim() !== ""){
-      adminServ.getEmployeeById(this.userId).subscribe(res => {
-        roleStateServ.updateState(res.role);
-      });
-    }
   }
 
   clearLastRoute(){localStorage.setItem('lastRoute', "/tabs/home");}

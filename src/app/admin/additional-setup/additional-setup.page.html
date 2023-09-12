@@ -85,7 +85,7 @@
             <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
           </ion-col>
           <ion-col size="12" *ngIf="employeeList.length > 0">
-            <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === 2" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
+            <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === employeeList.length" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
           </ion-col>
           <ion-col size="12" *ngIf="!isDataLoaded" class="ion-text-center">
             <ion-spinner color="medium"></ion-spinner>
@@ -115,7 +115,7 @@
           <ion-button mode="md" fill="solid" [color]="!isMoreEmployee ? 'medium' : 'primary'" class="ion-text-wrap paginateBtn" [disabled]="!isMoreEmployee" (click)="next()">Next</ion-button>
         </ion-buttons> -->
 
-        <ion-button class="ion-margin big_assign_btn" shape="round" mode="md" fill="solid" expand="block" *ngIf="selectedEmployee.length >= 2" (click)="selectWrokWeek(selectedEmployee)">Assign Week</ion-button>
+        <ion-button class="ion-margin big_assign_btn" shape="round" mode="md" fill="solid" expand="block" *ngIf="selectedEmployee.length >= 1" (click)="selectWrokWeek(selectedEmployee)">Assign Week</ion-button>
 
         <!-- action sheet for week section -->
         <!-- <ion-action-sheet></ion-action-sheet> -->

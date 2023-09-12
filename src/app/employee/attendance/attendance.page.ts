@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonInfiniteScroll } from '@ionic/angular';
 import * as moment from 'moment';
 import { IClockInResponce } from 'src/app/interfaces/response/IAttendanceSetup';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -11,14 +12,17 @@ import { ShareService } from 'src/app/services/share.service';
   styleUrls: ['./attendance.page.scss'],
 })
 export class AttendancePage implements OnInit {
+  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   attendanceDateList: Date[] = [];
   attendanceList: IClockInResponce[] = [];
   dataLoaded: boolean = false;
   dateModal: boolean = false;
+  moreData: boolean = false;
   attendanceDate: Date = new Date();
   attendanceStatus: string[] = ['Present', 'Absent'];
   expandedCards: number[] = [0];
   userId: string = "";
+  pageIndex: number = 0;
 
   constructor(
     public router: Router,
@@ -48,21 +52,25 @@ export class AttendancePage implements OnInit {
   }
 
   getEmployeeAttendance() {
-    this.loader.present('');
     const data = {
       employeeId: this.userId,
       date: moment(this.attendanceDate).format()
     }
-    console.log(data, "data");
+    if(this.pageIndex < 1){this.attendanceList = [];}
+
     this.shareServ.employeeAttendance(data).subscribe(res => {
       if(res) {
         this.attendanceList = res;
+        for(let i=0; i<res.length; i++){
+          this.attendanceList.push(res[i]);
+        }
+        this.moreData = res.length > 29;
         console.log(this.attendanceList, "list");
-        this.loader.dismiss();
+        this.infiniteScroll.complete();
       }
     }, (error) => {
       console.log(error, "error");
-      this.loader.dismiss();
+      this.infiniteScroll.complete();
     })
   }
 
@@ -152,5 +160,12 @@ export class AttendancePage implements OnInit {
   }
 
   goBack() {history.back();}
+
+  loadData(event: any){
+    if(this.moreData){
+      this.pageIndex++;
+      this.getEmployeeAttendance();
+    }
+  }
 
 }

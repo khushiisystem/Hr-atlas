@@ -58,14 +58,14 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
     if(this.pageIndex < 1){
       this.employeeList = [];
     }
-    this.adminServ.getEmployees().subscribe(res => {
+    this.adminServ.getEmployees(this.pageIndex * 10, 10).subscribe(res => {
       if(res){
         const data: IEmployeeResponse[] = res;
         for(let i=0; i<data.length; i++){
           this.employeeList.push(res[i]);
         }
         
-        this.isMoreData = this.employeeList.length < 10;
+        this.isMoreData = res.length > 9;
         this.infiniteScroll.complete();
         this.isDataLoaded = true;
       }

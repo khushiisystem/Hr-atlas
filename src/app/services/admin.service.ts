@@ -18,8 +18,8 @@ import { IEmployeeWorkRequest } from "../interfaces/request/IEmployeeWork";
 export class AdminService {
     constructor(private http: HttpClient){}
 
-    getEmployees(): Observable<any>{
-        return this.http.get<any>(environment.Api + `api/user`);
+    getEmployees(pageIndex: number, pageSize: number): Observable<any>{
+        return this.http.get<any>(environment.Api + `api/user?skip=${pageIndex}&limit=${pageSize}`);
     }
     addEmployees(employeeData: IEmployeeRequest): Observable<IEmployeeResponse>{
         return this.http.post<IEmployeeResponse>(environment.Api + `api/user`, employeeData);

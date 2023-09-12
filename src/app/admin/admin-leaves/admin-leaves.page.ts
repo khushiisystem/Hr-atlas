@@ -16,6 +16,8 @@ export class AdminLeavesPage implements OnInit {
   showApplyForm: boolean = false;
   applyCardTitle: string = '';
   openCalendar: boolean = false;
+  moreData: boolean = false;
+  pageNumber: number = 0;
   activeTab: string = 'requests'
   leaveLogs: ILeaveLogsResponse[] = [];
   requestedLeaveList: ILeaveLogsResponse[] = [];
@@ -55,7 +57,7 @@ export class AdminLeavesPage implements OnInit {
 
   getLogs(){
     const data = {};
-    this.shareServ.getLeaveList(data).subscribe(res => {
+    this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
       if(res) {
         this.leaveLogs = res;
       }
@@ -66,11 +68,16 @@ export class AdminLeavesPage implements OnInit {
     const data = {
       status: 'Pending'
     };
-    this.shareServ.getLeaveList(data).subscribe(res => {
+    this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
       if(res) {
         this.requestedLeaveList = res;
       }
     });
+  }
+
+  loadMore(){
+    this.pageNumber++;
+    this.getLogs();
   }
 
   getStatus(status: string) {

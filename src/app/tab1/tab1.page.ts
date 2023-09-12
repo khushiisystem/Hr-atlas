@@ -7,6 +7,7 @@ import { IEmployeeResponse } from '../interfaces/response/IEmployee';
 import { RoleStateService } from '../services/roleState.service';
 import { LoaderService } from '../services/loader.service';
 import * as moment from 'moment';
+import { UserStateService } from '../services/userState.service';
 
 @Component({
   selector: 'app-tab1',
@@ -34,24 +35,17 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private shareServ: ShareService,
     private roleStateServ: RoleStateService,
     private loader: LoaderService,
+    private userStateServ: UserStateService,
   ) {}
 
   ngOnInit() {
-    this.roleStateServ.getState().subscribe(res => {
-      this.userRole = res || "";
-    });
     this.userId = localStorage.getItem("userId") || "";
-    const directoryIcon = document.getElementById('directoryIcon');
-    if (directoryIcon) {
-      directoryIcon.addEventListener('click', this.showdirectory.bind(this));
-    }
+    this.getStates();
     localStorage.setItem('lastRoute', this.router.url);
-    if(this.userId.trim() !== '') {
-      this.getProfile();
-    }
     this.demoCard.length = 12;
     this.clockInTime = localStorage.getItem('clockInTime') || "";
-    if(this.clockInTime.trim() !== ''){
+    const clockOutTime = localStorage.getItem('clockOutTime') || "";
+    if(this.clockInTime.trim() !== '' && !clockOutTime){
       this.isRunning = true;
       this.buttonLabel = "Clock Out";
       this.startWatch(this.clockInTime);
@@ -59,44 +53,51 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.clockInTime = localStorage.getItem('clockInTime') || "";
-    console.log(this.clockInTime, 'after');
   }
 
-  getProfile(){
-    this.shareServ.getEmployeeById(this.userId).subscribe(res => {
-      if(res) {
+  getStates(){
+    this.userStateServ.getState().subscribe(res => {
+      if(res){
         this.userDetails = res;
-        this.isDataLoaded = true;
         this.roleStateServ.updateState(this.userDetails.role);
+    
         if(this.userDetails.role === 'Employee'){
           this.getAttendance();
         }
+        this.isDataLoaded = true;
       }
-    }, (error) => {
-      console.log(error);
-      this.isDataLoaded = true;
-    })
+    });
+
+    this.roleStateServ.getState().subscribe(res => {
+      this.userRole = res || "";
+    });
   }
 
   getAttendance(){
     this.shareServ.todayAttendance().subscribe(res => {
-      if(res && !res.message) {
+      if(res && !res.message && !res.clockOut) {
         this.isRunning = true;
         this.buttonLabel = 'Clock Out\t';
         const currentTime = new Date(moment(res.clockIn).format()).toISOString();
         localStorage.setItem('clockinId', res.guid);
-        localStorage.setItem('clockInTime', currentTime);        
-        this.startWatch(res.clockIn);
+        localStorage.setItem('clockInTime', currentTime);
+        if(res.clockOut){
+          const outTime = new Date(moment(res.clockOut).format()).toISOString();
+          localStorage.setItem('clockOutTime', outTime);
+        }
+        if(res.clockIn.trim() !== '' && !res.clockOut){
+          this.isRunning = true;
+          this.buttonLabel = "Clock Out";
+          this.startWatch(this.clockInTime);
+        }
       }
-    })
+    }, (error) => {
+      console.log(error, 'err');
+    });
   }
 
   toggleStopwatch() {
-    if (!this.isRunning) {
-      this.clockIn();
-    } else {
-      this.clockOut();
-    }
+    !this.isRunning ? this.clockIn() : this.clockOut();
   }
 
   clockIn() {
@@ -114,17 +115,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.loader.dismiss();
       }
     }, (error) => {
+      this.shareServ.presentToast(error.error.Message, 'top', 'danger')
       this.loader.dismiss();
     });
-    this.loader.dismiss();
   }
 
   clockOut() {
     this.loader.present('');
-
-    // Store the clock-out time in localStorage
-    const currentTime = new Date().toISOString();
-    localStorage.setItem('clockOutTime', currentTime);
 
     clearInterval(this.stopwatchInterval);
     this.stopwatchTime = '00:00:00';
@@ -138,6 +135,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
           this.buttonLabel = 'Clock In';
           this.loader.dismiss();
           localStorage.removeItem('clockinId');
+          localStorage.removeItem('clockOutTime');
+          localStorage.removeItem('clockInTime');
         }
       }, (error) => {
         this.loader.dismiss();
@@ -161,19 +160,15 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   startWatch(clockIn: string | Date){
-    let seconds = 0;
-    // this.stopwatchTime = this.formatTime(seconds);
-    
     this.stopwatchInterval = setInterval(() => {
-      seconds++;
-      this.stopwatchTime = this.calculateDurationAndAddSeconds(clockIn,seconds);
+      this.stopwatchTime = this.calculateDurationAndAddSeconds(clockIn,1);
     }, 1000);
   }
-
+  
   calculateDurationAndAddSeconds(startTime: string | Date, secondsToAdd: number): string {
     const startDate = new Date(moment(startTime).format());
     const endDate = new Date();
-  
+    
     // Calculate the time duration in milliseconds
     const durationMs = endDate.getTime() - startDate.getTime();
   
@@ -200,11 +195,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
       event.target.complete();
     }, 2000);
   }
-
-  showdirectory() {
-    this.router.navigate(['./directory']);
-  }
-
   async addEmployee(){
     const employeeModel = this.modalCtrl.create({
       component: AddEmployeePage,

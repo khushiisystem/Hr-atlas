@@ -5,6 +5,7 @@ import { IJWTPayload } from '../interfaces/request/IPayload';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { RoleStateService } from '../services/roleState.service';
+import { UserStateService } from '../services/userState.service';
 
 export const ROLES = {
   ADMIN: 'Admin',
@@ -22,7 +23,7 @@ export class AuthService {
   private currentUserPayload!: BehaviorSubject<IJWTPayload>;
   userRole: string = ROLES.EMPLOYEE || ROLES.ADMIN;
 
-  constructor(private http: HttpClient, public router: Router, private roleStatServ: RoleStateService,) {
+  constructor(private http: HttpClient, public router: Router, private roleStatServ: RoleStateService, private userSateSer: UserStateService) {
     this.currentUserSubject = new BehaviorSubject<string>(
       localStorage.getItem('token') || ''
     );
@@ -83,6 +84,7 @@ export class AuthService {
     this.currentUserPayload.next(null as any);
     localStorage.clear();
     this.roleStatServ.updateState("");
+    this.userSateSer.updateState(null);
     this.router.navigate(['/login']);
   }
 }

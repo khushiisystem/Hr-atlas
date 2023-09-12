@@ -170,7 +170,7 @@ export class AdditionalSetupPage implements OnInit {
 
   getEmployees(){
     this.isDataLoaded = false;
-    this.shareServ.getAllEmployee().subscribe(res => {
+    this.shareServ.getAllEmployee(this.pageIndex * 10, 10).subscribe(res => {
       if(res){
         this.employeeList = res;
         this.isMoreEmployee = res.length > 9;
@@ -216,6 +216,7 @@ export class AdditionalSetupPage implements OnInit {
         this.activeTab = "create_work_week";
         this.getWorkWeek();
         this.loader.dismiss();
+        this.selectedEmployee = [];
       }
     }, (error) => {
       console.log(error, "error");
@@ -225,6 +226,7 @@ export class AdditionalSetupPage implements OnInit {
   }
 
   getWorkWeek(){
+    this.sheetBtns = [];
     this.isDataLoaded = false;
     this.adminServ.getWorkWeek().subscribe(res => {
       if(res) {

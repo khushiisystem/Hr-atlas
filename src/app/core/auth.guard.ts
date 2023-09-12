@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
+  CanDeactivateFn,
   Router,
   RouterStateSnapshot,
   UrlTree,
@@ -18,5 +19,27 @@ export class AuthGuard {
     const token = this.authServ.getToken();
 
     return token && token.trim() !== '' ? true : this.router.navigateByUrl('/login');
+  }
+
+  canDeactivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    const token = this.authServ.getToken();
+
+    return token && token.trim() !== '' ? false : true;
+  }
+}
+
+export interface CanComponentDeactivate {
+  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+}
+
+export const NameGuard: CanDeactivateFn<CanComponentDeactivate> = (
+  component: CanComponentDeactivate
+) => {
+    if (component.canDeactivate()) {
+      console.log(`💂‍♀️ [Guard] - Can Deactivate Guard - allowed`);
+      return true;
+    } else {
+      console.log(`💂‍♀️ [Guard] - Can Deactivate Guard - not allowed`);
+      return false;
   }
 }
