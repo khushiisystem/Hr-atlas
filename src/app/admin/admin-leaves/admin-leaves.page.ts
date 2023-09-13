@@ -32,22 +32,23 @@ export class AdminLeavesPage implements OnInit {
   ngOnInit() {
     this.selectedDates = history.state.selectedDates || [];
     this.requestedLeaves();
-    this.getLogs();
+    // this.getLogs();
   }
 
   goBack() {history.back();}
 
-  leaveApprovel(leaveId: string, action: string){
+  leaveApprovel(leaveId: string, approvel: boolean){
     this.loader.present('');
     const leaveData = {
       leaveGuid: leaveId,
-      aproveLeave: action
+      aproveLeave: approvel
     }
     this.adminServ.leaveApprove(leaveData).subscribe(res => {
       console.log(res, 'res');
       if(res){
         this.shareServ.presentToast('Responded', 'top', 'success');
         this.loader.dismiss();
+        this.requestedLeaves();
       }
     }, (error) => {
       this.shareServ.presentToast('Something went wrong', 'top', 'danger');

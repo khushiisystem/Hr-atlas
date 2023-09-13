@@ -14,6 +14,7 @@ export interface IEmployeeWorkRequest {
     department: string;
     subDepartment: string;
     workHistory: IExperience[];
+    salaryInformation: ISalary;
 }
 
 export interface IExperience {
@@ -24,4 +25,10 @@ export interface IExperience {
     department: string;
     from: string | Date;
     to: string | Date;
+}
+
+export interface ISalary {
+    ctc: number;
+    salary: number;
+    effectiveDate: Date;
 }

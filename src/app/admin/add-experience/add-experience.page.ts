@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { AdminService } from 'src/app/services/admin.service';
@@ -61,16 +62,29 @@ export class AddExperiencePage implements OnInit {
     private fb: FormBuilder,
     private adminServ: AdminService,
     private shareServ: ShareService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    public router: Router,
+    private activeatedRoute: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.today = new Date();
-    this.maxDate.setFullYear(this.today.getFullYear() - 10);
-    this.formSetup();
-    if(this.action === 'edit' && this.userId){
-      this.getWorkDetail();
-    } else {this.isDataLoaded = true;}
+    this.activeatedRoute.queryParams.subscribe(param => {
+      console.log(param, "param");
+      if(param){
+        this.employeeId = param?.['employeeId'];
+        this.action = param?.['action'];
+        this.userId = param?.['userId'];
+        console.log(this.employeeId, this.action, this.userId);
+
+        this.today = new Date();
+        this.maxDate.setFullYear(this.today.getFullYear() - 10);
+        this.formSetup();
+        if(this.action === 'edit' && this.userId){
+          this.getWorkDetail();
+        } else {this.isDataLoaded = true;}
+      }
+    });
+    console.log(this.employeeId, this.action, this.userId);
   }
 
   formSetup(){
@@ -88,6 +102,11 @@ export class AddExperiencePage implements OnInit {
       jobTitle: ['', Validators.required],
       department: ['', Validators.required],
       subDepartment: ['', Validators.required],
+      salaryInformation: this.fb.group({
+        ctc: ['', Validators.required],
+        salary: ['', Validators.required],
+        effectiveDate: ['', Validators.required],
+      }),
       workHistory: this.fb.array([]),
     });
   }
@@ -157,8 +176,7 @@ export class AddExperiencePage implements OnInit {
       ((this.workInfoForm.controls['workHistory'] as FormArray).controls[this.formIndex] as FormGroup).patchValue({
         to: moment.utc(event.detail.value).format()
       });
-    }
-    console.log(this.workInfoForm.value);
+    };
   }
 
   getNestedCtrl(ctrlName: string, index: number) {
@@ -172,6 +190,24 @@ export class AddExperiencePage implements OnInit {
   getExpDate(ctrlName: string, index: number){
     const formDate = ((this.workInfoForm.controls['workHistory'] as FormArray).controls[index] as FormGroup).controls[ctrlName].value;
     return formDate ? new Date(moment(formDate).format()) : '';
+  }
+
+  getSubGroup(ctrlname: string): FormGroup{
+    return this.workInfoForm.controls[ctrlname] as FormGroup
+  }
+  getSalaryEffeDate(ctrlName: string){
+    const formDate = (this.workInfoForm.controls['salaryInformation'] as FormGroup).controls[ctrlName].value;
+    return formDate ? new Date(moment(formDate).format()) : '';
+  }
+  setSalaryEffectiveDate(event: DatetimeCustomEvent){
+    if(event.detail.value){
+      let setEffDate = new Date(event.detail.value as string);
+      setEffDate.setHours(0,0,0);
+      (this.workInfoForm.controls['salaryInformation'] as FormGroup).patchValue({
+        effectiveDate: moment.utc(setEffDate).format()
+      });
+    }
+    console.log(this.workInfoForm.value);
   }
 
   expandCard(cardName: string) {
@@ -209,7 +245,9 @@ export class AddExperiencePage implements OnInit {
     this.adminServ.addEmployeesWork(this.workInfoForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
-        this.modalCtrl.dismiss(res, 'confirm');
+        // this.modalCtrl.dismiss(res, 'confirm');
+        localStorage.setItem('lastRoute', '/tabs/directory');
+        this.router.navigateByUrl(`/tabs/employee-profile/${this.userId}`);
         this.isInProgress = false;
       }
     }, (error) =>{
@@ -222,8 +260,10 @@ export class AddExperiencePage implements OnInit {
     this.adminServ.updateEmployeeWork(this.employeeWorkId, this.workInfoForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
-        this.modalCtrl.dismiss(res, 'confirm');
+        localStorage.setItem('lastRoute', '/tabs/directory');
+        this.router.navigateByUrl(`/tabs/employee-profile/${this.userId}`);
         this.isInProgress = false;
+        // this.modalCtrl.dismiss(res, 'confirm');
       }
     }, (error) =>{
       this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
@@ -231,5 +271,5 @@ export class AddExperiencePage implements OnInit {
     });
   }
 
-  goBack(){this.modalCtrl.dismiss();}
+  goBack(){history.back();}
 }

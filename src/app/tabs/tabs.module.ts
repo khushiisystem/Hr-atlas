@@ -26,6 +26,7 @@ import { LeaveApplyFormPage } from "../employee/leaves/leave-apply-form/leave-ap
 import { DirectoryPage } from "./components/directory/directory.page";
 import { RoleGuard } from "../core/role.guard";
 import { AdminLeavesPageModule } from "../admin/admin-leaves/admin-leaves.module";
+import { AddExperiencePageModule } from "../admin/add-experience/add-experience.module";
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { AdminLeavesPageModule } from "../admin/admin-leaves/admin-leaves.module
     RouterModule,
     NameImgPageModule,
     AdminLeavesPageModule,
+    AddExperiencePageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, RoleGuard],

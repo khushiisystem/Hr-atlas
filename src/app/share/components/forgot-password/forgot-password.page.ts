@@ -47,10 +47,8 @@ export class ForgotPasswordPage implements OnInit {
   }
 
   onOtpChange(event: any){
-    console.log(event, "otp event");
     this.otpCtrl.setValue(event);
     const val = this.otpCtrl.value;
-    console.log(typeof val, val);
     if(this.otpCtrl.valid){
       let otpTimeOut = setTimeout(() => {
         this.verifyOtp();
@@ -63,7 +61,6 @@ export class ForgotPasswordPage implements OnInit {
     if(this.getOTPForm.valid){
       this.isInProgress = true;
       this.passwordForm.patchValue(this.getOTPForm.value);
-      console.log(this.passwordForm.value, "email patch");
       this.loader.present('');
       this.shareServ.getOTP(this.getOTPForm.value).subscribe(res => {
         if(res) {
@@ -76,14 +73,13 @@ export class ForgotPasswordPage implements OnInit {
         this.shareServ.presentToast('Something is wrong..', 'top', 'danger');
         this.loader.dismiss();
         this.isInProgress = false;
-      })
-      this.activeEvent = 'getOTP';
+      });
     }
   }
 
   verifyOtp(){
-    console.log(this.otpCtrl.value, "value");
-    console.log(this.getOTPForm.value, "email form");
+    // console.log(this.otpCtrl.value, "value");
+    // console.log(this.getOTPForm.value, "email form");
     this.loader.present('');
     this.isInProgress = true;
     const data: IOptVerifyRequest = {

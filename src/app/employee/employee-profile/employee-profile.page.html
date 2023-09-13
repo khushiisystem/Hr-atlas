@@ -171,7 +171,7 @@
               </div>
             </ion-item-divider>
 
-            <ion-item [lines]="'none'" [button]="false">
+            <ion-item [lines]="'none'" [button]="false" *ngIf="employeeDetail.linkedinUrl || employeeDetail.facebookUrl || employeeDetail.twitterUrl">
               <div class="social_info ion-margin-top ion-padding-top">
                 <div class="nested_item ion-margin-bottom">
                   <ion-label>Social Information</ion-label>
@@ -258,7 +258,7 @@
               </div>
             </ion-item-divider>
 
-            <ion-item-divider>
+            <ion-item-divider *ngIf="workDetail">
               <div class="work_info ion-margin-top ion-padding-top">
                 <div class="nested_item ion-margin-bottom">
                   <ion-label>Work Information</ion-label>
@@ -339,7 +339,7 @@
               <ion-label color="primary">Edit Profile</ion-label>
             </ion-item>
 
-            <ion-item [lines]="'none'" type="button" [button]="true" [detail]="true" class="btn_item" (click)="openWorkModal()">
+            <ion-item [lines]="'none'" type="button" [button]="true" [detail]="true" class="btn_item" (click)="setupWorkInfo()">
               <ion-icon name="construct-outline" aria-hidden="true" slot="start" color="primary"></ion-icon>
               <ion-label color="primary">{{workDetail ? 'Update' : 'Add'}} Work</ion-label>
             </ion-item>

@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">hr-payroll-ui</string>
-    <string name="title_activity_main">hr-payroll-ui</string>
+    <string name="app_name">HR-Atlas</string>
+    <string name="title_activity_main">HR-Atlas</string>
     <string name="package_name">com.hratlas.app</string>
     <string name="custom_url_scheme">com.hratlas.app</string>
 </resources>

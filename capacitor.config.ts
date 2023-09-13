@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'com.hratlas.app',
-  appName: 'hr-payroll-ui',
+  appName: 'HR-Atlas',
   webDir: 'www',
   server: {
     androidScheme: 'https'

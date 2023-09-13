@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { IonAccordionGroup, ModalController } from '@ionic/angular';
 import { IAddress } from 'src/app/interfaces/request/IEmployee';
 import { IEmployeeResponse, IEmployeeWrokResponse } from 'src/app/interfaces/response/IEmployee';
@@ -29,6 +29,7 @@ export class EmployeeProfilePage implements OnInit {
     private shareServ: ShareService,
     private roleStateServ: RoleStateService,
     private modalCtrl: ModalController,
+    public router: Router,
   ) {
     this.employeeId = activeRoute.snapshot.params?.['employeeId'];
     this.randomList.length = 7;
@@ -74,7 +75,12 @@ export class EmployeeProfilePage implements OnInit {
     }
   };
 
-  goBack(){history.back();}
+  goBack(){
+    const lastRoute = localStorage.getItem('lastRoute');
+    if(lastRoute && lastRoute.trim() !== '/tabs/home'){
+      this.router.navigate([lastRoute]);
+    } else {history.back();}
+  }
   
   handleRefresh(event: any) {
     setTimeout(() => {
@@ -100,13 +106,25 @@ export class EmployeeProfilePage implements OnInit {
     }
   }
 
+  setupWorkInfo(){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        action: this.workDetail ? 'edit' : 'add',
+        employeeId: this.employeeDetail.employeeId,
+        userId: this.employeeDetail.guid,
+      }
+    }
+    this.router.navigate([`/tabs/employee/workinfo`], navigationExtras);
+  }
+
   async openWorkModal() {
     const workModal = this.modalCtrl.create({
       component: AddExperiencePage,
-      initialBreakpoint: 1,
       backdropDismiss: false,
       mode: 'md',
       animated: true,
+      showBackdrop: true,
+      handleBehavior: 'cycle',
       componentProps: {employeeId: this.employeeDetail.employeeId, userId: this.employeeDetail.guid, action: this.workDetail ? 'edit' : 'add'}
     });
     

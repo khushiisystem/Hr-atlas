@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatetimeCustomEvent } from '@ionic/angular';
 import { ILeaveApplyrequest } from 'src/app/interfaces/request/ILeaveApply';
-import { ILeaveLogsResponse } from 'src/app/interfaces/response/ILeave';
+import { ILeaveLogsResponse, ILeaveStatus } from 'src/app/interfaces/response/ILeave';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 
@@ -28,6 +28,7 @@ export class LeavesPage implements OnInit {
   activeTab: string = 'status'
   leaveLogs: ILeaveLogsResponse[] = [];
   pageNumber: number = 0;
+  leaveStatus!: ILeaveStatus;
 
   constructor(
     private router: Router,
@@ -132,6 +133,7 @@ export class LeavesPage implements OnInit {
       if(res){
         this.showApplyForm = false;
         this.shareServ.presentToast('Leave requested successfully', 'top', 'success');
+        this.getLeaveStatus();
         this.getLogs();
         this.loader.dismiss();
       }
@@ -154,6 +156,9 @@ export class LeavesPage implements OnInit {
   getLeaveStatus(){
     this.shareServ.getLeaveStatus().subscribe(res => {
       console.log(res, 'status');
+      if(res){
+        this.leaveStatus = res;
+      }
     }, (error) => {
       console.log(error, "error status");
     });

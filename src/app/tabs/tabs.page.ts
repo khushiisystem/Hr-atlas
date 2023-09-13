@@ -13,10 +13,9 @@ export class TabsPage {
   userId: string = "";
 
   constructor(private roleStateServ: RoleStateService, private adminServ: AdminService, private userStateServ: UserStateService) {
-    this.userId = localStorage.getItem("userId") || "";
-    
     userStateServ.getState().subscribe(res => {
       if(!res){
+        this.userId = localStorage.getItem("userId") || "";
         if(this.userId.trim() !== ""){
           adminServ.getEmployeeById(this.userId).subscribe(res => {
             userStateServ.updateState(res);

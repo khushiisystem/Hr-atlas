@@ -18,6 +18,7 @@ import { AdminProfilePage } from '../admin/admin-profile/admin-profile.page';
 import { LeavesPage } from '../employee/leaves/leaves.page';
 import { RoleGuard } from '../core/role.guard';
 import { AdminLeavesPage } from '../admin/admin-leaves/admin-leaves.page';
+import { AddExperiencePage } from '../admin/add-experience/add-experience.page';
 
 const routes: Routes = [
   {
@@ -89,6 +90,13 @@ const routes: Routes = [
         path: 'employee-profile/:employeeId',
         title: "Employee Profile",
         component: EmployeeProfilePage
+      },
+      {
+        path: 'employee/workinfo',
+        title: "Employee Workinfo",
+        component: AddExperiencePage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"}
       },
       {
         path: 'payroll-setup/:employeeId',
