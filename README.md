@@ -1,6 +1,7 @@
 # HR-Payroll-UI
 
-
+##keystore password: hr@123
+##keyalias: key0, password: hr@123
 
 ## Getting started
 
