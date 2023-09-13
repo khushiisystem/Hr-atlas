@@ -9,7 +9,7 @@ import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response/IEmployee";
 import { ILeaveApplyrequest } from "../interfaces/request/ILeaveApply";
 import { IClockInResponce } from "../interfaces/response/IAttendanceSetup";
-import { ILeaveLogsResponse, ILeaveSetupResponse } from "../interfaces/response/ILeave";
+import { ILeaveLogsResponse, ILeaveSetupResponse, ILeaveStatus } from "../interfaces/response/ILeave";
 
 @Injectable({
   providedIn: "root",
@@ -65,7 +65,7 @@ export class ShareService {
     return this.http.post<any>(environment.Api + `api/user/verifyOtp`, data);
   }
   resetPassword(data: IResetPasswordRequest): Observable<any> {
-    return this.http.post<any>(environment.Api + `api/user/forgotPassword`, data);
+    return this.http.put<any>(environment.Api + `api/user/forgotPassword`, data);
   }
   changePassword(data: any): Observable<any> {
     return this.http.post<any>(environment.Api + `api/user/changePassword`, data);
@@ -82,13 +82,13 @@ export class ShareService {
     return this.http.post<ILeaveApplyrequest>(environment.Api + `api/applyLeave`, leaveData);
   }
   cancelLeave(leaveId: string): Observable<any> {
-    return this.http.post<any>(environment.Api + `api/applyLeave/cancelLeave/${leaveId}`, {});
+    return this.http.put<any>(environment.Api + `api/applyLeave/cancelLeave/${leaveId}`, {});
   }
   getLeaveList(filterData: any, pageIndex: number, pageSize: number): Observable<ILeaveLogsResponse[]> {
     return this.http.post<ILeaveLogsResponse[]>(environment.Api + `api/applyLeave/allLeaves?skip=${pageIndex}&limit=${pageSize}`, filterData);
   }
-  getLeaveStatus(): Observable<any> {
-    return this.http.get<any>(environment.Api + `api/leaveStatus/getLeaveStatus`);
+  getLeaveStatus(): Observable<ILeaveStatus> {
+    return this.http.get<ILeaveStatus>(environment.Api + `api/leaveStatus/getLeaveStatus`);
   }
   employeeAttendance(filterData : {employeeId: string, date: string}): Observable<any> {
     return this.http.post<any>(environment.Api + `api/attendence/employeeId`, filterData);

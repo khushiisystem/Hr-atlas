@@ -24,7 +24,7 @@
     </ion-segment>
 
     <div *ngIf="activeTab === 'status'">
-        <ion-card class="leave_card">
+        <ion-card class="leave_card" *ngIf="leaveStatus && leaveStatus.loseOfPay">
             <ion-card-header>
                 <ion-card-title>Loss of Pay</ion-card-title>
                 <ion-button mode="md" *ngIf="!showApplyForm || selectedLeaveType !== 'LOP'" shape="round" color="primary" (click)="selectedLeaveType = 'LOP'; showApplyForm = true;" class="apply-button">Apply</ion-button>
@@ -38,7 +38,7 @@
                     </ion-col>
                     <ion-col size="5">
                         <div class="leave-info">
-                            <ion-label class="leave-value">{{ getCreditedDataForLossOfPay() }}</ion-label>
+                            <ion-label class="leave-value">{{ leaveStatus.loseOfPay.totalLeave }}</ion-label>
                         </div>                        
                     </ion-col>
                     <ion-col size="7">
@@ -48,7 +48,7 @@
                     </ion-col>
                     <ion-col size="5">
                         <div class="leave-info">
-                            <ion-label class="leave-value">{{ getCreditedDataForLossOfPay() }}</ion-label>
+                            <ion-label class="leave-value">{{ leaveStatus.loseOfPay.createdLeave }}</ion-label>
                         </div>                        
                     </ion-col>
                     <ion-col size="7">
@@ -58,17 +58,7 @@
                     </ion-col>
                     <ion-col size="5">
                         <div class="leave-info">
-                            <ion-label class="leave-value">{{ getAppliedDataForLossOfPay() }}</ion-label>
-                        </div>                        
-                    </ion-col>
-                    <ion-col size="7">
-                        <div class="leave-info">
-                            <ion-label class="leave-label">Penalty:</ion-label>
-                        </div>
-                    </ion-col>
-                    <ion-col size="5">
-                        <div class="leave-info">
-                            <ion-label class="leave-value">{{ getPenaltyForLossOfPay() }}</ion-label>
+                            <ion-label class="leave-value">{{ leaveStatus.loseOfPay.applyLeave }}</ion-label>
                         </div>                        
                     </ion-col>
                 </ion-row>
@@ -76,7 +66,7 @@
             </ion-card-content>
         </ion-card>
     
-        <ion-card class="leave_card">
+        <ion-card class="leave_card" *ngIf="leaveStatus && leaveStatus.casualLeave">
             <ion-card-header>
                 <ion-card-title>Casual Leave</ion-card-title>
                 <ion-button mode="md" *ngIf="!showApplyForm || selectedLeaveType !== 'CL'" shape="round" color="primary" (click)="selectedLeaveType = 'CL'; showApplyForm = true;" class="apply-button">Apply</ion-button>
@@ -90,7 +80,7 @@
                     </ion-col>
                     <ion-col size="5">
                         <div class="leave-info">
-                            <ion-label class="leave-value">18</ion-label>
+                            <ion-label class="leave-value">{{leaveStatus.casualLeave.totalLeave}}</ion-label>
                         </div>                        
                     </ion-col>
                     <ion-col size="7">
@@ -100,7 +90,7 @@
                     </ion-col>
                     <ion-col size="5">
                         <div class="leave-info">
-                            <ion-label class="leave-value">5</ion-label>
+                            <ion-label class="leave-value">{{leaveStatus.casualLeave.createdLeave}}</ion-label>
                         </div>                        
                     </ion-col>
                     <ion-col size="7">
@@ -110,17 +100,7 @@
                     </ion-col>
                     <ion-col size="5">
                         <div class="leave-info">
-                            <ion-label class="leave-value">2</ion-label>
-                        </div>                        
-                    </ion-col>
-                    <ion-col size="7">
-                        <div class="leave-info">
-                            <ion-label class="leave-label">Penalty:</ion-label>
-                        </div>
-                    </ion-col>
-                    <ion-col size="5">
-                        <div class="leave-info">
-                            <ion-label class="leave-value">0</ion-label>
+                            <ion-label class="leave-value">{{leaveStatus.casualLeave.applyLeave}}</ion-label>
                         </div>                        
                     </ion-col>
                 </ion-row>

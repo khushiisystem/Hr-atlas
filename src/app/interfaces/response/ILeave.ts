@@ -5,5 +5,28 @@ import { IGeneric } from "./IGeneric";
 export interface ILeaveSetupResponse extends IGeneric, ILeaveSetupRequest {}
 
 export interface ILeaveLogsResponse extends IGeneric, ILeaveApplyrequest {
-    status: string;
+  status: string;
+  employeeDetails: IEmployee;
+}
+
+export interface ILeaveStatus extends IGeneric {
+  userId: string;
+  casualLeave: {
+    totalLeave: number;
+    createdLeave: number;
+    applyLeave: number;
+  };
+  loseOfPay: {
+    totalLeave: number;
+    createdLeave: number;
+    applyLeave: number;
+  };
+}
+
+export interface IEmployee {
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobileNumber: string;
+  role: string;
 }

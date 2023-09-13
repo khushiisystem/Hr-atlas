@@ -1,13 +1,18 @@
-import { Component, QueryList, ViewChildren } from '@angular/core';
-import { AlertController, IonRouterOutlet, ModalController, Platform } from '@ionic/angular';
-import { ShareService } from './services/share.service';
+import { Component, QueryList, ViewChildren } from "@angular/core";
+import {
+  AlertController,
+  IonRouterOutlet,
+  ModalController,
+  Platform,
+} from "@ionic/angular";
+import { ShareService } from "./services/share.service";
 import { App } from "@capacitor/app";
-import { Router } from '@angular/router';
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss'],
+  selector: "app-root",
+  templateUrl: "app.component.html",
+  styleUrls: ["app.component.scss"],
 })
 export class AppComponent {
   @ViewChildren(IonRouterOutlet) routerOutlets!: QueryList<IonRouterOutlet>;
@@ -22,11 +27,9 @@ export class AppComponent {
     private router: Router
   ) {
     this.backButtonEvent();
-    // console.log(platform.is('android'), "android", platform.is('cordova'), "cordova", platform.is('capacitor'), "capacitor", platform.is('pwa'), "pwa", platform.is('mobile'), "mobile", platform.is('mobileweb'), "mobileweb", platform.is('desktop'), "desktop");
-    // console.log(platform.backButton, "backBtn");
     this.platform.backButton.subscribeWithPriority(5, () => {
-      console.log('Another handler was called!');
-      shareServ.presentToast('Another handler was called!', 'top', 'dark');
+      console.log("Another handler was called!");
+      shareServ.presentToast("Another handler was called!", "top", "dark");
     });
   }
 
@@ -53,32 +56,31 @@ export class AppComponent {
   }
 
   backButtonEvent() {
-    this.platform.backButton.subscribeWithPriority(0, () => {
-      this.shareServ.presentToast("route call", 'top', 'tertiary');
+    this.platform.backButton.subscribeWithPriority(100, async () => {
+      const modal = this.modalCtrl.getTop();
       this.routerOutlets.forEach(async (outlet: IonRouterOutlet) => {
-        if (this.router.url != "/tabs/home") {
-          history.back();
-        } else if (this.router.url === "/tabs/home") {
+        if (this.router.url != "/tabs/home" && this.router.url != "/login") {
+          if (await modal) {
+            console.log("model opened");
+            this.modalCtrl.dismiss();
+          } else {
+            history.back();
+          }
+        } else if (
+          this.router.url === "/tabs/home" ||
+          this.router.url === "/login"
+        ) {
           if (
             new Date().getTime() - this.lastTimeBackPress >=
             this.timePeriodToExit
-            ) {
-        
-              this.lastTimeBackPress = new Date().getTime();
+          ) {
+            this.lastTimeBackPress = new Date().getTime();
             this.presentAlertConfirm();
           } else {
-           App.exitApp();
+            App.exitApp();
           }
         }
       });
-    });
-
-    this.platform.backButton.subscribeWithPriority(100, async () => {
-      this.shareServ.presentToast("modal call", 'top', 'tertiary');
-      const modal = this.modalCtrl.getTop();
-      if(await modal){
-        this.modalCtrl.dismiss();
-      }
     });
   }
 }

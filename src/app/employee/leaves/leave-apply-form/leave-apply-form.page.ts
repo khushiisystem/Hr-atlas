@@ -69,11 +69,15 @@ export class LeaveApplyFormPage implements OnInit {
     this.leaveApplyForm.patchValue({
       endDate: moment.utc(event.detail.value).format()
     });
-    console.log(this.leaveApplyForm.value);
   }
 
   submitForm(){
     if(this.leaveApplyForm.valid){
+      if(this.leaveApplyForm.controls['dayType'].value === 'Half Day'){
+        this.leaveApplyForm.patchValue({
+          endDate: this.leaveApplyForm.controls['startDate'].value
+        });
+      }
       this.saveForm.emit(this.leaveApplyForm.value);
     }
   }

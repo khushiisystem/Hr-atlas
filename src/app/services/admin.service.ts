@@ -79,7 +79,7 @@ export class AdminService {
     getLeaveSetup(): Observable<ILeaveSetupResponse> {
         return this.http.get<ILeaveSetupResponse>(environment.Api + `api/leaveSetup/getLeaveSetup`);
     }
-    leaveApprove(leaveData: {leaveGuid: string, aproveLeave: string}): Observable<any> {
+    leaveApprove(leaveData: {leaveGuid: string, aproveLeave: boolean}): Observable<any> {
         return this.http.put<any>(environment.Api + `api/applyLeave/aproveLeave`, leaveData);
     }
 }
