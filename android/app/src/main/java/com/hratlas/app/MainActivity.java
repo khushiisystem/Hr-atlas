@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.hratlas.app;
 
 import com.getcapacitor.BridgeActivity;
 
