@@ -30,6 +30,9 @@ log.txt
 /bazel-out
 
 # Node
+package-lock.json
+node_modules
+/package-lock.json
 /node_modules
 npm-debug.log
 yarn-error.log
