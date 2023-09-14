@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'HR-Atlas',
   webDir: 'www',
   server: {
-    androidScheme: 'https'
+    androidScheme: 'http'
   }
 };
 
