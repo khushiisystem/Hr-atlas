@@ -53,7 +53,8 @@
 
         <div class="emp_name_role">
           <ion-label class="emp_name">{{employeeDetail.firstName | titlecase}} {{employeeDetail.lastName || "" | titlecase}}</ion-label>
-          <ion-text class="emp_role">{{employeeDetail.role}}</ion-text>
+          <ion-text class="emp_role" *ngIf="employeeDetail.employeeWorkDetails">{{employeeDetail.employeeWorkDetails.jobTitle}}</ion-text>
+          <ion-text class="emp_role" *ngIf="!employeeDetail.employeeWorkDetails && workDetail">{{workDetail.jobTitle}}</ion-text>
         </div>
       </ion-item>
     </ion-card>

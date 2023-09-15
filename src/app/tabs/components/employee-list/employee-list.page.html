@@ -41,7 +41,8 @@
         </div>
         <div class="employee_data" (click)="goToSetup(employee.guid)">
           <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-          <ion-text class="emp_salary"><small>Net Pay</small> <span class="amount">450000</span></ion-text>
+          <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+          <!-- <ion-text class="emp_salary"><small>Net Pay</small> <span class="amount">450000</span></ion-text> -->
         </div>
       </ion-item>
     </ion-list>

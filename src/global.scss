@@ -81,3 +81,12 @@
 }
 
 .action_week_btn{--ripple-color: var(--ion-color-primary);}
+
+.alert-button {
+    &.sc-ion-alert-ios, &.sc-ion-alert-md {
+        &.deleteBtn{
+            color: var(--ion-color-danger);
+        }
+    }
+}
+.alert-sub-title{&.sc-ion-alert-md{margin-top: 10px;}}

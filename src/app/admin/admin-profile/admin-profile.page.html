@@ -6,7 +6,7 @@
     <!-- <img src="../../../assets/images/logo.png" alt="Spundan - The IT Pulse" class="logoImg"> -->
     <!-- <ion-title color="light">Admin Profile</ion-title> -->
     <ion-buttons slot="end">
-      <ion-button mode="md" (click)="logout()" color="danger" fill="solid" shape="round" size="small" class="smLogoutBtn">
+      <ion-button mode="md" (click)="logout()" color="danger" fill="solid" shape="round" size="small" [strong]="true" class="smLogoutBtn">
         <!-- <ion-icon name="log-out-outline" slot="icon-only" aria-hidden="true"></ion-icon> -->
         <ion-label>Log out</ion-label>
       </ion-button>
@@ -50,7 +50,8 @@
     <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
       <div class="emp_avatar" slot="start">
         <ion-avatar class="employee_img">
-          <img alt="Employee" [src]="adminDetail.imageUrl.trim() != '' ? adminDetail.imageUrl : 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+          <app-name-img [name]="getName()" *ngIf="adminDetail.imageUrl.trim() === ''"></app-name-img>
+          <img *ngIf="adminDetail.imageUrl.trim() != ''" [alt]="adminDetail.firstName" [src]="adminDetail.imageUrl" />
         </ion-avatar>
       </div>
 

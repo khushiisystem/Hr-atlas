@@ -42,7 +42,7 @@
             </div>
             <div class="employee_data">
               <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-              <ion-text class="emp_salary"><small>Net Pay</small> <span class="amount">450000</span></ion-text>
+              <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
             </div>
           </ion-item>
       
@@ -65,13 +65,13 @@
             <div slot="start" class="check_container">
               <ion-avatar class="employee_img">
                 <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
-                <img alt="imployee" *ngIf="employee.imageUrl.trim() !== ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+                <img [alt]="getName(employee)" *ngIf="employee.imageUrl.trim() !== ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
             </ion-avatar>
           </div>
           <div class="employee_data">
             <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-            <ion-text class="role"><small>Frontend Developer</small></ion-text>
-          </div>
+            <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+        </div>
         </ion-item>
       </ion-list>
     </div>

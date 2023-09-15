@@ -44,7 +44,7 @@ const routes: Routes = [
   {
     path: 'name-img',
     loadChildren: () => import('./components/name-img/name-img.module').then( m => m.NameImgPageModule)
-  }
+  },
 ];
 
 @NgModule({

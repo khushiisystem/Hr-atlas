@@ -59,8 +59,8 @@ export class AdminService {
     createWorkWeek(data: IWorkWeek): Observable<any> {
         return this.http.post<any>(environment.Api + `api/workWeek`, data);
     }
-    getWorkWeek(): Observable<IWorkWeekResponse[]> {
-        return this.http.get<IWorkWeekResponse[]>(environment.Api + `api/workWeek`);
+    getWorkWeek(pageIndex: number, pageSize: number): Observable<IWorkWeekResponse[]> {
+        return this.http.get<IWorkWeekResponse[]>(environment.Api + `api/workWeek?skip=${pageIndex}&limit=${pageSize}`);
     }
     deletetWorkWeek(workWeekID: string): Observable<any> {
         return this.http.delete<any>(environment.Api + `api/workWeek/${workWeekID}`);

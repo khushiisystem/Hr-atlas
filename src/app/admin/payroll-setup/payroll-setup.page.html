@@ -10,14 +10,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-item [lines]="'full'" class="ion-margin-bottom">
+  <ion-item [lines]="'full'" class="ion-margin-bottom" *ngIf="employeeDetail">
     <div class="emp_avatar" slot="start">
       <ion-avatar class="employee_img">
-        <img alt="imployee" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+        <app-name-img [name]="getName(employeeDetail)" [classes]="''" *ngIf="employeeDetail.imageUrl.trim() === ''"></app-name-img>
+        <img [alt]="employeeDetail.firstName" *ngIf="employeeDetail.imageUrl.trim() !== ''" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
       </ion-avatar>
     </div>
 
-    <ion-label class="emp_name">Arjun Kumar</ion-label>
+    <ion-label class="emp_name">{{employeeDetail.firstName | titlecase}} {{employeeDetail.lastName || '' | titlecase}}</ion-label>
 
     <div class="emp_salary text-end" slot="end">
       <ion-text><small>Net Pay</small><br></ion-text>
