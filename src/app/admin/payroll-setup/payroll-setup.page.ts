@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { IPayrollSetupRequest } from 'src/app/interfaces/request/IPayrollSetup';
+import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
@@ -23,6 +24,7 @@ export class PayrollSetupPage implements OnInit {
   leaveId: string = '';
   employeeId: string = '';
   activeTab: string = 'earning';
+  employeeDetail!: IEmployeeResponse;
 
   constructor(
     private fb: FormBuilder,
@@ -34,9 +36,12 @@ export class PayrollSetupPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loaderServ.present('');
     this.employeeId = this.activeRoute.snapshot.params?.['employeeId'];
     this.today = new Date();
+
+    if(this.employeeId.trim() !== ''){
+      this.getProfile(this.employeeId);
+    }
 
     this.earningForm = this.fb.group({
       ctc: [0, Validators.compose([Validators.required, Validators.min(0)])],
@@ -44,7 +49,8 @@ export class PayrollSetupPage implements OnInit {
       basics: [0, Validators.compose([Validators.min(0)])],
       salary: [0, Validators.compose([Validators.required, Validators.min(0)])],
       specialAllowance: [0, Validators.compose([Validators.min(0)])],
-      payslipDate: [moment.utc(this.payslipDate).format(), Validators.required]
+      payslipDate: [moment.utc(this.payslipDate).format(), Validators.required],
+      employeeId: this.employeeId
     });
 
     this.deductionForm = this.fb.group({
@@ -56,7 +62,25 @@ export class PayrollSetupPage implements OnInit {
 
     console.log(this.earningForm.value, "form");
     console.log(this.deductionForm.value, "form");
-    this.loaderServ.dismiss();
+  }
+
+  getProfile(empId: string) {
+    this.loaderServ.present('fullHide');
+    this.adminServ.getEmployeeById(empId).subscribe(res => {
+      if(res) {
+        this.employeeDetail = res;
+        this.loaderServ.dismiss();
+      }
+    }, (error) => {
+      this.loaderServ.dismiss();
+    });
+  }
+  getName(employee: IEmployeeResponse) {
+    if(employee.lastName && employee.lastName.trim() !== ''){
+      return `${employee.firstName.slice(0,1)}${employee.lastName.slice(0,1)}`;
+    } else {
+      return `${employee.firstName.slice(0,2)}`;
+    }
   }
 
   selectPayslipDate(event: any){

@@ -36,6 +36,7 @@ ion-content {
     justify-content: center;
     margin-top: 5px;
     margin-bottom: 5px;
+    margin-right: 20px;
     border: 2px solid var(--ion-color-light);
     border-radius: 50%;
     background-color: var(--color-primary);
@@ -44,6 +45,10 @@ ion-content {
 .emp_name_role {
     width: 100%;
     overflow: hidden;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
     & .emp_role {font-size: 0.8rem; color: #ebebeb;}
     & .emp_name {
         font-size: 1.4rem;

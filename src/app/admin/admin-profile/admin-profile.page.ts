@@ -71,6 +71,14 @@ export class AdminProfilePage implements OnInit {
   goBack() {history.back();}
 
   logout() {this.authServ.signOut();}
+
+  getName() {
+    if(this.adminDetail.lastName && this.adminDetail.lastName.trim() !== ''){
+      return `${this.adminDetail.firstName.slice(0,1)}${this.adminDetail.lastName.slice(0,1)}`;
+    } else {
+      return `${this.adminDetail.firstName.slice(0,2)}`;
+    }
+  }
   
   handleRefresh(event: any) {
     setTimeout(() => {

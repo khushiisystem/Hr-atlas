@@ -161,7 +161,7 @@
           <ion-row class="row_one">
             <ion-col size="12" sizeSm="6">
               <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="ctc" placeholder="CTC" type="text">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="ctc" placeholder="CTC" type="number" min="0">
                   <div slot="label">CTC <ion-text color="danger">*</ion-text></div>
                 </ion-input>
                 <ion-text color="danger" class="error_txt" *ngIf="getSubGroup('salaryInformation').controls['ctc'].touched && getSubGroup('salaryInformation').controls['ctc'].errors">
@@ -172,7 +172,7 @@
             
             <ion-col size="12" sizeSm="6">
               <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="salary" placeholder="Salary" type="number">
+                <ion-input labelPlacement="floating" fill="outline" formControlName="salary" placeholder="Salary" type="number" min="0">
                   <div slot="label">Salary <ion-text color="danger">*</ion-text></div>
                 </ion-input>
                 <ion-text color="danger" class="error_txt" *ngIf="getSubGroup('salaryInformation').controls['salary'].touched && getSubGroup('salaryInformation').controls['salary'].errors">

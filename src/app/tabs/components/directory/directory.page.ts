@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonInfiniteScroll, ModalController, NavController } from '@ionic/angular';
+import { AlertController, IonInfiniteScroll, ModalController, NavController } from '@ionic/angular';
 import { Subject, debounceTime } from 'rxjs';
 import { AddEmployeePage } from 'src/app/admin/add-employee/add-employee.page';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
@@ -29,6 +29,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   constructor(
     private adminServ: AdminService,
     private modelCtrl: ModalController,
+    private alertCtrl: AlertController,
     private shareServ: ShareService,
     public router: Router,
     private roleStateServ: RoleStateService,
@@ -44,12 +45,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
     this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
       this.searchEmployee(searchValue);
     });
-  }
-  
-  ngAfterContentInit(): void {
-    setTimeout(() => {
-      this.infiniteScroll.complete();
-    }, 2000);
   }
 
   getEmployeeList(){
@@ -103,14 +98,33 @@ export class DirectoryPage implements OnInit, OnDestroy {
     });
   }
 
-  deleteEmployee(employeeItem: any){
-    this.adminServ.deleteEmployee(employeeItem).subscribe(res => {
-      if(res){
-        this.shareServ.presentToast('Employee deleted', 'top', 'success');
-        this.pageIndex = 0;
-        this.getEmployeeList();
-      }
-    }, (error) => {})
+  async deleteEmployee(employeeItem: any){
+    const deleteCtrl = await this.alertCtrl.create({
+      header: 'Delete',
+      subHeader: 'Are you sure, you want to delete this employee?',
+      mode: 'md',
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'cancelBtn',
+        handler: () => {}
+      },{
+        text: 'Delete',
+        role: 'confirm',
+        cssClass: 'deleteBtn',
+        handler: () => {
+          this.adminServ.deleteEmployee(employeeItem).subscribe(res => {
+            if(res){
+              this.shareServ.presentToast('Employee deleted', 'top', 'success');
+              this.pageIndex = 0;
+              this.getEmployeeList();
+            }
+          }, (error) => {console.log(error.error)});
+        }
+      },]
+    });
+
+    await deleteCtrl.present();
   }
 
   viewProfile(empId: string) {

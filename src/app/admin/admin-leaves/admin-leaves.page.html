@@ -16,50 +16,126 @@
 
   <ion-segment [(ngModel)]="activeTab" mode="md">
       <ion-segment-button value="requests">
-          <ion-label>Requested Leaves</ion-label>
+          <ion-label>Requestes</ion-label>
       </ion-segment-button>
-      <!-- <ion-segment-button value="logs">
+      <ion-segment-button value="logs">
           <ion-label>Logs</ion-label>
-      </ion-segment-button> -->
+      </ion-segment-button>
   </ion-segment>
 
   <div *ngIf="activeTab === 'requests'">
-    <ion-card *ngIf="requestedLeaveList.length < 1">
+    <div class="ion-text-center ion-margin" *ngIf="!requestLoaded"><ion-spinner name="circular" color="tertiary"></ion-spinner></div>
+    
+    <ion-card *ngIf="requestLoaded && requestedLeaveList.length < 1">
         <ion-card-content class="ion-text-center">
             <ion-label color="dark">No any request.</ion-label>
         </ion-card-content>
     </ion-card>
+
     <ion-card class="log_card" mode="md" *ngFor="let leaveItem of requestedLeaveList; index as a">
       <ion-card-header>
-        <ion-card-subtitle *ngIf="leaveItem.employeeDetails">
+        <div>
+          <ion-card-subtitle *ngIf="leaveItem.employeeDetails">
             {{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || "" | titlecase}}
-        </ion-card-subtitle>
+          </ion-card-subtitle>
           <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
+        </div>
+        <div class="ion-text-end">
+          <ion-chip [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-chip>
+        </div>
       </ion-card-header>
       <ion-card-content>
-          <p><ion-label>{{leaveItem.dayType}}</ion-label></p>
-          <p><ion-label>From - </ion-label> <ion-text>{{leaveItem.startDate | date}}</ion-text></p>
-          <p *ngIf="leaveItem.endDate"><ion-label>To - </ion-label> <ion-text>{{leaveItem.endDate | date}}</ion-text></p>
+          <ion-row class="ion-margin-bottom">
+            <ion-col size="6">
+              <div class="flex-div">
+                <ion-label>Applied On</ion-label>
+                <ion-text>{{leaveItem.created_date | date}}</ion-text>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="flex-div">
+                <ion-label>Day Type</ion-label>
+                <ion-text>{{leaveItem.dayType}}</ion-text>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="flex-div">
+                <ion-label>From</ion-label>
+                <ion-text>{{leaveItem.startDate | date}}</ion-text>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="flex-div">
+                <ion-label>To</ion-label>
+                <ion-text>{{leaveItem.endDate | date}}</ion-text>
+              </div>
+            </ion-col>
+          </ion-row>
           <p><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
       </ion-card-content>
+
       <ion-button type="button" color="danger" fill="clear" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
       <ion-button type="button" color="primary" fill="clear" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
     </ion-card>
   </div>
 
   <div *ngIf="activeTab === 'logs'">
-    <ion-card class="log_card" mode="md" *ngFor="let leaveItem of leaveLogs; index as a">
-        <ion-card-header>
-            <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-            <p><ion-label>{{leaveItem.dayType}}</ion-label></p>
-            <p><ion-label>From - </ion-label> <ion-text>{{leaveItem.startDate | date}}</ion-text></p>
-            <p *ngIf="leaveItem.endDate"><ion-label>To - </ion-label> <ion-text>{{leaveItem.endDate | date}}</ion-text></p>
-            <div class="ion-text-end">
-                <ion-chip [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-chip>
-            </div>
+    <div class="ion-text-center ion-margin" *ngIf="!logsLoaded"><ion-spinner name="circular" color="tertiary"></ion-spinner></div>
+    
+    <ion-card *ngIf="logsLoaded && leaveLogs.length < 1">
+        <ion-card-content class="ion-text-center">
+            <ion-label color="dark">No any leave assigned you.</ion-label>
         </ion-card-content>
     </ion-card>
+
+    <ion-card class="log_card" mode="md" *ngFor="let leaveItem of leaveLogs; index as a">
+      <ion-card-header>
+        <div>
+          <ion-card-subtitle *ngIf="leaveItem.employeeDetails">
+            {{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || "" | titlecase}}
+          </ion-card-subtitle>
+          <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
+        </div>
+        <div class="ion-text-end">
+          <ion-chip [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-chip>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row class="ion-margin-bottom">
+          <ion-col size="6">
+              <div class="flex-div">
+                <ion-label>From</ion-label>
+                <ion-text>{{leaveItem.created_date | date}}</ion-text>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="flex-div">
+                <ion-label>From</ion-label>
+                <ion-text>{{leaveItem.dayType}}</ion-text>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="flex-div">
+                <ion-label>From</ion-label>
+                <ion-text>{{leaveItem.startDate | date}}</ion-text>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="flex-div">
+                <ion-label>To</ion-label>
+                <ion-text>{{leaveItem.endDate | date}}</ion-text>
+              </div>
+            </ion-col>
+          </ion-row>
+          <p><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
+      </ion-card-content>
+      
+      <ion-button type="button" color="danger" fill="clear" *ngIf="leaveItem.status === 'Pending'" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
+      <ion-button type="button" color="primary" fill="clear" *ngIf="leaveItem.status === 'Pending'" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
+    </ion-card>
   </div>
+
+  <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadMoreData($any($event))" [position]="'bottom'" *ngIf="moreRequests || moreLogs">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

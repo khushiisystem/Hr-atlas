@@ -46,9 +46,8 @@
                 <ion-text><strong>{{workWeekItem.employees ? workWeekItem.employees.length : 'No'}}</strong> Employees</ion-text>
               </div>
             </ion-item>
-            <ion-card-content *ngIf="expandedCard === workWeekItem.title">
-              <ion-chip color="primary">Akash Sharma</ion-chip>
-              <ion-chip color="tertiary">Ambikesh kumar</ion-chip>
+            <ion-card-content *ngIf="(expandedCard === workWeekItem.title) && workWeekItem.employeeDetails">
+              <ion-chip color="primary" *ngFor="let employee of workWeekItem.employeeDetails">{{employee.firstName | titlecase}} {{employee.lastName || "" | titlecase}}</ion-chip>
             </ion-card-content>
           </ion-card>
 
