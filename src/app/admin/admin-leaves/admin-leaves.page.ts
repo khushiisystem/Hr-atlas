@@ -56,7 +56,10 @@ export class AdminLeavesPage implements OnInit {
           this.shareServ.presentToast('Responded', 'top', 'success');
         }
         this.loader.dismiss();
+        this.pageNumber = 0;
+        this.logPageNumber = 0;
         this.requestedLeaves();
+        this.getLogs();
       }
     }, (error) => {
       this.shareServ.presentToast(error.error.message, 'top', 'danger');
@@ -67,6 +70,9 @@ export class AdminLeavesPage implements OnInit {
   getLogs(){
     this.logsLoaded = false;
     const data = {};
+    if(this.logPageNumber < 1){
+      this.requestedLeaveList = []
+    }
     this.shareServ.getLeaveList(data, this.logPageNumber * 20, 20).subscribe(res => {
       if(res) {
         if(res.length < 1){this.moreLogs = false; this.logsLoaded = true;}
@@ -91,6 +97,9 @@ export class AdminLeavesPage implements OnInit {
     const data = {
       status: 'Pending'
     };
+    if(this.pageNumber < 1){
+      this.requestedLeaveList = []
+    }
     this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
       if(res) {
         if(res.length < 1){this.moreLogs = false; this.requestLoaded = true;}

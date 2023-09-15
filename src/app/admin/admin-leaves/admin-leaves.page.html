@@ -71,7 +71,7 @@
               </div>
             </ion-col>
           </ion-row>
-          <p><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
+          <p class="purpose"><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
       </ion-card-content>
 
       <ion-button type="button" color="danger" fill="clear" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
@@ -127,7 +127,7 @@
               </div>
             </ion-col>
           </ion-row>
-          <p><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
+          <p class="purpose"><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
       </ion-card-content>
       
       <ion-button type="button" color="danger" fill="clear" *ngIf="leaveItem.status === 'Pending'" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>

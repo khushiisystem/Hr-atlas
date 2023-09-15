@@ -133,9 +133,9 @@ export class LeavesPage implements OnInit {
       if(res){
         this.showApplyForm = false;
         this.shareServ.presentToast('Leave requested successfully', 'top', 'success');
-        this.getLeaveStatus();
-        this.getLogs();
         this.loader.dismiss();
+        this.getLogs();
+        this.getLeaveStatus();
       }
     }, (error) => {
       this.shareServ.presentToast('Something went wrong', 'top', 'danger');
