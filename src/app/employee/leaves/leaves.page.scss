@@ -30,10 +30,25 @@ ion-segment {
     }
 
     & ion-row{margin-left: -5px; margin-right: -5px;}
+    & .purpose {white-space: pre-line;}
 }
 
 .log_card {
     color: var(--ion-color-dark-tint);
+
+    & ion-card-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+    & ion-row{margin-left: -5px; margin-right: -5px;}
+    & .flex-div {
+        display: flex;
+        flex-direction: column;
+
+        & ion-text {font-size: 0.97rem; font-weight: 500;}
+    }
 
     & .flexItem{
         display: flex;
@@ -45,6 +60,7 @@ ion-segment {
     }
 
     & .cancelBtn {text-transform: capitalize;}
+    & .purpose {white-space: pre-line;}
 }
 
 .apply-button-row {

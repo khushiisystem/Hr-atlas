@@ -75,7 +75,7 @@ export class ProfilePage implements OnInit {
       showBackdrop: true,
       backdropDismiss: false,
       initialBreakpoint: 1,
-      componentProps: {employeeId: this.employeeId}
+      componentProps: {userId: this.employeeId}
     });
 
     (await profileModal).present();

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { ShareService } from '../services/share.service';
 import { IEmployeeResponse } from '../interfaces/response/IEmployee';
@@ -32,6 +32,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
     private shareServ: ShareService,
     private roleStateServ: RoleStateService,
     private loader: LoaderService,
@@ -120,29 +121,48 @@ export class Tab1Page implements OnInit, AfterViewInit {
     });
   }
 
-  clockOut() {
-    this.loader.present('');
+  async clockOut(){
+    const clockOutAlert = await this.alertCtrl.create({
+      header: 'Clock out',
+      subHeader: 'Are you sure, you want to clock out?',
+      mode: 'md',
+      buttons: [{
+        text: 'No',
+        role: 'cancel',
+        cssClass: 'cancelBtn',
+        handler: () => {}
+      },{
+        text: 'Yes',
+        role: 'confirm',
+        cssClass: 'deleteBtn',
+        handler: () => {
+          this.loader.present('');
 
-    clearInterval(this.stopwatchInterval);
-    this.stopwatchTime = '00:00:00';
+          clearInterval(this.stopwatchInterval);
+          this.stopwatchTime = '00:00:00';
 
-    const clockId = localStorage.getItem('clockinId');
-    if(clockId){
-      this.shareServ.clockOut(clockId).subscribe(res => {
-        if(res){
-          console.log(res);
-          this.isRunning = false;
-          this.buttonLabel = 'Clock In';
+          const clockId = localStorage.getItem('clockinId');
+          if(clockId){
+            this.shareServ.clockOut(clockId).subscribe(res => {
+              if(res){
+                console.log(res);
+                this.isRunning = false;
+                this.buttonLabel = 'Clock In';
+                this.loader.dismiss();
+                localStorage.removeItem('clockinId');
+                localStorage.removeItem('clockOutTime');
+                localStorage.removeItem('clockInTime');
+              }
+            }, (error) => {
+              this.loader.dismiss();
+            });
+          }
           this.loader.dismiss();
-          localStorage.removeItem('clockinId');
-          localStorage.removeItem('clockOutTime');
-          localStorage.removeItem('clockInTime');
         }
-      }, (error) => {
-        this.loader.dismiss();
-      });
-    }
-    this.loader.dismiss();
+      },]
+    });
+
+    await clockOutAlert.present();
   }
 
   formatTime(seconds: number): string {
