@@ -42,10 +42,6 @@ const routes: Routes = [
     title: "Work Week",
     component: EmployeeWorkWeekPage,
   },
-  {
-    path: 'admin-leaves',
-    loadChildren: () => import('./admin/admin-leaves/admin-leaves.module').then( m => m.AdminLeavesPageModule)
-  },
 ];
 @NgModule({
   imports: [

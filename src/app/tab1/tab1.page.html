@@ -7,7 +7,7 @@
     </ion-avatar>
     <ion-title>HR Atlas</ion-title>
 
-    <ion-button mode="md" slot="end" shape="round" [strong]="true" [color]="isRunning ? 'success' : 'primary'" fill="solid" class="ion-padding-horizontal ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
+    <ion-button mode="md" slot="end" shape="round" [strong]="true" [color]="'primary'" fill="solid" class="ion-padding-horizontal ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
       <span class="stopwatch-time">{{ buttonLabel }}</span>
       <ion-icon slot="end" icon="time"></ion-icon>
     </ion-button>
@@ -24,7 +24,7 @@
 
   <!-- <div class="ion-text-center"><ion-spinner color="medium" *ngIf="!isDataLoaded || !userDetails" name="circular"></ion-spinner></div> -->
 
-  <ion-card mode="ios" color="success" class="time_card" *ngIf="userDetails && userRole === 'Employee' && isRunning">
+  <ion-card mode="ios" color="primary" class="time_card" *ngIf="userDetails && userRole === 'Employee' && isRunning">
     <ion-card-header>
       <ion-card-title>Work Duration</ion-card-title>
       <ion-icon name="time" size="large"></ion-icon>
@@ -32,7 +32,7 @@
     <ion-card-content>
       <div class="flex_div">
         <ion-label class="stopwatch-time">{{ stopwatchTime }}</ion-label>
-        <ion-button mode="ios" [shape]="'round'" [strong]="true" color="danger" (click)="toggleStopwatch()">Clock Out</ion-button>
+        <ion-button mode="ios" [shape]="'round'" [strong]="true" color="light" (click)="toggleStopwatch()">Clock Out</ion-button>
       </div>
     </ion-card-content>
   </ion-card>

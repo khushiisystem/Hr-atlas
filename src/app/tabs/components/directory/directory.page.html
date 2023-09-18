@@ -61,18 +61,20 @@
           <ion-label class="ion-text-center">No any employee.</ion-label>
         </ion-item>
   
-        <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile(employee.guid)" *ngFor="let employee of employeeList; index as i;">
-            <div slot="start" class="check_container">
-              <ion-avatar class="employee_img">
-                <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
-                <img [alt]="getName(employee)" *ngIf="employee.imageUrl.trim() !== ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-            </ion-avatar>
-          </div>
-          <div class="employee_data">
-            <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-            <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
-        </div>
-        </ion-item>
+        <ng-container *ngFor="let employee of employeeList; index as i;">
+          <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile(employee.guid)" *ngIf="employee.guid !== userId">
+              <div slot="start" class="check_container">
+                <ion-avatar class="employee_img">
+                  <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+                  <img [alt]="getName(employee)" *ngIf="employee.imageUrl.trim() !== ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+                </ion-avatar>
+              </div>
+              <div class="employee_data">
+                <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
+                <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+            </div>
+          </ion-item>
+        </ng-container>
       </ion-list>
     </div>
     

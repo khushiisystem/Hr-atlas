@@ -53,7 +53,8 @@ const routes: Routes = [
       {
         path: 'profile',
         loadChildren: () => import('../employee/profile/profile.module').then(m => m.ProfilePageModule),
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard, RoleGuard],
+        data: {role: "Admin"}
       },
       {
         path: 'admin-profile',
@@ -66,6 +67,8 @@ const routes: Routes = [
         path: 'add-employee',
         title: "Add Employee",
         component: AddEmployeePage,
+        canActivate: [AuthGuard, RoleGuard],
+        data: {role: "Admin"}
       },
       {
         path: 'employee-list',
@@ -89,7 +92,8 @@ const routes: Routes = [
       {
         path: 'employee-profile/:employeeId',
         title: "Employee Profile",
-        component: EmployeeProfilePage
+        component: EmployeeProfilePage,
+        canActivate: [AuthGuard]
       },
       {
         path: 'employee/workinfo',
@@ -114,7 +118,9 @@ const routes: Routes = [
       {
         path: 'leaves',
         title: "Apply Leave",
-        component: LeavesPage
+        component: LeavesPage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Employee"}
       },
       {
         path: 'admin-leaves',
@@ -126,7 +132,8 @@ const routes: Routes = [
       {
         path: 'directory',
         title: 'Directory',
-        component: DirectoryPage
+        component: DirectoryPage,
+        canActivate:[AuthGuard],
       },
       {
         path: '',

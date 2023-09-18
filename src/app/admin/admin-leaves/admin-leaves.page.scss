@@ -1,3 +1,10 @@
+
+.tab_segement {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+}
 .log_card {
     color: var(--ion-color-dark-tint);
     & ion-card-header {

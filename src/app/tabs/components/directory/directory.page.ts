@@ -25,6 +25,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   selectedEmployee: any[] = [];
   private searchSubject = new Subject<string>();
   private readonly debounceTimeMs = 3000;
+  userId: string = '';
 
   constructor(
     private adminServ: AdminService,
@@ -33,7 +34,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     private shareServ: ShareService,
     public router: Router,
     private roleStateServ: RoleStateService,
-  ) { }
+  ) { this.userId = localStorage.getItem("userId") || ''; }
 
   ngOnInit() {
     this.roleStateServ.getState().subscribe(res => {

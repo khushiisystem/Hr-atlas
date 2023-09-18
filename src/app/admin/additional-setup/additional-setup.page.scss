@@ -2,6 +2,11 @@
     ion-title{display: block; text-align: center;}
 }
 .tab_segement {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+
     ion-segment-button {
         border-bottom: 2px solid var(--ion-color-primary);
         text-transform: capitalize;
