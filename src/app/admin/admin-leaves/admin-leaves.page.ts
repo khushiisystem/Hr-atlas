@@ -81,7 +81,7 @@ export class AdminLeavesPage implements OnInit {
           this.leaveLogs.push(res[i]);
         }
         this.moreLogs = res.length > 19;
-        if(this.activeTab === 'logs'){
+        if(this.activeTab === 'logs' && !this.moreLogs){
           this.infiniteScroll.complete();
         }
         this.logsLoaded = true;
@@ -102,13 +102,13 @@ export class AdminLeavesPage implements OnInit {
     }
     this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
       if(res) {
-        if(res.length < 1){this.moreLogs = false; this.requestLoaded = true;}
+        if(res.length < 1){this.moreRequests = false; this.requestLoaded = true;}
 
         for(let i=0; i < res.length; i++){
           this.requestedLeaveList.push(res[i]);
         }
-        this.moreLogs = res.length > 19;
-        if(this.activeTab === 'requests'){
+        this.moreRequests = res.length > 19;
+        if(this.activeTab === 'requests'  && this.infiniteScroll && !this.moreRequests){
           this.infiniteScroll.complete();
         }
         this.requestLoaded = true;

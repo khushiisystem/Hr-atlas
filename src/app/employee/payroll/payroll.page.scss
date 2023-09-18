@@ -22,6 +22,10 @@
 .payrollSegment {
     // border-bottom: 1px solid var(--ion-color-primary);
     // background-color: var(--ion-color-primary);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
 
     & ion-segment-button {
         --padding-start: 0; --padding-end: 0;
