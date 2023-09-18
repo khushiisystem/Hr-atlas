@@ -36,7 +36,8 @@
     position: relative;
     width: 100%;
 
-    & .password_input input {
+    & .password_input input,
+    & .flex_input input {
         padding-right: 35px;
     }
 
@@ -90,3 +91,8 @@
     }
 }
 .alert-sub-title{&.sc-ion-alert-md{margin-top: 10px;}}
+
+.sc-ion-buttons-md-h.datemodal_btns {
+    column-gap: 10px;
+    & ion-button {min-width: 90px;}
+}

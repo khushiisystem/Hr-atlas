@@ -11,6 +11,7 @@ import { IWorkWeekResponse } from "../interfaces/response/IWorkWeek";
 import { ILeaveSetupRequest } from "../interfaces/request/ILeaveSetup";
 import { ILeaveSetupResponse } from "../interfaces/response/ILeave";
 import { IEmployeeWorkRequest } from "../interfaces/request/IEmployeeWork";
+import { ISalarySetupRequest } from "../interfaces/request/ISalarySetup";
 
 @Injectable({
     providedIn: 'root'
@@ -81,5 +82,17 @@ export class AdminService {
     }
     leaveApprove(leaveData: {leaveGuid: string, aproveLeave: boolean}): Observable<any> {
         return this.http.put<any>(environment.Api + `api/applyLeave/aproveLeave`, leaveData);
+    }
+
+
+    // payroll and salary setup
+    employeeSalarySetup(salaryData: ISalarySetupRequest): Observable<ISalarySetupRequest> {
+        return this.http.post<ISalarySetupRequest>(environment.Api + `api/applyLeave/salary`, salaryData);
+    }
+    deleteEmployeeSalarySetup(salarysetupId: string): Observable<ISalarySetupRequest> {
+        return this.http.delete<ISalarySetupRequest>(environment.Api + `api/applyLeave/salary/${salarysetupId}`);
+    }
+    getEmloyeeSalarySetup(userId: string): Observable<ISalarySetupRequest> {
+        return this.http.get<ISalarySetupRequest>(environment.Api + `api/salary/employeeId/${userId}`);
     }
 }

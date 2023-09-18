@@ -1,0 +1,30 @@
+form {
+    margin-top: 16px;
+    margin-bottom: 16px;
+    ion-row {row-gap: 10px;}
+
+    .sub_total{
+        min-height: 56px;
+        border: 1px solid #b3b3b3;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        line-height: 1.5;
+        padding-top: 7px;
+        padding-bottom: 7px;
+
+        & > * {padding-top: 4px; padding-bottom: 4px;}
+    }
+}
+.submitBtn {
+    --background: rgb(255, 106, 0);
+    --color: #fff;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1rem;
+    height: 45px;
+    font-weight: 600;
+}

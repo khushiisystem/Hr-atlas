@@ -1,0 +1,42 @@
+
+<div class="container ion-padding-top"  *ngIf="userRole === 'Admin'">
+  <ion-row class="ion-padding-horizontal">
+    <ion-col size="12">
+      <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+    </ion-col>
+    <ion-col size="12" *ngIf="isChecklist">
+      <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === 3" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
+    </ion-col>
+  </ion-row>
+  <div class="ion-text-center ion-margin" *ngIf="!isDataLoaded">
+    <ion-spinner color="primary" name="circular"></ion-spinner>
+  </div>
+
+  <ion-list *ngIf="isDataLoaded">
+    <ion-item lines="none" [button]="false" *ngIf="employeeList.length === 0">
+      <ion-label class="ion-text-center">No any employee.</ion-label>
+    </ion-item>
+
+    <ion-item lines="full" [button]="true" [detail]="true" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="selectEmployee(employee)">
+      <div slot="start" class="check_container" (click)="checkEmployee(employee.guid)">
+        <ion-avatar class="employee_img">
+          <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+          <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl" />
+        </ion-avatar>
+        <div class="custom_checkbox" *ngIf="isChecklist && isChecked(employee.guid)">
+          <span class="checkmark"></span>
+        </div>
+      </div>
+      <div class="employee_data">
+        <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
+        <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+      </div>
+    </ion-item>
+  </ion-list>
+</div>
+
+
+<ion-infinite-scroll #infiniteScroll (ionInfinite)="isMoreData ? loadData($any($event)) : ''" [position]="'bottom'">
+  <ion-infinite-scroll-content *ngIf="isMoreData" loadingSpinner="bubbles" loadingText="Loading more data...">
+  </ion-infinite-scroll-content>
+</ion-infinite-scroll>

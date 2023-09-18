@@ -1,0 +1,117 @@
+<ion-header [translucent]="true" mode="md">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
+        <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Salary Setup</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="!employee && employeeId.trim() === ''">
+    <app-employees [isChecklist]="false" (employee)="selectEmploye($event)"></app-employees>
+  </ng-container>
+
+  <div *ngIf="employee" class="ion-padding">
+    <form [formGroup]="salarySetupForm" (ionChange)="calculateTotal();" (ionInput)="calculateTotal()">
+      <ion-row class="form_row">
+        <ion-col size="12">
+          <div class="form-input">
+            <ion-input labelPlacement="floating" fill="outline" formControlName="employeeId" placeholder="Employee" class="flex_input" [readonly]="true" [tabIndex]="1">
+              <div slot="label">Employee Id <ion-text color="danger">*</ion-text></div>
+            </ion-input>
+  
+            <div class="toggleBtn">
+              <ion-button mode="md" slot="end" fill="clear" (click)="reseteEmployee()">
+                <ion-icon name="pencil-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+          <ion-text color="danger" class="error_txt" *ngIf="salarySetupForm.controls['employeeId'].touched && salarySetupForm.controls['employeeId'].errors">Employee Id is required</ion-text>
+        </ion-col>
+
+        <ion-col size="12" *ngIf="employee">
+          <div class="form-input">
+            <ion-input labelPlacement="floating" fill="outline" placeholder="Employee Name" [readonly]="true" [value]="employee.firstName + ' ' + (employee.lastName || '')" [readonly]="true">
+              <div slot="label">Employee</div>
+            </ion-input>
+          </div>
+        </ion-col>
+
+        <ion-col size="12" sizeSm="6">
+          <div class="form-input" (click)="openCalendar1 = true">
+            <ion-input labelPlacement="floating" fill="outline" placeholder="Effective Date" class="flex_input" [value]="getValue('effectiveDate') | date" [readonly]="true">
+              <div slot="label">Effective Date <ion-text color="danger">*</ion-text></div>
+            </ion-input>
+  
+            <div class="toggleBtn">
+              <ion-button mode="md" slot="end" fill="clear">
+                <ion-icon name="calendar-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="12" sizeSm="6">
+          <div class="form-input">
+            <ion-input labelPlacement="floating" fill="outline" placeholder="Last Increment Date" class="flex_input" [value]="getValue('lastIncrementDate') | date" [readonly]="true">
+              <div slot="label">Last Increment Date</div>
+            </ion-input>
+          </div>
+        </ion-col>
+        
+        <ion-col size="12">
+          <h3><ion-label>CTC</ion-label></h3>
+          <div class="form-input">
+            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Current CTC" formControlName="current_ctc" [required]="true" min="0">
+              <div slot="label">Current CTC</div>
+            </ion-input>
+          </div>
+          <ion-text color="danger" class="error_txt" *ngIf="salarySetupForm.controls['current_ctc'].touched && salarySetupForm.controls['current_ctc'].errors">CTC is required</ion-text>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="form-input">
+            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Hike in %" formControlName="increment" [required]="true" min="0">
+              <div slot="label">Hike in %</div>
+            </ion-input>
+          </div>
+          <ion-text color="danger" class="error_txt" *ngIf="salarySetupForm.controls['increment'].touched && salarySetupForm.controls['increment'].errors">Hke percentage is required</ion-text>
+        </ion-col>
+
+        <ion-col size="12">
+          <div class="sub_total ion-padding-horizontal">
+            <div>
+              <ion-label>Calculated Value</ion-label>
+            </div>
+            <div *ngIf="calculatedValue > 0">
+              <ion-label>{{calculatedValue | currency:'INR'}}</ion-label>
+            </div>
+          </div>
+        </ion-col>
+
+        <ion-col size="12">
+          <ion-text>{{openCalendar1}}</ion-text>
+          <ion-button mode="md" [expand]="'full'" class="submitBtn" shape="round" [disabled]="salarySetupForm.invalid || isInProcess" (click)="submit()">Submit</ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-modal [isOpen]="openCalendar1" mode="md" [keepContentsMounted]="true" #effectiveDateModal (ionModalDidDismiss)="openCalendar1 = false" [initialBreakpoint]="0.65">
+        <ng-template>
+          <ion-content>
+            <ion-datetime [preferWheel]="true" [presentation]="'date'" mode="md" [size]="'cover'" [showDefaultTitle]="true" #effectiveDate (ionChange)="setEffectiveDate($any($event))">
+              <ion-label slot="title">Select Effective Date</ion-label>
+
+              <ion-buttons slot="buttons" class="datemodal_btns">
+                <ion-button color="danger" shape="round" [strong]="true" class="cancel_btn" (click)="effectiveDate.cancel(); openCalendar1 = false;">Cancel</ion-button>
+                <ion-button color="primary" fill="solid" shape="round" [strong]="true" class="saveBtn" [disabled]="effectiveDate.isDateEnabled" (click)="effectiveDate.confirm();">Done</ion-button>
+              </ion-buttons>
+            </ion-datetime>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </form>
+  </div>
+</ion-content>
