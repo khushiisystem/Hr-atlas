@@ -1,7 +1,48 @@
+ion-item, ion-card {
+    --ripple-color: var(--ion-color-primary)
+}
+
+ion-accordion ion-item[slot="header"], .btn_item {--ripple-color: var(--ion-color-primary)}
+.accordion_head_item {
+    & div {
+        padding: 15px 0;
+        white-space: break-spaces;
+        overflow: hidden;
+        line-height: 1.5;
+
+        // & ion-label {color: var(--ion-color-primary);}
+    }
+    & .sub-header {
+        font-size: 0.8rem;
+        color: var(--ion-color-primary);
+        white-space: nowrap;
+        display: block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+    }
+}
+
+.nested_item {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    & ion-label {font-size: 1rem; color: var(--ion-color-dark);}
+}
+.decorative-line {
+    height: 2px;
+    background-color: #fff;
+    margin: 10px 0;
+}
+
 .header-toolbar {
     --ion-toolbar-background: rgb(255, 106, 0);
     --ion-color-base: black;
 }
-ion-item, ion-card {
-    --ripple-color: var(--ion-color-primary)
+.nested_item_btn{--padding-start: 5px; --inner-padding-end: 5px; --ripple-color: var(--ion-color-primary);}
+
+.loadingContent {
+    & ion-card, & ion-item {--background: transparent;}
 }

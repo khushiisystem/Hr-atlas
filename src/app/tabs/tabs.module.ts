@@ -27,6 +27,9 @@ import { DirectoryPage } from "./components/directory/directory.page";
 import { RoleGuard } from "../core/role.guard";
 import { AdminLeavesPageModule } from "../admin/admin-leaves/admin-leaves.module";
 import { AddExperiencePageModule } from "../admin/add-experience/add-experience.module";
+import { EmployeesPageModule } from "../share/employees/employees.module";
+import { SalarySetupPage } from "../admin/salary-setup/salary-setup.page";
+import { SalaryIncrementsPage } from "../admin/salary-increments/salary-increments.page";
 
 @NgModule({
   declarations: [
@@ -46,6 +49,8 @@ import { AddExperiencePageModule } from "../admin/add-experience/add-experience.
     LeavesPage,
     LeaveApplyFormPage,
     DirectoryPage,
+    SalarySetupPage,
+    SalaryIncrementsPage,
   ],
   imports: [
     IonicModule,
@@ -57,6 +62,7 @@ import { AddExperiencePageModule } from "../admin/add-experience/add-experience.
     NameImgPageModule,
     AdminLeavesPageModule,
     AddExperiencePageModule,
+    EmployeesPageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, RoleGuard],
