@@ -1,0 +1,38 @@
+.attendance_list {
+    padding: 5px 10px;
+}
+.attendance_Card{
+    margin-inline: 5px;
+
+    & ion-card-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 10px;
+        background-color: var(--ion-color-light-tint);
+    }
+
+    & .sort_desc {
+        & ion-text{color: var(--ion-color-dark-tint); font-size: 0.9rem;}
+        & ion-label{color: var(--color-blue-gray); font-size: 1rem;}
+    }
+}
+
+form {
+    color: var(--ion-color-dark);
+    .form_row {
+        row-gap: 10px;
+        margin-top: 5px;
+        padding-top: 20px;
+        border-top: 1px solid var(--ion-color-dark);
+    }
+
+    ion-button {
+        min-height: 50px;
+        font-size: 1.1rem;
+    }
+    h6 {
+        font-size: 1rem;
+        margin-left: 5px;
+    }
+}

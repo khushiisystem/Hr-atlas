@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { AttendanceSetupRequest } from "../interfaces/request/IAttendanceSetup";
+import { AttendanceSetupRequest, udpateAttendanceRequst } from "../interfaces/request/IAttendanceSetup";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response/IEmployee";
 import { IAttendanceSetupResponse } from "../interfaces/response/IAttendanceSetup";
@@ -54,6 +54,9 @@ export class AdminService {
     }
     getAttendanceSetup(): Observable<IAttendanceSetupResponse>{
         return this.http.get<IAttendanceSetupResponse>(environment.Api + `api/attendancesetup`);
+    }
+    updateEmployeeAttendance(attendanceData: udpateAttendanceRequst): Observable<any> {
+        return this.http.put<any>(environment.Api + `api/attendance`, attendanceData);
     }
 
     // assign work week

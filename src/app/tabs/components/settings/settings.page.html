@@ -15,13 +15,18 @@
       <ion-item slot="header" class="accordion_head_item">
         <div>
           <ion-label>Primary Setups</ion-label>
-          <ion-text class="sub-header">Attendance Setup</ion-text>
+          <ion-text class="sub-header">Attendance Setup, Employee Attendance</ion-text>
         </div>
       </ion-item>
       <div class="ion-padding" slot="content">
-        <ion-item [lines]="'none'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="attendanceSetup()">
+        <ion-item [lines]="'full'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="attendanceSetup()">
           <ion-icon name="hourglass-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
           <ion-label color="primary">Attendance Setup</ion-label>
+        </ion-item>
+
+        <ion-item [lines]="'none'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" [routerLink]="['/tabs/employee-attendance']" routerLinkActive="router-link-active" >
+          <ion-icon name="people-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
+          <ion-label color="primary">Employee Attendance</ion-label>
         </ion-item>
       </div>
     </ion-accordion>

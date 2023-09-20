@@ -22,6 +22,7 @@ import { AddExperiencePage } from '../admin/add-experience/add-experience.page';
 import { SalarySetupPage } from '../admin/salary-setup/salary-setup.page';
 import { SalaryIncrementsPage } from '../admin/salary-increments/salary-increments.page';
 import { ViewCalendarPage } from '../admin/view-calendar/view-calendar.page';
+import { EmployeeAttendancePage } from '../admin/employee-attendance/employee-attendance.page';
 
 const routes: Routes = [
   {
@@ -158,6 +159,13 @@ const routes: Routes = [
         component: ViewCalendarPage,
         canActivate:[AuthGuard],
         data: {role: "Admin"}
+      },
+      {
+        path: 'employee-attendance',
+        title: 'Employee Attendance',
+        component: EmployeeAttendancePage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"},
       },
       {
         path: '',
