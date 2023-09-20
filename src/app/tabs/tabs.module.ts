@@ -30,6 +30,8 @@ import { AddExperiencePageModule } from "../admin/add-experience/add-experience.
 import { EmployeesPageModule } from "../share/employees/employees.module";
 import { SalarySetupPage } from "../admin/salary-setup/salary-setup.page";
 import { SalaryIncrementsPage } from "../admin/salary-increments/salary-increments.page";
+import { HollydaySetupPage } from "../admin/hollyday-setup/hollyday-setup.page";
+import { ViewCalendarPage } from "../admin/view-calendar/view-calendar.page";
 
 @NgModule({
   declarations: [
@@ -51,6 +53,8 @@ import { SalaryIncrementsPage } from "../admin/salary-increments/salary-incremen
     DirectoryPage,
     SalarySetupPage,
     SalaryIncrementsPage,
+    HollydaySetupPage,
+    ViewCalendarPage,
   ],
   imports: [
     IonicModule,

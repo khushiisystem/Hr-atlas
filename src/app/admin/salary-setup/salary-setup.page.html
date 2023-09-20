@@ -66,7 +66,7 @@
           <h3><ion-label>CTC</ion-label></h3>
           <div class="form-input">
             <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Current CTC" formControlName="current_ctc" [required]="true" min="0">
-              <div slot="label">Current CTC</div>
+              <div slot="label">Current CTC <ion-text color="danger">*</ion-text></div>
             </ion-input>
           </div>
           <ion-text color="danger" class="error_txt" *ngIf="salarySetupForm.controls['current_ctc'].touched && salarySetupForm.controls['current_ctc'].errors">CTC is required</ion-text>
@@ -75,7 +75,7 @@
         <ion-col size="12">
           <div class="form-input">
             <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Hike in %" formControlName="increment" [required]="true" min="0">
-              <div slot="label">Hike in %</div>
+              <div slot="label">Hike in % <ion-text color="danger">*</ion-text></div>
             </ion-input>
           </div>
           <ion-text color="danger" class="error_txt" *ngIf="salarySetupForm.controls['increment'].touched && salarySetupForm.controls['increment'].errors">Hke percentage is required</ion-text>
@@ -93,7 +93,6 @@
         </ion-col>
 
         <ion-col size="12">
-          <ion-text>{{openCalendar1}}</ion-text>
           <ion-button mode="md" [expand]="'full'" class="submitBtn" shape="round" [disabled]="salarySetupForm.invalid || isInProcess" (click)="submit()">Submit</ion-button>
         </ion-col>
       </ion-row>

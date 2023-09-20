@@ -58,7 +58,7 @@ export class AttendancePage implements OnInit {
     }
     if(this.pageIndex < 1){this.attendanceList = [];}
 
-    this.shareServ.employeeAttendance(data).subscribe(res => {
+    this.shareServ.employeeAttendance(this.userId, this.pageIndex * 30, 30).subscribe(res => {
       if(res) {
         this.attendanceList = res;
         for(let i=0; i<res.length; i++){

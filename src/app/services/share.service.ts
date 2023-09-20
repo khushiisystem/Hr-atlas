@@ -90,8 +90,8 @@ export class ShareService {
   getLeaveStatus(): Observable<ILeaveStatus> {
     return this.http.get<ILeaveStatus>(environment.Api + `api/leaveStatus/getLeaveStatus`);
   }
-  employeeAttendance(filterData : {employeeId: string, date: string}): Observable<any> {
-    return this.http.post<any>(environment.Api + `api/attendence/employeeId`, filterData);
+  employeeAttendance(employeeId: string, pageIndex: number, pageSize: number): Observable<any> {
+    return this.http.get<any>(environment.Api + `api/attendence/employeeId/${employeeId}?skip=${pageIndex}&limit=${pageSize}`);
   }
   todayAttendance(): Observable<any> {
     return this.http.get<any>(environment.Api + `api/attendence/todayAttendance`);

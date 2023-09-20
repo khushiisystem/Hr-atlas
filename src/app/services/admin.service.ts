@@ -8,8 +8,8 @@ import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response
 import { IAttendanceSetupResponse } from "../interfaces/response/IAttendanceSetup";
 import { IAssignWorkWeek, IWorkWeek } from "../interfaces/request/IAssignWorks";
 import { IWorkWeekResponse } from "../interfaces/response/IWorkWeek";
-import { ILeaveSetupRequest } from "../interfaces/request/ILeaveSetup";
-import { ILeaveSetupResponse } from "../interfaces/response/ILeave";
+import { IHollydayRequest, ILeaveSetupRequest } from "../interfaces/request/ILeaveSetup";
+import { IHollydayResponse, ILeaveSetupResponse } from "../interfaces/response/ILeave";
 import { IEmployeeWorkRequest } from "../interfaces/request/IEmployeeWork";
 import { ISalarySetupRequest } from "../interfaces/request/ISalarySetup";
 
@@ -82,6 +82,19 @@ export class AdminService {
     }
     leaveApprove(leaveData: {leaveGuid: string, aproveLeave: boolean}): Observable<any> {
         return this.http.put<any>(environment.Api + `api/applyLeave/aproveLeave`, leaveData);
+    }
+
+    createEventHollyday(eventData: IHollydayRequest): Observable<IHollydayRequest> {
+        return this.http.post<IHollydayRequest>(environment.Api + `api/hollyday`, eventData);
+    }
+    updateEventHollyday(eventId: string, eventData: IHollydayRequest): Observable<IHollydayRequest> {
+        return this.http.put<IHollydayRequest>(environment.Api + `api/hollyday/${eventId}`, eventData);
+    }
+    getEventHollyday(selectedYear: string | number): Observable<IHollydayResponse[]> {
+        return this.http.get<IHollydayResponse[]>(environment.Api + `api/hollyday/allHollyday?date=${selectedYear}`);
+    }
+    deleteEventHollyday(eventId: string): Observable<IHollydayRequest> {
+        return this.http.delete<IHollydayRequest>(environment.Api + `api/hollyday${eventId}`);
     }
 
 

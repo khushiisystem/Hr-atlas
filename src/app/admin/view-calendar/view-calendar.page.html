@@ -1,0 +1,69 @@
+<ion-header [translucent]="true" mode="md">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
+        <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>View Calendar</ion-title>
+    <ion-progress-bar type="indeterminate" color="tertiary" *ngIf="!isDataLoaded"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="container">
+
+    <div class="flex_div">
+      <h4 class="ion-padding-horizontal ion-text-center">Calendar of the year</h4>
+      <ion-button color="tertiary" mode="ios" [id]="'openModal'" size="small">
+        <span *ngIf="selectedDate">{{getDate(selectedDate).getFullYear()}}</span>
+        <span *ngIf="!selectedDate">Select Year</span>
+        <ion-icon name="chevron-down-outline" slot="end" [ariaHidden]="true" size="small"></ion-icon>
+      </ion-button>
+    </div>
+
+    <h5 class="ion-text-center" *ngIf="eventsList.length === 0">Calendar is not available.</h5>
+
+    <ion-grid [hidden]="!isDataLoaded" *ngIf="eventsList.length > 0">
+      <ion-row class="calendar_row">
+        <ion-col size="6" class="th ion-text-center">
+          <h5><ion-text>Event Name</ion-text></h5>
+        </ion-col>
+        <ion-col size="6" class="th ion-text-center">
+          <h5><ion-text>Event Date</ion-text></h5>
+        </ion-col>
+        <ng-container *ngFor="let event of eventsList">
+          <ion-col size="6">
+            <ion-text>{{event.eventTitle}}</ion-text>
+          </ion-col>
+          <ion-col size="6">
+            <ion-text>{{getDate(event.eventDate) | date}}</ion-text>
+            <ion-button fill="clear" color="primary" [strong]="true" size="small" shape="round" (click)="createHollyday(event, 'update')" aria-label="Edit">
+              <ion-icon name="pencil-outline" size="small" aria-hidden="true" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ng-container>
+      </ion-row>
+    </ion-grid>
+
+  
+    <ion-modal [trigger]="'openModal'" mode="md" #modal [keepContentsMounted]="true" [initialBreakpoint]="0.5">
+      <ng-template>
+        <ion-content>
+          <ion-datetime [preferWheel]="true" [presentation]="'year'" mode="md" [size]="'cover'" [showDefaultTitle]="true" #yearDateTime (ionChange)="selectYear($any($event))">
+            <ion-label slot="title">Select Effective Date</ion-label>
+
+            <ion-buttons slot="buttons" class="datemodal_btns">
+              <ion-button color="danger" shape="round" [strong]="true" class="cancel_btn" (click)="yearDateTime.cancel(); modal.dismiss(null, 'cancel')">Cancel</ion-button>
+              <ion-button color="primary" fill="solid" shape="round" [strong]="true" class="saveBtn" [disabled]="yearDateTime.isDateEnabled" (click)="yearDateTime.confirm();">Done</ion-button>
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+  </div>
+</ion-content>
+<ion-footer mode="md" [hidden]="!isDataLoaded">
+  <ion-button [expand]="'full'" [shape]="'round'" [strong]="true" [mode]="'ios'" color="primary" class="bigBtn" [disabled]="!isDataLoaded" (click)="createHollyday({}, 'add')">Add Event</ion-button>
+</ion-footer>
