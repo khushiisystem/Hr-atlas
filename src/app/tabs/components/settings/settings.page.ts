@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AttendanceSetupPage } from 'src/app/admin/attendance-setup/attendance-setup.page';
+import { HollydaySetupPage } from 'src/app/admin/hollyday-setup/hollyday-setup.page';
 import { LeaveSetupPage } from 'src/app/admin/leave-setup/leave-setup.page';
 
 @Component({
@@ -72,6 +73,23 @@ export class SettingsPage implements OnInit {
     if(event.detail.value){
       this.activeTab = event.detail.value;
     }
+  }
+
+  async hollydaySetup() {
+    const eventModal = this.modalCtrl.create({
+      component: HollydaySetupPage,
+      mode: 'md',
+      initialBreakpoint: 1,
+      componentProps: {action: 'add'}
+    });
+
+    (await eventModal).present();
+
+    (await eventModal).onDidDismiss().then(result => {
+      if(result && result.role === 'confirm'){
+        console.log(result);
+      }
+    });
   }
  
 }

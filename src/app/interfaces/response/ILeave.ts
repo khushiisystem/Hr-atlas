@@ -1,5 +1,5 @@
 import { ILeaveApplyrequest } from "../request/ILeaveApply";
-import { ILeaveSetupRequest } from "../request/ILeaveSetup";
+import { IHollydayRequest, ILeaveSetupRequest } from "../request/ILeaveSetup";
 import { IGeneric } from "./IGeneric";
 
 export interface ILeaveSetupResponse extends IGeneric, ILeaveSetupRequest {}
@@ -30,3 +30,5 @@ export interface IEmployee {
   mobileNumber: string;
   role: string;
 }
+
+export interface IHollydayResponse extends IGeneric, IHollydayRequest {}

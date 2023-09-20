@@ -21,6 +21,7 @@ import { AdminLeavesPage } from '../admin/admin-leaves/admin-leaves.page';
 import { AddExperiencePage } from '../admin/add-experience/add-experience.page';
 import { SalarySetupPage } from '../admin/salary-setup/salary-setup.page';
 import { SalaryIncrementsPage } from '../admin/salary-increments/salary-increments.page';
+import { ViewCalendarPage } from '../admin/view-calendar/view-calendar.page';
 
 const routes: Routes = [
   {
@@ -149,6 +150,13 @@ const routes: Routes = [
         title: 'View Salary Increments',
         component: SalaryIncrementsPage,
         canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"}
+      },
+      {
+        path: 'view-calendar',
+        title: 'View Calendar',
+        component: ViewCalendarPage,
+        canActivate:[AuthGuard],
         data: {role: "Admin"}
       },
       {

@@ -88,6 +88,8 @@ export class SalarySetupPage implements OnInit {
     if(hikePer && currentCtc){
       const incresedValue = (currentCtc * hikePer) / 100;
       this.calculatedValue = currentCtc + incresedValue;
+    } else if(currentCtc){
+      this.calculatedValue = currentCtc;
     }
   }
 

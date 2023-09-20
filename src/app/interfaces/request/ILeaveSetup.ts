@@ -2,8 +2,13 @@ import { LeaveCreditCycle } from "../enums/leaveCreditCycle";
 import { LeaveCreditPeriod } from "../enums/leaveCreditPeriod";
 
 export interface ILeaveSetupRequest {
-    creditCycle: LeaveCreditCycle
+    creditCycle: LeaveCreditCycle,
     creditPeriod: LeaveCreditPeriod,
     annualLeave: number,
-    creditLeave: number
+    creditLeave: number,
+}
+
+export interface IHollydayRequest {
+    eventTitle: string,
+    eventDate: string | Date,
 }
