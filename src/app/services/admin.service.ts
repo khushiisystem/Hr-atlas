@@ -70,7 +70,7 @@ export class AdminService {
         return this.http.delete<any>(environment.Api + `api/workWeek/${workWeekID}`);
     }
     assignWorkWeek(data: IAssignWorkWeek): Observable<any> {
-        return this.http.post<any>(environment.Api + `api/workWeek/assignWorkweek`, data);
+        return this.http.post<any>(environment.Api + `api/workWeekEmployee`, data);
     }
 
     // leave setup

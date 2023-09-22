@@ -6,6 +6,10 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Attendance Setup</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+    <ion-progress-bar type="inderminate" color="primary" *ngIf="!dataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
@@ -77,7 +81,7 @@
       </ion-grid>
 
       <div class="btn_div">
-          <ion-button mode="md" type="submit" class="submitBtn ion-text-wrap" [expand]="'block'" [shape]="'round'" [strong]="true" [disabled]="attendanceForm.invalid" (click)="saveSetup()">Save Setup</ion-button>
+          <ion-button mode="md" type="submit" class="submitBtn ion-text-wrap" [expand]="'block'" [shape]="'round'" [strong]="true" [disabled]="attendanceForm.invalid || !dataLoaded" (click)="saveSetup()">Save Setup</ion-button>
         </div>
     </form>
 

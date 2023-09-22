@@ -4,6 +4,9 @@
       <ion-icon name="close" slot="icon-only"></ion-icon>
     </ion-button>
     <ion-title>{{action === 'add' ? 'Add' : 'Update'}} {{isDataLoaded && employeeForm.controls['role'].value === 'Admin' ? 'Profile' : 'Employee'}}</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
     <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>

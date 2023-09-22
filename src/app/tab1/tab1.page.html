@@ -11,6 +11,9 @@
       <span class="stopwatch-time">{{ buttonLabel }}</span>
       <ion-icon slot="end" icon="time"></ion-icon>
     </ion-button>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end" *ngIf="userRole === 'Admin'">
+      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
     <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
@@ -20,7 +23,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <!-- <img src="../../assets/images/logo.png" alt="Photo" class="logo_img" /> -->
+  <!-- <img src="../../assets/images/logo.png" alt="Photo" class="logo_img2" /> -->
 
   <!-- <div class="ion-text-center"><ion-spinner color="medium" *ngIf="!isDataLoaded || !userDetails" name="circular"></ion-spinner></div> -->
 

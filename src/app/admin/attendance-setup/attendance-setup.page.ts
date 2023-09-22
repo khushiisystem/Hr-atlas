@@ -19,6 +19,7 @@ interface DatetimeCustomEvent extends CustomEvent {
 export class AttendanceSetupPage implements OnInit {
   attendanceForm!: FormGroup;
   isOpenTimeModal: boolean = false;
+  dataLoaded: boolean = false;
   workDuration!: string;
   setupId: string = "";
   currentControl: string = "";
@@ -69,10 +70,12 @@ export class AttendanceSetupPage implements OnInit {
         this.setupId = res.guid;
         await this.attendanceForm.patchValue(res);
         this.calculateWorkDuration();
+        this.dataLoaded = true;
       }
     }, (error) => {
       console.error(error.error, "get error");
       this.defualtSetups();
+      this.dataLoaded = true;
     });
   }
 

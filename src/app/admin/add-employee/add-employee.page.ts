@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { AdminService } from 'src/app/services/admin.service';
+import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 
 interface DatetimeCustomEvent extends CustomEvent {
@@ -35,7 +36,8 @@ export class AddEmployeePage implements OnInit {
     public router: Router,
     private adminServ: AdminService,
     private shareServ: ShareService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private loader: LoaderService,
   ) { }
 
   ngOnInit() {
@@ -148,6 +150,7 @@ export class AddEmployeePage implements OnInit {
       return;
     } else {
       this.isInProgress = true;
+      this.loader.present('');
       console.log(this.employeeForm.value, "form");
       this.action === 'add' ? this.addEmployee() : this.updateEmployee();
     }
@@ -159,23 +162,27 @@ export class AddEmployeePage implements OnInit {
         this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
         this.modalCtrl.dismiss(res, 'confirm');
         this.isInProgress = false;
+        this.loader.dismiss();
       }
     }, (error) =>{
-      this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
+      this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
       this.isInProgress = false;
+      this.loader.dismiss();
     });
   }
-
+  
   updateEmployee(){
     this.adminServ.updateEmployee(this.employeeId, this.employeeForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
         this.modalCtrl.dismiss(res, 'confirm');
         this.isInProgress = false;
+        this.loader.dismiss();
       }
     }, (error) =>{
-      this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
+      this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
       this.isInProgress = false;
+      this.loader.dismiss();
     });
   }
 

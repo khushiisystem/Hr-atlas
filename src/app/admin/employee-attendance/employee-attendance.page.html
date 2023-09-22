@@ -6,6 +6,9 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Employee Attendance</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
   </ion-toolbar>
 </ion-header>
 
@@ -33,7 +36,7 @@
       <ng-container *ngFor="let attendanceItem of attendanceList; index as i;">
         <ion-card class="attendance_Card" mode="md">
           <ion-card-header (click)="collapseCard(i)">
-            <ion-card-title>{{getWeek(attendanceItem.clockIn)}}</ion-card-title>
+            <ion-card-title>{{attendanceItem.created_date | date}}</ion-card-title>
             <ion-text class="attendance_status" [color]="getStatus(attendanceItem.status)">{{attendanceItem.status}}</ion-text>
           </ion-card-header>
           <ion-card-content *ngIf="expandedCards.includes(i)">

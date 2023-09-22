@@ -90,10 +90,15 @@ export class ShareService {
   getLeaveStatus(): Observable<ILeaveStatus> {
     return this.http.get<ILeaveStatus>(environment.Api + `api/leaveStatus/getLeaveStatus`);
   }
-  employeeAttendance(employeeId: string, pageIndex: number, pageSize: number): Observable<IClockInResponce[]> {
-    return this.http.get<IClockInResponce[]>(environment.Api + `api/attendence/employeeId/${employeeId}?skip=${pageIndex}&limit=${pageSize}`);
+  employeeAttendance(employeeId: string, pageIndex: number, pageSize: number): Observable<any> {
+    return this.http.get<any>(environment.Api + `api/attendence/employeeId/${employeeId}?skip=${pageIndex}&limit=${pageSize}`);
   }
   todayAttendance(): Observable<any> {
     return this.http.get<any>(environment.Api + `api/attendence/todayAttendance`);
+  }
+
+  // employee workWeek
+  employeeAssignedWorkWeek(emplId: string) : Observable<any> {
+    return this.http.get<any>(environment.Api + `/api/workWeekEmployee/employeeId/${emplId}`);
   }
 }

@@ -203,7 +203,7 @@ export class AdditionalSetupPage implements OnInit {
     this.loader.present('');
     const data = {
       employeeIds: employeeId,
-      workWeek: workWeek
+      workWeekId: workWeek
     }
     console.log(data, 'data');
     this.adminServ.assignWorkWeek(data).subscribe(res => {
