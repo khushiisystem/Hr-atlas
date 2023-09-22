@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { AdminService } from 'src/app/services/admin.service';
+import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 
 interface DatetimeCustomEvent extends CustomEvent {
@@ -65,16 +66,15 @@ export class AddExperiencePage implements OnInit {
     private modalCtrl: ModalController,
     public router: Router,
     private activeatedRoute: ActivatedRoute,
+    private loader: LoaderService,
   ) { }
 
   ngOnInit() {
     this.activeatedRoute.queryParams.subscribe(param => {
-      console.log(param, "param");
       if(param){
         this.employeeId = param?.['employeeId'];
         this.action = param?.['action'];
         this.userId = param?.['userId'];
-        console.log(this.employeeId, this.action, this.userId);
 
         this.today = new Date();
         this.maxDate.setFullYear(this.today.getFullYear() - 10);
@@ -84,7 +84,6 @@ export class AddExperiencePage implements OnInit {
         } else {this.isDataLoaded = true;}
       }
     });
-    console.log(this.employeeId, this.action, this.userId);
   }
 
   formSetup(){
@@ -138,10 +137,8 @@ export class AddExperiencePage implements OnInit {
         this.workInfoForm.patchValue(res[0]);
         this.employeeWorkId = res[0].guid;
         this.isDataLoaded = true;
-        console.log(this.workInfoForm.value, "patch form");
       }
     }, (error) => {
-      console.log(error, "get error");
       this.isDataLoaded = true;
     });
   }
@@ -161,8 +158,6 @@ export class AddExperiencePage implements OnInit {
     } else {
 
     }
-    // this.getDate();
-    console.log(this.workInfoForm.value);
   }
   
   selectExpDate(event: DatetimeCustomEvent){
@@ -207,7 +202,6 @@ export class AddExperiencePage implements OnInit {
         effectiveDate: moment.utc(setEffDate).format()
       });
     }
-    console.log(this.workInfoForm.value);
   }
 
   expandCard(cardName: string) {
@@ -232,10 +226,10 @@ export class AddExperiencePage implements OnInit {
 
   
   submit(){
-    console.log(this.workInfoForm.value, "form");
     if(this.workInfoForm.invalid){
       return;
     } else {
+      this.loader.present('');
       this.isInProgress = true;
       this.action === 'add' ? this.addEmployeeWork() : this.updateEmployeeWork();
     }
@@ -244,30 +238,34 @@ export class AddExperiencePage implements OnInit {
   addEmployeeWork(){
     this.adminServ.addEmployeesWork(this.workInfoForm.value).subscribe(res => {
       if(res){
-        this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
+        this.shareServ.presentToast('Experience added successfully.', 'top', 'success');
         // this.modalCtrl.dismiss(res, 'confirm');
         localStorage.setItem('lastRoute', '/tabs/directory');
         this.router.navigateByUrl(`/tabs/employee-profile/${this.userId}`);
         this.isInProgress = false;
+        this.loader.dismiss();
       }
     }, (error) =>{
-      this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
+      this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
       this.isInProgress = false;
+      this.loader.dismiss();
     });
   }
-
+  
   updateEmployeeWork(){
     this.adminServ.updateEmployeeWork(this.employeeWorkId, this.workInfoForm.value).subscribe(res => {
       if(res){
-        this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
+        this.shareServ.presentToast('Experience updated successfully.', 'top', 'success');
         localStorage.setItem('lastRoute', '/tabs/directory');
         this.router.navigateByUrl(`/tabs/employee-profile/${this.userId}`);
         this.isInProgress = false;
+        this.loader.dismiss();
         // this.modalCtrl.dismiss(res, 'confirm');
       }
     }, (error) =>{
-      this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
+      this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
       this.isInProgress = false;
+      this.loader.dismiss();
     });
   }
 

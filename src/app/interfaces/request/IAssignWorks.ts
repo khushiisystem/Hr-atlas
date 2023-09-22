@@ -1,6 +1,6 @@
 export interface IAssignWorkWeek {
     employeeIds: string[];
-    workWeek: string;
+    workWeekId: string;
 }
 
 export interface IWorkWeek {

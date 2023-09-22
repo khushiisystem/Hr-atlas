@@ -52,7 +52,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
     if(this.pageIndex < 1){
       this.employeeList = [];
     }
-    console.log(this.isMoreData, "before load");
     this.adminServ.getEmployees(this.pageIndex * 10, 10).subscribe(res => {
       if(res){
         const data: IEmployeeResponse[] = res;
@@ -63,7 +62,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
         this.isMoreData = res.length > 9;
         this.infiniteScroll.complete();
         this.isDataLoaded = true;
-        console.log(this.isMoreData, "after load");
       }
     }, (error) => {
       this.isMoreData = false;
@@ -132,7 +130,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     if(this.lastRoute === '/tabs/settings'){
       this.router.navigate([`/tabs/payroll-setup/${empId}`]);
     } else {
-      this.router.navigate([`/tabs/employee-profile/${empId}`]);
+      this.router.navigateByUrl(`/tabs/employee-profile/${empId}`);
     }
   }
 

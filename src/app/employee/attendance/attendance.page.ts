@@ -39,7 +39,7 @@ export class AttendancePage implements OnInit {
   
 
   getUserDetail(){
-    // this.loader.present('fullHide');
+    this.loader.present('fullHide');
     this.shareServ.getEmployeeById(this.userId).subscribe(res => {
       if(res){
         this.setStartEndDate(this.attendanceDate);
@@ -52,26 +52,31 @@ export class AttendancePage implements OnInit {
   }
 
   getEmployeeAttendance() {
-    const data = {
-      employeeId: this.userId,
-      date: moment(this.attendanceDate).format()
-    }
-    if(this.pageIndex < 1){this.attendanceList = [];}
+    if(this.pageIndex == 0){this.attendanceList = [];}
 
-    this.shareServ.employeeAttendance(this.userId, this.pageIndex * 30, 30).subscribe(res => {
+    this.shareServ.employeeAttendance(this.userId, this.pageIndex * 10, 10).subscribe(res => {
       if(res) {
-        this.attendanceList = res;
+        if(res.length < 1){
+          this.moreData = false;
+          this.infiniteScroll.complete();
+          return;
+        }
         for(let i=0; i<res.length; i++){
           this.attendanceList.push(res[i]);
         }
-        this.moreData = res.length > 29;
-        console.log(this.attendanceList, "list");
+        
+        if(res.length > 9) {
+          this.moreData = true;
+        } else {this.moreData = false;}
+
         this.infiniteScroll.complete();
       }
+      this.loader.dismiss();
     }, (error) => {
-      console.log(error, "error");
       this.infiniteScroll.complete();
-    })
+      this.moreData = false;
+      this.loader.dismiss();
+    });
   }
 
   setStartEndDate(dateString: Date){

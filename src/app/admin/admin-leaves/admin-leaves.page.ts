@@ -81,7 +81,7 @@ export class AdminLeavesPage implements OnInit {
           this.leaveLogs.push(res[i]);
         }
         this.moreLogs = res.length > 19;
-        if(this.activeTab === 'logs' && !this.moreLogs){
+        if(this.activeTab === 'logs' && !this.moreLogs && this.infiniteScroll){
           this.infiniteScroll.complete();
         }
         this.logsLoaded = true;
@@ -100,7 +100,7 @@ export class AdminLeavesPage implements OnInit {
     if(this.pageNumber < 1){
       this.requestedLeaveList = []
     }
-    this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
+    this.shareServ.getLeaveList(data, this.pageNumber * 20, 20).subscribe(res => {
       if(res) {
         if(res.length < 1){this.moreRequests = false; this.requestLoaded = true;}
 

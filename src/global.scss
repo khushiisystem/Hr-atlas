@@ -32,6 +32,12 @@
         --ion-color-base: #fff;
     }
 }
+
+ion-header {
+    & .logo_img ion-img {
+        object-fit: contain;
+    }
+}
 .form-input {
     position: relative;
     width: 100%;

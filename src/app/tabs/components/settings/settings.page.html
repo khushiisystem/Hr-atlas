@@ -6,6 +6,9 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Settings</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
   </ion-toolbar>
 </ion-header>
 
@@ -44,7 +47,7 @@
           <ion-label color="primary">Leave Setup</ion-label>
         </ion-item>
 
-        <ion-item [lines]="'none'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="hollydaySetup()">
+        <ion-item [lines]="'full'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="hollydaySetup()">
           <ion-icon name="calendar-number-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
           <ion-label color="primary">Hollyday Setup</ion-label>
         </ion-item>

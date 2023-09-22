@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { IonAccordionGroup, ModalController } from '@ionic/angular';
 import { IAddress } from 'src/app/interfaces/request/IEmployee';
@@ -14,7 +14,7 @@ import { AddEmployeePage } from 'src/app/admin/add-employee/add-employee.page';
   templateUrl: './employee-profile.page.html',
   styleUrls: ['./employee-profile.page.scss'],
 })
-export class EmployeeProfilePage implements OnInit {
+export class EmployeeProfilePage {
   @ViewChild('accordionGroup', { static: true }) accordionGroup!: IonAccordionGroup;
   employeeId: string = "";
   employeeDetail!: IEmployeeResponse;
@@ -30,12 +30,13 @@ export class EmployeeProfilePage implements OnInit {
     private roleStateServ: RoleStateService,
     private modalCtrl: ModalController,
     public router: Router,
-  ) {
-    this.employeeId = activeRoute.snapshot.params?.['employeeId'];
-    this.randomList.length = 7;
-  }
+    private loader: LoaderService,
+  ) {}
 
-  ngOnInit() {
+  ionViewWillEnter(){
+    this.employeeId = this.activeRoute.snapshot.params?.['employeeId'];
+    this.randomList.length = 7;
+    console.log('entered');
     if(this.employeeId.trim() !== ''){
       this.getEmployeeDetails();
       this.getWorkDetails();
@@ -47,14 +48,17 @@ export class EmployeeProfilePage implements OnInit {
 
   getEmployeeDetails(){
     this.dataLoaded = false;
+    this.loader.present('');
     this.shareServ.getEmployeeById(this.employeeId).subscribe(res => {
       if(res){
         this.employeeDetail = res;
         this.dataLoaded = true;
+        this.loader.dismiss();
       }
     }, (error) => {
       console.log(error, "error");
       this.dataLoaded = true;
+      this.loader.dismiss();
     });
   }
 
@@ -155,6 +159,14 @@ export class EmployeeProfilePage implements OnInit {
         this.getEmployeeDetails();
       }
     });
+  }
+
+  ionViewWillLeave(): void {
+    this.employeeDetail = undefined as any;
+    this.workDetail = undefined as any;
+    this.expandedAccordion = '';
+    this.dataLoaded = false;
+    this.employeeId = '';
   }
 
 }

@@ -6,16 +6,19 @@
       </ion-button>
     </ion-buttons>
     <ion-title>Attendance</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
     <ion-progress-bar type="indeterminate" *ngIf="!dataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="container" *ngIf="dataLoaded">
-    <ion-button mode="md" color="primary" shape="round" type="button" (click)="dateModal = true" fill="solid" mode="md">
+    <!-- <ion-button mode="md" color="primary" shape="round" type="button" (click)="dateModal = true" fill="solid" mode="md">
       {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}
       <ion-icon name="chevron-down-outline" aria-hidden="true" slot="end"></ion-icon>
-    </ion-button>
+    </ion-button> -->
     <ion-modal [isOpen]="dateModal" [initialBreakpoint]=".5" [breakpoints]="[0.5, 0.75, 1]" [keepContentsMounted]="true" mode="md" [backdropDismiss]="false" [showBackdrop]="true">
         <ng-template>
           <ion-content>
@@ -39,7 +42,7 @@
       <ng-container *ngFor="let attendanceItem of attendanceList; index as i;">
         <ion-card class="attendance_Card" mode="md" *ngIf="!isWeekOff(attendanceItem.clockIn)">
           <ion-card-header (click)="collapseCard(i)">
-            <ion-card-title>{{getWeek(attendanceItem.clockIn)}}</ion-card-title>
+            <ion-card-title>{{attendanceItem.created_date | date}}</ion-card-title>
             <ion-text class="attendance_status" [color]="getStatus(attendanceItem.status)">{{attendanceItem.status}}</ion-text>
           </ion-card-header>
           <ion-card-content *ngIf="expandedCards.includes(i)">
@@ -61,7 +64,7 @@
                 <ion-text>Work Duration</ion-text>
               </ion-col>
               <ion-col size="6">
-                <ion-label>{{attendanceItem.workingTime ? attendanceItem.workingTime : '--'}}</ion-label>
+                <ion-label>{{attendanceItem.workingTime ? attendanceItem.workingTime.slice(0,7) : '--'}}</ion-label>
               </ion-col>
             </ion-row>
           </ion-card-content>
@@ -100,7 +103,7 @@
       </ng-container> -->
     </div>
     
-    <ion-infinite-scroll #infiniteScroll (ionInfinite)="moreData ? loadData($any($event)) : ''" [position]="'bottom'">
+    <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadData($any($event))" [position]="'bottom'">
       <ion-infinite-scroll-content *ngIf="moreData" loadingSpinner="bubbles" loadingText="Loading more data...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
