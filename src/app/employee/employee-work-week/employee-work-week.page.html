@@ -11,18 +11,37 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="container">
+  <div class="container" *ngIf="workWeekDetail">
+    <ion-card mode="ios">
+      <ion-card-header *ngIf="workWeekDetail.employeeDetails">
+        <ion-card-title>{{workWeekDetail.employeeDetails.firstName | titlecase}} {{workWeekDetail.employeeDetails.lastName || '' | titlecase}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-text>Assigned Work Week</ion-text>
+
+        <ion-row>
+          <ion-col size="12" sizeSm="6" sizeMd="4">
+            <ion-text>Day Off:</ion-text>
+            <div class="indicator dayoff"></div>
+          </ion-col>
+          <ion-col size="12" sizeSm="6" sizeMd="4">
+            <ion-text>Working Day:</ion-text>
+            <div class="indicator"></div>
+          </ion-col>
+        </ion-row>>
+      </ion-card-content>
+    </ion-card>
     
     <div class="flex_div ion-padding">
       <div class="header_row">
         <div class="header_cell" *ngFor="let weekName of weekArray">
           <ion-text color="light">
-            {{weekName}}
+            {{weekName.slice(0,3)}}
           </ion-text>
         </div>
       </div>
       <div class="body_row" *ngFor="let num of numberOfWeek; index as a;">
-        <div class="body_cell" *ngFor="let weekName of weekArray; index as b;">
+        <div class="body_cell" [ngClass]="{'dayOff': workWeekDetail.workweekDetails.weekOff.includes(weekName)}" *ngFor="let weekName of weekArray; index as b;">
           <div [class]="num + ' ' + weekName"></div>
         </div>
       </div>

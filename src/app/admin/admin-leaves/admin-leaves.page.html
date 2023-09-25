@@ -1,22 +1,4 @@
-<ion-header [translucent]="true" [mode]="'md'">
-  <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button type="button" fill="clear" class="noBg noRipple" mode="md" (click)="goBack()">
-            <ion-icon name="chevron-back-outline" aria-hidden="true" aria-label="Back"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-      <ion-title>Leaves</ion-title>
-      <ion-thumbnail slot="end" class="logo_img ion-margin-end">
-        <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
-      </ion-thumbnail>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-
+<div>
   <ion-segment [(ngModel)]="activeTab" mode="md">
       <ion-segment-button value="requests">
           <ion-label>Requestes</ion-label>
@@ -141,4 +123,4 @@
   <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadMoreData($any($event))" [position]="'bottom'" *ngIf="moreRequests || moreLogs">
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
-</ion-content>
+</div>

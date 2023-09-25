@@ -1,0 +1,140 @@
+<div class="container">
+  <ion-segment [(ngModel)]="activeTab">
+      <ion-segment-button value="status">
+          <ion-label>Status</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="logs">
+          <ion-label>Logs</ion-label>
+      </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="activeTab === 'status'">
+      <ion-card class="leave_card" *ngIf="leaveStatus && leaveStatus.loseOfPay">
+          <ion-card-header>
+              <ion-card-title>Loss of Pay</ion-card-title>
+              <ion-button mode="md" *ngIf="leaveStatus.loseOfPay.createdLeave > 0 && !showApplyForm || selectedLeaveType !== 'LOP'" shape="round" color="primary" (click)="selectedLeaveType = 'LOP'; showApplyForm = true;" class="apply-button">Apply</ion-button>
+          </ion-card-header>
+          <ion-card-content>
+              <ion-row class="ion-margin-bottom">
+                  <ion-col size="7">
+                      <div class="leave-info">
+                          <ion-label class="leave-label">Total:</ion-label>
+                      </div>
+                  </ion-col>
+                  <ion-col size="5">
+                      <div class="leave-info">
+                          <ion-label class="leave-value">{{ leaveStatus.loseOfPay.totalLeave }}</ion-label>
+                      </div>                        
+                  </ion-col>
+                  <ion-col size="7">
+                      <div class="leave-info">
+                          <ion-label class="leave-label">Credited:</ion-label>
+                      </div>
+                  </ion-col>
+                  <ion-col size="5">
+                      <div class="leave-info">
+                          <ion-label class="leave-value">{{ leaveStatus.loseOfPay.createdLeave }}</ion-label>
+                      </div>                        
+                  </ion-col>
+                  <ion-col size="7">
+                      <div class="leave-info">
+                          <ion-label class="leave-label">Applied:</ion-label>
+                      </div>
+                  </ion-col>
+                  <ion-col size="5">
+                      <div class="leave-info">
+                          <ion-label class="leave-value">{{ leaveStatus.loseOfPay.applyLeave }}</ion-label>
+                      </div>                        
+                  </ion-col>
+              </ion-row>
+              <app-leave-apply-form *ngIf="showApplyForm && selectedLeaveType === 'LOP'" [leaveType]="'Loss of Pay'" (saveForm)="leaveApply($event)"></app-leave-apply-form>
+          </ion-card-content>
+      </ion-card>
+  
+      <ion-card class="leave_card" *ngIf="leaveStatus && leaveStatus.casualLeave">
+          <ion-card-header>
+              <ion-card-title>Casual Leave</ion-card-title>
+              <ion-button mode="md" *ngIf="leaveStatus.casualLeave.createdLeave > 0 && (!showApplyForm || selectedLeaveType !== 'CL')" shape="round" color="primary" (click)="selectedLeaveType = 'CL'; showApplyForm = true;" class="apply-button">Apply</ion-button>
+          </ion-card-header>
+          <ion-card-content>
+              <ion-row class="ion-margin-bottom">
+                  <ion-col size="7">
+                      <div class="leave-info">
+                          <ion-label class="leave-label">Total:</ion-label>
+                      </div>
+                  </ion-col>
+                  <ion-col size="5">
+                      <div class="leave-info">
+                          <ion-label class="leave-value">{{leaveStatus.casualLeave.totalLeave}}</ion-label>
+                      </div>                        
+                  </ion-col>
+                  <ion-col size="7">
+                      <div class="leave-info">
+                          <ion-label class="leave-label">Credited:</ion-label>
+                      </div>
+                  </ion-col>
+                  <ion-col size="5">
+                      <div class="leave-info">
+                          <ion-label class="leave-value">{{leaveStatus.casualLeave.createdLeave}}</ion-label>
+                      </div>                        
+                  </ion-col>
+                  <ion-col size="7">
+                      <div class="leave-info">
+                          <ion-label class="leave-label">Applied:</ion-label>
+                      </div>
+                  </ion-col>
+                  <ion-col size="5">
+                      <div class="leave-info">
+                          <ion-label class="leave-value">{{leaveStatus.casualLeave.applyLeave}}</ion-label>
+                      </div>                        
+                  </ion-col>
+              </ion-row>
+  
+              <app-leave-apply-form *ngIf="showApplyForm && selectedLeaveType === 'CL'" [leaveType]="'Casual Leave'" (saveForm)="leaveApply($event)"></app-leave-apply-form>
+          </ion-card-content>
+      </ion-card>
+  </div>
+
+  <div *ngIf="activeTab === 'logs'">
+      <ion-card class="log_card" *ngFor="let leaveItem of leaveLogs; index as a">
+          <ion-card-header>
+              <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
+              <div class="ion-text-end">
+                <ion-chip [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-chip>
+              </div>
+          </ion-card-header>
+          <ion-card-content>
+              <ion-row class="ion-margin-bottom">
+                <ion-col size="6">
+                  <div class="flex-div">
+                    <ion-label>Applied On</ion-label>
+                    <ion-text>{{leaveItem.created_date | date}}</ion-text>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div class="flex-div">
+                    <ion-label>Day Type</ion-label>
+                    <ion-text>{{leaveItem.dayType}}</ion-text>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div class="flex-div">
+                    <ion-label>From</ion-label>
+                    <ion-text>{{leaveItem.startDate | date}}</ion-text>
+                  </div>
+                </ion-col>
+                <ion-col size="6">
+                  <div class="flex-div">
+                    <ion-label>To</ion-label>
+                    <ion-text>{{leaveItem.endDate | date}}</ion-text>
+                  </div>
+                </ion-col>
+              </ion-row>
+              <p class="purpose"><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
+              <div class="flexItem">
+                  <ion-button *ngIf="leaveItem.status === 'Pending'" color="danger" mode="md" fill="solid" [strong]="true" shape="round" class="cancelBtn" (click)="cancelLeave(leaveItem.guid)">Cancel Leave</ion-button>
+              </div>
+          </ion-card-content>
+      </ion-card>
+  </div>
+</div>

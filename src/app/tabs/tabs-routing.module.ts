@@ -15,7 +15,6 @@ import { PayrollSetupPage } from '../admin/payroll-setup/payroll-setup.page';
 import { PayrollPage } from '../employee/payroll/payroll.page';
 import { AdditionalSetupPage } from '../admin/additional-setup/additional-setup.page';
 import { AdminProfilePage } from '../admin/admin-profile/admin-profile.page';
-import { LeavesPage } from '../employee/leaves/leaves.page';
 import { RoleGuard } from '../core/role.guard';
 import { AdminLeavesPage } from '../admin/admin-leaves/admin-leaves.page';
 import { AddExperiencePage } from '../admin/add-experience/add-experience.page';
@@ -23,6 +22,7 @@ import { SalarySetupPage } from '../admin/salary-setup/salary-setup.page';
 import { SalaryIncrementsPage } from '../admin/salary-increments/salary-increments.page';
 import { ViewCalendarPage } from '../admin/view-calendar/view-calendar.page';
 import { EmployeeAttendancePage } from '../admin/employee-attendance/employee-attendance.page';
+import { LeavesPage } from '../share/leaves/leaves.page';
 
 const routes: Routes = [
   {
@@ -123,8 +123,7 @@ const routes: Routes = [
         path: 'leaves',
         title: "Apply Leave",
         component: LeavesPage,
-        canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Employee"}
+        canActivate:[AuthGuard],
       },
       {
         path: 'admin-leaves',

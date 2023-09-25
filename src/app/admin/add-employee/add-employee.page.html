@@ -44,11 +44,24 @@
                 Please enter a valid name.
               </ion-text>
             </ion-col>
+  
+            <ion-col size="12" sizeSm="6">
+              <div class="form-input">
+                <ion-select labelPlacement="floating" fill="outline" formControlName="role" placeholder="Select" interface="action-sheet">
+                  <div slot="label">Role <ion-text color="danger">*</ion-text></div>
+                  <ion-select-option value="Admin">Admin</ion-select-option>
+                  <ion-select-option value="Employee">Employee</ion-select-option>
+                </ion-select>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['lastName'].errors">
+                Please enter a valid name.
+              </ion-text>
+            </ion-col>
 
             <ion-col size="12" sizeSm="6">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" [readonly]="true" [value]="getDate() | date" (ionFocus)="openCalendar = true" (ionActive)="openCalendar = true">
-                  <div slot="label">Date of birth <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Date of birth</div>
                 </ion-input>
                 <div class="toggleBtn">
                   <ion-button mode="md" fill="clear" (click)="openCalendar = true">
@@ -61,7 +74,7 @@
             <ion-col size="12" sizeSm="6">
               <div class="form-input">
                 <ion-select labelPlacement="floating" fill="outline" formControlName="gender" placeholder="Select" interface="action-sheet">
-                  <div slot="label">Gender <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Gender</div>
                   <ion-select-option value="Male">Male</ion-select-option>
                   <ion-select-option value="Female">Female</ion-select-option>
                 </ion-select>
@@ -113,7 +126,7 @@
             <ion-col size="12">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="email" placeholder="Enter Email" type="email">
-                  <div slot="label">Personal Email <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Personal Email</div>
                 </ion-input>
               </div>
               <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['email'].touched && employeeForm.controls['email'].errors">
@@ -124,7 +137,7 @@
             <ion-col size="12">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="officialEmail" placeholder="Enter Email" type="email">
-                  <div slot="label">Official Email</div>
+                  <div slot="label">Official Email <ion-text color="danger">*</ion-text></div>
                 </ion-input>
               </div>
             </ion-col>
@@ -147,18 +160,15 @@
             <ion-col size="12" sizeMd="6">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine1" placeholder="Address Line 1" type="text">
-                  <div slot="label">Address Line 1 <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Address Line 1</div>
                 </ion-input>
               </div>
-              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
-                {{employeeForm.controls['firstName'].value ? 'Please enter a valid name.' : 'First name is required'}}
-              </ion-text>
             </ion-col>
   
             <ion-col size="12" sizeMd="6">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine2" placeholder="Address Line 2" type="text">
-                  <div slot="label">Address Line 2 <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Address Line 2</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -166,7 +176,7 @@
             <ion-col size="6" sizeMd="4">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="city" placeholder="City" type="text">
-                  <div slot="label">City <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">City</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -174,7 +184,7 @@
             <ion-col size="6" sizeMd="4">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="state" placeholder="State" type="text">
-                  <div slot="label">State <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">State</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -182,7 +192,7 @@
             <ion-col size="6" sizeMd="4">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="country" placeholder="Country" type="text">
-                  <div slot="label">Country <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Country</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -190,7 +200,7 @@
             <ion-col size="6" sizeMd="4">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="zipCode" placeholder="Zip Code" type="text">
-                  <div slot="label">Zip Code <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Zip Code</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -207,18 +217,15 @@
             <ion-col size="12" sizeMd="6">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine1" placeholder="Address Line 1" type="text">
-                  <div slot="label">Address Line 1 <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Address Line 1</div>
                 </ion-input>
               </div>
-              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
-                {{employeeForm.controls['firstName'].value ? 'Please enter a valid name.' : 'First name is required'}}
-              </ion-text>
             </ion-col>
   
             <ion-col size="12" sizeMd="6">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine2" placeholder="Address Line 2" type="text">
-                  <div slot="label">Address Line 2 <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Address Line 2</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -226,7 +233,7 @@
             <ion-col size="6" sizeMd="4">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="city" placeholder="City" type="text">
-                  <div slot="label">City <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">City</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -234,7 +241,7 @@
             <ion-col size="6" sizeMd="4">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="state" placeholder="State" type="text">
-                  <div slot="label">State <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">State</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -242,7 +249,7 @@
             <ion-col size="6" sizeMd="4">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="country" placeholder="Country" type="text">
-                  <div slot="label">Country <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Country</div>
                 </ion-input>
               </div>
             </ion-col>
@@ -250,7 +257,7 @@
             <ion-col size="6" sizeMd="4">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="zipCode" placeholder="Zip Code" type="text">
-                  <div slot="label">Zip Code <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Zip Code</div>
                 </ion-input>
               </div>
             </ion-col>

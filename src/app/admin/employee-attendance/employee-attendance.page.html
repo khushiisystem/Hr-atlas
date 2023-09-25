@@ -21,7 +21,7 @@
   </ng-container>
 
     <!-- ------------ attendance list ----------------- -->
-    <div class="attendance_list" [hidden]="!employee">
+    <div class="attendance_list" [hidden]="employee">
       <ion-card mode="ios" color="light" *ngIf="employee">
         <ion-item [lines]="'none'" [detail]="false">
           <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>

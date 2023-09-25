@@ -4,6 +4,7 @@ import { IonInfiniteScroll } from '@ionic/angular';
 import { ILeaveLogsResponse } from 'src/app/interfaces/response/ILeave';
 import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
+import { RoleStateService } from 'src/app/services/roleState.service';
 import { ShareService } from 'src/app/services/share.service';
 
 @Component({
@@ -25,13 +26,23 @@ export class AdminLeavesPage implements OnInit {
   activeTab: string = 'requests'
   leaveLogs: ILeaveLogsResponse[] = [];
   requestedLeaveList: ILeaveLogsResponse[] = [];
+  userRole: string = '';
 
   constructor(
     private router: Router,
     private shareServ: ShareService,
     private adminServ: AdminService,
+    private roleStateServ: RoleStateService,
     private loader: LoaderService,
-  ) {}
+  ) {
+    this.roleStateServ.getState().subscribe(res => {
+      if(res){
+        this.userRole = res;
+      } else {
+        this.userRole = localStorage.getItem('userRole') || "";
+      }
+    });
+  }
 
   ngOnInit() {
     this.selectedDates = history.state.selectedDates || [];
@@ -150,13 +161,6 @@ export class AdminLeavesPage implements OnInit {
     }
 
     return {leaveStatus: leaveStatus, color: color};
-  }
-
-  handleRefresh(event: any) {
-    setTimeout(() => {
-      window.location.reload();
-      event.target.complete();
-    }, 2000);
   }
 
   loadRequests(){

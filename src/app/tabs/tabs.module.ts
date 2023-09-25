@@ -22,10 +22,8 @@ import { AdminProfilePage } from "../admin/admin-profile/admin-profile.page";
 import { Tab1Page } from "../tab1/tab1.page";
 import { NameImgPageModule } from "../share/components/name-img/name-img.module";
 import { LeavesPage } from "../employee/leaves/leaves.page";
-import { LeaveApplyFormPage } from "../employee/leaves/leave-apply-form/leave-apply-form.page";
 import { DirectoryPage } from "./components/directory/directory.page";
 import { RoleGuard } from "../core/role.guard";
-import { AdminLeavesPageModule } from "../admin/admin-leaves/admin-leaves.module";
 import { AddExperiencePageModule } from "../admin/add-experience/add-experience.module";
 import { EmployeesPageModule } from "../share/employees/employees.module";
 import { SalarySetupPage } from "../admin/salary-setup/salary-setup.page";
@@ -33,6 +31,7 @@ import { SalaryIncrementsPage } from "../admin/salary-increments/salary-incremen
 import { HollydaySetupPage } from "../admin/hollyday-setup/hollyday-setup.page";
 import { ViewCalendarPage } from "../admin/view-calendar/view-calendar.page";
 import { EmployeeAttendancePage } from "../admin/employee-attendance/employee-attendance.page";
+import { LeavesPageModule } from "../share/leaves/leaves.module";
 
 @NgModule({
   declarations: [
@@ -50,7 +49,6 @@ import { EmployeeAttendancePage } from "../admin/employee-attendance/employee-at
     AdditionalSetupPage,
     AdminProfilePage,
     LeavesPage,
-    LeaveApplyFormPage,
     DirectoryPage,
     SalarySetupPage,
     SalaryIncrementsPage,
@@ -66,9 +64,9 @@ import { EmployeeAttendancePage } from "../admin/employee-attendance/employee-at
     TabsPageRoutingModule,
     RouterModule,
     NameImgPageModule,
-    AdminLeavesPageModule,
     AddExperiencePageModule,
     EmployeesPageModule,
+    LeavesPageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, RoleGuard],

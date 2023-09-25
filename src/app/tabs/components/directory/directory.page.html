@@ -87,13 +87,10 @@
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
   
-    <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="userRole === 'Admin' && lastRoute === '/tabs/home'">
+    <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="userRole === 'Admin'">
       <ion-fab-button (click)="employeeMoal('', 'add')" aria-label="Add Employee">
         <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
       </ion-fab-button>
     </ion-fab>
   </ion-content>
-  <ion-footer *ngIf="userRole === 'Admin' && lastRoute === '/tabs/settings' && selectedEmployee.length > 0">
-    <ion-button mode="md" type="button" color="primary" size="large" expand="block" shape="round" class="ion-margin-horizontal sendPayBtn">Send Payslip</ion-button>
-  </ion-footer>
   
