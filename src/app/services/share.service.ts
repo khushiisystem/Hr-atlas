@@ -10,6 +10,7 @@ import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response
 import { ILeaveApplyrequest } from "../interfaces/request/ILeaveApply";
 import { IClockInResponce } from "../interfaces/response/IAttendanceSetup";
 import { ILeaveLogsResponse, ILeaveSetupResponse, ILeaveStatus } from "../interfaces/response/ILeave";
+import { IEmplpoyeeWorWeek } from "../interfaces/response/IEmplpoyeeWorWeek";
 
 @Injectable({
   providedIn: "root",
@@ -98,7 +99,7 @@ export class ShareService {
   }
 
   // employee workWeek
-  employeeAssignedWorkWeek(emplId: string) : Observable<any> {
-    return this.http.get<any>(environment.Api + `/api/workWeekEmployee/employeeId/${emplId}`);
+  employeeAssignedWorkWeek(emplId: string) : Observable<IEmplpoyeeWorWeek> {
+    return this.http.get<IEmplpoyeeWorWeek>(environment.Api + `api/workWeekEmployee/employeeId/${emplId}`);
   }
 }

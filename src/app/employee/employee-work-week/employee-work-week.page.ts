@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import { IEmplpoyeeWorWeek } from 'src/app/interfaces/response/IEmplpoyeeWorWeek';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 
@@ -13,6 +14,7 @@ export class EmployeeWorkWeekPage implements OnInit {
   employeeId: string = '';
   weekArray: string[] = [];
   numberOfWeek: string[] = [];
+  workWeekDetail!: IEmplpoyeeWorWeek;
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -22,10 +24,13 @@ export class EmployeeWorkWeekPage implements OnInit {
   
   ngOnInit() {
     this.employeeId = this.activeRoute.snapshot.params?.['employeeId'];
-    this.weekArray = moment.weekdaysShort();
+    this.weekArray = moment.weekdays();
     this.weekCount();
     console.log(this.weekArray);
     console.log(this.numberOfWeek);
+    if(this.employeeId.trim() !== ''){
+      this.getWorkWeek();
+    }
   }
 
   weekCount() {
@@ -42,6 +47,19 @@ export class EmployeeWorkWeekPage implements OnInit {
     }
 
     // return Math.ceil( used / 7);
+  }
+
+  getWorkWeek(){
+    this.loaderServ.present('');
+    this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(res => {
+      if(res) {
+        this.workWeekDetail = res;
+        console.log(this.workWeekDetail, 'res');
+        this.loaderServ.dismiss();
+      }
+    }, (error) => {
+      this.loaderServ.dismiss();
+    });
   }
 
   goBack(){history.back();}

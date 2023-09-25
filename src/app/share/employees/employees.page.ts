@@ -4,6 +4,7 @@ import { Subject, debounceTime } from 'rxjs';
 import { IRoles } from 'src/app/interfaces/enums/IRoles';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
+import { RoleStateService } from 'src/app/services/roleState.service';
 import { ShareService } from 'src/app/services/share.service';
 
 interface InfiniteScrollCustomEvent extends CustomEvent {
@@ -40,13 +41,23 @@ export class EmployeesPage implements OnInit, OnDestroy {
   constructor(
     private adminServ: AdminService,
     private shareServ: ShareService,
-  ) { this.userRole = localStorage.getItem('userRole') || ''; }
+    private roleStateServ: RoleStateService,
+  ) { 
+    roleStateServ.getState().subscribe(res => {
+      if(res){
+        this.userRole = res;
+      } else {
+        this.userRole = localStorage.getItem('userRole') || '';
+      }
+    });
+   }
 
   ngOnInit() {
     this.getEmployeeList();
     this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
       this.searchEmployee(searchValue);
     });
+    console.log(this.userRole);
   }
 
   getEmployeeList(){

@@ -39,7 +39,7 @@ export class AttendancePage implements OnInit {
   
 
   getUserDetail(){
-    this.loader.present('fullHide');
+    this.loader.present('');
     this.shareServ.getEmployeeById(this.userId).subscribe(res => {
       if(res){
         this.setStartEndDate(this.attendanceDate);
@@ -59,6 +59,7 @@ export class AttendancePage implements OnInit {
         if(res.length < 1){
           this.moreData = false;
           this.infiniteScroll.complete();
+          this.loader.dismiss();
           return;
         }
         for(let i=0; i<res.length; i++){

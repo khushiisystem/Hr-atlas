@@ -61,15 +61,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
       if(res){
         this.userDetails = res;
         this.roleStateServ.updateState(this.userDetails.role);
-    
-        if(this.userDetails.role === 'Employee'){
-          this.getAttendance();
-        }
+        this.getAttendance();
         this.isDataLoaded = true;
       }
     });
 
     this.roleStateServ.getState().subscribe(res => {
+      console.log(this.userRole);
       this.userRole = res || "";
     });
   }
@@ -239,15 +237,22 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }
   }
 
+  roleToggle(event: any) {
+    console.log(event, 'event');
+    if(event.detail.checked){
+      this.roleStateServ.updateState('Admin');
+      localStorage.setItem('userRole', 'Admin');
+    } else {
+      this.roleStateServ.updateState('Employee');
+      localStorage.setItem('userRole', 'Employee');
+    }
+  }
+
   showattendance() {
     this.router.navigate(['/tabs/attendance']);
   }
   showleaves() {
-    if(this.userRole === 'Admin'){
-      this.router.navigate(['./tabs/admin-leaves']);
-    } else {
-      this.router.navigate(['./tabs/leaves']);
-    }
+    this.router.navigate(['./tabs/leaves']);
   }
   showpayroll() {
     this.router.navigate(['./payroll']);

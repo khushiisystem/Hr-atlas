@@ -46,7 +46,7 @@
             <ion-item [lines]="'none'" [button]="true" [detail]="true" [detailIcon]="expandedCard === workWeekItem.title ? 'chevron-down-outline' : 'chevron-forward-outline'" (click)="expandCard(workWeekItem.title)">
               <div>
                 <ion-label>{{workWeekItem.title}}</ion-label>
-                <ion-text><strong>{{workWeekItem.employees ? workWeekItem.employees.length : 'No'}}</strong> Employees</ion-text>
+                <ion-text><strong>{{workWeekItem.employeeDetails ? workWeekItem.employeeDetails.length : 'No'}}</strong> Employees</ion-text>
               </div>
             </ion-item>
             <ion-card-content *ngIf="(expandedCard === workWeekItem.title) && workWeekItem.employeeDetails">

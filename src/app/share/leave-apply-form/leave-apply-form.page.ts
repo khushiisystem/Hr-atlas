@@ -81,5 +81,4 @@ export class LeaveApplyFormPage implements OnInit {
       this.saveForm.emit(this.leaveApplyForm.value);
     }
   }
-
 }
