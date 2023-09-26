@@ -8,6 +8,7 @@ import { RoleStateService } from 'src/app/services/roleState.service';
 })
 export class LeavesPage implements OnInit {
   userRole: string = '';
+  isSwitchable: string = '';
 
   constructor(
     private roleStateServ: RoleStateService,
@@ -19,6 +20,7 @@ export class LeavesPage implements OnInit {
         this.userRole = localStorage.getItem('userRole') || "";
       }
     });
+    this.isSwitchable = localStorage.getItem('isSwitchable') || 'false';
   }
 
   ngOnInit() {

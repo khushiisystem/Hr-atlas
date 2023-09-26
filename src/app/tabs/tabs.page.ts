@@ -20,6 +20,11 @@ export class TabsPage {
           adminServ.getEmployeeById(this.userId).subscribe(res => {
             userStateServ.updateState(res);
             roleStateServ.updateState(res.role);
+            if(res.role === 'Employee'){
+              localStorage.setItem('isSwitchable', 'false');
+            } else {
+              localStorage.setItem('isSwitchable', 'true');
+            }
           });
         }    
       }
