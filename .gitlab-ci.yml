@@ -1,0 +1,55 @@
+# image: docker:latest
+
+stages:
+- build_aab
+- release_app
+
+build_aab:
+  stage: build_aab
+  image: rishikeshops/gsdk
+  before_script:
+    - npm i -g @ionic/cli
+    - npm install
+    - ionic cap sync android --prod
+  script:
+    - cd android
+    - chmod +x gradlew  
+    - ./gradlew bundleRelease
+  artifacts:
+    paths:
+      - android/app/build/outputs/bundle/release/app-release.aab
+    expire_in: 1 week
+    when: on_success
+  only:
+    refs:
+      - update/cicd
+    changes:
+      - android/**/*
+
+
+
+release_app:
+  stage: release_app
+  image: google/cloud-sdk:alpine
+  # before_script:
+  #   - npm i -g @ionic/cli
+
+  script:
+    - echo $PLAY_CONSOLE_JSON_KEY > key.json  # Save JSON key to a file
+    - gcloud auth activate-service-account --key-file=key.json
+    - gcloud config set project $PROJECT_ID  # Replace with your Google Play Console project ID
+    - gcloud config set app/promote_track internal  # Specify the release track (e.g., internal, alpha, beta, production)
+    - |
+      # Download the AAB artifact
+      mkdir -p /tmp/artifacts
+      cp android/app/build/outputs/bundle/release/app-release.aab /tmp/artifacts/
+    - gcloud app release create /tmp/artifacts/*.aab  # Use the AAB file from the artifact
+
+  only:
+    refs:
+      - update/cicd
+    changes:
+      - android/**/*
+  dependencies:
+        - build_aab
+
