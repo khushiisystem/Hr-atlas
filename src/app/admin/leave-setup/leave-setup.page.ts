@@ -33,6 +33,7 @@ export class LeaveSetupPage implements OnInit {
       creditPeriod: ['', Validators.required],
       annualLeave: ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(365)])],
       creditLeave: ['', Validators.compose([Validators.required, Validators.min(0), Validators.max(365)])],
+      reserveDays: 0,
     });
 
     console.log(this.leaveSetupForm.value, "form");

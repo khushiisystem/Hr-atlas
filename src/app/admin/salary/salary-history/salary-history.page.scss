@@ -1,0 +1,23 @@
+.historyItem {
+    color: var(--ion-color-dark);
+    padding-bottom: 10px;
+    background-color: #f7f7f7;
+    border-radius: 5px;
+    box-shadow: 0 3px 5px -5px rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    & ion-label {
+        font-size: 0.9em;
+    }
+    & h4 {
+        color: midnightblue;
+        background-color: #f2f2f2;
+        padding: 16px 5px 7px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        margin-top: 0;
+    }
+}
+ion-list {
+    max-height: 75vh;
+    overflow-y: auto;
+}

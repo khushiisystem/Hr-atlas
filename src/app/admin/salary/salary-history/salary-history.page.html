@@ -1,7 +1,46 @@
 <div class="history_salary">
-  <ion-list>
-    <ion-list-header>
-      <ion-label>History</ion-label>
-    </ion-list-header>
-  </ion-list>
+
+  <ion-accordion-group #accordionGroup>
+    <ion-accordion value="first">
+      <ion-item slot="header" color="light">
+        <ion-label>History</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-item [lines]="'none'" [detail]="false" class="ion-text-center" *ngIf="isLoaded && incrementHistory.length < 1">
+          <ion-label>History is not available.</ion-label>
+        </ion-item>
+
+        <ion-list *ngIf="incrementHistory.length > 0">
+          <div class="historyItem ion-margin-bottom" *ngFor="let history of incrementHistory">
+            <h4 class="created_date">{{history.created_date | date}}</h4>
+
+            <ion-row>
+              <ion-col size="6">
+                <ion-label>Current CTC</ion-label>
+              </ion-col>
+              <ion-col size="6" class="ion-text-end">
+                <ion-label>{{history.current_ctc | currency:'INR'}}</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label>Increment </ion-label>
+              </ion-col>
+              <ion-col size="6" class="ion-text-end">
+                <ion-label>{{history.increment}}%</ion-label>
+              </ion-col>
+              <ion-col size="6">
+                <ion-label>Effective Date</ion-label>
+              </ion-col>
+              <ion-col size="6" class="ion-text-end">
+                <ion-label>{{history.effectiveDate | date}}</ion-label>
+              </ion-col>
+            </ion-row>
+          </div>
+        </ion-list>
+        
+        <div class="ion-text-end">
+          <ion-button mode="ios" [fill]="'solid'" [size]="'small'" [strong]="true" *ngIf="moreData" (click)="loadMore()">See More</ion-button>
+        </div>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
 </div>

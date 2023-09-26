@@ -67,6 +67,7 @@ export class ViewCalendarPage implements OnInit {
 
   getCalendar(){
     this.loader.present('');
+    this.eventsList = [];
     this.adminServ.getEventHollyday(moment.utc(this.selectedDate).format()).subscribe(res => {
       if(res) {
         if(res.length < 1) {

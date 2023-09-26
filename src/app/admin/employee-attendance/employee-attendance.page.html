@@ -70,15 +70,16 @@
               <ion-row class="form_row">
                 <ion-col size="12">
                   <div class="form-input">
-                    <ion-select mode="md" labelPlacement="floating" formControlName="status" fill="outline" [compareWith]="compareStatus">
+                    <ion-select mode="md" labelPlacement="floating" formControlName="status" fill="outline" [interface]="'action-sheet'" [compareWith]="compareStatus" (ionChange)="selectStatus($event)">
                       <div slot="label">Status <ion-text color="danger">*</ion-text></div>
                       <ion-select-option value="Present">Present</ion-select-option>
                       <ion-select-option value="Absent">Absent</ion-select-option>
+                      <ion-select-option value="Hollyday">Hollyday</ion-select-option>
                     </ion-select>
                   </div>
                 </ion-col>
 
-                <ion-col size="12" sizeMd="6" [hidden]="attendanceForm.controls['status'].value !== 'Present'">
+                <ion-col size="12" sizeMd="6" *ngIf="attendanceForm.controls['status'].value === 'Present'">
                   <div class="form-input" [id]="'clockInModal'">
                     <ion-input labelPlacement="floating" fill="outline" (ionFocus)="modal.present()" [value]="getFormDate('clockIn') | date:'shortTime'" placeholder="In Time" [readonly]="true">
                       <div slot="label">Clock In Time <ion-text color="danger">*</ion-text></div>
@@ -93,7 +94,7 @@
                   >Clock In Time is required</ion-text>
                 </ion-col>
       
-                <ion-col size="12" sizeMd="6" [hidden]="attendanceForm.controls['status'].value !== 'Present'">
+                <ion-col size="12" sizeMd="6" *ngIf="attendanceForm.controls['status'].value === 'Present'">
                   <div class="form-input" [id]="'clockOutModal'">
                     <ion-input labelPlacement="floating" fill="outline" (ionFocus)="modal2.present()" [value]="getFormDate('clockOut') | date:'shortTime'" placeholder="Out Time" [readonly]="true">
                       <div slot="label">Clock Out Time <ion-text color="danger">*</ion-text></div>

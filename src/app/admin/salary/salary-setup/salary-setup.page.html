@@ -43,7 +43,7 @@
 
         <ion-col size="12">
           <div class="form-input">
-            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Hike in %" formControlName="increment" min="0">
+            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Hike in %" formControlName="increment" min="0" [readonly]="true">
               <div slot="label">Hike in %</div>
             </ion-input>
           </div>
@@ -68,7 +68,7 @@
       <ion-modal [isOpen]="openCalendar1" mode="md" [keepContentsMounted]="true" #effectiveDateModal (ionModalDidDismiss)="openCalendar1 = false" [initialBreakpoint]="0.65">
         <ng-template>
           <ion-content>
-            <ion-datetime [preferWheel]="true" [presentation]="'date'" mode="md" [size]="'cover'" [showDefaultTitle]="true" #effectiveDate (ionChange)="setEffectiveDate($any($event))">
+            <ion-datetime [preferWheel]="true" [presentation]="'date'" mode="md" [size]="'cover'" [showDefaultTitle]="true" #effectiveDate [max]="maxDate.toISOString()" (ionChange)="setEffectiveDate($any($event))">
               <ion-label slot="title">Select Effective Date</ion-label>
 
               <ion-buttons slot="buttons" class="datemodal_btns">

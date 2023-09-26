@@ -26,6 +26,7 @@ export class SalarySetupPage implements OnInit {
   isInProcess: boolean = false;
   calculatedValue: number = 0;
   previousSalary: number = 0;
+  maxDate: Date = new Date();
 
   constructor(
     private fb: FormBuilder,
@@ -35,6 +36,9 @@ export class SalarySetupPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    const today = new Date();
+    this.maxDate = today;
+    this.maxDate.setFullYear(today.getFullYear() + 1, today.getMonth(), today.getDate());
     this.formSetup();
     if(this.employee) {
       this.employeeId = this.employee.guid;
@@ -94,13 +98,10 @@ export class SalarySetupPage implements OnInit {
     // } else if(reviceSalary){
     //   this.calculatedValue = currentCtc;
     // }
-    const percent = (currentCtc - this.previousSalary) / this.previousSalary;
+    const percent = ((currentCtc - this.previousSalary) / this.previousSalary) * 100;
     this.salarySetupForm.patchValue({
       increment: percent.toFixed(2),
-      currentCtc: this.calculatedValue
     });
-    // console.log(reviceSalary, 'revice\n', percent, ' incre\n', currentCtc, ' current\n', this.calculatedValue, 'calc');
-    console.log(this.salarySetupForm.value);
   }
 
   submit(){

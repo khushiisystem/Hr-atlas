@@ -29,7 +29,7 @@
     </ion-item>
   </ion-card>
 
-  <app-salary-setup *ngIf="employee" [employee]="employee"></app-salary-setup>
+  <app-salary-setup *ngIf="employee" [employee]="employee" (createSalary)="formSubmited($event)"></app-salary-setup>
 
   <ng-container *ngIf="employee">
     <app-salary-history [employeeId]="employeeId"></app-salary-history>
