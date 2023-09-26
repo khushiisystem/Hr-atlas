@@ -12,6 +12,7 @@ import { IHollydayRequest, ILeaveSetupRequest } from "../interfaces/request/ILea
 import { IHollydayResponse, ILeaveSetupResponse } from "../interfaces/response/ILeave";
 import { IEmployeeWorkRequest } from "../interfaces/request/IEmployeeWork";
 import { ISalarySetupRequest } from "../interfaces/request/ISalarySetup";
+import { ISalarySetupResponse } from "../interfaces/response/ISalaryResponse";
 
 @Injectable({
     providedIn: 'root'
@@ -55,8 +56,8 @@ export class AdminService {
     getAttendanceSetup(): Observable<IAttendanceSetupResponse>{
         return this.http.get<IAttendanceSetupResponse>(environment.Api + `api/attendancesetup`);
     }
-    updateEmployeeAttendance(attendanceData: udpateAttendanceRequst): Observable<any> {
-        return this.http.put<any>(environment.Api + `api/attendance`, attendanceData);
+    updateEmployeeAttendance(uuid: string, attendanceData: udpateAttendanceRequst): Observable<any> {
+        return this.http.put<any>(environment.Api + `api/attendence/${uuid}`, attendanceData);
     }
 
     // assign work week
@@ -108,10 +109,10 @@ export class AdminService {
     deleteEmployeeSalarySetup(salarysetupId: string): Observable<ISalarySetupRequest> {
         return this.http.delete<ISalarySetupRequest>(environment.Api + `api/salary/${salarysetupId}`);
     }
-    getEmloyeeReviseSalary(userId: string): Observable<ISalarySetupRequest> {
-        return this.http.get<ISalarySetupRequest>(environment.Api + `api/salary/latestSalary/${userId}`);
+    getEmloyeeReviseSalary(userId: string): Observable<ISalarySetupResponse> {
+        return this.http.get<ISalarySetupResponse>(environment.Api + `api/salary/latestSalary/${userId}`);
     }
-    getEmloyeeSalaryHistory(userId: string): Observable<ISalarySetupRequest> {
-        return this.http.get<ISalarySetupRequest>(environment.Api + `api/salary/employeeId/${userId}`);
+    getEmloyeeSalaryHistory(userId: string, pageIndex: number, pageSize: number): Observable<ISalarySetupResponse[]> {
+        return this.http.get<ISalarySetupResponse[]>(environment.Api + `api/salary/employeeId/${userId}?skip=${pageIndex}&limit=${pageSize}`);
     }
 }

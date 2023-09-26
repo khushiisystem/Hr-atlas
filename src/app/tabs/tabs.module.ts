@@ -21,7 +21,6 @@ import { RouterModule } from "@angular/router";
 import { AdminProfilePage } from "../admin/admin-profile/admin-profile.page";
 import { Tab1Page } from "../tab1/tab1.page";
 import { NameImgPageModule } from "../share/components/name-img/name-img.module";
-import { LeavesPage } from "../employee/leaves/leaves.page";
 import { DirectoryPage } from "./components/directory/directory.page";
 import { RoleGuard } from "../core/role.guard";
 import { AddExperiencePageModule } from "../admin/add-experience/add-experience.module";
@@ -50,7 +49,6 @@ import { SalaryPage } from "../admin/salary/salary.page";
     AttendancePage,
     AdditionalSetupPage,
     AdminProfilePage,
-    LeavesPage,
     DirectoryPage,
     SalarySetupPage,
     SalaryIncrementsPage,

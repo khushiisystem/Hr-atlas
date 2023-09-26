@@ -6,6 +6,7 @@ export interface ILeaveSetupRequest {
     creditPeriod: LeaveCreditPeriod,
     annualLeave: number,
     creditLeave: number,
+    reserveDays: number,
 }
 
 export interface IHollydayRequest {

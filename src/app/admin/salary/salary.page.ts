@@ -22,6 +22,8 @@ export class SalaryPage implements OnInit {
 
   reseteEmployee(){this.employee = null as any; this.employeeId = '';}
 
+  formSubmited(event: 'confirm' | 'cancel'){}
+
   goBack(){history.back();}
 
 }

@@ -129,12 +129,26 @@ export class EmployeeAttendancePage implements OnInit {
       case 'Leave':
         color = 'warning'
         break;
+
+      case 'Hollyday':
+        color = 'warning'
+        break;
+
+      case 'Absent':
+        color = 'danger'
+        break;
     
       default:
         color = 'danger'
         break;
     }
     return color;
+  }
+
+  selectStatus(event: any){
+    if(event.detail.value){
+      this.manageForm();
+    }
   }
 
   openForm(item: IClockInResponce, index: number){
@@ -152,7 +166,8 @@ export class EmployeeAttendancePage implements OnInit {
   submitForm(){
     console.log(this.attendanceForm.value, "form");
     this.loader.present('');
-    this.adminServ.updateEmployeeAttendance(this.attendanceForm.value).subscribe(res => {
+    const uuid = this.attendanceForm.controls['guid'].value;
+    this.adminServ.updateEmployeeAttendance(uuid, this.attendanceForm.value).subscribe(res => {
       if(res) {
         console.log(res);
         this.shareServ.presentToast('Attendance updated successfully', 'top', 'success');
