@@ -51,6 +51,12 @@ export class LoginPage implements OnInit {
           const userId = localStorage.getItem('userId') || "";
           this.shareServ.getEmployeeById(userId).subscribe(async res => {
             this.userStateServ.updateState(res);
+
+            if(res.role === 'Employee'){
+              localStorage.setItem('isSwitchable', 'false');
+            } else {
+              localStorage.setItem('isSwitchable', 'true');
+            }
           });
           this.router.navigateByUrl('/tabs/home');
           this.loader.dismiss();

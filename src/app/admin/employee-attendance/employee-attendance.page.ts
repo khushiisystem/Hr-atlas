@@ -77,6 +77,8 @@ export class EmployeeAttendancePage implements OnInit {
   reseteEmployee(){this.employee = null as any; this.employeeId = '';}
 
   getEmployeeAttendance(){
+    this.attendanceLoaded = false;
+    this.loader.present('');
     if(this.pageIndex === 0){this.attendanceList = [];}
     this.shareServ.employeeAttendance(this.employeeId, this.pageIndex * 20, 20).subscribe(res => {
       if(res) {

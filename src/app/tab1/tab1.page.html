@@ -3,16 +3,19 @@
     <ion-avatar slot="start" class="user_avatar" *ngIf="userDetails">
       <app-name-img [name]="getName()" [classes]="'sm'" *ngIf="userDetails.imageUrl.trim() === ''"></app-name-img>
       <img *ngIf="userDetails.imageUrl.trim() !== ''" alt="user" [src]="userDetails && userDetails.imageUrl.trim() !== '' ? userDetails.imageUrl: 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-      <ion-skeleton-text *ngIf="!userDetails" [animated]="true"></ion-skeleton-text>
     </ion-avatar>
 
-    <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === 'Admin'" slot="end" (ionChange)="roleToggle($event)" class="ion-margin-end">Admin</ion-toggle>
+    <ion-avatar slot="start" class="user_avatar" *ngIf="!userDetails">
+      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+    </ion-avatar>
+
+    <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === 'Admin'" slot="end" (ionChange)="roleToggle($event)" class="ion-margin-end" [disabled]="!userDetails" *ngIf="isSwitchable === 'true'">Admin</ion-toggle>
 
     <ion-button mode="md" slot="end" shape="round" [strong]="true" [color]="'primary'" fill="solid" class="ion-padding-horizontal ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
       <span class="stopwatch-time">{{ buttonLabel }}</span>
       <ion-icon slot="end" icon="time"></ion-icon>
     </ion-button>
-    <ion-thumbnail slot="end" class="logo_img ion-margin-end" *ngIf="userRole === 'Admin'">
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end" *ngIf="userRole !== 'Employee'">
       <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>
     <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>

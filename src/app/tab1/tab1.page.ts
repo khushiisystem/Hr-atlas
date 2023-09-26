@@ -28,6 +28,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   userDetails!: IEmployeeResponse;
   demoCard: any[] = [];
   clockInTime: string = '';
+  isSwitchable: string = '';
 
   constructor(
     private router: Router,
@@ -37,7 +38,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private roleStateServ: RoleStateService,
     private loader: LoaderService,
     private userStateServ: UserStateService,
-  ) {}
+  ) {
+    this.isSwitchable = localStorage.getItem('isSwitchable') || 'false';
+  }
 
   ngOnInit() {
     this.userId = localStorage.getItem("userId") || "";
@@ -60,6 +63,12 @@ export class Tab1Page implements OnInit, AfterViewInit {
     this.userStateServ.getState().subscribe(res => {
       if(res){
         this.userDetails = res;
+
+        if(res.role === 'Employee'){
+          localStorage.setItem('isSwitchable', 'false');
+        } else {
+          localStorage.setItem('isSwitchable', 'true');
+        }
         this.roleStateServ.updateState(this.userDetails.role);
         this.getAttendance();
         this.isDataLoaded = true;
