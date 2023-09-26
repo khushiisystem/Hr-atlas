@@ -26,12 +26,14 @@ import { DirectoryPage } from "./components/directory/directory.page";
 import { RoleGuard } from "../core/role.guard";
 import { AddExperiencePageModule } from "../admin/add-experience/add-experience.module";
 import { EmployeesPageModule } from "../share/employees/employees.module";
-import { SalarySetupPage } from "../admin/salary-setup/salary-setup.page";
+import { SalarySetupPage } from "../admin/salary/salary-setup/salary-setup.page";
 import { SalaryIncrementsPage } from "../admin/salary-increments/salary-increments.page";
 import { HollydaySetupPage } from "../admin/hollyday-setup/hollyday-setup.page";
 import { ViewCalendarPage } from "../admin/view-calendar/view-calendar.page";
 import { EmployeeAttendancePage } from "../admin/employee-attendance/employee-attendance.page";
 import { LeavesPageModule } from "../share/leaves/leaves.module";
+import { SalaryHistoryPage } from "../admin/salary/salary-history/salary-history.page";
+import { SalaryPage } from "../admin/salary/salary.page";
 
 @NgModule({
   declarations: [
@@ -55,6 +57,8 @@ import { LeavesPageModule } from "../share/leaves/leaves.module";
     HollydaySetupPage,
     ViewCalendarPage,
     EmployeeAttendancePage,
+    SalaryHistoryPage,
+    SalaryPage,
   ],
   imports: [
     IonicModule,

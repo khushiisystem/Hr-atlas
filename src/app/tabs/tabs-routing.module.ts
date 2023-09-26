@@ -18,11 +18,12 @@ import { AdminProfilePage } from '../admin/admin-profile/admin-profile.page';
 import { RoleGuard } from '../core/role.guard';
 import { AdminLeavesPage } from '../admin/admin-leaves/admin-leaves.page';
 import { AddExperiencePage } from '../admin/add-experience/add-experience.page';
-import { SalarySetupPage } from '../admin/salary-setup/salary-setup.page';
+import { SalarySetupPage } from '../admin/salary/salary-setup/salary-setup.page';
 import { SalaryIncrementsPage } from '../admin/salary-increments/salary-increments.page';
 import { ViewCalendarPage } from '../admin/view-calendar/view-calendar.page';
 import { EmployeeAttendancePage } from '../admin/employee-attendance/employee-attendance.page';
 import { LeavesPage } from '../share/leaves/leaves.page';
+import { SalaryPage } from '../admin/salary/salary.page';
 
 const routes: Routes = [
   {
@@ -142,6 +143,13 @@ const routes: Routes = [
         path: 'salary-setup',
         title: 'Salary Setup',
         component: SalarySetupPage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"}
+      },
+      {
+        path: 'salary',
+        title: 'Salary',
+        component: SalaryPage,
         canActivate:[AuthGuard, RoleGuard],
         data: {role: "Admin"}
       },
