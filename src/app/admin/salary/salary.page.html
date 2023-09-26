@@ -1,0 +1,37 @@
+<ion-header [translucent]="true" mode="md">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
+        <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Salary Setup</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ng-container *ngIf="!employee && employeeId.trim() === ''">
+    <app-employees [isChecklist]="false" (employee)="selectEmploye($event)"></app-employees>
+  </ng-container>
+
+  <ion-card mode="ios" color="light" *ngIf="employee">
+    <ion-item [lines]="'none'" [detail]="false">
+      <div class="empDetail">
+        <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
+        <ion-text>ID: {{employee.employeeId}}</ion-text>
+      </div>
+      <ion-button slot="end" mode="md" fill="clear" [strong]="true" aria-label="Chnage employee" color="primary" (click)="reseteEmployee()">
+        <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-card>
+
+  <app-salary-setup *ngIf="employee" [employee]="employee"></app-salary-setup>
+
+  <ng-container *ngIf="employee">
+    <app-salary-history [employeeId]="employeeId"></app-salary-history>
+  </ng-container>
+</ion-content>

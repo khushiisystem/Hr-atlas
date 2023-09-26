@@ -103,12 +103,15 @@ export class AdminService {
 
     // payroll and salary setup
     employeeSalarySetup(salaryData: ISalarySetupRequest): Observable<ISalarySetupRequest> {
-        return this.http.post<ISalarySetupRequest>(environment.Api + `api/applyLeave/salary`, salaryData);
+        return this.http.post<ISalarySetupRequest>(environment.Api + `api/salary`, salaryData);
     }
     deleteEmployeeSalarySetup(salarysetupId: string): Observable<ISalarySetupRequest> {
-        return this.http.delete<ISalarySetupRequest>(environment.Api + `api/applyLeave/salary/${salarysetupId}`);
+        return this.http.delete<ISalarySetupRequest>(environment.Api + `api/salary/${salarysetupId}`);
     }
-    getEmloyeeSalarySetup(userId: string): Observable<ISalarySetupRequest> {
+    getEmloyeeReviseSalary(userId: string): Observable<ISalarySetupRequest> {
+        return this.http.get<ISalarySetupRequest>(environment.Api + `api/salary/latestSalary/${userId}`);
+    }
+    getEmloyeeSalaryHistory(userId: string): Observable<ISalarySetupRequest> {
         return this.http.get<ISalarySetupRequest>(environment.Api + `api/salary/employeeId/${userId}`);
     }
 }
