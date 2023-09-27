@@ -240,8 +240,13 @@ export class AddExperiencePage implements OnInit {
       if(res){
         this.shareServ.presentToast('Experience added successfully.', 'top', 'success');
         // this.modalCtrl.dismiss(res, 'confirm');
+        const lastRoute= localStorage.getItem('lastRoute');
         localStorage.setItem('lastRoute', '/tabs/directory');
-        this.router.navigateByUrl(`/tabs/employee-profile/${this.userId}`);
+        if(lastRoute){
+          this.router.navigateByUrl(lastRoute);
+        } else {
+          this.router.navigateByUrl(`/tabs/employee-profile/${this.userId}`);
+        }
         this.isInProgress = false;
         this.loader.dismiss();
       }
@@ -256,8 +261,13 @@ export class AddExperiencePage implements OnInit {
     this.adminServ.updateEmployeeWork(this.employeeWorkId, this.workInfoForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Experience updated successfully.', 'top', 'success');
+        const lastRoute= localStorage.getItem('lastRoute');
         localStorage.setItem('lastRoute', '/tabs/directory');
-        this.router.navigateByUrl(`/tabs/employee-profile/${this.userId}`);
+        if(lastRoute){
+          this.router.navigateByUrl(lastRoute);
+        } else {
+          this.router.navigateByUrl(`/tabs/employee-profile/${this.userId}`);
+        }
         this.isInProgress = false;
         this.loader.dismiss();
         // this.modalCtrl.dismiss(res, 'confirm');

@@ -118,6 +118,7 @@ export class EmployeeProfilePage {
         userId: this.employeeDetail.guid,
       }
     }
+    localStorage.setItem('lastRoute', this.router.url);
     this.router.navigate([`/tabs/employee/workinfo`], navigationExtras);
   }
 
