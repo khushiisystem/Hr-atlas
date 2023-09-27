@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { IonAccordionGroup, ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/core/auth.service';
 import { LoaderService } from 'src/app/services/loader.service';
@@ -96,6 +96,18 @@ export class ProfilePage implements OnInit {
     } else {
       return `${this.employeeDetail.firstName.slice(0,2)}`;
     }
+  }
+
+  setupWorkInfo(){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        action: this.workDetail ? 'edit' : 'add',
+        employeeId: this.employeeDetail.employeeId,
+        userId: this.employeeDetail.guid,
+      }
+    }
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/employee/workinfo`], navigationExtras);
   }
 
   goBack() {history.back();}

@@ -96,6 +96,11 @@
   </div>
 
   <div *ngIf="activeTab === 'logs'">
+    <ion-card mode="ios">
+        <ion-item class="ion-text-center" [lines]="'none'" [detail]="false" *ngIf="leaveLogs.length < 1">
+            <ion-label>Logs are empty.</ion-label>
+        </ion-item>
+    </ion-card>
       <ion-card class="log_card" *ngFor="let leaveItem of leaveLogs; index as a">
           <ion-card-header>
               <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
