@@ -39,7 +39,7 @@ export class EditProfilePage implements OnInit {
     this.employeeForm = this.fb.group({
       firstName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
       lastName: ['', Validators.compose([Validators.maxLength(50)])],
-      email: ['', Validators.compose([Validators.required, Validators.email])],
+      email: ['', Validators.compose([Validators.email])],
       officialEmail: ['', Validators.compose([Validators.email])],
       mobileNumber: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
       alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10)])],
@@ -47,7 +47,7 @@ export class EditProfilePage implements OnInit {
       gender: ['Male', Validators.required],
       maritalStatus: [''],
       imageUrl: [''],
-      uuid: [''],
+      guid: [''],
       currentAddress: this.fb.group({
         addressLine1: ['', Validators.compose([Validators.required])],
         addressLine2: ['', Validators.compose([Validators.required])],
@@ -151,13 +151,14 @@ export class EditProfilePage implements OnInit {
       return;
     } else {
       console.log(this.employeeForm.value, "form");
-      this.adminServ.addEmployees(this.employeeForm.value).subscribe(res => {
+      this.adminServ.updateEmployee(this.employeeDetail.guid, this.employeeForm.value).subscribe(res => {
         if(res){
-          this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
+          this.shareServ.presentToast('Profile updated successfully.', 'top', 'success');
           this.modalCtrl.dismiss(res, 'confirm');
         }
       }, (error) =>{
-        this.shareServ.presentToast('Something is wrong.', 'bottom', 'danger');
+        this.shareServ.presentToast(error.error.message, 'top', 'danger');
+        this.modalCtrl.dismiss();
       });
     }
   }

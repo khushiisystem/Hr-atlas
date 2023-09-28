@@ -17,14 +17,17 @@
     <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <div class="container ion-padding-top"  *ngIf="userRole === 'Admin'">
-      <ion-row class="ion-padding-horizontal">
+    <div class="container ion-padding-top">
+      <ion-row class="ion-padding-horizontal" *ngIf="searchString.trim() !== '' || employeeList.length > 0 || isHold">
         <ion-col size="12">
-          <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+          <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()" (ionChange)="checkEmpty()"></ion-input>
+        </ion-col>
+        <ion-col size="12" *ngIf="isHold">
+          <ion-progress-bar type="indeterminate" color="primary"></ion-progress-bar>
         </ion-col>
       </ion-row>
   
-      <ion-list *ngIf="isDataLoaded">
+      <ion-list *ngIf="isDataLoaded && userRole === 'Admin'">
         <ion-item lines="none" [button]="false" *ngIf="employeeList.length === 0">
           <ion-label class="ion-text-center">No any employee.</ion-label>
         </ion-item>
@@ -56,10 +59,9 @@
           </ion-item-options>
         </ion-item-sliding>
       </ion-list>
-    </div>
-    
-    <div class="container" *ngIf="userRole === 'Employee' ">
-      <ion-list *ngIf="isDataLoaded">
+      
+  
+      <ion-list *ngIf="isDataLoaded && userRole === 'Employee'">
         <ion-item lines="none" [button]="false" *ngIf="employeeList.length === 0">
           <ion-label class="ion-text-center">No any employee.</ion-label>
         </ion-item>
@@ -82,7 +84,7 @@
     </div>
     
     
-    <ion-infinite-scroll #infiniteScroll (ionInfinite)="isMoreData ? loadData($any($event)) : ''" [position]="'bottom'" *ngIf="isMoreData">
+    <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadData($any($event))" [position]="'bottom'">
       <ion-infinite-scroll-content *ngIf="isMoreData" loadingSpinner="bubbles" loadingText="Loading more data...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>

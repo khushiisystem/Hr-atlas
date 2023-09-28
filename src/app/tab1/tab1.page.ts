@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { UserStateService } from '../services/userState.service';
 import { AdminService } from '../services/admin.service';
 import { AdminTutorialsPage } from '../admin/admin-tutorials/admin-tutorials.page';
+import Swiper from 'swiper';
 
 @Component({
   selector: 'app-tab1',
@@ -20,6 +21,14 @@ export class Tab1Page implements OnInit, AfterViewInit {
   navigateToUser() {
     throw new Error('Method not implemented.');
   }
+  @ViewChild('swiper') swiper: Swiper = new Swiper('#swiper', {
+    autoHeight: true,
+    autoplay: {delay: 100},
+    initialSlide: 0,
+    slidesPerView: 1.25,
+    spaceBetween: 20,
+    centeredSlides: true,
+  });
   isRunning: boolean = false;
   stopwatchInterval: any;
   stopwatchTime: string = '';
@@ -51,7 +60,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
   ngOnInit() {
     this.userId = localStorage.getItem("userId") || "";
     this.getStates();
-    this.checkAdminSetups();
 
     localStorage.setItem('lastRoute', this.router.url);
     this.demoCard.length = 12;
@@ -76,6 +84,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
           localStorage.setItem('isSwitchable', 'false');
         } else {
           localStorage.setItem('isSwitchable', 'true');
+          this.checkAdminSetups();
         }
         this.roleStateServ.updateState(this.userDetails.role);
         this.getAttendance();
@@ -360,6 +369,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
   showleaves() {
     this.router.navigate(['./tabs/leaves']);
+  }
+  attendancePAge(){
+    if(this.userRole === 'Employee'){
+      this.router.navigate(['/tabs/attendance']);
+    } else if(this.userRole === 'Admin'){
+      this.router.navigate(['/tabs/employee-attendance']);
+    }
   }
   showpayroll() {
     this.router.navigate(['./payroll']);

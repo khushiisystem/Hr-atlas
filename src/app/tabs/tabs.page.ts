@@ -11,6 +11,7 @@ import { UserStateService } from '../services/userState.service';
 export class TabsPage {
   userRole: string = "";
   userId: string = "";
+  isSwitchable: boolean = false;
 
   constructor(private roleStateServ: RoleStateService, private adminServ: AdminService, private userStateServ: UserStateService) {
     userStateServ.getState().subscribe(res => {
@@ -22,8 +23,10 @@ export class TabsPage {
             roleStateServ.updateState(res.role);
             if(res.role === 'Employee'){
               localStorage.setItem('isSwitchable', 'false');
+              this.isSwitchable = false;
             } else {
               localStorage.setItem('isSwitchable', 'true');
+              this.isSwitchable = true;
             }
           });
         }    

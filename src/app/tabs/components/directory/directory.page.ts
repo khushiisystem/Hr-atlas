@@ -26,6 +26,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   private searchSubject = new Subject<string>();
   private readonly debounceTimeMs = 3000;
   userId: string = '';
+  isHold: boolean = false;
 
   constructor(
     private adminServ: AdminService,
@@ -63,9 +64,12 @@ export class DirectoryPage implements OnInit, OnDestroy {
         this.infiniteScroll.complete();
         this.isDataLoaded = true;
       }
+      this.isHold = false;
+      console.log(this.isHold);
     }, (error) => {
       this.isMoreData = false;
       this.isDataLoaded = true;
+      this.isHold = false;
       this.infiniteScroll.complete();
     });
   }
@@ -146,9 +150,10 @@ export class DirectoryPage implements OnInit, OnDestroy {
           this.employeeList = res;
           this.isDataLoaded = true;
         }
+        this.isHold = false;
       }, (error) => {
-        console.log(error, "search error");
         this.isDataLoaded = true;
+        this.isHold = false;
       });
     } else {
       this.getEmployeeList();
@@ -164,7 +169,11 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   onSearch() {
+    this.isHold = true;
     this.searchSubject.next(this.searchString);
+  }
+  checkEmpty(){
+    if(this.searchString === ''){this.isHold = true;}
   }
 
   ngOnDestroy(): void {

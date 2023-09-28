@@ -78,7 +78,6 @@ export class AddEmployeePage implements OnInit {
     });
 
     this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
-    console.log(this.employeeForm.value, "form");
     if(this.action === 'edit' && this.employeeId.trim() !== ''){
       this.getProfile();
     } else {this.isDataLoaded = true;}
@@ -90,7 +89,6 @@ export class AddEmployeePage implements OnInit {
       if(res){
         this.employeeForm.patchValue(res);
         this.isDataLoaded = true;
-        console.log(this.employeeForm.value, "path form");
       }
     }, (error) => {
       console.log(error, "get error");
@@ -124,18 +122,11 @@ export class AddEmployeePage implements OnInit {
   }
 
   sameAddress(event: CustomEvent){
-    console.log(event, "event");
     this.isSameAddress = event.detail.checked;
-    console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
-    console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
     if(this.isSameAddress){
       (this.employeeForm.controls['permanentAddress'] as FormGroup).patchValue((this.employeeForm.controls['currentAddress'] as FormGroup).value);
-      console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
-      console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
     } else {
       (this.employeeForm.controls['permanentAddress'] as FormGroup).reset();
-      console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
-      console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
     }
   }
 

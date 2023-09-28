@@ -71,6 +71,8 @@ export class AttendanceSetupPage implements OnInit {
         await this.attendanceForm.patchValue(res);
         this.calculateWorkDuration();
         this.dataLoaded = true;
+      } else {
+        this.dataLoaded = true;
       }
     }, (error) => {
       console.error(error.error, "get error");
