@@ -26,6 +26,33 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <swiper-container #swiper id="swiper" class="banner-slides ion-margin-top" [loop]="true" effect="coverflow">
+    <ng-container *ngIf="userRole === 'Admin'">
+      <swiper-slide>
+        <ion-card mode="md" class="">
+          <ion-card-content>
+            <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
+            <small><em>Settings > Calendar setup > leave Setup</em></small>
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+      <swiper-slide>
+        <ion-card mode="md" class="">
+          <ion-card-content>
+            <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
+            <small><em>Settings > Primary setup > Attendance Setup</em></small>
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+    </ng-container>
+    <!-- <swiper-slide>
+      <ion-card mode="md" class=" ion-text-center">
+        <ion-card-header>
+          <ion-label>Slide 3</ion-label>
+        </ion-card-header>
+      </ion-card>
+    </swiper-slide> -->
+  </swiper-container>
 
   <!-- <img src="../../assets/images/logo.png" alt="Photo" class="logo_img2" /> -->
 
@@ -80,7 +107,7 @@
       </ion-col>
 
       <ion-col size="4" sizeSm="3">
-        <ion-card mode="md" type="button" [routerLink]="'/tabs/attendance'">
+        <ion-card mode="md" type="button" (click)="attendancePAge()">
           <ion-card-content>
             <div class="icon_card">
               <ion-icon name="hand-right-outline" aria-hidden="true" size="large"></ion-icon>

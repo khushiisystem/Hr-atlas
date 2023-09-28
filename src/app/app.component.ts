@@ -8,6 +8,9 @@ import {
 import { ShareService } from "./services/share.service";
 import { App } from "@capacitor/app";
 import { Router } from "@angular/router";
+import { register } from 'swiper/element/bundle';
+
+register();
 
 @Component({
   selector: "app-root",
