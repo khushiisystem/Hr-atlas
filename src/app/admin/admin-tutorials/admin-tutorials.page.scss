@@ -1,0 +1,21 @@
+.inner_div{
+    display: grid;
+    gap: 10px;
+    padding: 16px;
+}
+ion-text {
+    color: #4e6779;
+    padding-right: 5px;
+}
+a {
+    text-decoration: none;
+    display: inline-block;
+    outline: none;
+    color: var(--ion-color-primary);
+    &:hover, &:focus, &:active, &:focus-within {
+        outline: none;
+    }
+}
+.actions {
+    display: flex;
+}

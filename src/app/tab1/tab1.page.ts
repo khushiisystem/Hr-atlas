@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { ShareService } from '../services/share.service';
 import { IEmployeeResponse } from '../interfaces/response/IEmployee';
@@ -8,6 +8,8 @@ import { RoleStateService } from '../services/roleState.service';
 import { LoaderService } from '../services/loader.service';
 import * as moment from 'moment';
 import { UserStateService } from '../services/userState.service';
+import { AdminService } from '../services/admin.service';
+import { AdminTutorialsPage } from '../admin/admin-tutorials/admin-tutorials.page';
 
 @Component({
   selector: 'app-tab1',
@@ -20,7 +22,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
   isRunning: boolean = false;
   stopwatchInterval: any;
-  stopwatchTime: string = '00:00:00';
+  stopwatchTime: string = '';
   buttonLabel: string = 'Clock in';
   userRole: string = "";
   userId: string = '';
@@ -29,12 +31,16 @@ export class Tab1Page implements OnInit, AfterViewInit {
   demoCard: any[] = [];
   clockInTime: string = '';
   isSwitchable: string = '';
+  leaveDone: boolean = false;
+  attendanceDone: boolean = false;
 
   constructor(
     private router: Router,
     private modalCtrl: ModalController,
+    private popoverCtrl: PopoverController,
     private alertCtrl: AlertController,
     private shareServ: ShareService,
+    private adminServ: AdminService,
     private roleStateServ: RoleStateService,
     private loader: LoaderService,
     private userStateServ: UserStateService,
@@ -45,6 +51,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
   ngOnInit() {
     this.userId = localStorage.getItem("userId") || "";
     this.getStates();
+    this.checkAdminSetups();
+
     localStorage.setItem('lastRoute', this.router.url);
     this.demoCard.length = 12;
     this.clockInTime = localStorage.getItem('clockInTime') || "";
@@ -76,28 +84,30 @@ export class Tab1Page implements OnInit, AfterViewInit {
     });
 
     this.roleStateServ.getState().subscribe(res => {
-      console.log(this.userRole);
       this.userRole = res || "";
     });
   }
 
   getAttendance(){
     this.shareServ.todayAttendance().subscribe(res => {
-      if(res && !res.message && !res.clockOut) {
+      if(res && !res.message && !res[0].clockOut) {
         this.isRunning = true;
         this.buttonLabel = 'Clock Out\t';
-        const currentTime = new Date(moment(res.clockIn).format()).toISOString();
-        localStorage.setItem('clockinId', res.guid);
+        const currentTime = res[0].clockIn;
+        localStorage.setItem('clockinId', res[0].guid);
         localStorage.setItem('clockInTime', currentTime);
-        if(res.clockOut){
-          const outTime = new Date(moment(res.clockOut).format()).toISOString();
+        if(res[0].clockOut){
+          const outTime = res.clockOut;
           localStorage.setItem('clockOutTime', outTime);
         }
-        if(res.clockIn.trim() !== '' && !res.clockOut){
+        if(res[0].clockIn && res[0].clockIn.trim() !== '' && !res[0].clockOut){
           this.isRunning = true;
           this.buttonLabel = "Clock Out";
+          this.clockInTime = res[0].clockIn;
           this.startWatch(this.clockInTime);
         }
+      } if(res.message){
+        this.shareServ.presentToast(res.message, 'top', 'primary');
       }
     }, (error) => {
       console.log(error, 'err');
@@ -146,7 +156,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
           this.loader.present('');
 
           clearInterval(this.stopwatchInterval);
-          this.stopwatchTime = '00:00:00';
+          this.stopwatchTime = '';
 
           const clockId = localStorage.getItem('clockinId');
           if(clockId){
@@ -246,8 +256,96 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }
   }
 
+  async checkAdminSetups(){
+    if(!this.leaveDone && !this.attendanceDone){
+      this.getLleaveSetup();
+    }
+  }
+  
+  getLleaveSetup(){
+    this.adminServ.getLeaveSetup().subscribe(res => {
+      if(res) {
+        this.leaveDone = true;
+        this.getAttendanceSetups();
+      } else {
+        this.tutorialModal('leave');
+      }
+    }, (error) => {
+      this.tutorialModal('leave');
+    });
+  }
+  getAttendanceSetups(){
+    this.adminServ.getAttendanceSetup().subscribe(async res => {
+      if(!res) {
+        this.tutorialModal('attendance');
+      }
+    }, (error) => {
+      this.tutorialModal('attendance');
+    });
+  }
+
+  instructionsClosed(event: any){
+    console.log(event, "popover");
+  }
+
+  async tutorialModal(setup: 'leave' | 'attendance') {
+    const tutorialPopover = this.popoverCtrl.create({
+      component: AdminTutorialsPage,
+      cssClass: 'tutorialPopover',
+      mode: 'md',
+      side: 'end',
+      size: 'auto',
+      id: 'tutorialAdmin',
+      backdropDismiss: false,
+      componentProps: {setupName: setup}
+    });
+
+    (await tutorialPopover).present();
+
+    (await tutorialPopover).onDidDismiss().then(result => {
+      switch (result.data) {
+        case 'leaveDone':
+          this.leaveDone = true;
+          this.getAttendanceSetups();
+          break;
+
+        case 'attendanceDone':
+          this.attendanceDone = true;
+          // this.getAttendanceSetups()
+          break;
+      
+        default:
+          break;
+      }
+    });
+    // const tutorialDialog = this.modalCtrl.create({
+    //   component: AdminTutorialsPage,
+    //   backdropDismiss: false,
+    //   mode: 'md',
+    //   cssClass: 'tutorialDialog',
+    //   componentProps: {setupName: setup}
+    // });
+
+    // (await tutorialDialog).present();
+    // (await tutorialDialog).onDidDismiss().then(result => {
+    //   switch (result.data) {
+    //     case 'leaveDone':
+    //       this.leaveDone = true;
+    //       this.getAttendanceSetups()
+    //       break;
+
+    //     case 'attendaceDone':
+    //       this.attendanceDone = true;
+    //       this.getAttendanceSetups()
+    //       break;
+      
+    //     default:
+    //       break;
+    //   }
+    // });
+  }
+
   roleToggle(event: any) {
-    console.log(event, 'event');
     if(event.detail.checked){
       this.roleStateServ.updateState('Admin');
       localStorage.setItem('userRole', 'Admin');

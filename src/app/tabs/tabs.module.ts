@@ -33,6 +33,7 @@ import { EmployeeAttendancePage } from "../admin/employee-attendance/employee-at
 import { LeavesPageModule } from "../share/leaves/leaves.module";
 import { SalaryHistoryPage } from "../admin/salary/salary-history/salary-history.page";
 import { SalaryPage } from "../admin/salary/salary.page";
+import { AdminTutorialsPage } from "../admin/admin-tutorials/admin-tutorials.page";
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { SalaryPage } from "../admin/salary/salary.page";
     EmployeeAttendancePage,
     SalaryHistoryPage,
     SalaryPage,
+    AdminTutorialsPage,
   ],
   imports: [
     IonicModule,

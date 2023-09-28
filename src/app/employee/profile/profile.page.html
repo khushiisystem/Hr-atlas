@@ -23,9 +23,9 @@
                 <app-name-img [name]="getName()" *ngIf="employeeDetail.imageUrl.trim() === ''"></app-name-img>
                 <img *ngIf="employeeDetail.imageUrl.trim() != ''" alt="Employee" [src]="employeeDetail.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
               </ion-avatar>
-              <span class="edit_btn">
+              <!-- <span class="edit_btn">
                 <ion-icon name="pencil" aria-hidden="true"></ion-icon>
-              </span>
+              </span> -->
             </div>
     
             <div class="emp_name_role">
