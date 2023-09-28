@@ -21,14 +21,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
   navigateToUser() {
     throw new Error('Method not implemented.');
   }
-  @ViewChild('swiper') swiper: Swiper = new Swiper('#swiper', {
-    autoHeight: true,
-    autoplay: {delay: 100},
-    initialSlide: 0,
-    slidesPerView: 1.25,
-    spaceBetween: 20,
-    centeredSlides: true,
-  });
+  @ViewChild('swiper') swiperRef!: ElementRef;
+  swiper?: Swiper;
   isRunning: boolean = false;
   stopwatchInterval: any;
   stopwatchTime: string = '';
@@ -70,9 +64,35 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.buttonLabel = "Clock Out";
       this.startWatch(this.clockInTime);
     }
+    this.swiper = new Swiper('#swiper', {
+      autoplay: {delay: 3000},
+      initialSlide: 0,
+      loop: true,
+      navigation: true,
+      freeMode: {enabled: true},
+      slidesPerView: 1.25,
+      spaceBetween: 20,
+      centeredSlides: true,
+    })
   }
   ngAfterViewInit(): void {
     this.clockInTime = localStorage.getItem('clockInTime') || "";
+    this.swiperReady();
+  }
+  swiperSlideChanged(e: any) {
+    console.log('changed: ', e);
+  }
+ 
+  swiperReady() {
+    this.swiper = this.swiperRef?.nativeElement.swiper;
+  }
+ 
+  goNext() {
+    this.swiper?.slideNext();
+  }
+ 
+  goPrev() {
+    this.swiper?.slidePrev();
   }
 
   getStates(){
@@ -94,6 +114,33 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
     this.roleStateServ.getState().subscribe(res => {
       this.userRole = res || "";
+
+      if(this.userRole === 'Admin'){
+        // this.swiper = new Swiper('#swiper', {
+        //   autoplay: {delay: 3000},
+      // initialSlide: 0,
+      // loop: true,
+      // navigation: true,
+      // freeMode: {enabled: true},
+      // slidesPerView: 1.25,
+      // spaceBetween: 20,
+      // centeredSlides: true,
+        // });
+    //     this.swiper.addSlide(0, `<ion-card mode="md" class="">
+    //   <ion-card-content>
+    //     <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
+    //     <small><em>Settings > Calendar setup > leave Setup</em></small>
+    //   </ion-card-content>
+    // </ion-card>`);
+    // this.swiper.appendSlide(`<ion-card mode="md" class="">
+    //   <ion-card-content>
+    //     <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
+    //     <small><em>Settings > Calendar setup > leave Setup</em></small>
+    //   </ion-card-content>
+    // </ion-card>`);
+        // console.log(this.swiper, "swper");
+        // this.swiper.autoplay.start();
+      }
     });
   }
 

@@ -26,8 +26,8 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <swiper-container #swiper id="swiper" class="banner-slides ion-margin-top" [loop]="true" effect="coverflow">
-    <ng-container *ngIf="userRole === 'Admin'">
+  <swiper-container [slidesPerView]="1.25" [spaceBetween]="20" [centeredSlides]="true" [autoplay]="3000" [initialSlide]="0" [freeMode]="true" #swiper [loop]="true" class="banner-slides ion-margin-top" (afterinit)="swiperReady()" (slidechange)="swiperSlideChanged($event)" lazy="true" *ngIf="userRole === 'Admin'">
+    <!-- <ng-container> -->
       <swiper-slide>
         <ion-card mode="md" class="">
           <ion-card-content>
@@ -44,7 +44,7 @@
           </ion-card-content>
         </ion-card>
       </swiper-slide>
-    </ng-container>
+    <!-- </ng-container> -->
     <!-- <swiper-slide>
       <ion-card mode="md" class=" ion-text-center">
         <ion-card-header>

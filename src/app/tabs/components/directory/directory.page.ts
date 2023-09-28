@@ -131,6 +131,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   viewProfile(empId: string) {
+    this.searchString = "";
+    this.searchSubject.complete();
     if(this.lastRoute === '/tabs/settings'){
       this.router.navigate([`/tabs/payroll-setup/${empId}`]);
     } else {
