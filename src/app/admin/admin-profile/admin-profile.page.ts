@@ -51,12 +51,12 @@ export class AdminProfilePage implements OnInit {
 
   async editProfile(){
     const profileModal = this.modalCtrl.create({
-      component: AddEmployeePage,
+      component: EditProfilePage,
       mode: 'md',
       showBackdrop: true,
       backdropDismiss: false,
       initialBreakpoint: 1,
-      componentProps: {action: "edit", employeeId: this.userId}
+      componentProps: {userId: this.userId}
     });
 
     (await profileModal).present();
