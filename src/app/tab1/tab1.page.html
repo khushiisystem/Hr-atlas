@@ -60,7 +60,10 @@
 
   <ion-card mode="ios" color="primary" class="time_card" *ngIf="userDetails && userRole === 'Employee' && isRunning">
     <ion-card-header>
-      <ion-card-title>Work Duration</ion-card-title>
+      <div>
+        <ion-card-title>Work Duration</ion-card-title>
+        <ion-card-subtitle>Clock In: {{clockInTime | date:'shortTime'}}</ion-card-subtitle>
+      </div>
       <ion-icon name="time" size="large"></ion-icon>
     </ion-card-header>
     <ion-card-content>

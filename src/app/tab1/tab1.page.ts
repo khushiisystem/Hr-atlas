@@ -57,13 +57,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
     localStorage.setItem('lastRoute', this.router.url);
     this.demoCard.length = 12;
-    this.clockInTime = localStorage.getItem('clockInTime') || "";
-    const clockOutTime = localStorage.getItem('clockOutTime') || "";
-    if(this.clockInTime.trim() !== '' && !clockOutTime){
-      this.isRunning = true;
-      this.buttonLabel = "Clock Out";
-      this.startWatch(this.clockInTime);
-    }
     this.swiper = new Swiper('#swiper', {
       autoplay: {delay: 3000},
       initialSlide: 0,
@@ -153,7 +146,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         localStorage.setItem('clockinId', res[0].guid);
         localStorage.setItem('clockInTime', currentTime);
         if(res[0].clockOut){
-          const outTime = res.clockOut;
+          const outTime = res[0].clockOut;
           localStorage.setItem('clockOutTime', outTime);
         }
         if(res[0].clockIn && res[0].clockIn.trim() !== '' && !res[0].clockOut){
@@ -163,9 +156,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
           this.startWatch(this.clockInTime);
         }
       } if(res.message){
+        this.isRunning = false;
         this.shareServ.presentToast(res.message, 'top', 'primary');
       }
     }, (error) => {
+      this.isRunning = false;
       console.log(error, 'err');
     });
   }
