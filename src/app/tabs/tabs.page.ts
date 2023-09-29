@@ -24,7 +24,7 @@ export class TabsPage {
             if(res.role === 'Employee'){
               localStorage.setItem('isSwitchable', 'false');
               this.isSwitchable = false;
-            } else {
+            } else if(res.role === 'Admin') {
               localStorage.setItem('isSwitchable', 'true');
               this.isSwitchable = true;
             }

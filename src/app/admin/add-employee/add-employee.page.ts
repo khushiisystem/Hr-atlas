@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { AdminService } from 'src/app/services/admin.service';
@@ -34,6 +34,7 @@ export class AddEmployeePage implements OnInit {
   constructor(
     private fb: FormBuilder,
     public router: Router,
+    public activeroute: ActivatedRoute,
     private adminServ: AdminService,
     private shareServ: ShareService,
     private modalCtrl: ModalController,
@@ -43,6 +44,8 @@ export class AddEmployeePage implements OnInit {
   ngOnInit() {
     this.today = new Date();
     this.maxDate.setFullYear(this.today.getFullYear() - 10);
+    this.action = this.activeroute.snapshot.params?.['action'];
+    this.employeeId = this.activeroute.snapshot.params?.['employeeId'];
 
     this.employeeForm = this.fb.group({
       firstName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
@@ -78,13 +81,15 @@ export class AddEmployeePage implements OnInit {
     });
 
     this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
-    if(this.action === 'edit' && this.employeeId.trim() !== ''){
+    console.log(typeof this.employeeId);
+    if(this.action === 'edit' && this.employeeId.trim() !== '' && this.employeeId !== null){
       this.getProfile();
     } else {this.isDataLoaded = true;}
   }
 
 
   getProfile(){
+    console.log('called');
     this.adminServ.getEmployeeById(this.employeeId).subscribe(res => {
       if(res){
         this.employeeForm.patchValue(res);
@@ -151,7 +156,10 @@ export class AddEmployeePage implements OnInit {
     this.adminServ.addEmployees(this.employeeForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
-        this.modalCtrl.dismiss(res, 'confirm');
+        // this.modalCtrl.dismiss(res, 'confirm');
+        const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
+        localStorage.setItem('lastRoute', '/tabs/home');
+        this.router.navigateByUrl(lastRoute);
         this.isInProgress = false;
         this.loader.dismiss();
       }
@@ -166,7 +174,10 @@ export class AddEmployeePage implements OnInit {
     this.adminServ.updateEmployee(this.employeeId, this.employeeForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
-        this.modalCtrl.dismiss(res, 'confirm');
+        // this.modalCtrl.dismiss(res, 'confirm');
+        const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
+        localStorage.setItem('lastRoute', '/tabs/home');
+        this.router.navigateByUrl(lastRoute);
         this.isInProgress = false;
         this.loader.dismiss();
       }
@@ -177,5 +188,8 @@ export class AddEmployeePage implements OnInit {
     });
   }
 
-  goBack(){this.modalCtrl.dismiss();}
+  goBack(){
+    const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
+    this.router.navigateByUrl(lastRoute);
+  }
 }

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { ShareService } from '../services/share.service';
@@ -33,7 +33,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   userDetails!: IEmployeeResponse;
   demoCard: any[] = [];
   clockInTime: string = '';
-  isSwitchable: string = '';
+  isSwitchable: boolean = false;
   leaveDone: boolean = false;
   attendanceDone: boolean = false;
 
@@ -48,7 +48,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private loader: LoaderService,
     private userStateServ: UserStateService,
   ) {
-    this.isSwitchable = localStorage.getItem('isSwitchable') || 'false';
+    this.isSwitchable = false;
   }
 
   ngOnInit() {
@@ -95,10 +95,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
         if(res.role === 'Employee'){
           localStorage.setItem('isSwitchable', 'false');
-        } else {
+          this.isSwitchable = false;
+        } else if(res.role === 'Admin') {
           localStorage.setItem('isSwitchable', 'true');
           this.checkAdminSetups();
+          this.isSwitchable = true;
         }
+        console.log(this.isSwitchable);
         this.roleStateServ.updateState(this.userDetails.role);
         this.getAttendance();
         this.isDataLoaded = true;
@@ -283,20 +286,25 @@ export class Tab1Page implements OnInit, AfterViewInit {
       event.target.complete();
     }, 2000);
   }
-  async addEmployee(){
-    const employeeModel = this.modalCtrl.create({
-      component: AddEmployeePage,
-      componentProps: {
-        action: 'add',
-        employeeId: ""
-      },
-    });
+  // async addEmployee(){
+  //   const employeeModel = this.modalCtrl.create({
+  //     component: AddEmployeePage,
+  //     componentProps: {
+  //       action: 'add',
+  //       employeeId: ""
+  //     },
+  //   });
 
-    (await employeeModel).present();
+  //   (await employeeModel).present();
 
-    (await employeeModel).onDidDismiss().then(result => {
-      console.log(result, "result");
-    });
+  //   (await employeeModel).onDidDismiss().then(result => {
+  //     console.log(result, "result");
+  //   });
+  // }
+
+  addEmployee(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/add-employee/add/${null}`])
   }
 
   getName() {

@@ -69,7 +69,7 @@ const routes: Routes = [
         data: {role: "Admin"}
       },
       {
-        path: 'add-employee',
+        path: 'add-employee/:action/:employeeId',
         title: "Add Employee",
         component: AddEmployeePage,
         canActivate: [AuthGuard, RoleGuard],
@@ -92,7 +92,8 @@ const routes: Routes = [
       {
         path: 'edit-profile/:employeeId',
         title: "Edit Profile",
-        component: EditProfilePage
+        component: EditProfilePage,
+        canActivate:[AuthGuard],
       },
       {
         path: 'employee-profile/:employeeId',

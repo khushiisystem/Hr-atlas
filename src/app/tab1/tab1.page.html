@@ -9,7 +9,7 @@
       <ion-skeleton-text [animated]="true"></ion-skeleton-text>
     </ion-avatar>
 
-    <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === 'Admin'" slot="end" (ionChange)="roleToggle($event)" class="ion-margin-end" [disabled]="!userDetails" *ngIf="isSwitchable === 'true'">Admin</ion-toggle>
+    <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === 'Admin'" slot="end" (ionChange)="roleToggle($event)" class="ion-margin-end" [disabled]="!userDetails" *ngIf="isSwitchable">Admin</ion-toggle>
 
     <ion-button mode="md" slot="end" shape="round" [strong]="true" [color]="'primary'" fill="solid" class="ion-padding-horizontal ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
       <span class="stopwatch-time">{{ buttonLabel }}</span>

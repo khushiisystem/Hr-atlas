@@ -7,11 +7,9 @@
       <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
     </ion-avatar>
     <ion-title color="light">Profile</ion-title>
-    <ion-buttons slot="end">
-      <ion-button mode="md" (click)="logout()" color="danger" fill="solid" shape="round" size="small" [strong]="true" class="smLogoutBtn">
-        <ion-label>Log out</ion-label>
-      </ion-button>
-    </ion-buttons>
+    <ion-button mode="md" slot="end" (click)="logout()" color="danger" fill="solid" shape="round" size="small" [strong]="true" class="smLogoutBtn ion-margin-end">
+      <ion-label>Log out</ion-label>
+    </ion-button>
     <ion-progress-bar color="light" type="inderminate" *ngIf="!dataLoaded && !adminDetail"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
@@ -208,11 +206,11 @@
       </ion-accordion>
     </ion-accordion-group>
     
-    <ion-card color="danger" type="button" mode="md" class="ion-margin">
-        <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger" (click)="logout()">
-            <ion-label>Log out</ion-label>
-            <ion-icon slot="end" name="log-out-outline" aria-hidden="true"></ion-icon>
-        </ion-item>
+    <ion-card color="danger" type="button" mode="ios" class="ion-margin logout-card">
+      <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger" (click)="logout()">
+        <ion-label>Log out</ion-label>
+        <ion-icon slot="end" name="log-out-outline" aria-hidden="true" size="large"></ion-icon>
+      </ion-item>
     </ion-card>
   </div>
 </ion-content>

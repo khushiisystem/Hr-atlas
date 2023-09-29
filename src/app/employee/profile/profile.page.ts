@@ -68,23 +68,27 @@ export class ProfilePage implements OnInit {
     }
   };
 
-  async editProfile(){
-    const profileModal = this.modalCtrl.create({
-      component: EditProfilePage,
-      mode: 'md',
-      showBackdrop: true,
-      backdropDismiss: false,
-      initialBreakpoint: 1,
-      componentProps: {userId: this.employeeId}
-    });
+  // async editProfile(){
+  //   const profileModal = this.modalCtrl.create({
+  //     component: EditProfilePage,
+  //     mode: 'md',
+  //     showBackdrop: true,
+  //     backdropDismiss: false,
+  //     initialBreakpoint: 1,
+  //     componentProps: {userId: this.employeeId}
+  //   });
 
-    (await profileModal).present();
+  //   (await profileModal).present();
 
-    (await profileModal).onDidDismiss().then(result => {
-      if(result.role === 'confirm'){
-        this.getEmployeeDetails();
-      }
-    });
+  //   (await profileModal).onDidDismiss().then(result => {
+  //     if(result.role === 'confirm'){
+  //       this.getEmployeeDetails();
+  //     }
+  //   });
+  // }
+  editProfile(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/edit-profile/${this.employeeId}`]);
   }
 
   getAddress(add: IAddress){
@@ -112,7 +116,7 @@ export class ProfilePage implements OnInit {
     this.router.navigate([`/tabs/employee/workinfo`], navigationExtras);
   }
 
-  goBack() {history.back();}
+  goBack() {this.router.navigate([`/tabs/home`]);}
 
   logout() {this.authServ.signOut();}
   
@@ -122,6 +126,12 @@ export class ProfilePage implements OnInit {
   workWeek() {
     this.router.navigate([`/employee-work-week/${this.employeeId}`]);
   }
-
+  
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      window.location.reload();
+      event.target.complete();
+    }, 2000);
+  }
 
 }

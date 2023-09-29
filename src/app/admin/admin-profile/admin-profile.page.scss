@@ -35,6 +35,11 @@ ion-content {
     --background: transparent;
     // background-image: linear-gradient(45deg, #4854e0, #50c8ff); //#ff8d00
 }
+ion-accordion-group{
+    &.accordion-group-expand-inset ion-accordion {
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+    }
+}
 .emp_avatar {
     display: flex;
     align-items: center;
@@ -142,3 +147,4 @@ ion-accordion ion-item[slot="header"], .btn_item {--ripple-color: var(--ion-colo
 .loadingContent {
     & ion-card, & ion-item {--background: transparent;}
 }
+.logout-card {font-weight: 600;}
