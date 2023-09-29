@@ -50,10 +50,10 @@ export class AddEmployeePage implements OnInit {
     this.employeeForm = this.fb.group({
       firstName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
       lastName: ['', Validators.compose([Validators.maxLength(50)])],
-      email: [''],
+      email: ['', Validators.compose([Validators.email])],
       dateOfBirth: null,
       gender: ['Male'],
-      officialEmail: ['', Validators.compose([Validators.email])],
+      officialEmail: ['', Validators.compose([Validators.required, Validators.email])],
       mobileNumber: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
       alternateMobileNumber: [''],
       maritalStatus: [''],
@@ -159,7 +159,7 @@ export class AddEmployeePage implements OnInit {
         // this.modalCtrl.dismiss(res, 'confirm');
         const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
         localStorage.setItem('lastRoute', '/tabs/home');
-        this.router.navigateByUrl(lastRoute);
+        this.router.navigateByUrl(lastRoute, {replaceUrl: true});
         this.isInProgress = false;
         this.loader.dismiss();
       }
@@ -177,7 +177,7 @@ export class AddEmployeePage implements OnInit {
         // this.modalCtrl.dismiss(res, 'confirm');
         const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
         localStorage.setItem('lastRoute', '/tabs/home');
-        this.router.navigateByUrl(lastRoute);
+        this.router.navigateByUrl(lastRoute, {replaceUrl: true});
         this.isInProgress = false;
         this.loader.dismiss();
       }

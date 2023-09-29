@@ -8,7 +8,7 @@ import { RoleStateService } from 'src/app/services/roleState.service';
 })
 export class LeavesPage implements OnInit {
   userRole: string = '';
-  isSwitchable: string = '';
+  isSwitchable: boolean = false;
 
   constructor(
     private roleStateServ: RoleStateService,
@@ -16,11 +16,12 @@ export class LeavesPage implements OnInit {
     this.roleStateServ.getState().subscribe(res => {
       if(res){
         this.userRole = res;
+        this.isSwitchable = this.userRole === 'Admin';
       } else {
         this.userRole = localStorage.getItem('userRole') || "";
+        this.isSwitchable = this.userRole === 'Admin';
       }
     });
-    this.isSwitchable = localStorage.getItem('isSwitchable') || 'false';
   }
 
   ngOnInit() {
@@ -32,13 +33,9 @@ export class LeavesPage implements OnInit {
     if(event.detail.checked){
       this.roleStateServ.updateState('Admin');
       localStorage.setItem('userRole', 'Admin');
-      // this.router.navigateByUrl('/tabs/admin-leaves');
-      console.log('admin');
     } else {
       this.roleStateServ.updateState('Employee');
       localStorage.setItem('userRole', 'Employee');
-      // this.router.navigateByUrl('/tabs/leaves');
-      console.log('employee');
     }
   }
 

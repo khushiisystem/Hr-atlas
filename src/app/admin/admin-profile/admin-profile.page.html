@@ -79,7 +79,7 @@
               <ion-col size="6">
                 <ion-label>Date of Birth</ion-label>
                 <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="adminDetail.dateOfBirth" [value]="adminDetail.dateOfBirth | date"></ion-input>
-                <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="adminDetail.dateOfBirth" [value]="'--'"></ion-input>
+                <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="!adminDetail.dateOfBirth" [value]="'--'"></ion-input>
               </ion-col>
 
               <ion-col size="6">

@@ -54,8 +54,8 @@ export class SalarySetupPage implements OnInit {
       employeeId: ['', Validators.required],
       effectiveDate: ['', Validators.required],
       lastIncrementDate: [''],
-      current_ctc: [0, Validators.compose([Validators.min(0)])],
-      increment:[0, Validators.compose([Validators.required, Validators.min(0), Validators.max(100)])],
+      current_ctc: [0, Validators.compose([Validators.required, Validators.min(0)])],
+      increment:0,
     });
   }
 
@@ -66,11 +66,9 @@ export class SalarySetupPage implements OnInit {
 
 
   setEffectiveDate(event: DatetimeCustomEvent){
-    console.log(event, "effectiveDate");
     this.salarySetupForm.patchValue({
       effectiveDate: moment.utc(event.detail.value).format()
     });
-    console.log(this.salarySetupForm.value);
     this.openCalendar1 = false;
   }
 
@@ -82,6 +80,8 @@ export class SalarySetupPage implements OnInit {
           lastIncrementDate: res.effectiveDate,
         });
         this.previousSalary = res.current_ctc;
+        this.isInProcess = false;
+      } else {
         this.isInProcess = false;
       }
     }, (error) => {
@@ -98,10 +98,12 @@ export class SalarySetupPage implements OnInit {
     // } else if(reviceSalary){
     //   this.calculatedValue = currentCtc;
     // }
-    const percent = ((currentCtc - this.previousSalary) / this.previousSalary) * 100;
-    this.salarySetupForm.patchValue({
-      increment: percent.toFixed(2),
-    });
+    if(this.previousSalary > 0){
+      const percent = ((currentCtc - this.previousSalary) / this.previousSalary) * 100;
+      this.salarySetupForm.patchValue({
+        increment: percent.toFixed(2),
+      });
+    }
   }
 
   submit(){
@@ -115,10 +117,8 @@ export class SalarySetupPage implements OnInit {
           lastIncrementDate: null
         });
       }
-      console.log(this.salarySetupForm.value, 'form');
       this.adminServ.employeeSalarySetup(this.salarySetupForm.value).subscribe(res => {
         if(res) {
-          console.log(res);
           this.shareServ.presentToast('Salary setup successfully', 'top', 'success');
           this.isInProcess = false;
           this.createSalary.emit('confirm');

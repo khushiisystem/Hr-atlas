@@ -296,10 +296,10 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-modal [isOpen]="openCalendar" [initialBreakpoint]="1">
+      <ion-modal [isOpen]="openCalendar" [initialBreakpoint]="0.5" mode="md">
         <ng-template>        
           <ion-content>
-            <ion-datetime presentation="date" mode="md" [size]="'cover'" #datetime (ionChange)="selectDate($any($event))" [value]="getDate().toISOString()">
+            <ion-datetime presentation="date" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="selectDate($any($event))" [value]="getDate().toISOString()">
               <span slot="title">Date of Birth</span>
               <ion-buttons slot="buttons">
                 <ion-button mode="md" color="danger" (click)="datetime.cancel();openCalendar = false">Cancel</ion-button>

@@ -182,6 +182,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         const currentTime = new Date(moment(res.clockIn).format()).toISOString();
         localStorage.setItem('clockinId', res.guid);
         localStorage.setItem('clockInTime', currentTime);
+        this.clockInTime = moment(res.clockIn).format();
         
         this.startWatch(res.clockIn);
         this.loader.dismiss();

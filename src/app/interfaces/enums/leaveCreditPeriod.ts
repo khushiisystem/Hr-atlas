@@ -15,6 +15,9 @@ export enum LeaveType {
 
 export enum AttendaceStatus {
     PRESENT = 'Present',
-    ABUSENT = "Abusent",
-    LEAVE = "Leave"
+    ABSENT = "Absent",
+    LEAVE = "Leave",
+    HOLLYDAY = "Hollyday",
+    ApplyLeave = "ApplyLeave",
+    HALF_DAY = 'Half Day'
 }

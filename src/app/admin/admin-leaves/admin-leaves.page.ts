@@ -59,7 +59,6 @@ export class AdminLeavesPage implements OnInit {
       aproveLeave: approvel
     }
     this.adminServ.leaveApprove(leaveData).subscribe(res => {
-      console.log(res, 'res');
       if(res){
         if(res.Message){
           this.shareServ.presentToast(res.Message, 'top', 'success');
@@ -82,7 +81,7 @@ export class AdminLeavesPage implements OnInit {
     this.logsLoaded = false;
     const data = {};
     if(this.logPageNumber < 1){
-      this.requestedLeaveList = []
+      this.leaveLogs = []
     }
     this.shareServ.getLeaveList(data, this.logPageNumber * 20, 20).subscribe(res => {
       if(res) {

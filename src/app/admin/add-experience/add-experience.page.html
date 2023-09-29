@@ -153,53 +153,6 @@
         </ion-card-content>
       </ion-card>
 
-      <ion-card mode="md" class="salary_card" formGroupName="salaryInformation">
-        <ion-card-header class="card_header" (click)="expandCard('salary_card')">
-          <ion-card-title>Salary Information</ion-card-title>
-          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
-            <ion-icon [name]="isExpanded('salary_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-card-header>
-        <ion-card-content *ngIf="isExpanded('salary_card')">
-          <ion-row class="row_one">
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="ctc" placeholder="CTC" type="number" min="0">
-                  <div slot="label">CTC <ion-text color="danger">*</ion-text></div>
-                </ion-input>
-                <ion-text color="danger" class="error_txt" *ngIf="getSubGroup('salaryInformation').controls['ctc'].touched && getSubGroup('salaryInformation').controls['ctc'].errors">
-                  CTC is required.
-                </ion-text>
-              </div>
-            </ion-col>
-            
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="salary" placeholder="Salary" type="number" min="0">
-                  <div slot="label">Salary <ion-text color="danger">*</ion-text></div>
-                </ion-input>
-                <ion-text color="danger" class="error_txt" *ngIf="getSubGroup('salaryInformation').controls['salary'].touched && getSubGroup('salaryInformation').controls['salary'].errors">
-                  Salary is required.
-                </ion-text>
-              </div>
-            </ion-col>
-
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" [readonly]="true" [value]="getSalaryEffeDate('effectiveDate') | date" (ionFocus)="activeControl = 'effectiveDate'; openCalendar = true" (ionActive)="activeControl = 'effectiveDate'; openCalendar = true">
-                  <div slot="label">Effective Date <ion-text color="danger">*</ion-text></div>
-                </ion-input>
-                <div class="toggleBtn">
-                  <ion-button mode="md" fill="clear" (click)="activeControl = 'effectiveDate'; openCalendar = true;">
-                    <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
-                  </ion-button>
-                </div>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
-
       <ion-card mode="md" [button]="true" *ngIf="newWorkHistory() && newWorkHistory().controls.length < 1">
         <ion-item [lines]="'none'" type="button" [button]="true" [detail]="true" (click)="addWorkHistory()" detailIcon="add-circle-outline">
           <ion-label>Add Work Experience</ion-label>
@@ -359,20 +312,6 @@
               <ion-buttons slot="buttons">
                 <ion-button mode="md" color="danger" (click)="datetime4.cancel();openCalendar = false">Cancel</ion-button>
                 <ion-button mode="md" color="primary" (click)="datetime4.confirm();openCalendar = false">Done</ion-button>
-              </ion-buttons>
-            </ion-datetime>
-          </ion-content>
-        </ng-template>
-      </ion-modal>
-
-      <ion-modal [isOpen]="openCalendar && activeControl === 'effectiveDate'" [initialBreakpoint]="1" mode="md">
-        <ng-template>        
-          <ion-content>
-            <ion-datetime presentation="date" mode="md" [size]="'cover'" #datetime5 (ionChange)="setSalaryEffectiveDate($any($event))">
-              <span slot="title">Select {{activeControl}} Date</span>
-              <ion-buttons slot="buttons">
-                <ion-button mode="md" color="danger" (click)="datetime5.cancel();openCalendar = false">Cancel</ion-button>
-                <ion-button mode="md" color="primary" (click)="datetime5.confirm();openCalendar = false">Done</ion-button>
               </ion-buttons>
             </ion-datetime>
           </ion-content>
