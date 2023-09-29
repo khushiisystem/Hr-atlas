@@ -78,7 +78,8 @@
 
               <ion-col size="6">
                 <ion-label>Date of Birth</ion-label>
-                <ion-input aria-label="Date of Birth" [readonly]="true" [value]="adminDetail.dateOfBirth || '-' | date"></ion-input>
+                <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="adminDetail.dateOfBirth" [value]="adminDetail.dateOfBirth | date"></ion-input>
+                <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="adminDetail.dateOfBirth" [value]="'--'"></ion-input>
               </ion-col>
 
               <ion-col size="6">
@@ -86,11 +87,6 @@
                 <ion-input aria-label="Gender" [readonly]="true" [value]="adminDetail.gender || '-'">
                   <!-- <div slot="label">Gender</div> -->
                 </ion-input>
-              </ion-col>
-
-              <ion-col size="6">
-                <ion-label>Blood Group</ion-label>
-                <ion-input aria-label="Blood Group" [readonly]="true" [value]="'-'"></ion-input>
               </ion-col>
 
               <ion-col size="6">

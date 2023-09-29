@@ -16,7 +16,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="container ion-padding-vertical">
+  <div class="container ion-padding-top">
     <ion-title class="text-center ion-margin-bottom">Work Week</ion-title>
 
     <ion-segment [(ngModel)]="activeTab" class="tab_segement">
@@ -116,8 +116,10 @@
           <ion-button mode="md" fill="solid" [color]="!isMoreEmployee ? 'medium' : 'primary'" class="ion-text-wrap paginateBtn" [disabled]="pageIndex < 1" (click)="prev()">Previous</ion-button>
           <ion-button mode="md" fill="solid" [color]="!isMoreEmployee ? 'medium' : 'primary'" class="ion-text-wrap paginateBtn" [disabled]="!isMoreEmployee" (click)="next()">Next</ion-button>
         </ion-buttons> -->
+        <div class="sticky_div" *ngIf="selectedEmployee.length >= 1">
+          <ion-button class="big_assign_btn" shape="round" mode="md" fill="solid" expand="block" [strong]="true" size="large" (click)="selectWrokWeek(selectedEmployee)">Assign Week</ion-button>
+        </div>
 
-        <ion-button class="ion-margin big_assign_btn" shape="round" mode="md" fill="solid" expand="block" *ngIf="selectedEmployee.length >= 1" (click)="selectWrokWeek(selectedEmployee)">Assign Week</ion-button>
 
         <!-- action sheet for week section -->
         <!-- <ion-action-sheet></ion-action-sheet> -->
