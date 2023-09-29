@@ -11,6 +11,7 @@
         <ion-icon name="log-out-outline" slot="icon-only" aria-hidden="true"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-progress-bar type="indeterminate" color="primary" *ngIf="!dataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
@@ -64,7 +65,8 @@
         
                       <ion-col size="6">
                         <ion-label>Date of Birth</ion-label>
-                        <ion-input aria-label="Date of Birth" [readonly]="true" [value]="employeeDetail.dateOfBirth || '-' | date"></ion-input>
+                        <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="employeeDetail.dateOfBirth" [value]="employeeDetail.dateOfBirth | date"></ion-input>
+                        <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="employeeDetail.dateOfBirth" [value]="'--'"></ion-input>
                       </ion-col>
         
                       <ion-col size="6">
@@ -209,7 +211,9 @@
                     <ion-row>
                       <ion-col size="12">
                         <ion-label>Employee ID</ion-label>
-                        <ion-input aria-label="Employee ID" [value]="workDetail ? workDetail.employeeId : '--'"></ion-input>
+                        <ion-input aria-label="Employee ID" *ngIf="!workDetail && employeeDetail" [value]="employeeDetail.employeeId"></ion-input>
+                        <ion-input aria-label="Employee ID" *ngIf="workDetail" [value]="workDetail.employeeId"></ion-input>
+                        <ion-input aria-label="Employee ID" *ngIf="!workDetail && !employeeDetail" [value]="'--'"></ion-input>
                       </ion-col>
     
                       <ion-col size="6">

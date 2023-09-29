@@ -22,7 +22,7 @@
     <ion-modal [isOpen]="dateModal" [initialBreakpoint]=".5" [breakpoints]="[0.5, 0.75, 1]" [keepContentsMounted]="true" mode="md" [backdropDismiss]="false" [showBackdrop]="true">
         <ng-template>
           <ion-content>
-            <ion-datetime presentation="month-year" size="cover" mode="md" [(ngModel)]="attendanceDate" #yearMonth (ionChange)="selectAttendanceDate($any($event))">
+            <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth (ionChange)="selectAttendanceDate($any($event))">
               <ion-label slot="title">Select Year and Month</ion-label>
               <ion-buttons slot="buttons">
                 <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateModal = false;">Cancel</ion-button>

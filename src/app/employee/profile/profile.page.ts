@@ -81,7 +81,9 @@ export class ProfilePage implements OnInit {
     (await profileModal).present();
 
     (await profileModal).onDidDismiss().then(result => {
-      console.log(result, "result");
+      if(result.role === 'confirm'){
+        this.getEmployeeDetails();
+      }
     });
   }
 
