@@ -26,7 +26,7 @@
         <ion-col size="12">
           <h3><ion-label>CTC</ion-label></h3>
           <div class="form-input">
-            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Current CTC" [value]="previousSalary" min="0" #prevCtc>
+            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Current CTC" [value]="previousSalary" min="0" [readonly]="true">
               <div slot="label">Current CTC</div>
             </ion-input>
           </div>

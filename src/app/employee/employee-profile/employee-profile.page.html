@@ -91,13 +91,14 @@
       
                     <ion-col size="6">
                       <ion-label>Date of Birth</ion-label>
-                      <ion-input aria-label="Date of Birth" [readonly]="true" [value]="employeeDetail.dateOfBirth || '-' | date"></ion-input>
+                      <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="employeeDetail.dateOfBirth" [value]="employeeDetail.dateOfBirth | date"></ion-input>
+                      <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="!employeeDetail.dateOfBirth" [value]="'--'"></ion-input>
                     </ion-col>
       
                     <ion-col size="6">
                       <ion-label>Gender</ion-label>
-                      <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="employeeDetail.dateOfBirth" [value]="employeeDetail.dateOfBirth | date"></ion-input>
-                      <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="employeeDetail.dateOfBirth" [value]="'--'"></ion-input>
+                      <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="employeeDetail.gender" [value]="employeeDetail.gender"></ion-input>
+                      <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="!employeeDetail.gender" [value]="'--'"></ion-input>
                     </ion-col>
       
                     <ion-col size="6">

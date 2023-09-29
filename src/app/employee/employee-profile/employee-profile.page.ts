@@ -36,7 +36,6 @@ export class EmployeeProfilePage {
   ionViewWillEnter(){
     this.employeeId = this.activeRoute.snapshot.params?.['employeeId'];
     this.randomList.length = 7;
-    console.log('entered');
     if(this.employeeId.trim() !== ''){
       this.getEmployeeDetails();
       this.getWorkDetails();
@@ -80,10 +79,7 @@ export class EmployeeProfilePage {
   };
 
   goBack(){
-    const lastRoute = localStorage.getItem('lastRoute');
-    if(lastRoute && lastRoute.trim() !== '/tabs/home'){
-      this.router.navigate([lastRoute]);
-    } else {history.back();}
+    history.back();
   }
   
   handleRefresh(event: any) {
@@ -121,45 +117,29 @@ export class EmployeeProfilePage {
     localStorage.setItem('lastRoute', this.router.url);
     this.router.navigate([`/tabs/employee/workinfo`], navigationExtras);
   }
-
-  async openWorkModal() {
-    const workModal = this.modalCtrl.create({
-      component: AddExperiencePage,
-      backdropDismiss: false,
-      mode: 'md',
-      animated: true,
-      showBackdrop: true,
-      handleBehavior: 'cycle',
-      componentProps: {employeeId: this.employeeDetail.employeeId, userId: this.employeeDetail.guid, action: this.workDetail ? 'edit' : 'add'}
-    });
-    
-    (await workModal).present();
-    (await workModal).onDidDismiss().then(res => {
-      console.log(res, "res");
-      if(res.data && res.role === 'confirm'){
-        this.getWorkDetails();
-      }
-    });
-  }
   
-  async editProfile(){
-    const employeeModel = this.modalCtrl.create({
-      component: AddEmployeePage,
-      componentProps: {
-        action: "edit",
-        employeeId: this.employeeDetail.guid
-      },
-      mode: 'md',
-      initialBreakpoint: 1
-    });
+  // async editProfile(){
+  //   const employeeModel = this.modalCtrl.create({
+  //     component: AddEmployeePage,
+  //     componentProps: {
+  //       action: "edit",
+  //       employeeId: this.employeeDetail.guid
+  //     },
+  //     mode: 'md',
+  //     initialBreakpoint: 1
+  //   });
 
-    (await employeeModel).present();
+  //   (await employeeModel).present();
 
-    (await employeeModel).onDidDismiss().then(result => {
-      if(result.data) {
-        this.getEmployeeDetails();
-      }
-    });
+  //   (await employeeModel).onDidDismiss().then(result => {
+  //     if(result.data) {
+  //       this.getEmployeeDetails();
+  //     }
+  //   });
+  // }
+  editProfile(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/edit-profile/${this.employeeId}`], {replaceUrl: true});
   }
 
   ionViewWillLeave(): void {

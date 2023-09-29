@@ -40,7 +40,7 @@
             <ion-text class="attendance_status" [color]="getStatus(attendanceItem.status)">{{attendanceItem.status}}</ion-text>
           </ion-card-header>
           <ion-card-content *ngIf="expandedCards.includes(i)">
-            <ion-row class="sort_desc ion-margin-top">
+            <ion-row class="sort_desc ion-margin-top" *ngIf="attendanceItem.status === 'Present' || attendanceItem.status === 'Absent'">
               <ion-col size="6">
                 <ion-text>In Time</ion-text>
               </ion-col>
@@ -62,7 +62,7 @@
               </ion-col>
             </ion-row>
 
-            <ion-button type="button" mode="md" color="primary" fill="solid" class="ion-margin-top" (click)="openForm(attendanceItem, i)" *ngIf="openUpdatForm[i] == false">
+            <ion-button type="button" mode="md" color="primary" fill="solid" [strong]="true" class="ion-margin-top update_btn" (click)="openForm(attendanceItem, i)" *ngIf="openUpdatForm[i] == false">
               <ion-label>Update Attendance</ion-label>
             </ion-button>
             <form [formGroup]="attendanceForm" *ngIf="openUpdatForm[i] === true" class="ion-padding-top">

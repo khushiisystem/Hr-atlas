@@ -105,18 +105,11 @@ export class EditProfilePage implements OnInit {
   }
 
   sameAddress(event: CustomEvent){
-    console.log(event, "event");
     this.isSameAddress = event.detail.checked;
-    console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
-    console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
     if(this.isSameAddress){
       (this.employeeForm.controls['permanentAddress'] as FormGroup).patchValue((this.employeeForm.controls['currentAddress'] as FormGroup).value);
-      console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
-      console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
     } else {
       (this.employeeForm.controls['permanentAddress'] as FormGroup).reset();
-      console.log((this.employeeForm.controls['currentAddress'] as FormGroup).value, "current");
-      console.log((this.employeeForm.controls['permanentAddress'] as FormGroup).value, "permanent");
     }
   }
 
@@ -165,7 +158,6 @@ export class EditProfilePage implements OnInit {
       return;
     } else {
       this.loader.present('');
-      console.log(this.employeeForm.value, "form");
       this.adminServ.updateEmployee(this.employeeDetail.guid, this.employeeForm.value).subscribe(res => {
         if(res){
           this.shareServ.presentToast('Profile updated successfully.', 'top', 'success');
@@ -173,7 +165,7 @@ export class EditProfilePage implements OnInit {
           this.loader.dismiss();
           const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
           localStorage.setItem('lastRoute', '/tabs/home');
-          this.router.navigate([lastRoute]);
+          this.router.navigate([lastRoute], {replaceUrl: true});
         }
       }, (error) =>{
         this.shareServ.presentToast(error.error.message, 'top', 'danger');
