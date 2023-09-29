@@ -49,26 +49,31 @@ export class AdminProfilePage implements OnInit {
     });
   }
 
-  async editProfile(){
-    const profileModal = this.modalCtrl.create({
-      component: EditProfilePage,
-      mode: 'md',
-      showBackdrop: true,
-      backdropDismiss: false,
-      initialBreakpoint: 1,
-      componentProps: {userId: this.userId}
-    });
+  // async editProfile(){
+  //   const profileModal = this.modalCtrl.create({
+  //     component: EditProfilePage,
+  //     mode: 'md',
+  //     showBackdrop: true,
+  //     backdropDismiss: false,
+  //     initialBreakpoint: 1,
+  //     componentProps: {userId: this.userId}
+  //   });
 
-    (await profileModal).present();
+  //   (await profileModal).present();
 
-    (await profileModal).onDidDismiss().then(result => {
-      if(result.data && result.role === 'confirm'){
-        this.getAdminProfile();
-      }
-    });
+  //   (await profileModal).onDidDismiss().then(result => {
+  //     if(result.data && result.role === 'confirm'){
+  //       this.getAdminProfile();
+  //     }
+  //   });
+  // }
+
+  editProfile(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/edit-profile/${this.userId}`]);
   }
 
-  goBack() {history.back();}
+  goBack() {this.router.navigate([`/tabs/home`]);}
 
   logout() {this.authServ.signOut();}
 

@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
     <ion-toolbar>
       <ion-buttons slot="start">
-        <ion-button mode="md" [routerDirection]="'back'" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+        <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
           <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -33,7 +33,7 @@
         </ion-item>
   
         <ion-item-sliding #editSlide [disabled]="lastRoute === '/tabs/settings'" *ngFor="let employee of employeeList; index as i;">
-          <ion-item-options side="start" (ionSwipe)="employeeMoal(employee.guid, 'edit')">
+          <ion-item-options side="start" (ionSwipe)="employeeMoal(employee.guid, 'edit'); editSlide.closeOpened();">
             <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal(employee.guid, 'edit'); editSlide.closeOpened();" [expandable]="true">
               <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
             </ion-item-option>
@@ -52,7 +52,7 @@
             </div>
           </ion-item>
       
-          <ion-item-options side="end" (ionSwipe)="deleteEmployee(employee.guid)">
+          <ion-item-options side="end" (ionSwipe)="deleteEmployee(employee.guid); editSlide.closeOpened();">
             <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(employee.guid); editSlide.closeOpened();" [expandable]="true">
               <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
             </ion-item-option>
@@ -90,7 +90,7 @@
     </ion-infinite-scroll>
   
     <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="userRole === 'Admin'">
-      <ion-fab-button (click)="employeeMoal('', 'add')" aria-label="Add Employee">
+      <ion-fab-button (click)="employeeMoal(null, 'add')" aria-label="Add Employee">
         <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
       </ion-fab-button>
     </ion-fab>

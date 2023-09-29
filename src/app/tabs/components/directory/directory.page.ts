@@ -81,24 +81,26 @@ export class DirectoryPage implements OnInit, OnDestroy {
     }
   }
 
-  async employeeMoal(employeeItem: string, action: "add" | "edit"){
-    const employeeModel = this.modelCtrl.create({
-      component: AddEmployeePage,
-      componentProps: {
-        action: action,
-        employeeId: employeeItem
-      },
-      mode: 'md',
-      initialBreakpoint: 1
-    });
+  async employeeMoal(employeeItem: string | null, action: "add" | "edit"){
+    // const employeeModel = this.modelCtrl.create({
+    //   component: AddEmployeePage,
+    //   componentProps: {
+    //     action: action,
+    //     employeeId: employeeItem
+    //   },
+    //   mode: 'md',
+    //   initialBreakpoint: 1
+    // });
 
-    (await employeeModel).present();
+    // (await employeeModel).present();
 
-    (await employeeModel).onDidDismiss().then(result => {
-      if(result.data) {
-        this.getEmployeeList();
-      }
-    });
+    // (await employeeModel).onDidDismiss().then(result => {
+    //   if(result.data) {
+    //     this.getEmployeeList();
+    //   }
+    // });
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/add-employee/${action}/${employeeItem}`]);
   }
 
   async deleteEmployee(employeeItem: any){

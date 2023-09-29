@@ -1,21 +1,49 @@
-<ion-header [translucent]="true" mode="md">
+<ion-header [translucent]="true" mode="md" class="main-header">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button mode="md" type="button" [routerDirection]="'back'" (click)="goBack()" fill="clear" class="noBg noRipple">
-        <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-title>Profile</ion-title>
-    <ion-buttons slot="end">
-      <ion-button mode="md" (click)="logout()" color="danger" fill="clear" [strong]="true" *ngIf="employeeDetail">
-        <ion-icon name="log-out-outline" slot="icon-only" aria-hidden="true"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <ion-progress-bar type="indeterminate" color="primary" *ngIf="!dataLoaded"></ion-progress-bar>
+    <ion-button slot="start" mode="md" color="light" type="button" [routerDirection]="'back'" (click)="goBack()" fill="clear" class="noBg noRipple backBtn">
+      <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
+    </ion-button>
+    <ion-avatar slot="start" class="logo_img">
+      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
+    </ion-avatar>
+    <ion-title color="light">Profile</ion-title>
+    <ion-button mode="md" slot="end" (click)="logout()" color="danger" fill="solid" shape="round" size="small" [strong]="true" class="smLogoutBtn ion-margin-end" *ngIf="employeeDetail">
+      <ion-label>Log out</ion-label>
+    </ion-button>
+    <ion-progress-bar color="light" type="inderminate" *ngIf="!dataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div class="container loadingContent" *ngIf="!employeeDetail">
+    <ion-card mode="ios">
+      <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
+        <div slot="start" class="ion-margin-top">
+          <ion-avatar>
+            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+          </ion-avatar>
+        </div>
+  
+        <div class="emp_name_role">
+          <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+        </div>
+      </ion-item>
+    </ion-card>
+
+    <ion-card mode="ios" *ngFor="let item of [1,2,3]">
+      <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
+        <div class="emp_name_role">
+          <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+        </div>
+      </ion-item>
+    </ion-card>
+  </div>
     <div class="container" *ngIf="employeeDetail">
         <ion-card mode="md" class="profile_card ion-margin">
           <ion-item lines="none" class="noBg">
@@ -346,7 +374,7 @@
           </ion-accordion>
         </ion-accordion-group>
         
-        <ion-card type="button" mode="md" class="ion-margin">
+        <ion-card type="button" mode="ios" class="ion-margin">
           <ion-item [lines]="'none'" [detail]="true" [button]="true" [mode]="'md'" class="accordion_head_item btn_item" (click)="workWeek()">
             <div>
               <ion-label>Work-week</ion-label>
@@ -355,10 +383,10 @@
           </ion-item>
         </ion-card>
 
-        <ion-card color="danger" type="button" mode="md" class="ion-margin">
+        <ion-card color="danger" type="button" mode="ios" class="ion-margin logout-card">
           <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger" (click)="logout()">
             <ion-label>Log Out</ion-label>
-            <ion-icon slot="end" name="log-out-outline" aria-hidden="true"></ion-icon>
+            <ion-icon slot="end" name="log-out-outline" aria-hidden="true" size="large"></ion-icon>
           </ion-item>
         </ion-card>
         <!-- <ion-card (click)="openWorkPage() ">

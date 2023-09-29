@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DatetimeCustomEvent, ModalController } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
+
+interface DatetimeCustomEvent extends CustomEvent {
+  detail: DatetimeChangeEventDetail;
+  target: HTMLIonDatetimeElement;
+}
 
 @Component({
   selector: 'app-edit-profile',
@@ -17,8 +23,6 @@ export class EditProfilePage implements OnInit {
   employeeDetail!: IEmployeeResponse;
   openCalendar: boolean = false;
   today: Date = new Date();
-  maxDate: Date = new Date();
-  birthDate: any;
   userId: string = '';
   imgUrl: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   isSameAddress: boolean = false;
@@ -30,11 +34,13 @@ export class EditProfilePage implements OnInit {
     private shareServ: ShareService,
     private modalCtrl: ModalController,
     private loader: LoaderService,
+    private router: Router,
+    private activeRoute: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.today = new Date();
-    this.maxDate.setFullYear(this.today.getFullYear() - 10);
+    this.userId = this.activeRoute.snapshot.params?.['employeeId'];
 
     this.employeeForm = this.fb.group({
       firstName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
@@ -43,7 +49,7 @@ export class EditProfilePage implements OnInit {
       officialEmail: ['', Validators.compose([Validators.email])],
       mobileNumber: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
       alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10)])],
-      dateOfBirth: [''],
+      dateOfBirth: '',
       gender: ['Male', Validators.required],
       maritalStatus: [''],
       imageUrl: [''],
@@ -68,8 +74,6 @@ export class EditProfilePage implements OnInit {
       facebookUrl: [''],
       twitterUrl: ['']
     });
-
-    this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
     
     if(this.userId.trim() !== '') {this.getEmployeeDetail();}
   }
@@ -146,24 +150,42 @@ export class EditProfilePage implements OnInit {
     }
   }
 
+  setDob(event: DatetimeCustomEvent){
+    this.employeeForm.patchValue({
+      dateOfBirth: moment.utc(event.detail.value).format()
+    });
+  }
+  getDob(){
+    const formValue = this.employeeForm.controls['dateOfBirth'].value;
+    return formValue ? new Date(moment(formValue).format()) : '';
+  }
+
   submit(){
     if(this.employeeForm.invalid){
       return;
     } else {
+      this.loader.present('');
       console.log(this.employeeForm.value, "form");
       this.adminServ.updateEmployee(this.employeeDetail.guid, this.employeeForm.value).subscribe(res => {
         if(res){
           this.shareServ.presentToast('Profile updated successfully.', 'top', 'success');
-          this.modalCtrl.dismiss(res, 'confirm');
+          // this.modalCtrl.dismiss(res, 'confirm');
+          this.loader.dismiss();
+          const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
+          localStorage.setItem('lastRoute', '/tabs/home');
+          this.router.navigate([lastRoute]);
         }
       }, (error) =>{
         this.shareServ.presentToast(error.error.message, 'top', 'danger');
-        this.modalCtrl.dismiss();
+        this.loader.dismiss();
       });
     }
   }
 
-  goBack(){this.modalCtrl.dismiss();}
+  goBack(){
+    const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
+    this.router.navigate([lastRoute]);
+  }
   getName() {
     if(this.employeeDetail.lastName && this.employeeDetail.lastName.trim() !== ''){
       return `${this.employeeDetail.firstName.slice(0,1)}${this.employeeDetail.lastName.slice(0,1)}`;
