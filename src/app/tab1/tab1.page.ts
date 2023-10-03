@@ -33,6 +33,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   userDetails!: IEmployeeResponse;
   demoCard: any[] = [];
   clockInTime: string = '';
+  clockInId: string = '';
   isSwitchable: boolean = false;
   leaveDone: boolean = false;
   attendanceDone: boolean = false;
@@ -69,7 +70,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
     })
   }
   ngAfterViewInit(): void {
-    this.clockInTime = localStorage.getItem('clockInTime') || "";
     this.swiperReady();
   }
   swiperSlideChanged(e: any) {
@@ -101,7 +101,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
           this.checkAdminSetups();
           this.isSwitchable = true;
         }
-        console.log(this.isSwitchable);
         this.roleStateServ.updateState(this.userDetails.role);
         this.getAttendance();
         this.isDataLoaded = true;
@@ -146,16 +145,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.isRunning = true;
         this.buttonLabel = 'Clock Out\t';
         const currentTime = res[0].clockIn;
-        localStorage.setItem('clockinId', res[0].guid);
-        localStorage.setItem('clockInTime', currentTime);
-        if(res[0].clockOut){
-          const outTime = res[0].clockOut;
-          localStorage.setItem('clockOutTime', outTime);
-        }
         if(res[0].clockIn && res[0].clockIn.trim() !== '' && !res[0].clockOut){
           this.isRunning = true;
           this.buttonLabel = "Clock Out";
           this.clockInTime = res[0].clockIn;
+          this.clockInId = res[0].guid;
           this.startWatch(this.clockInTime);
         }
       } if(res.message){
@@ -180,9 +174,8 @@ export class Tab1Page implements OnInit, AfterViewInit {
         this.isRunning = true;
         this.buttonLabel = 'Clock Out\t';
         const currentTime = new Date(moment(res.clockIn).format()).toISOString();
-        localStorage.setItem('clockinId', res.guid);
-        localStorage.setItem('clockInTime', currentTime);
         this.clockInTime = moment(res.clockIn).format();
+        this.clockInId = res.guid;
         
         this.startWatch(res.clockIn);
         this.loader.dismiss();
@@ -213,17 +206,14 @@ export class Tab1Page implements OnInit, AfterViewInit {
           clearInterval(this.stopwatchInterval);
           this.stopwatchTime = '';
 
-          const clockId = localStorage.getItem('clockinId');
-          if(clockId){
-            this.shareServ.clockOut(clockId).subscribe(res => {
+          // const clockId = localStorage.getItem('clockinId');
+          if(this.clockInId){
+            this.shareServ.clockOut(this.clockInId).subscribe(res => {
               if(res){
                 console.log(res);
                 this.isRunning = false;
                 this.buttonLabel = 'Clock In';
                 this.loader.dismiss();
-                localStorage.removeItem('clockinId');
-                localStorage.removeItem('clockOutTime');
-                localStorage.removeItem('clockInTime');
               }
             }, (error) => {
               this.loader.dismiss();
