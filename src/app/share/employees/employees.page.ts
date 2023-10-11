@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { IonInfiniteScroll } from '@ionic/angular';
+import * as moment from 'moment';
 import { Subject, debounceTime } from 'rxjs';
 import { IRoles } from 'src/app/interfaces/enums/IRoles';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
+import { LoaderService } from 'src/app/services/loader.service';
 import { RoleStateService } from 'src/app/services/roleState.service';
 import { ShareService } from 'src/app/services/share.service';
 
@@ -27,20 +29,25 @@ export interface IEmpSelect {
 export class EmployeesPage implements OnInit, OnDestroy {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   @Input() isChecklist: boolean = false;
+  @Input() isPayroll?: boolean;
   @Output() employee: EventEmitter<IEmpSelect> = new EventEmitter<IEmpSelect>();
   employeeList: IEmployeeResponse[] = [];
   isDataLoaded: boolean = false;
   isMoreData: boolean = true;
+  openCalendar: boolean = false;
   pageIndex: number = 0;
   userRole: string = "";
   searchString: string = "";
   selectedEmployee: any[] = [];
+  payslipDate: Date = new Date();
+  today: Date = new Date();
   private searchSubject = new Subject<string>();
-  private readonly debounceTimeMs = 3000;
+  private readonly debounceTimeMs = 2000;
 
   constructor(
     private adminServ: AdminService,
     private shareServ: ShareService,
+    private loader: LoaderService,
     private roleStateServ: RoleStateService,
   ) { 
     roleStateServ.getState().subscribe(res => {
@@ -53,11 +60,12 @@ export class EmployeesPage implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
+    this.today.setFullYear(this.today.getFullYear(), this.today.getMonth() - 1, this.today.getDate());
+    this.payslipDate = this.today;
     this.getEmployeeList();
     this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
       this.searchEmployee(searchValue);
     });
-    console.log(this.userRole);
   }
 
   getEmployeeList(){
@@ -83,7 +91,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
     });
   }
 
-  loadData(event: any){
+  loadData(event: InfiniteScrollCustomEvent){
     if (this.isMoreData) {
       this.pageIndex++;
       this.getEmployeeList();
@@ -100,7 +108,6 @@ export class EmployeesPage implements OnInit, OnDestroy {
     } else if(event.detail.checked === false) {
       this.selectedEmployee = [];
     }
-    console.log(this.selectedEmployee);
   }
 
   checkEmployee(employee: string) {
@@ -111,7 +118,6 @@ export class EmployeesPage implements OnInit, OnDestroy {
       } else {
         this.selectedEmployee.push(employee);
       }
-      console.log(this.selectedEmployee);
     }
   }
 
@@ -120,7 +126,12 @@ export class EmployeesPage implements OnInit, OnDestroy {
   }
 
   selectEmployee(empData: IEmpSelect){
-    this.employee.emit(empData);
+    console.log(this.selectedEmployee);
+    if(this.selectedEmployee.length > 0){
+      this.checkEmployee(empData.guid);
+    } else {
+      this.employee.emit(empData);
+    }
   }
 
   searchEmployee(searchValue: string){
@@ -162,10 +173,36 @@ export class EmployeesPage implements OnInit, OnDestroy {
     this.searchString = '';
   }
 
-  handleRefresh(event: any) {
-    setTimeout(() => {
-      window.location.reload();
-      event.target.complete();
-    }, 2000);
+  getMonthYear(){
+    let customDate = '';
+    let monthArray = moment.months();
+    if(this.payslipDate){
+      customDate = `${monthArray[new Date(this.payslipDate).getMonth()]} ${new Date(this.payslipDate).getFullYear()}`;
+    }
+    return customDate;
+  }
+
+  selectPayslipDate(event: any){
+    if(event.detail.value){
+      this.payslipDate = new Date(event.detail.value);
+    }
+  }
+
+
+  generatePaySlip(event: Event){
+    event.preventDefault();
+    event.stopPropagation();
+    console.log(this.selectedEmployee);
+    this.loader.present('');
+    this.adminServ.createPayslip({employeeIds: this.selectedEmployee, date: moment.utc(this.payslipDate).format()}).subscribe(result => {
+      console.log(result);
+      this.shareServ.presentToast('Payslip generated', 'top', 'success');
+      this.selectedEmployee = [];
+      this.loader.dismiss();
+    }, (error) => {
+      console.log(error);
+      this.shareServ.presentToast(error.error.message, 'top', 'danger');
+      this.loader.dismiss();
+    });
   }
 }

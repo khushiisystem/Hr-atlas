@@ -418,14 +418,19 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.router.navigate(['/tabs/employee-attendance']);
     }
   }
-  showpayroll() {
-    this.router.navigate(['./payroll']);
-  }
-  showsettings() {
-    this.router.navigate(['./settings']);
+  viewPayroll(){
+    if(this.userRole === 'Employee'){
+      this.router.navigate(['/tabs/payroll/'+this.userId]);
+    } else if(this.userRole === 'Admin'){
+      this.router.navigate(['/tabs/payroll-setup']);
+    }
   }
   showprofile() {
-    this.router.navigate(['./profile']);
+    if(this.userRole === 'Employee'){
+      this.router.navigate(['/tabs/profile']);
+    } else if(this.userRole === 'Admin'){
+      this.router.navigate(['/tabs/admin-profile']);
+    }
   }
   showhome() {
     this.router.navigate(['./home']);

@@ -22,7 +22,6 @@ export class SettingsPage implements OnInit {
   }
   
   goBack() {
-    localStorage.setItem('lastRoute', 'home');
     history.back();
   }
 
@@ -56,7 +55,7 @@ export class SettingsPage implements OnInit {
   }
 
   payrollSetup(){
-    this.router.navigate(['/tabs/employee-list']);
+    this.router.navigate(['/tabs/payroll-setup']);
   }
   
   additionalsetup(){
@@ -89,6 +88,10 @@ export class SettingsPage implements OnInit {
         console.log(result);
       }
     });
+  }
+
+  ionViewWillLeave(){
+    this.activeTab = '';
   }
  
 }

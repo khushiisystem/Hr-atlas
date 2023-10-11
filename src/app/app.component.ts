@@ -21,6 +21,7 @@ export class AppComponent {
   @ViewChildren(IonRouterOutlet) routerOutlets!: QueryList<IonRouterOutlet>;
   lastTimeBackPress: number = 0;
   timePeriodToExit: number = 2000;
+  isOffline: boolean = false;
 
   constructor(
     private platform: Platform,
@@ -33,6 +34,12 @@ export class AppComponent {
     this.platform.backButton.subscribeWithPriority(5, () => {
       console.log("Another handler was called!");
       shareServ.presentToast("Another handler was called!", "top", "dark");
+    });
+
+    window.addEventListener('load', (e) => {
+      setInterval(() => {
+        this.isOffline = !window.navigator.onLine;
+      }, 2000);
     });
   }
 

@@ -46,13 +46,22 @@ swiper-slide {
 .add_emp_btn {margin-left: auto; display: block; max-width: 250px; height: 45px; font-size: 1rem; font-weight: 600;}
 .skeleton_avatar{margin: 0 auto 10px;}
 
+.flex_div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    min-height: -webkit-fill-available;
+    pointer-events: none;
+}
 .time_card {
     ion-card-header {flex-direction: row; justify-content: space-between; gap: 16px; align-items: center;}
     ion-button {text-transform: capitalize;}
     & .flex_div {
-        display: flex;
+        flex-direction: row;
         justify-content: space-between;
-        align-items: center;
         gap: 16px;
         flex-wrap: wrap;
     }

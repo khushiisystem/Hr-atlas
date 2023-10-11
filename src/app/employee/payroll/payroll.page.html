@@ -24,14 +24,14 @@
 
   <div [ngSwitch]="activeTab" class="container ion-padding-vertical">
     <div *ngSwitchCase="'payslip'">
-      <ion-item lines="none" fill="outline" type="button" (click)="dateModal = true">
-        <ion-input label="Select year and month" labelPlacement="floating" [readonly]="true" [value]="payslipDate | date"></ion-input>
+      <ion-item lines="none" color="primary" type="button" (click)="dateModal = true" class="dateITem">
+        <ion-input label="Select year and month" color="primary" labelPlacement="floating" [readonly]="true" [value]="payslipDate | date"></ion-input>
       </ion-item>
 
-      <ion-modal [isOpen]="dateModal" [initialBreakpoint]=".5" [breakpoints]="[0.5, 0.75, 1]" [keepContentsMounted]="true" mode="md" [backdropDismiss]="false" [showBackdrop]="true">
+      <ion-modal [isOpen]="dateModal" [initialBreakpoint]=".65" [keepContentsMounted]="true" mode="ios" (didDismiss)="dateModal = false" [showBackdrop]="true">
         <ng-template>
           <ion-content>
-            <ion-datetime presentation="month-year" size="cover" mode="md" [(ngModel)]="payslipDate" #yearMonth (ionChange)="selectPayslipDate($any($event))">
+            <ion-datetime presentation="month-year" size="cover" mode="md" [(ngModel)]="payslipDate" #yearMonth [max]="today.toISOString()" (ionChange)="selectPayslipDate($any($event))">
               <ion-label slot="title">Select Year and Month</ion-label>
               <ion-buttons slot="buttons">
                 <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateModal = false;">Cancel</ion-button>
@@ -42,62 +42,35 @@
         </ng-template>
       </ion-modal>
 
-      <ion-card mode="md" *ngIf="salaryReceipt" class="payslipCard">
-        <ion-card-content>
-            <ion-row>
-              <ion-col size="3">
-                <img src="./assets/images/5.png" alt="Photo" />
-              </ion-col>
-              <ion-col size="9">
-                <ion-card-title class="ion-padding-start">Spundan Consultancy & IT Solutions Pvt Ltd</ion-card-title>
-              </ion-col>
-              <ion-col size="12">
-                  <ion-label>3rd Floor, 315.Sai, Ram Plaza, 63 Mangal Nagar Road, Vishru Pari, Colony Indor, Madhya Pradesh-152001</ion-label>
-              </ion-col>
-              <ion-col size="12">
-                  <ion-label>CIN: U72200MP2011PTC025132</ion-label>
-              </ion-col>
-              <ion-col size="6">
-                  <ion-text>{{ selectedMonthName }} {{ payslipDate.getFullYear() }}</ion-text>
-              </ion-col>
-              <ion-col size="6">
-                  <ion-text>Working Days: {{ workingDays }}</ion-text>
-              </ion-col>
-              <ion-col size="6">
-                  <ion-text>LOP: 0</ion-text>
-              </ion-col>
-              <ion-col size="6">
-                  <ion-text>Leaves Credited: 1.5</ion-text>
-              </ion-col>
-              <ion-col size="12">
-            </ion-col>
-          </ion-row>
-          <ion-item [lines]="'none'" [button]="false" [detail]="false" class="card_item_last">
-            <ion-label class="subSalary">Salary: <span>{{ salary | currency:'INR'}}</span></ion-label>
-          </ion-item>
-        </ion-card-content>
-      </ion-card>
+      <app-employee-payslip *ngIf="payslipData" [payslipData]="payslipData"></app-employee-payslip>
 
-      <ion-button mode="md" (click)="downloadReceipt()" size="large" expand="block" class="downloadBtn ion-margin-vertical">
-        <ion-icon name="download" aria-hidden="true" slot="start"></ion-icon>
-        <span>Download</span>
-      </ion-button>
+      <ion-card mode="ios" *ngIf="!payslipLoaded || !payslipData" class="ion-text-center">
+        <ion-card-header>
+          <ion-label>Paylip is not generated yet.</ion-label>
+        </ion-card-header>
+      </ion-card>
     </div>
 
     <div *ngSwitchCase="'salary_structure'">
-      <ion-row>
+      <ion-card mode="ios" *ngIf="!structureLoaded || !salaryStructure" class="ion-text-center">
+        <ion-card-header>
+          <ion-label>Salary structure is not generated yet.</ion-label>
+        </ion-card-header>
+      </ion-card>
+
+      <ion-row *ngIf="salaryStructure">
         <ion-col size="6">
             <ion-text>Current Salary</ion-text>
         </ion-col>
         <ion-col size="6">
             <div class="text-end">
                 <ion-text><small>Effective Date</small></ion-text><br>
-                <ion-label>Jun 01, 2002</ion-label>
+                <ion-label>{{salaryStructure.effectiveDate | date}}</ion-label>
             </div>
         </ion-col>
       </ion-row>
 
-      <table class="table ion-margin-vertical">
+      <table class="table ion-margin-vertical" *ngIf="salaryStructure">
         <thead>
             <tr>
                 <th><ion-label>Components</ion-label></th>
@@ -108,13 +81,13 @@
         <tbody>
             <tr>
                 <td><ion-text>CTC</ion-text></td>
-                <td><ion-text>9000</ion-text></td>
-                <td><ion-text>108000</ion-text></td>
+                <td><ion-text>{{salaryStructure.current_ctc / 12}}</ion-text></td>
+                <td><ion-text>{{salaryStructure.current_ctc}}</ion-text></td>
             </tr>
             <tr>
                 <td><ion-text>Basic</ion-text></td>
-                <td><ion-text>0</ion-text></td>
-                <td><ion-text>0</ion-text></td>
+                <td><ion-text>{{salaryStructure.current_ctc / 12}}</ion-text></td>
+                <td><ion-text>{{salaryStructure.current_ctc}}</ion-text></td>
             </tr>
             <tr>
                 <td><ion-text>HRA</ion-text></td>
@@ -123,16 +96,6 @@
             </tr>
             <tr>
                 <td><ion-text>PF</ion-text></td>
-                <td><ion-text>0</ion-text></td>
-                <td><ion-text>0</ion-text></td>
-            </tr>
-            <tr>
-                <td><ion-text>Salary</ion-text></td>
-                <td><ion-text>9000</ion-text></td>
-                <td><ion-text>108000</ion-text></td>
-            </tr>
-            <tr>
-                <td><ion-text>ESI Employer</ion-text></td>
                 <td><ion-text>0</ion-text></td>
                 <td><ion-text>0</ion-text></td>
             </tr>

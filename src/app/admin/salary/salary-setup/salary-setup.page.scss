@@ -28,3 +28,14 @@ form {
     height: 45px;
     font-weight: 600;
 }
+
+fieldset {
+    margin-inline: 5px;
+    border: 1px solid #b3b3b3;
+    border-radius: 5px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    padding-top: 20px;
+
+    & legend {padding-inline: 5px;}
+}

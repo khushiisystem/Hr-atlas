@@ -13,6 +13,7 @@ import { IHollydayResponse, ILeaveSetupResponse } from "../interfaces/response/I
 import { IEmployeeWorkRequest } from "../interfaces/request/IEmployeeWork";
 import { ISalarySetupRequest } from "../interfaces/request/ISalarySetup";
 import { ISalarySetupResponse } from "../interfaces/response/ISalaryResponse";
+import { IPayslipResponse } from "../interfaces/response/payslipResponse";
 
 @Injectable({
     providedIn: 'root'
@@ -114,5 +115,18 @@ export class AdminService {
     }
     getEmloyeeSalaryHistory(userId: string, pageIndex: number, pageSize: number): Observable<ISalarySetupResponse[]> {
         return this.http.get<ISalarySetupResponse[]>(environment.Api + `api/salary/employeeId/${userId}?skip=${pageIndex}&limit=${pageSize}`);
+    }
+    getEmloyeePayStructure(userId: string, date: string): Observable<ISalarySetupResponse> {
+        return this.http.get<ISalarySetupResponse>(environment.Api + `api/salary/getSalarybeforeDate?employeeId=${userId}&date=${date}`);
+    }
+
+    createPayslip(payslipData: {employeeIds: Array<string>, date: string}): Observable<any> {
+        return this.http.post<any>(environment.Api + `api/paySlip`, payslipData);
+    }
+    getEmployeePayslip(payslipData: {employeeId: string, date: string}): Observable<IPayslipResponse> {
+        return this.http.get<IPayslipResponse>(environment.Api + `api/paySlip?employeeId=${payslipData.employeeId}&date=${payslipData.date}`);
+    }
+    createIndividualPayslip(payslipData: IPayslipResponse): Observable<any> {
+        return this.http.post<any>(environment.Api + `api/paySlip`, payslipData);
     }
 }

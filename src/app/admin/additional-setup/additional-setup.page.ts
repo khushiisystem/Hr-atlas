@@ -41,7 +41,7 @@ export class AdditionalSetupPage implements OnInit {
   searchString: string = "";
   expandedCard: string = "";
   private searchSubject = new Subject<string>();
-  private readonly debounceTimeMs = 2500;
+  private readonly debounceTimeMs = 2000;
 
   constructor(
     private adminServ: AdminService,

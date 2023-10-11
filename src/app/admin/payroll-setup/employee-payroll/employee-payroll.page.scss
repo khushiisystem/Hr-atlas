@@ -1,0 +1,59 @@
+.text-end{text-align: end;}
+
+.emp_avatar {
+    margin: 15px 15px 15px 0;
+    border-radius: 50%;
+}
+
+.emp_name {font-size: 1.2rem; line-height: 1.3; white-space: break-spaces;}
+
+.sticky_div{
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 3;
+}
+
+.tab_segement{
+    --ripple-color: var(--ion-color-primary);
+    background-color: rgba(56, 128, 255, 0.1);
+    // border: 2px solid var(--ion-color-primary);
+
+    ion-segment-button {
+        border-bottom: 2px solid var(--ion-color-primary);
+        color: var(--ion-color-primary);
+        --indicator-color: var(--ion-color-primary);
+        --color-checked: var(--ion-color-light);
+        &.segment-button-checked {
+            font-weight: 600;
+            background-color: var(--ion-color-primary);
+            color: var(--ion-color-light);
+        }
+    }
+}
+
+.form-input {margin-bottom: 10px;}
+
+.btn-group {
+    justify-content: end;
+    column-gap: 10px;
+
+    & ion-button {min-width: 30%;}
+}
+
+.sum_earning_item{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: var(--ion-color-primary);
+    & ion-item{font-weight: 600;}
+    & .sum_earnings {
+        background: #fff;
+        color: var(--ion-color-primary);
+        padding: 7px 16px;
+        border-radius: 2rem;
+        line-height: 1.3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
