@@ -24,6 +24,7 @@ import { ViewCalendarPage } from '../admin/view-calendar/view-calendar.page';
 import { EmployeeAttendancePage } from '../admin/employee-attendance/employee-attendance.page';
 import { LeavesPage } from '../share/leaves/leaves.page';
 import { SalaryPage } from '../admin/salary/salary.page';
+import { EmployeePayrollPage } from '../admin/payroll-setup/employee-payroll/employee-payroll.page';
 
 const routes: Routes = [
   {
@@ -109,14 +110,20 @@ const routes: Routes = [
         data: {role: "Admin"}
       },
       {
-        path: 'payroll-setup/:employeeId',
+        path: 'payroll-setup',
         title: "Payroll Setup",
         component: PayrollSetupPage,
         canActivate:[AuthGuard, RoleGuard],
         data: {role: "Admin"}
       },
       {
-        path: 'payroll',
+        path: 'employee-payroll',
+        component: EmployeePayrollPage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"}
+      },
+      {
+        path: 'payroll/:id',
         title: "Payroll",
         component: PayrollPage,
         canActivate:[AuthGuard],

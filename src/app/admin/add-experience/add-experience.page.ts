@@ -94,7 +94,7 @@ export class AddExperiencePage implements OnInit {
       status: ['', Validators.required],
       joiningDate: ['', Validators.required],
       resignationDate: [''],
-      work_experience: [''],
+      work_experience: 0,
       workLocation: [''],
       probationPeriod: ['', Validators.required],
       designation: ['', Validators.required],

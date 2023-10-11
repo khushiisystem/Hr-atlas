@@ -34,6 +34,8 @@ import { LeavesPageModule } from "../share/leaves/leaves.module";
 import { SalaryHistoryPage } from "../admin/salary/salary-history/salary-history.page";
 import { SalaryPage } from "../admin/salary/salary.page";
 import { AdminTutorialsPage } from "../admin/admin-tutorials/admin-tutorials.page";
+import { EmployeePayrollPage } from "../admin/payroll-setup/employee-payroll/employee-payroll.page";
+import { EmployeePayslipPage } from "../employee/employee-payslip/employee-payslip.page";
 
 @NgModule({
   declarations: [
@@ -59,6 +61,8 @@ import { AdminTutorialsPage } from "../admin/admin-tutorials/admin-tutorials.pag
     SalaryHistoryPage,
     SalaryPage,
     AdminTutorialsPage,
+    EmployeePayrollPage,
+    EmployeePayslipPage,
   ],
   imports: [
     IonicModule,

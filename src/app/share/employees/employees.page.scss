@@ -48,3 +48,10 @@ ion-list-header ion-label {
     }
 }
 .sendPayBtn {text-transform: capitalize;}
+.footer {
+    position: sticky;
+    bottom: 0;
+    padding: 5px 10px;
+    background-color: #fff;
+    z-index: 1;
+}

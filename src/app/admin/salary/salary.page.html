@@ -23,7 +23,7 @@
         <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
         <ion-text>ID: {{employee.employeeId}}</ion-text>
       </div>
-      <ion-button slot="end" mode="md" fill="clear" [strong]="true" aria-label="Chnage employee" color="primary" (click)="reseteEmployee()">
+      <ion-button slot="end" mode="md" fill="clear" [strong]="true" aria-label="Chnage employee" color="danger" (click)="reseteEmployee()">
         <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon>
       </ion-button>
     </ion-item>

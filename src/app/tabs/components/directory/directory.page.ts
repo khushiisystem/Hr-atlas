@@ -24,7 +24,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   searchString: string = "";
   selectedEmployee: any[] = [];
   private searchSubject = new Subject<string>();
-  private readonly debounceTimeMs = 3000;
+  private readonly debounceTimeMs = 2000;
   userId: string = '';
   isHold: boolean = false;
 
@@ -37,7 +37,9 @@ export class DirectoryPage implements OnInit, OnDestroy {
     private roleStateServ: RoleStateService,
   ) { this.userId = localStorage.getItem("userId") || ''; }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ionViewWillEnter(){
     this.roleStateServ.getState().subscribe(res => {
       this.userRole = res || "";
     });

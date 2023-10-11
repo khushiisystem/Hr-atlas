@@ -14,7 +14,7 @@ export interface IEmployeeWorkRequest {
     department: string;
     subDepartment: string;
     workHistory: IExperience[];
-    salaryInformation: ISalary;
+    // salaryInformation: ISalary;
 }
 
 export interface IExperience {

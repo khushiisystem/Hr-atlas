@@ -87,7 +87,7 @@
             <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
           </ion-col>
           <ion-col size="12" *ngIf="employeeList.length > 0">
-            <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === employeeList.length"  [indeterminate]="selectedEmployee.length > 0"(ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
+            <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === employeeList.length"  [indeterminate]="selectedEmployee.length > 0 && selectedEmployee.length !== employeeList.length" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
           </ion-col>
           <ion-col size="12" *ngIf="!isDataLoaded" class="ion-text-center">
             <ion-spinner color="medium"></ion-spinner>

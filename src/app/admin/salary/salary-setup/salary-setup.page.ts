@@ -55,7 +55,9 @@ export class SalarySetupPage implements OnInit {
       effectiveDate: ['', Validators.required],
       lastIncrementDate: [''],
       current_ctc: [0, Validators.compose([Validators.required, Validators.min(0)])],
-      increment:0,
+      increment: 0,
+      advanceSalary: 0,
+      deductionAmount: 0,
     });
   }
 

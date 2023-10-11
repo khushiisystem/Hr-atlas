@@ -4,4 +4,6 @@ export interface ISalarySetupRequest {
   lastIncrementDate: string | Date;
   current_ctc: number;
   increment: number;
+  advanceSalary: number;
+  deductionAmount: number;
 }

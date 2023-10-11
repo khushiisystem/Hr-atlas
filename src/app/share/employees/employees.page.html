@@ -4,10 +4,33 @@
     <ion-col size="12">
       <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
     </ion-col>
-    <ion-col size="12" *ngIf="isChecklist">
-      <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length === 3" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
+    <ion-col size="6" *ngIf="isChecklist && employeeList.length > 0">
+      <ion-checkbox color="primary" class="ion-margin-top" mode="md" [checked]="selectedEmployee.length > (employeeList.length-1)" [indeterminate]="selectedEmployee.length > 0 && selectedEmployee.length !== employeeList.length" (ionChange)="selectAll($any($event))" labelPlacement="end">Select All</ion-checkbox>
+    </ion-col>
+    <ion-col size="6" *ngIf="isPayroll && employeeList.length > 0" class="ion-text-end">
+      <ion-button mode="md" color="primary" shape="round" type="button" (click)="openCalendar = true">
+        <!-- {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}} -->
+        {{payslipDate | date:'MMM, y'}}
+        <ion-icon name="chevron-down-outline" aria-hidden="true" slot="end" size="small"></ion-icon>
+      </ion-button>
     </ion-col>
   </ion-row>
+  
+  <ion-modal [isOpen]="openCalendar" #dateModal [initialBreakpoint]=".65" [keepContentsMounted]="true" mode="ios" [backdropDismiss]="false" [showBackdrop]="true" (didDismiss)="openCalendar = false;">
+    <ng-template>
+      <ion-content>
+        <ion-datetime presentation="month-year" size="cover" mode="md" [firstDayOfWeek]="1" #yearMonth [max]="today.toISOString()" (ionChange)="selectPayslipDate($any($event))">
+          <ion-label slot="title">Select Year and Month</ion-label>
+          <ion-buttons slot="buttons">
+            <ion-button mode="md" color="danger" (click)="yearMonth.cancel();dateModal.dismiss()">Cancel</ion-button>
+            <ion-button mode="md" color="primary" [disabled]="!payslipDate" (click)="yearMonth.confirm();dateModal.dismiss();">Done</ion-button>
+          </ion-buttons>
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+
   <div class="ion-text-center ion-margin" *ngIf="!isDataLoaded">
     <ion-spinner color="primary" name="circular"></ion-spinner>
   </div>
@@ -17,7 +40,7 @@
       <ion-label class="ion-text-center">No any employee.</ion-label>
     </ion-item>
 
-    <ion-item lines="full" [button]="true" [detail]="true" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="selectEmployee(employee)">
+    <ion-item lines="full" [button]="true" [detail]="true" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="isChecklist ? null : selectEmployee(employee)">
       <div slot="start" class="check_container" (click)="checkEmployee(employee.guid)">
         <ion-avatar class="employee_img">
           <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
@@ -27,7 +50,7 @@
           <span class="checkmark"></span>
         </div>
       </div>
-      <div class="employee_data">
+      <div class="employee_data" (click)="!isChecklist ? null : selectEmployee(employee)">
         <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
         <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
       </div>
@@ -40,3 +63,7 @@
   <ion-infinite-scroll-content *ngIf="isMoreData" loadingSpinner="bubbles" loadingText="Loading more data...">
   </ion-infinite-scroll-content>
 </ion-infinite-scroll>
+
+<div *ngIf="isPayroll && selectedEmployee.length > 0" class="footer">
+  <ion-button mode="md" type="button" color="primary" size="large" expand="block" shape="round" class="ion-margin-horizontal sendPayBtn" (click)="generatePaySlip($event)">Generate Payslip</ion-button>
+</div>

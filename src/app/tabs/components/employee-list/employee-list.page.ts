@@ -27,7 +27,7 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
   searchString: string = "";
   selectedEmployee: any[] = [];
   private searchSubject = new Subject<string>();
-  private readonly debounceTimeMs = 3000;
+  private readonly debounceTimeMs = 2000;
 
   constructor(
     private adminServ: AdminService,
