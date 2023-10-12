@@ -3,7 +3,7 @@
     <ion-row class="form_row">
       <ion-col size="12" sizeSm="6">
         <div class="form-input" (click)="openCalendar1 = true">
-          <ion-input labelPlacement="floating" fill="outline" placeholder="Effective Date" class="flex_input" [value]="getValue('effectiveDate') | date" [readonly]="true" type="date" [pattern]="'date'" [name]="'effectiveDate'">
+          <ion-input labelPlacement="floating" fill="outline" placeholder="Effective Date" class="flex_input" [value]="getValue('effectiveDate') | date" [readonly]="true" [pattern]="'date'" [name]="'effectiveDate'">
             <div slot="label">Effective Date <ion-text color="danger">*</ion-text></div>
           </ion-input>
 
@@ -17,7 +17,7 @@
 
       <ion-col size="12" sizeSm="6">
         <div class="form-input">
-          <ion-input labelPlacement="floating" fill="outline" placeholder="Last Increment Date" class="flex_input" [value]="getValue('lastIncrementDate') | date" [readonly]="true" type="date" [pattern]="'date'" [name]="'elastIncrementDate'">
+          <ion-input labelPlacement="floating" fill="outline" placeholder="Last Increment Date" class="flex_input" [value]="getValue('lastIncrementDate') | date" [readonly]="true" [pattern]="'date'" [name]="'elastIncrementDate'" [disabled]="true">
             <div slot="label">Last Increment Date</div>
           </ion-input>
         </div>
@@ -89,7 +89,7 @@
       </ion-col> -->
 
       <ion-col size="12">
-        <ion-button mode="md" [expand]="'full'" class="submitBtn" shape="round" [disabled]="salarySetupForm.invalid || isInProcess" (click)="submit()">Submit</ion-button>
+        <ion-button mode="md" [expand]="'full'" class="submitBtn" shape="round" [disabled]="salarySetupForm.invalid || salarySetupForm.controls['current_ctc'].value < 1 || isInProcess" (click)="submit()">Submit</ion-button>
       </ion-col>
     </ion-row>
 

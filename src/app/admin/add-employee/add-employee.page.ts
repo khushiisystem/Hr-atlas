@@ -81,7 +81,6 @@ export class AddEmployeePage implements OnInit {
     });
 
     this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
-    console.log(typeof this.employeeId);
     if(this.action === 'edit' && this.employeeId.trim() !== '' && this.employeeId !== null){
       this.getProfile();
     } else {this.isDataLoaded = true;}
@@ -89,7 +88,6 @@ export class AddEmployeePage implements OnInit {
 
 
   getProfile(){
-    console.log('called');
     this.adminServ.getEmployeeById(this.employeeId).subscribe(res => {
       if(res){
         this.employeeForm.patchValue(res);
@@ -106,7 +104,6 @@ export class AddEmployeePage implements OnInit {
       dateOfBirth: moment.utc(event.detail.value).format()
     });
     this.getDate();
-    console.log(this.employeeForm.value);
   }
 
   getDate(){

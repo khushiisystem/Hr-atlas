@@ -73,7 +73,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     this.swiperReady();
   }
   swiperSlideChanged(e: any) {
-    console.log('changed: ', e);
+    // console.log('changed: ', e);
   }
  
   swiperReady() {

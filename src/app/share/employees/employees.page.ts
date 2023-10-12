@@ -60,7 +60,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
-    this.today.setFullYear(this.today.getFullYear(), this.today.getMonth() - 1, this.today.getDate());
+    this.today.setFullYear(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
     this.payslipDate = this.today;
     this.getEmployeeList();
     this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {

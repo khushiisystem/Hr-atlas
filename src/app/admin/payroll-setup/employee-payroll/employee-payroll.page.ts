@@ -41,7 +41,7 @@ export class EmployeePayrollPage implements OnInit {
 
   ngOnInit() {
     this.today = new Date();
-    this.today.setFullYear(this.today.getFullYear(), this.today.getMonth() - 1, this.today.getDate());
+    this.today.setFullYear(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
     this.employeeId = this.employee.guid;
     this.payslipDate = this.today;
 

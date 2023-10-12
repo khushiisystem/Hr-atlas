@@ -67,7 +67,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
         this.isDataLoaded = true;
       }
       this.isHold = false;
-      console.log(this.isHold);
     }, (error) => {
       this.isMoreData = false;
       this.isDataLoaded = true;
