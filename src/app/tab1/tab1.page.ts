@@ -142,9 +142,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
   getAttendance(){
     this.shareServ.todayAttendance().subscribe(res => {
       if(res && !res.message && !res[0].clockOut) {
-        this.isRunning = true;
-        this.buttonLabel = 'Clock Out\t';
-        const currentTime = res[0].clockIn;
         if(res[0].clockIn && res[0].clockIn.trim() !== '' && !res[0].clockOut){
           this.isRunning = true;
           this.buttonLabel = "Clock Out";
