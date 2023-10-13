@@ -128,6 +128,17 @@
       </ion-col>
 
       <ion-col size="4" sizeSm="3">
+        <ion-card mode="md" type="button" [routerLink]="['/tabs/view-calendar']" routerLinkActive="router-link-active" >
+          <ion-card-content>
+            <div class="icon_card">
+              <ion-icon name="calendar-outline" aria-hidden="true" size="large"></ion-icon>
+            </div>
+            <ion-label>calendar</ion-label>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="4" sizeSm="3">
         <ion-card mode="md" type="button" (click)="showleaves()">
           <ion-card-content>
             <div class="icon_card">

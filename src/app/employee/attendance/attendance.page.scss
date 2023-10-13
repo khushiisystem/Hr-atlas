@@ -27,3 +27,10 @@
         & ion-label{color: var(--color-blue-gray); font-size: 1rem;}
     }
 }
+
+.stickyCalender {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    background-color: #fff;
+}

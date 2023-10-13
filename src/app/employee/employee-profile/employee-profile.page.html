@@ -197,7 +197,7 @@
             </ion-item>
           </div>
         </ion-accordion>
-        <ion-accordion value="Work" mode="md">
+        <ion-accordion value="Work" mode="md" *ngIf="userRole === 'Admin'">
           <ion-item slot="header" class="accordion_head_item">
             <div>
               <ion-label>Work</ion-label>
@@ -347,7 +347,7 @@
       </ion-accordion-group>
     </ion-card>
     
-    <ion-card type="button" mode="md">
+    <ion-card type="button" mode="md" *ngIf="userRole === 'Admin'">
       <ion-item [lines]="'none'" [detail]="true" [button]="true" [mode]="'md'" class="accordion_head_item btn_item" [href]="'employee-work-week/'+employeeId">
         <div>
           <ion-label>Work-week</ion-label>

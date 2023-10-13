@@ -6,6 +6,7 @@ import { ShareService } from 'src/app/services/share.service';
 import { HollydaySetupPage } from '../hollyday-setup/hollyday-setup.page';
 import { IHollydayResponse } from 'src/app/interfaces/response/ILeave';
 import * as moment from 'moment';
+import { RoleStateService } from 'src/app/services/roleState.service';
 
 interface DatetimeCustomEvent extends CustomEvent {
   detail: DatetimeChangeEventDetail;
@@ -22,13 +23,19 @@ export class ViewCalendarPage implements OnInit {
   eventsList: IHollydayResponse[] = [];
   isDataLoaded: boolean = false;
   selectedDate: any;
+  userRole: string = '';
 
   constructor(
     private shareServ: ShareService,
     private adminServ: AdminService,
     private loader: LoaderService,
     private modalCtrl: ModalController,
-  ) { }
+    private roleStateServ: RoleStateService,
+  ) { 
+    roleStateServ.getState().subscribe(res => {
+      this.userRole = res;
+    })
+  }
 
   ngOnInit() {
     this.selectedDate = new Date();

@@ -102,6 +102,9 @@
         </ion-card>
       </ng-container> -->
     </div>
+    <!-- <div class="stickyCalender">
+      <ion-datetime presentation="date" [(ngModel)]="attendanceDate" [highlightedDates]="highlightedDates" (ionChange)="dateChange($event)"></ion-datetime>
+    </div> -->
     
     <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadData($any($event))" [position]="'bottom'">
       <ion-infinite-scroll-content *ngIf="moreData" loadingSpinner="bubbles" loadingText="Loading more data...">

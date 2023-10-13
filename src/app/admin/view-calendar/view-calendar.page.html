@@ -67,6 +67,6 @@
 
   </div>
 </ion-content>
-<ion-footer mode="md" [hidden]="!isDataLoaded">
+<ion-footer mode="md" *ngIf="isDataLoaded && userRole === 'Admin'">
   <ion-button [expand]="'full'" [shape]="'round'" [strong]="true" [mode]="'ios'" color="primary" class="bigBtn" [disabled]="!isDataLoaded" (click)="createHollyday({}, 'add')">Add Event</ion-button>
 </ion-footer>

@@ -17,18 +17,26 @@
         <ion-card-title>{{workWeekDetail.employeeDetails.firstName | titlecase}} {{workWeekDetail.employeeDetails.lastName || '' | titlecase}}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
-        <ion-text>Assigned Work Week</ion-text>
-
+        
         <ion-row>
-          <ion-col size="12" sizeSm="6" sizeMd="4">
-            <ion-text>Day Off:</ion-text>
-            <div class="indicator dayoff"></div>
+          <ion-col size="12">
+            <ion-text>Assigned Work Week</ion-text>
           </ion-col>
           <ion-col size="12" sizeSm="6" sizeMd="4">
-            <ion-text>Working Day:</ion-text>
-            <div class="indicator"></div>
+            <div class="flex_div">
+              <ion-text>Day Off:</ion-text>
+              <ion-text class="indicator dayoff">
+                <small>{{workWeekDetail.workweekDetails.weekOff.join(', ')}}</small>
+              </ion-text>
+            </div>
           </ion-col>
-        </ion-row>>
+          <ion-col size="12" sizeSm="6" sizeMd="4">
+            <div class="flex_div">
+              <ion-text>Working Day:</ion-text>
+              <ion-text class="ion-padding-left"><small>{{getWorkingDays().join(', ')}}</small></ion-text>
+            </div>
+          </ion-col>
+        </ion-row>
       </ion-card-content>
     </ion-card>
     
@@ -48,7 +56,7 @@
     </div>
   </div>
 
-  <div class="container" *ngIf="!workWeekDetail">
+  <div class="container" *ngIf="!workWeekDetail && isLoaded">
     <ion-card mode="ios">
       <ion-card-content>
         <ion-label>You have not assigned yet any wrok week.</ion-label>

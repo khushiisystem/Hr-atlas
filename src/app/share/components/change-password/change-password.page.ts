@@ -25,7 +25,8 @@ export class ChangePasswordPage implements OnInit {
   ngOnInit() {
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      newPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      newPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     },
     {validators:this.passwordValidator} as AbstractControlOptions
     );
@@ -39,7 +40,6 @@ export class ChangePasswordPage implements OnInit {
 
   submit(){
     this.loader.present('');
-    console.log(this.changePasswordForm.value);
     this.isInProgress = true;
     if(this.changePasswordForm.invalid){
       this.shareServ.presentToast('Please complete the form.', 'top', 'danger');
@@ -55,7 +55,8 @@ export class ChangePasswordPage implements OnInit {
           this.loader.dismiss();
         }
       }, (error) => {
-        this.shareServ.presentToast('Something is wrong.', 'top', 'danger');
+        console.log(error);
+        this.shareServ.presentToast(error.error.Message ||'Something is wrong.', 'top', 'danger');
         this.isInProgress = false;
         this.loader.dismiss();
       });
@@ -73,9 +74,12 @@ export class ChangePasswordPage implements OnInit {
   passwordValidator: ValidatorFn = (contorl: AbstractControl): Validators | null => {
     const oldPassword = contorl.get('oldPassword');
     const newPassword = contorl.get('newPassword');
+    const confirmPassword = contorl.get('confirmPassword');
 
     if(oldPassword && newPassword && (oldPassword.value && newPassword.value) && (oldPassword.value === newPassword.value)){
       return {passwordmatcherror: true}
+    } else if(newPassword && confirmPassword && (newPassword.value && confirmPassword.value) && (newPassword.value !== confirmPassword.value)){
+      return {passwordnotmatcherror: true}
     } else {return false}
   }
 
