@@ -104,10 +104,8 @@ export class EmployeeLeavesPage implements OnInit {
   }
 
   leaveApply(event: ILeaveApplyrequest){
-    console.log(event, "event");
     this.loader.present('');
     this.shareServ.leaveApply(event).subscribe(res => {
-      console.log(res, 'res');
       if(res){
         this.showApplyForm = false;
         this.shareServ.presentToast('Leave requested successfully', 'top', 'success');
@@ -116,7 +114,7 @@ export class EmployeeLeavesPage implements OnInit {
         this.getLeaveStatus();
       }
     }, (error) => {
-      this.shareServ.presentToast('Something went wrong', 'top', 'danger');
+      this.shareServ.presentToast(error.error.message || 'Something went wrong', 'top', 'danger');
       this.loader.dismiss();
     })
   }

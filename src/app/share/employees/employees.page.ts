@@ -42,7 +42,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   payslipDate: Date = new Date();
   today: Date = new Date();
   private searchSubject = new Subject<string>();
-  private readonly debounceTimeMs = 2000;
+  private readonly debounceTimeMs = 1500;
 
   constructor(
     private adminServ: AdminService,
@@ -135,7 +135,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   }
 
   searchEmployee(searchValue: string){
-    if(searchValue.trim().length > 3){
+    if(searchValue.trim().length > 2){
       this.isDataLoaded = false;
       const data = {
         searchString: searchValue
@@ -150,7 +150,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
         console.log(error, "search error");
         this.isDataLoaded = true;
       });
-    } else {
+    } else if(searchValue.trim() === '') {
       this.getEmployeeList();
     }
   }

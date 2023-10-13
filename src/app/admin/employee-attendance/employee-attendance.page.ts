@@ -134,6 +134,10 @@ export class EmployeeAttendancePage implements OnInit {
         color = 'warning'
         break;
 
+      case 'Holiday':
+        color = 'warning'
+        break;
+
       case 'Absent':
         color = 'danger'
         break;

@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
+      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="employee ? reseteEmployee() : goBack()" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -28,7 +28,8 @@
         <ion-text>ID: {{employee.employeeId}}</ion-text>
       </div>
       <ion-button slot="end" mode="md" fill="clear" [strong]="true" aria-label="Chnage employee" color="danger" (click)="reseteEmployee()">
-        <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon>
+        <!-- <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon> -->
+        Change
       </ion-button>
     </ion-item>
   </ion-card>

@@ -24,7 +24,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   searchString: string = "";
   selectedEmployee: any[] = [];
   private searchSubject = new Subject<string>();
-  private readonly debounceTimeMs = 2000;
+  private readonly debounceTimeMs = 1500;
   userId: string = '';
   isHold: boolean = false;
 
@@ -136,15 +136,21 @@ export class DirectoryPage implements OnInit, OnDestroy {
   viewProfile(empId: string) {
     this.searchString = "";
     this.searchSubject.complete();
-    if(this.lastRoute === '/tabs/settings'){
-      this.router.navigate([`/tabs/payroll-setup/${empId}`]);
+
+    if(this.userId === empId){
+      if(this.userRole === 'Admin'){
+        this.router.navigateByUrl(`/tabs/admin-profile`);
+      } else if(this.userRole === 'Employee'){
+        this.router.navigateByUrl(`/tabs/profile`);
+      }
     } else {
       this.router.navigateByUrl(`/tabs/employee-profile/${empId}`);
     }
   }
 
   searchEmployee(searchValue: string){
-    if(searchValue.trim().length > 3){
+    if(searchValue.trim().length > 2){
+      this.isHold = true;
       this.isDataLoaded = false;
       const data = {
         searchString: searchValue
@@ -160,7 +166,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
         this.isDataLoaded = true;
         this.isHold = false;
       });
-    } else {
+    } else if(searchValue.trim() === ''){
+      this.isHold = true;
       this.getEmployeeList();
     }
   }
@@ -174,7 +181,6 @@ export class DirectoryPage implements OnInit, OnDestroy {
   }
 
   onSearch() {
-    this.isHold = true;
     this.searchSubject.next(this.searchString);
   }
   checkEmpty(){

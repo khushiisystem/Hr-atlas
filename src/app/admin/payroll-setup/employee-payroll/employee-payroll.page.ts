@@ -64,7 +64,7 @@ export class EmployeePayrollPage implements OnInit {
 
 
   getProfile(empId: string) {
-    this.loaderServ.present('fullHide');
+    this.loaderServ.present('');
     this.adminServ.getEmployeeById(empId).subscribe(res => {
       if(res) {
         this.employeeDetail = res;

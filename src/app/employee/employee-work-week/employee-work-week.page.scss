@@ -1,5 +1,9 @@
-
-.flex_div {
+ion-card{
+    // box-shadow: #4c8dff 0px 4px 36px, #4c8dff 0px 4px 56px -5px;
+    box-shadow: #4a86ef63 0px 10px 26px -10px;
+    border: 2px solid #4a86ef63;
+}
+ion-card + .flex_div {
     background-color: #eee;
     max-width: 500px;
     margin: auto;
@@ -28,4 +32,11 @@
 }
 .body_row {
     margin-top: 5px;
+}
+ion-card .flex_div {
+    display: flex; gap: 5px;
+    & ion-text:first-child{
+        flex: 0 1 100px;
+        min-width: 100px;
+    }
 }

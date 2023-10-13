@@ -27,7 +27,7 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
   searchString: string = "";
   selectedEmployee: any[] = [];
   private searchSubject = new Subject<string>();
-  private readonly debounceTimeMs = 2000;
+  private readonly debounceTimeMs = 1500;
 
   constructor(
     private adminServ: AdminService,
@@ -145,7 +145,7 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
   }
 
   searchEmployee(searchValue: string){
-    if(searchValue.trim().length > 3){
+    if(searchValue.trim().length > 2){
       this.isDataLoaded = false;
       const data = {
         searchString: searchValue
@@ -160,7 +160,7 @@ export class EmployeeListPage implements OnInit, AfterContentInit, OnDestroy {
         console.log(error, "search error");
         this.isDataLoaded = true;
       });
-    } else {
+    } else if(searchValue.trim() === '') {
       this.getEmployeeList();
     }
   }

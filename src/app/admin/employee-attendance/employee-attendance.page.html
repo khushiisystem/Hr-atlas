@@ -1,11 +1,12 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
+      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="employee ? reseteEmployee() : goBack()" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Employee Attendance</ion-title>
+    <ion-title><span *ngIf="employee">{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</span>
+      <span *ngIf="!employee">Employee Attendance</span></ion-title>
     <ion-thumbnail slot="end" class="logo_img ion-margin-end">
       <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>
@@ -22,14 +23,14 @@
 
     <!-- ------------ attendance list ----------------- -->
     <div class="attendance_list" [hidden]="!employee">
-      <ion-card mode="ios" color="light" *ngIf="employee">
+      <!-- <ion-card mode="ios" color="light" *ngIf="employee">
         <ion-item [lines]="'none'" [detail]="false">
           <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
           <ion-button slot="end" mode="md" fill="clear" [strong]="true" aria-label="Chnage employee" color="primary" (click)="reseteEmployee()">
             <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon>
           </ion-button>
         </ion-item>
-      </ion-card>
+      </ion-card> -->
       <div class="ion-text-center" *ngIf="attendanceLoaded && attendanceList.length < 1">
         <ion-label>Attendance not available of this month.</ion-label>
       </div>
@@ -74,7 +75,6 @@
                       <div slot="label">Status <ion-text color="danger">*</ion-text></div>
                       <ion-select-option value="Present">Present</ion-select-option>
                       <ion-select-option value="Absent">Absent</ion-select-option>
-                      <ion-select-option value="Hollyday">Hollyday</ion-select-option>
                     </ion-select>
                   </div>
                 </ion-col>

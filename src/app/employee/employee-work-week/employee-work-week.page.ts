@@ -15,6 +15,7 @@ export class EmployeeWorkWeekPage implements OnInit {
   weekArray: string[] = [];
   numberOfWeek: string[] = [];
   workWeekDetail!: IEmplpoyeeWorWeek;
+  isLoaded: boolean = false;
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -50,18 +51,25 @@ export class EmployeeWorkWeekPage implements OnInit {
   }
 
   getWorkWeek(){
+    this.isLoaded = false;
     this.loaderServ.present('');
     this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(res => {
       if(res) {
         this.workWeekDetail = res;
-        console.log(this.workWeekDetail, 'res');
+        this.isLoaded = true;
         this.loaderServ.dismiss();
       }
     }, (error) => {
+      this.isLoaded = true;
       this.loaderServ.dismiss();
     });
   }
 
   goBack(){history.back();}
+
+  getWorkingDays(): string[] {
+    let workDay = this.weekArray.filter((e: string) => !this.workWeekDetail.workweekDetails.weekOff.includes(e));
+    return workDay;
+  }
 
 }
