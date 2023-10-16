@@ -9,7 +9,7 @@ import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response/IEmployee";
 import { ILeaveApplyrequest } from "../interfaces/request/ILeaveApply";
 import { IClockInResponce } from "../interfaces/response/IAttendanceSetup";
-import { ILeaveLogsResponse, ILeaveSetupResponse, ILeaveStatus } from "../interfaces/response/ILeave";
+import { IHollydayResponse, ILeaveLogsResponse, ILeaveSetupResponse, ILeaveStatus } from "../interfaces/response/ILeave";
 import { IEmplpoyeeWorWeek } from "../interfaces/response/IEmplpoyeeWorWeek";
 
 @Injectable({
@@ -102,4 +102,7 @@ export class ShareService {
   employeeAssignedWorkWeek(emplId: string) : Observable<IEmplpoyeeWorWeek> {
     return this.http.get<IEmplpoyeeWorWeek>(environment.Api + `api/workWeekEmployee/employeeId/${emplId}`);
   }
+  getEventHollyday(selectedYear: string | number): Observable<IHollydayResponse[]> {
+    return this.http.get<IHollydayResponse[]>(environment.Api + `api/hollyday/allHollyday?date=${selectedYear}`);
+}
 }

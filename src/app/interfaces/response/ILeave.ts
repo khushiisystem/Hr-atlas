@@ -29,6 +29,7 @@ export interface IEmployee {
   email: string;
   mobileNumber: string;
   role: string;
+  imageUrl: string
 }
 
 export interface IHollydayResponse extends IGeneric, IHollydayRequest {}

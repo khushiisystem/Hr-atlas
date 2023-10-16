@@ -25,7 +25,7 @@
       </ion-button>
     </div>
 
-    <h5 class="ion-text-center" *ngIf="eventsList.length === 0">Calendar is not available.</h5>
+    <h5 class="ion-text-center" *ngIf="isDataLoaded && eventsList.length === 0">Calendar is not available.</h5>
 
     <ion-grid [hidden]="!isDataLoaded" *ngIf="eventsList.length > 0">
       <ion-row class="calendar_row">

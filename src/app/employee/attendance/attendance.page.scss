@@ -30,7 +30,23 @@
 
 .stickyCalender {
     position: sticky;
-    bottom: 0;
+    top: 0;
     z-index: 1;
     background-color: #fff;
+}
+.btn_group{
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    align-items: center;
+}
+.flex_div_2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    min-height: -webkit-fill-available;
+    pointer-events: none;
 }

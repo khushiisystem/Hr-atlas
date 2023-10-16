@@ -11,13 +11,19 @@
 
     <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === 'Admin'" slot="end" (ionChange)="roleToggle($event)" class="ion-margin-end" [disabled]="!userDetails" *ngIf="isSwitchable">Admin</ion-toggle>
 
-    <ion-button mode="md" slot="end" shape="round" [strong]="true" [color]="'primary'" fill="solid" class="ion-padding-horizontal ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
-      <span class="stopwatch-time">{{ buttonLabel }}</span>
-      <ion-icon slot="end" icon="time"></ion-icon>
-    </ion-button>
-    <ion-thumbnail slot="end" class="logo_img ion-margin-end" *ngIf="userRole !== 'Employee'">
+    <ion-buttons slot="end" class="ion-margin-end">
+      <ion-button mode="md" shape="round" [strong]="true" [color]="'primary'" fill="solid" class="ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
+        <span class="stopwatch-time">{{ buttonLabel }}</span>
+        <ion-icon slot="end" icon="time"></ion-icon>
+      </ion-button>
+
+      <ion-button mode="md" shape="round" [strong]="true" [color]="'danger'" fill="solid" class="ion-text-wrap clock_in_btn" (click)="logout()" *ngIf="userDetails">
+        <ion-icon name="power" slot="icon-only" size="small"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <!-- <ion-thumbnail slot="end" class="logo_img ion-margin-end" *ngIf="userRole !== 'Employee'">
       <ion-img src="../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
-    </ion-thumbnail>
+    </ion-thumbnail> -->
     <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
@@ -172,5 +178,39 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <div class="leavesRequest ion-padding-vertical" *ngIf="userRole === 'Admin' && requestedLeaveList.length > 0">
+    <h2 class="ion-margin">Leave Requests</h2>
+    <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of requestedLeaveList; index as a">
+      <ion-card-header>
+        <div>
+          <ion-chip *ngIf="leaveItem.employeeDetails" color="tertiary" class="ion-no-margin">
+            <ion-avatar *ngIf="leaveItem.employeeDetails.imageUrl">
+              <img [alt]="leaveItem.employeeDetails.firstName" [src]="leaveItem.employeeDetails.imageUrl" />
+            </ion-avatar>
+            <ion-label>{{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || '' | titlecase}}</ion-label>
+          </ion-chip>
+        </div>
+        <div class="ion-text-end">
+          <ion-text>{{leaveItem.leaveType}}</ion-text>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <ion-text>{{leaveItem.startDate | date:'shortDate'}}</ion-text> - <ion-text>{{leaveItem.endDate | date:'shortDate'}}</ion-text>
+        </p>
+        <p class="purpose"><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
+      </ion-card-content>
+
+      <div class="ion-text-end">
+        <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
+        <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
+      </div>
+    </ion-card>
+
+    <div class="ion-text-end" *ngIf="moreRequests">
+      <ion-button fill="clear" color="primary" [strong]="true" size="small" mode="md" (click)="showAllLeaves()">View All</ion-button>
+    </div>
+  </div>
   <ion-title class="ion-text-center ion-margin-vertical" *ngIf="isDataLoaded && !userDetails">Please Login First</ion-title>
 </ion-content>
