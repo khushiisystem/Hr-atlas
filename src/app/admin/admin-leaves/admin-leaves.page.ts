@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
 import { ILeaveLogsResponse } from 'src/app/interfaces/response/ILeave';
@@ -14,6 +14,7 @@ import { ShareService } from 'src/app/services/share.service';
 })
 export class AdminLeavesPage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
+  @Input() leaveType?: string;
   selectedDates: string[] = [];
   requestLoaded: boolean = false;
   logsLoaded: boolean = false;
@@ -23,7 +24,7 @@ export class AdminLeavesPage implements OnInit {
   moreLogs: boolean = false;
   pageNumber: number = 0;
   logPageNumber: number = 0;
-  activeTab: string = 'requests'
+  activeTab: string = '';
   leaveLogs: ILeaveLogsResponse[] = [];
   requestedLeaveList: ILeaveLogsResponse[] = [];
   userRole: string = '';
@@ -42,6 +43,8 @@ export class AdminLeavesPage implements OnInit {
         this.userRole = localStorage.getItem('userRole') || "";
       }
     });
+
+    this.activeTab = this.leaveType ? this.leaveType : 'requests'
   }
 
   ngOnInit() {

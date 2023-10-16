@@ -11,6 +11,8 @@ import { UserStateService } from '../services/userState.service';
 import { AdminService } from '../services/admin.service';
 import { AdminTutorialsPage } from '../admin/admin-tutorials/admin-tutorials.page';
 import Swiper from 'swiper';
+import { ILeaveLogsResponse } from '../interfaces/response/ILeave';
+import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-tab1',
@@ -32,11 +34,13 @@ export class Tab1Page implements OnInit, AfterViewInit {
   isDataLoaded: boolean = false;
   userDetails!: IEmployeeResponse;
   demoCard: any[] = [];
+  requestedLeaveList: ILeaveLogsResponse[] = [];
   clockInTime: string = '';
   clockInId: string = '';
   isSwitchable: boolean = false;
   leaveDone: boolean = false;
   attendanceDone: boolean = false;
+  moreRequests: boolean = false;
 
   constructor(
     private router: Router,
@@ -44,6 +48,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     private popoverCtrl: PopoverController,
     private alertCtrl: AlertController,
     private shareServ: ShareService,
+    private authServ: AuthService,
     private adminServ: AdminService,
     private roleStateServ: RoleStateService,
     private loader: LoaderService,
@@ -99,6 +104,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         } else if(res.role === 'Admin') {
           localStorage.setItem('isSwitchable', 'true');
           this.checkAdminSetups();
+          this.getRequests();
           this.isSwitchable = true;
         }
         this.roleStateServ.updateState(this.userDetails.role);
@@ -137,6 +143,23 @@ export class Tab1Page implements OnInit, AfterViewInit {
         // this.swiper.autoplay.start();
       }
     });
+  }
+
+  getRequests(){
+    const data = {
+      status: 'Pending'
+    };
+    this.requestedLeaveList = []
+    this.shareServ.getLeaveList(data, 0 * 3, 3).subscribe(res => {
+      if(res) {
+        if(res.length < 1){return;}
+
+        for(let i=0; i < res.length; i++){
+          this.requestedLeaveList.push(res[i]);
+        }
+        this.moreRequests = res.length > 2 ? true : false;
+      }
+    }, (error) => {});
   }
 
   getAttendance(){
@@ -392,6 +415,28 @@ export class Tab1Page implements OnInit, AfterViewInit {
     // });
   }
 
+  leaveApprovel(leaveId: string, approvel: boolean){
+    this.loader.present('');
+    const leaveData = {
+      leaveGuid: leaveId,
+      aproveLeave: approvel
+    }
+    this.adminServ.leaveApprove(leaveData).subscribe(res => {
+      if(res){
+        if(res.Message){
+          this.shareServ.presentToast(res.Message, 'top', 'success');
+        } else {
+          this.shareServ.presentToast('Responded', 'top', 'success');
+        }
+        this.loader.dismiss();
+        this.getRequests();
+      }
+    }, (error) => {
+      this.shareServ.presentToast(error.error.message, 'top', 'danger');
+      this.loader.dismiss();
+    })
+  }
+
   roleToggle(event: any) {
     if(event.detail.checked){
       this.roleStateServ.updateState('Admin');
@@ -406,7 +451,10 @@ export class Tab1Page implements OnInit, AfterViewInit {
     this.router.navigate(['/tabs/attendance']);
   }
   showleaves() {
-    this.router.navigate(['./tabs/leaves']);
+    this.router.navigate(['/tabs/leaves']);
+  }
+  showAllLeaves() {
+    this.router.navigateByUrl('/tabs/leaves', {state: {tab: 'requests'}});
   }
   attendancePAge(){
     if(this.userRole === 'Employee'){
@@ -432,4 +480,6 @@ export class Tab1Page implements OnInit, AfterViewInit {
   showhome() {
     this.router.navigate(['./home']);
   }
+
+  logout() {this.authServ.signOut();}
 }

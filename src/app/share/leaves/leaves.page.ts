@@ -8,23 +8,25 @@ import { RoleStateService } from 'src/app/services/roleState.service';
 })
 export class LeavesPage implements OnInit {
   userRole: string = '';
+  leaveType: string = '';
   isSwitchable: boolean = false;
 
   constructor(
     private roleStateServ: RoleStateService,
   ) {
+    const isSwitched = localStorage.getItem('isSwitchable') || false;
+    this.isSwitchable = isSwitched as boolean
     this.roleStateServ.getState().subscribe(res => {
       if(res){
         this.userRole = res;
-        this.isSwitchable = this.userRole === 'Admin';
       } else {
         this.userRole = localStorage.getItem('userRole') || "";
-        this.isSwitchable = this.userRole === 'Admin';
       }
     });
   }
 
   ngOnInit() {
+    this.leaveType = history.state.tab;
   }
 
   goBack() {history.back();}

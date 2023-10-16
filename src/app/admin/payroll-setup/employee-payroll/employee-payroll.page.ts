@@ -132,6 +132,7 @@ export class EmployeePayrollPage implements OnInit {
         this.salaryStructure = res;
         this.payslipFrom.patchValue({
           ctc: res.current_ctc,
+          basicSalary: res.current_ctc / 12
         });
         console.log(this.payslipFrom.value);
         this.salaryStructureLoaded = true;

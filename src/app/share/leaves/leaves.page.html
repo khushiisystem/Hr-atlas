@@ -21,5 +21,5 @@
 
   <app-employee-leaves *ngIf="userRole === 'Employee'"></app-employee-leaves>
 
-  <app-admin-leaves *ngIf="userRole === 'Admin'"></app-admin-leaves>
+  <app-admin-leaves *ngIf="userRole === 'Admin'" [leaveType]="leaveType ? leaveType : ''"></app-admin-leaves>
 </ion-content>

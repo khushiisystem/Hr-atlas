@@ -108,7 +108,7 @@ export class AttendancePage implements OnInit {
         this.leaveLogs = res;
 
         this.leaveLogs.map((leave: ILeaveLogsResponse) => {
-          if(leave.endDate && leave.status.toLowerCase() !== 'canceled'){
+          if(leave.endDate && leave.status !== 'Cancel'){
             const startDate = new Date(leave.startDate);
             const endDate = new Date(leave.endDate);
             while (startDate <= endDate) {

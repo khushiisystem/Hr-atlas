@@ -35,6 +35,7 @@ swiper-slide {
         width: 100%;
         height: 100%;
         text-align: center;
+        box-shadow: rgb(82 96 255 / 20%) 0px 3px 1px -2px, rgb(82 96 255 / 14%) 0px 2px 2px 0px, rgb(82 96 255 / 12%) 0px 1px 5px 0px;
 
         & .icon_card {color: var(--color-primary);}
 
@@ -66,4 +67,17 @@ swiper-slide {
         gap: 16px;
         flex-wrap: wrap;
     }
+}
+
+.log_card {
+    color: var(--ion-color-dark-tint);
+    box-shadow: rgb(82 96 255 / 14%) 0px 4px 16px;
+    & ion-card-header {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: center;
+    }
+
+    & .purpose {white-space: pre-line;}
 }

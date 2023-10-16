@@ -19,6 +19,11 @@
 }
 .log_card {
     color: var(--ion-color-dark-tint);
+    box-shadow: rgb(82 96 255 / 14%) 0px 4px 16px;
+    border-radius: 8px;
+    margin-inline: 16px;
+    margin-top: 24px;
+    margin-bottom: 24px;
     & ion-card-header {
         flex-direction: row;
         justify-content: space-between;
