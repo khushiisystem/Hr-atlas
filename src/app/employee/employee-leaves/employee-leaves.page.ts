@@ -22,6 +22,7 @@ export class EmployeeLeavesPage implements OnInit {
   leaveType!: string;
   purpose!: string; 
   applyCardTitle: string = '';
+  userID: string = '';
   openCalendar: boolean = false;
   moreData: boolean = false;
   platformType: string = "";
@@ -35,7 +36,9 @@ export class EmployeeLeavesPage implements OnInit {
     private router: Router,
     private shareServ: ShareService,
     private loader: LoaderService,
-  ) { }
+  ) { 
+    this.userID = localStorage.getItem('userId') || '';
+  }
 
   ngOnInit() {
     this.selectedDates = history.state.selectedDates || [];
@@ -120,7 +123,7 @@ export class EmployeeLeavesPage implements OnInit {
   }
 
   getLogs(){
-    const data = {};
+    const data = { employeeId: this.userID, };
     this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
       if(res) {
         this.leaveLogs = res;

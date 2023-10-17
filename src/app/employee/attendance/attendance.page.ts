@@ -52,15 +52,51 @@ export class AttendancePage implements OnInit {
   ionViewWillEnter(){
     this.attendanceDate = this.today.toISOString();
     if(this.userId.trim() !== ''){
-      this.getStats();
+      this.getMonthLyAttendance();
+      this.getCalendar();
+      this.getWorkWeek();
+      this.getLogs();
     }
   }
-  
-  getStats(){
-    this.getEmployeeAttendance();
-    this.getCalendar();
-    this.getLogs();
-    this.getWorkWeek();
+
+  getMonthLyAttendance(){
+    this.dataLoaded = false;
+    this.moreData = true;
+    this.loader.present('');
+    this.shareServ.monthlyAttendance(this.userId, this.attendanceDate, this.pageIndex * 0, 40).subscribe(res => {
+      if(res.length < 1){
+        this.moreData = false;
+        this.dataLoaded = true;
+        this.loader.dismiss();
+        return;
+      } else {
+        this.attendanceList = res;
+        this.dataLoaded = true;
+        this.moreData = res.length > 39;
+
+        this.attendanceList.forEach((e: IClockInResponce) => {
+          const data = {
+            date: this.returnCustomDate(e.created_date),
+            textColor: this.checkStatus(e.status).color,
+            backgroundColor: this.checkStatus(e.status).backgroud,
+          };
+          const index = this.highlightedDates.findIndex((a: IHighlightedDate) => a.date === this.returnCustomDate(e.created_date));
+          if(index != -1){
+            this.highlightedDates[index] = data;
+          } else {
+            this.highlightedDates.push(data);
+          }
+        })
+        this.loader.dismiss();
+        if(this.infiniteScroll){
+          this.infiniteScroll.complete();
+        }
+      }
+    }, (error) => {
+      this.dataLoaded = true;
+      this.loader.dismiss();
+      this.infiniteScroll.complete();
+    });
   }
 
   getEmployeeAttendance() {
@@ -77,6 +113,17 @@ export class AttendancePage implements OnInit {
         }
         for(let i=0; i<res.length; i++){
           this.attendanceList.push(res[i]);
+          const data = {
+            date: this.returnCustomDate(res[i].created_date),
+            textColor: this.checkStatus(res[i].status).color,
+            backgroundColor: this.checkStatus(res[i].status).backgroud
+          };
+          const index = this.highlightedDates.findIndex((e: IHighlightedDate) => e.date === this.returnCustomDate(res[i].created_date));
+          if(index != -1){
+            this.highlightedDates[index] = data;
+          } else {
+            this.highlightedDates.push(data);
+          }
         }
         
         
@@ -87,7 +134,6 @@ export class AttendancePage implements OnInit {
         if(this.infiniteScroll){
           this.infiniteScroll.complete();
         }
-        this.setStartEndDate(this.attendanceDate);
 
       }
       this.dataLoaded = true;
@@ -97,12 +143,13 @@ export class AttendancePage implements OnInit {
       this.dataLoaded = true;
       this.moreData = false;
       this.loader.dismiss();
-      this.setStartEndDate(this.attendanceDate);
     });
   }
 
   getLogs(){
-    const data = {};
+    const data = {
+      employeeId: this.userId
+    };
     this.shareServ.getLeaveList(data, 0 * 200, 200).subscribe(res => {
       if(res) {
         this.leaveLogs = res;
@@ -159,11 +206,19 @@ export class AttendancePage implements OnInit {
     this.shareServ.employeeAssignedWorkWeek(this.userId).subscribe(res => {
       if(res) {
         this.workWeekDetail = res;
-        console.log(moment.weekdays());
-        this.getWeekendDates(new Date(this.attendanceDate).getFullYear(), new Date(this.attendanceDate).getMonth()+1);
+        const weekOff = this.workWeekDetail.workweekDetails.weekOff;
+        this.highlightedDates.forEach((abc: IHighlightedDate) => {
+          const abcDate = new Date(abc.date).getDay();
+          if(weekOff.includes(moment.weekdays()[abcDate])){
+            abc = {
+              date: this.returnCustomDate(abc.date),
+              backgroundColor: 'var(--ion-color-secondary-tint)',
+              textColor: 'var(--ion-color-secondary-contrast)',
+            };
+          }
+        })
       }
     }, (error) => {
-      this.getWeekendDates(new Date(this.attendanceDate).getFullYear(), new Date(this.attendanceDate).getMonth()+1);
     });
   }
 
@@ -184,21 +239,17 @@ export class AttendancePage implements OnInit {
           backgroundColor: 'red'
         });
 
-        if(this.workWeekDetail){
-          const weekOff = this.workWeekDetail.workweekDetails.weekOff;
-          for(let i=0; i<weekOff.length; i++){
-            if (dayOfWeek === moment.weekdays().findIndex((e) => e == weekOff[i])) {
-              const customData : IHighlightedDate = {
-                date: this.returnCustomDate(currentDate),
-                backgroundColor: 'var(--ion-color-secondary-tint)',
-                textColor: 'var(--ion-color-secondary-contrast)',
-              };
-              const index = this.highlightedDates.findIndex((e: IHighlightedDate) => e.date === this.returnCustomDate(currentDate));
-              if(index != -1){
-                this.highlightedDates.splice(index, 1);
-              }
-              this.highlightedDates.push(customData);
-            }
+        if(this.workWeekDetail && this.isWeekOff(currentDate)){
+          const customData : IHighlightedDate = {
+            date: this.returnCustomDate(currentDate),
+            backgroundColor: 'var(--ion-color-secondary-tint)',
+            textColor: 'var(--ion-color-secondary-contrast)',
+          };
+          const index = this.highlightedDates.findIndex((e: IHighlightedDate) => e.date === this.returnCustomDate(currentDate));
+          if(index != -1){
+            this.highlightedDates[index] = customData;
+          } else {
+            this.highlightedDates.push(customData);
           }
         }
         this.attendanceList.forEach((attend: IClockInResponce) => {
@@ -261,8 +312,8 @@ export class AttendancePage implements OnInit {
         break;
 
       case 'Absent':
-        data.color = 'red';
-        data.backgroud = '#fff';
+        data.color = '#fff';
+        data.backgroud = 'red';
         break;
     
       default:
@@ -318,22 +369,20 @@ export class AttendancePage implements OnInit {
       this.attendanceDateList.push(data);
       lastDate--;
     }
+
+    this.getWeekendDates(new Date(this.attendanceDate).getFullYear(), new Date(this.attendanceDate).getMonth()+1);
   }
 
   dateChange(event: CustomEvent) {
     if(event.detail.value){
-      // this.attendanceList = [];
-      
-      // this.getWeekendDates(new Date(this.attendanceDate).getFullYear(), new Date(this.attendanceDate).getMonth()+1);
-      // this.setStartEndDate(this.attendanceDate);
-      this.getStats();
+      this.getMonthLyAttendance();
       this.showCalendar = true;
     }
   }
 
   selectDate(event: CustomEvent) {
     if(event.detail.value){
-      this.getStats();
+      this.getMonthLyAttendance();
     }
   }
   
@@ -352,7 +401,12 @@ export class AttendancePage implements OnInit {
 
 
   isWeekOff(dateTime: string | Date){
-    return new Date(moment(dateTime).format()).getDay() === 0;
+    if(this.workWeekDetail){
+      const weekOff = this.workWeekDetail.workweekDetails.weekOff;
+      return weekOff.includes(moment.weekdays()[new Date(dateTime).getDay()]);
+    } else{
+      return  (new Date(dateTime).getDay() === 0);
+    }
   }
   getStatus(status: string){
     let color = '';
@@ -386,7 +440,7 @@ export class AttendancePage implements OnInit {
   loadData(event: any){
     if(this.moreData){
       this.pageIndex++;
-      this.getEmployeeAttendance();
+      this.getMonthLyAttendance();
     }
   }
   

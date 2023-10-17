@@ -37,3 +37,18 @@ form {
         margin-left: 5px;
     }
 }
+.stickyCalender {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #fff;
+}
+.btn_group{
+    display: flex;
+    gap: 5px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+
+    ion-button {text-transform: capitalize;}
+}

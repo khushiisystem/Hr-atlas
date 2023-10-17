@@ -126,7 +126,6 @@ export class EmployeesPage implements OnInit, OnDestroy {
   }
 
   selectEmployee(empData: IEmpSelect){
-    console.log(this.selectedEmployee);
     if(this.selectedEmployee.length > 0){
       this.checkEmployee(empData.guid);
     } else {

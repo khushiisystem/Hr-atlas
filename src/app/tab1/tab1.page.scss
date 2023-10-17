@@ -58,6 +58,7 @@ swiper-slide {
     pointer-events: none;
 }
 .time_card {
+    box-shadow: rgb(6 69 177 / 29%) 0 2px 4px, rgb(6 69 177 / 81%) 0 8px 23px -3px;
     ion-card-header {flex-direction: row; justify-content: space-between; gap: 16px; align-items: center;}
     ion-button {text-transform: capitalize;}
     & .flex_div {
