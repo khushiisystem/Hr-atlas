@@ -97,6 +97,9 @@ export class ShareService {
   todayAttendance(): Observable<any> {
     return this.http.get<any>(environment.Api + `api/attendence/todayAttendance`);
   }
+  monthlyAttendance(employeeId: string, dateStr: string, pageIndex: number, pageSize: number): Observable<IClockInResponce[]> {
+    return this.http.get<IClockInResponce[]>(environment.Api + `api/attendence/monthAttendance?employeeId=${employeeId}&date=${dateStr}&skip=${pageIndex}&limit=${pageSize}`)
+  }
 
   // employee workWeek
   employeeAssignedWorkWeek(emplId: string) : Observable<IEmplpoyeeWorWeek> {

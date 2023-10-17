@@ -105,3 +105,39 @@ ion-header {
     column-gap: 10px;
     & ion-button {min-width: 90px;}
 }
+
+// attendance calendar
+ion-datetime {
+    &.attendance_calendar{
+        &::part(calendar-day){
+            // color: #da5296;
+            color: #333;
+            background-color: red;
+        }
+        & ::part(calendar-day today) {
+          color: #fff;
+          background-color: #8462d1;
+        }
+        &::part(calendar-day):focus {
+            background-color: rgb(154 209 98 / 0.2);
+            box-shadow: 0px 0px 0px 4px rgb(154 209 98 / 0.2);
+        }
+        &.md::part(calendar-day active),
+        &.md::part(calendar-day active):focus,
+        &.ios::part(calendar-day active),
+        &.ios::part(calendar-day active):focus {
+            // border-color: #8462d1;
+            // background-color: #8462d1;
+            // color: #333;
+            border-color: initial;
+            background-color: initial;
+            color: initial;
+        }
+        &.md::part(calendar-day today),
+        &.ios::part(calendar-day today) {
+            border-color: #8462d1;
+            background-color: #8462d1;
+            color: #333;
+        }
+    }
+}

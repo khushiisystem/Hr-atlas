@@ -14,8 +14,6 @@ export class LeavesPage implements OnInit {
   constructor(
     private roleStateServ: RoleStateService,
   ) {
-    const isSwitched = localStorage.getItem('isSwitchable') || false;
-    this.isSwitchable = isSwitched as boolean
     this.roleStateServ.getState().subscribe(res => {
       if(res){
         this.userRole = res;
@@ -26,6 +24,9 @@ export class LeavesPage implements OnInit {
   }
 
   ngOnInit() {
+    const isSwitched = localStorage.getItem('isSwitchable');
+    this.isSwitchable = (isSwitched && isSwitched === 'true') ? true : false;
+    console.log(this.isSwitchable);
     this.leaveType = history.state.tab;
   }
 
