@@ -116,7 +116,7 @@ export class EmployeePayrollPage implements OnInit {
         this.salaryStructureLoaded = true;
         this.loaderServ.dismiss();
       } else {
-        
+        this.loaderServ.dismiss();
       }
     }, (error) => {
       this.shareServ.presentToast(error.error || error.error.message, 'top', 'danger');
@@ -136,12 +136,10 @@ export class EmployeePayrollPage implements OnInit {
         });
         console.log(this.payslipFrom.value);
         this.salaryStructureLoaded = true;
-        this.loaderServ.dismiss();
       }
     }, (error) => {
       this.shareServ.presentToast(error.error.message, 'top', 'danger');
       this.salaryStructureLoaded = false;
-      this.loaderServ.dismiss();
     });
 
     this.getPayslipOfTheMonth();

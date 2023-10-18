@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ToastController } from "@ionic/angular";
 import { Observable } from "rxjs";
@@ -52,10 +52,45 @@ export class ShareService {
 
   // payroll APIs
   getEmployeePayroll(empId: string, session: string | Date): Observable<any>{
-    return this.http.get<any>(environment.Api + `api/payroll/employee/${empId}?session=${session}`);
+    return this.http.get<any>(environment.Api + `api/payroll/employee/${empId}?session=${session}`, {
+      headers: {
+        responseType: 'blob',
+      }
+    });
   }
   setEmployeePayroll(empId: string, session: string | Date, payrollData: IPayrollSetupRequest): Observable<any>{
     return this.http.post<any>(environment.Api + `api/payroll/employee/${empId}?session=${session}`, payrollData);
+  }
+  downloadPayslip(employeeId: string, slipDate: string | Date): Observable<Blob> {
+    return this.http.get<Blob>(environment.Api + `api/paySlip/generatepdf?employeeId=${employeeId}&date=${slipDate}`, {
+      headers: {
+        'Content-Type': 'Application/pdf',
+        responseType: 'blob',
+      }
+    })
+  }
+  
+  downloadFile(path: string): Observable<any> {
+    return this.http.get(environment.Api + 'api/prescription/generatePdf/' + path, {
+      responseType: 'blob'
+    });
+  }
+
+  public exportFile(res: Blob, fileName: string) {
+    // const url = window.URL.createObjectURL(res);
+    // const a = document.createElement("a");
+    // a.style.display = "none";
+    // a.href = url;
+    // // the filename you want
+    // a.download = fileName;
+    // document.body.appendChild(a);
+    // a.click();
+    // document.body.removeChild(a);
+    // window.URL.revokeObjectURL(url);
+
+    // const blob = new Blob(res, {type: 'application/pdf'});
+    const url = window.URL.createObjectURL(res);
+    window.open(url);
   }
 
   // sharable APIs

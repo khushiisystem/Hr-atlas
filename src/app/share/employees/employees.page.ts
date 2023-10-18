@@ -150,6 +150,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
         this.isDataLoaded = true;
       });
     } else if(searchValue.trim() === '') {
+      this.pageIndex = 0;
       this.getEmployeeList();
     }
   }
