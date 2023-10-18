@@ -36,6 +36,8 @@ import { SalaryPage } from "../admin/salary/salary.page";
 import { AdminTutorialsPage } from "../admin/admin-tutorials/admin-tutorials.page";
 import { EmployeePayrollPage } from "../admin/payroll-setup/employee-payroll/employee-payroll.page";
 import { EmployeePayslipPage } from "../employee/employee-payslip/employee-payslip.page";
+import { HttpClientModule } from "@angular/common/http";
+import { FileOpener } from "@ionic-native/file-opener/ngx";
 
 @NgModule({
   declarations: [
@@ -75,8 +77,9 @@ import { EmployeePayslipPage } from "../employee/employee-payslip/employee-paysl
     AddExperiencePageModule,
     EmployeesPageModule,
     LeavesPageModule,
+    HttpClientModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [AuthGuard, RoleGuard],
+  providers: [AuthGuard, RoleGuard, FileOpener],
 })
 export class TabsPageModule {}

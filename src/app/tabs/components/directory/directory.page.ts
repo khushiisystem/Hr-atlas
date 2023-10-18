@@ -168,6 +168,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
       });
     } else if(searchValue.trim() === ''){
       this.isHold = true;
+      this.pageIndex = 0;
       this.getEmployeeList();
     }
   }

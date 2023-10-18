@@ -40,7 +40,7 @@ export class PayrollPage implements OnInit {
 
   ngOnInit() {
     this.employeeId = this.activeRoute.snapshot.params?.["id"];
-    this.today.setFullYear(this.today.getFullYear(), this.today.getMonth() - 1, this.today.getDate());
+    // this.today.setFullYear(this.today.getFullYear(), this.today.getMonth() - 1, this.today.getDate());
     this.payslipDate = this.today;
     if (this.employeeId.trim() !== "") {
       this.getPaySlip();
