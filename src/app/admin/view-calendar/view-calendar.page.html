@@ -41,7 +41,7 @@
           </ion-col>
           <ion-col size="6">
             <ion-text>{{getDate(event.eventDate) | date}}</ion-text>
-            <ion-button fill="clear" color="primary" [strong]="true" size="small" shape="round" (click)="createHollyday(event, 'update')" aria-label="Edit">
+            <ion-button fill="clear" color="primary" [strong]="true" size="small" shape="round" (click)="createHollyday(event, 'update')" aria-label="Edit" *ngIf="userRole === 'Admin'">
               <ion-icon name="pencil-outline" size="small" aria-hidden="true" slot="icon-only"></ion-icon>
             </ion-button>
           </ion-col>
