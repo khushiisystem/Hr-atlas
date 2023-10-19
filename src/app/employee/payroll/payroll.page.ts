@@ -60,10 +60,13 @@ export class PayrollPage implements OnInit {
     this.adminServ.getEmployeePayslip({employeeId: this.employeeId, date: moment.utc(this.payslipDate).format()}).subscribe(res => {
       if(res != null){
         this.payslipData = res;
+      } else {
+        this.payslipData = null as any;
       }
       this.payslipLoaded = true;
       this.loader.dismiss();
     }, (error) => {
+      this.payslipData = null as any;
       this.payslipLoaded = true;
       this.shareServ.presentToast(error.error, 'top', 'danger');
       this.loader.dismiss();
