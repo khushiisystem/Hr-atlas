@@ -61,36 +61,27 @@ export class ShareService {
   setEmployeePayroll(empId: string, session: string | Date, payrollData: IPayrollSetupRequest): Observable<any>{
     return this.http.post<any>(environment.Api + `api/payroll/employee/${empId}?session=${session}`, payrollData);
   }
-  downloadPayslip(employeeId: string, slipDate: string | Date): Observable<Blob> {
-    return this.http.get<Blob>(environment.Api + `api/paySlip/generatepdf?employeeId=${employeeId}&date=${slipDate}`, {
-      headers: {
-        'Content-Type': 'Application/pdf',
+  downloadPayslip(employeeId: string, slipDate: string | Date): Observable<any> {
+    return this.http.get(environment.Api + `api/paySlip/generatepdf?employeeId=${employeeId}&date=${slipDate}`, {
         responseType: 'blob',
-      }
     })
-  }
-  
-  downloadFile(path: string): Observable<any> {
-    return this.http.get(environment.Api + 'api/prescription/generatePdf/' + path, {
-      responseType: 'blob'
-    });
   }
 
   public exportFile(res: Blob, fileName: string) {
-    // const url = window.URL.createObjectURL(res);
-    // const a = document.createElement("a");
-    // a.style.display = "none";
-    // a.href = url;
-    // // the filename you want
-    // a.download = fileName;
-    // document.body.appendChild(a);
-    // a.click();
-    // document.body.removeChild(a);
-    // window.URL.revokeObjectURL(url);
+    const url = window.URL.createObjectURL(res);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    // the filename you want
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
 
     // const blob = new Blob(res, {type: 'application/pdf'});
-    const url = window.URL.createObjectURL(res);
-    window.open(url);
+    // const url = window.URL.createObjectURL(res);
+    // window.open(url);
   }
 
   // sharable APIs
