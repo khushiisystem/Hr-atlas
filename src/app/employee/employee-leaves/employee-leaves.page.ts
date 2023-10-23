@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { DatetimeCustomEvent } from '@ionic/angular';
+import { DatetimeCustomEvent, IonInfiniteScroll } from '@ionic/angular';
 import { ILeaveApplyrequest } from 'src/app/interfaces/request/ILeaveApply';
 import { ILeaveStatus } from 'src/app/interfaces/response/IAttendanceSetup';
 import { ILeaveLogsResponse } from 'src/app/interfaces/response/ILeave';
@@ -13,6 +13,7 @@ import { ShareService } from 'src/app/services/share.service';
   styleUrls: ['./employee-leaves.page.scss'],
 })
 export class EmployeeLeavesPage implements OnInit {
+  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   selectedDates: string[] = [];
   toggleChecked: boolean = false;
   showApplyForm: boolean = false;
@@ -126,10 +127,23 @@ export class EmployeeLeavesPage implements OnInit {
     const data = { employeeId: this.userID, };
     this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
       if(res) {
-        this.leaveLogs = res;
-        this.moreData = false;
+        for(let i=0; i<res.length; i++){
+          this.leaveLogs.push(res[i]);
+        }
+        this.moreData = res.length > 9;
+        this.infiniteScroll.complete();
       }
+    }, (error) => {
+      this.moreData = false;
+      this.infiniteScroll.complete();
     });
+  }
+
+  loadLogs(event: any){
+    if(this.moreData) {
+      this.pageNumber++;
+      this.getLogs();
+    }
   }
 
   getLeaveStatus(){

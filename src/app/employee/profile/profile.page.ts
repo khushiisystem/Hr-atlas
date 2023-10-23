@@ -31,6 +31,9 @@ export class ProfilePage implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter(){
     this.employeeId = localStorage.getItem('userId') || "";
     if(this.employeeId.trim() !== ''){
       this.getEmployeeDetails();
