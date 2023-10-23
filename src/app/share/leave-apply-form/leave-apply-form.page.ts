@@ -46,16 +46,16 @@ export class LeaveApplyFormPage implements OnInit {
 
   getDate(ctrlName: string){
     const formDate = this.leaveApplyForm.controls[ctrlName].value;
-    return formDate != '' ? new Date(moment(formDate).format()) : "";
+    return formDate != '' ? new Date(formDate) : "";
   }
 
   selectDate(event: DatetimeCustomEvent){
     this.leaveApplyForm.patchValue({
-      startDate: moment.utc(event.detail.value).format()
+      startDate: new Date(event.detail.value as string).toISOString()
     });
     if(this.leaveApplyForm.controls['endDate'].value){
-      const startDate = new Date(moment(event.detail.value).format());
-      const endDate = new Date(moment(this.leaveApplyForm.controls['endDate'].value).format());
+      const startDate = new Date(event.detail.value as string);
+      const endDate = new Date(this.leaveApplyForm.controls['endDate'].value);
       if(startDate > endDate){
         this.leaveApplyForm.patchValue({endDate: ''});
       }
@@ -67,7 +67,7 @@ export class LeaveApplyFormPage implements OnInit {
 
   selectEndDate(event: DatetimeCustomEvent){
     this.leaveApplyForm.patchValue({
-      endDate: moment.utc(event.detail.value).format()
+      endDate: new Date(event.detail.value as string).toISOString()
     });
   }
 
