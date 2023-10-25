@@ -18,6 +18,7 @@ export class LeaveApplyFormPage implements OnInit {
   openCalendar: boolean = false;
   minDate: Date = new Date();
   maxDate: Date = new Date();
+  minEndDate: any;
 
   constructor(
     private fb: FormBuilder,
@@ -53,6 +54,7 @@ export class LeaveApplyFormPage implements OnInit {
     this.leaveApplyForm.patchValue({
       startDate: new Date(event.detail.value as string).toISOString()
     });
+    this.minEndDate = event.detail.value;
     if(this.leaveApplyForm.controls['endDate'].value){
       const startDate = new Date(event.detail.value as string);
       const endDate = new Date(this.leaveApplyForm.controls['endDate'].value);
