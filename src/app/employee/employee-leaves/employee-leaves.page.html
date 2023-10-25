@@ -144,5 +144,11 @@
         </div>
       </ion-card-content>
     </ion-card>
+    
+    
+    <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadLogs($any($event))" [position]="'bottom'">
+      <ion-infinite-scroll-content *ngIf="moreData" loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </div>
 </div>
