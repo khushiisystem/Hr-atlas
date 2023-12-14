@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DatetimeChangeEventDetail, IonInfiniteScroll } from '@ionic/angular';
+import { ActivatedRoute } from '@angular/router';
+import { DatetimeChangeEventDetail, IonInfiniteScroll, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
 import { IHighlightedDate } from 'src/app/employee/attendance/attendance.page';
 import { AttendaceStatus } from 'src/app/interfaces/enums/leaveCreditPeriod';
@@ -11,10 +12,21 @@ import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 import { IEmpSelect } from 'src/app/share/employees/employees.page';
+import { AttendaceUpdatePage } from './attendace-update/attendace-update.page';
 
 interface DatetimeCustomEvent extends CustomEvent {
   detail: DatetimeChangeEventDetail;
   target: HTMLIonDatetimeElement;
+}
+
+export interface AttListItem {
+  employeeId: string,
+  status: AttendaceStatus,
+  created_date: string | Date,
+  created_user: string,
+  open_form: boolean,
+  attendanceData: any,
+  leaveData: any,
 }
 
 @Component({
@@ -42,16 +54,34 @@ export class EmployeeAttendancePage implements OnInit {
   attendanceDate: any;
   today: Date = new Date();
   workWeekDetail!: IEmplpoyeeWorWeek;
-
+  dateList: AttListItem[] = [];
+  presents: number = 0;
+  absent: number = 0;
+  isFirst: boolean = false;
 
   constructor(
     private shareServ: ShareService,
     private loader: LoaderService,
     private adminServ: AdminService,
     private fb: FormBuilder,
-  ) { }
+    private activeRoute: ActivatedRoute,
+    private modalCtrl: ModalController,
+  ) { 
+    const abc = localStorage.getItem('isFirst') || false;
+    this.isFirst = abc === 'true' ? true : false;
+  }
 
   ngOnInit() {
+    this.activeRoute.queryParams.subscribe(param => {
+      if(param){
+        this.employee = param as IEmpSelect;
+        this.employeeId = this.employee.guid;
+        this.attendanceDate = this.today.toISOString();
+        this.getCalendar();
+        this.selectEmploye(this.employee);
+        this.createDateList(this.attendanceDate);
+      }
+    });
     this.attendanceForm = this.fb.group({
       status: ['Present', Validators.required],
       clockIn: ['', Validators.required],
@@ -59,10 +89,8 @@ export class EmployeeAttendancePage implements OnInit {
       employeeId: ['', Validators.required],
       guid: ['', Validators.required]
     });
-    this.attendanceDate = this.today.toISOString();
 
     this.manageForm();
-    this.getCalendar();
   }
 
   manageForm(){
@@ -88,6 +116,7 @@ export class EmployeeAttendancePage implements OnInit {
     this.attendanceDate = this.today.toISOString();
     this.getMonthLyAttendance();
     this.getLogs();
+    this.getWorkWeek();
   }
 
   reseteEmployee(){
@@ -98,7 +127,33 @@ export class EmployeeAttendancePage implements OnInit {
   getWorkWeek(){
     this.shareServ.employeeAssignedWorkWeek(this.employee.guid).subscribe(res => {
       if(res) {
+        this.presents = 0;
+        this.absent = 0;
         this.workWeekDetail = res;
+        const weekOfList = this.workWeekDetail.workweekDetails.weekOff;
+        this.dateList.forEach((item) => {
+          if(weekOfList.includes(moment.weekdays(new Date(item.created_date).getDay()))){
+            item.status = AttendaceStatus.WEEK_OFF;
+            const hghIndex = this.highlightedDates.findIndex((e) => e.date === this.returnCustomDate(item.created_date));
+            if(hghIndex != -1){
+              this.highlightedDates.forEach((e, index) => {
+                if(e.date === this.returnCustomDate(item.created_date)){
+                  e.textColor = '#333';
+                  e.backgroundColor = 'var(--ion-color-warning)';
+                } else {
+  
+                }
+              });
+            } else {
+              this.highlightedDates.push({
+                date: this.returnCustomDate(item.created_date),
+                textColor: '#333',
+                backgroundColor: 'var(--ion-color-warning)',
+              })
+            }
+          }
+          item.status === AttendaceStatus.LEAVE || item.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+        });
       }
     }, (error) => {
     });
@@ -117,27 +172,35 @@ export class EmployeeAttendancePage implements OnInit {
         return;
       } else {
         this.attendanceLoaded = true;
-        this.openUpdatForm.length = this.attendanceList.length;
-        this.openUpdatForm.fill(false);        
         this.moreAttendance = res.length > 39;
         
         res.forEach((e: IClockInResponce) => {
           this.attendanceList.push(e);
-          const index = this.highlightedDates.findIndex((a: IHighlightedDate) => a.date === this.returnCustomDate(e.created_date));
-            if(index != -1){
-              this.highlightedDates[index] = {
-                date: this.returnCustomDate(e.created_date),
-                textColor: this.checkStatus(e.status).color,
-                backgroundColor: this.checkStatus(e.status).backgroud,
-              };
-            } else {
-              this.highlightedDates.push({
-                date: this.returnCustomDate(e.created_date),
-                textColor: this.checkStatus(e.status).color,
-                backgroundColor: this.checkStatus(e.status).backgroud,
-              });
+          const data = {
+            date: this.returnCustomDate(e.created_date),
+            textColor: this.checkStatus(e.status).color,
+            backgroundColor: this.checkStatus(e.status).backgroud,
+          };
+          const index = this.highlightedDates.findIndex((item: IHighlightedDate) => item.date === this.returnCustomDate(e.created_date));
+          if(index != -1){
+            this.highlightedDates[index] = data;
+          } else {
+            this.highlightedDates.push(data);
+          }
+
+          this.presents = 0;
+          this.absent = 0;
+          this.dateList.forEach((item) => {
+            if(this.checkDates(new Date(e.created_date), new Date(item.created_date))){
+              item.attendanceData = e;
+              item.status = e.status;
+              item.created_date = new Date(e.created_date).toISOString();
             }
+            e.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+          });
         });
+        this.openUpdatForm.length = this.attendanceList.length;
+        this.openUpdatForm.fill(false);
         this.loader.dismiss();
         this.infiniteScroll.complete();
       }
@@ -145,56 +208,6 @@ export class EmployeeAttendancePage implements OnInit {
       this.attendanceLoaded = true;
       this.loader.dismiss();
       this.infiniteScroll.complete();
-    });
-  }
-
-  getEmployeeAttendance(){
-    this.attendanceLoaded = false;
-    this.loader.present('');
-    this.highlightedDates = [];
-    if(this.pageIndex === 0){this.attendanceList = [];}
-    this.shareServ.employeeAttendance(this.employeeId, this.pageIndex * 20, 20).subscribe(res => {
-      if(res) {
-        if(res.length < 1){
-          this.attendanceLoaded = true;
-          this.moreAttendance = false;
-          this.infiniteScroll.complete();
-          this.loader.dismiss();
-          return;
-        } else {
-          for(let i=0; i<res.length; i++){
-            this.attendanceList.push(res[i]);
-            // console.log(this.highlightedDates)
-            const index = this.highlightedDates.findIndex((a: IHighlightedDate) => a.date === this.returnCustomDate(res[i].created_date));
-            if(index != -1){
-              this.highlightedDates[index] = {
-                date: this.returnCustomDate(res[i].created_date),
-                textColor: this.checkStatus(res[i].status).color,
-                backgroundColor: this.checkStatus(res[i].status).backgroud,
-              };
-            } else {
-              this.highlightedDates.push({
-                date: this.returnCustomDate(res[i].created_date),
-                textColor: this.checkStatus(res[i].status).color,
-                backgroundColor: this.checkStatus(res[i].status).backgroud,
-              });
-            }
-          }
-          this.openUpdatForm.length = this.attendanceList.length;
-          this.openUpdatForm.fill(false);
-          
-          this.moreAttendance = res.length > 19;
-          this.attendanceLoaded = true;
-          this.infiniteScroll.complete();
-          this.loader.dismiss();
-        }
-      }
-    }, (error) => {
-      console.log(error, "error");
-      this.infiniteScroll.complete();
-      this.moreAttendance = false;
-      this.attendanceLoaded = true;
-      this.loader.dismiss();
     });
   }
 
@@ -220,12 +233,12 @@ export class EmployeeAttendancePage implements OnInit {
     };
     switch (status) {
       case 'Present':
-        data.color = '#fff';
+        data.color = '#000';
         data.backgroud = '#2dd36f';
         break;
 
       case 'Absent':
-        data.color = '#fff';
+        data.color = '#000';
         data.backgroud = 'red';
         break;
     
@@ -270,55 +283,43 @@ export class EmployeeAttendancePage implements OnInit {
     }
   }
 
-  async createDateList(startDate: string | Date, endDate: string | Date) {
-    let beginDate = new Date(moment(startDate).format());
-    let lastDate = new Date(moment(endDate).format());
-    this.attendanceDateList = [];
-
-    while(beginDate <= lastDate) {
-      const newDate = new Date();
-      newDate.setFullYear(new Date(endDate).getFullYear(), new Date(endDate).getMonth(), lastDate.getDate());
-      const data = {
-        clockIn: '',
-        clockOut: '',
+  async createDateList(selectedDate: string | Date) {
+    let lastDate = new Date(selectedDate);
+    let beginDate = new Date(selectedDate);
+    beginDate.setDate(1);
+    beginDate.setHours(0,0,0);
+    lastDate.setHours(23,59,59);
+    this.dateList = [];
+    for(let date = lastDate; date >= beginDate; date.setDate(date.getDate()-1)){
+      const data: AttListItem = {
         employeeId: this.employeeId,
         status: AttendaceStatus.ABSENT,
-        workDuration: '',
-        workingTime: '',
-        guid: '',
-        created_date: moment.utc(newDate).format(),
+        created_date: new Date(date),
         created_user: this.employeeId,
-        isDeleted: false,
-        inTime: '',
-        outTime: '',
-        EmployeeDetails: {} as any,
-        gracePeriod: 0
+        open_form: false,
+        attendanceData: null,
+        leaveData: null,
       }
-      const listIndex = this.attendanceList.findIndex((attendDate: IClockInResponce) => checkDates(new Date(attendDate.created_date), newDate));
-      if(listIndex != -1){
-        this.attendanceDateList.push(this.attendanceList[listIndex]);
-      } else {
-        this.attendanceDateList.push(data);
-      }
-      lastDate.setDate(lastDate.getDate() - 1);
+      this.dateList.push(data);
     }
-
-
-    function checkDates(date1: Date, date2: Date): boolean{
-      if(new Date(date1).getFullYear() === new Date(date2).getFullYear()){
-        if(new Date(date1).getMonth() === new Date(date2).getMonth()){
-          if(new Date(date1).getDate() === new Date(date2).getDate()){
-            return true
-          } else {false}
-        } else {
-          return false
-        }
+    this.toggleCard(this.dateList[0]);
+  }
+  
+  checkDates(date1: Date, date2: Date): boolean{
+    if(date1.getFullYear() === date2.getFullYear()){
+      if(date1.getMonth() === date2.getMonth()){
+        if(date1.getDate() === date2.getDate()){
+          return true
+        } else {false}
       } else {
         return false
-      } 
+      }
+    } else {
       return false
     }
+    return false;
   }
+
   getCalendar(){
     this.shareServ.getEventHollyday(moment.utc(this.attendanceDate).format()).subscribe(res => {
       if(res) {
@@ -326,8 +327,9 @@ export class EmployeeAttendancePage implements OnInit {
           this.loader.dismiss();
           return;
         } else {
+          this.absent = 0;
+          this.presents = 0;
           this.eventsList = res;
-          console.log(this.highlightedDates);
           for (let a = 0; a < res.length; a++) {
             this.highlightedDates = [];
             const selectDate : IHighlightedDate = {
@@ -335,6 +337,13 @@ export class EmployeeAttendancePage implements OnInit {
               backgroundColor: '#f58f0d',
               textColor: '#000',
             }
+            this.dateList.forEach((e) => {
+              if(this.checkDates(new Date(res[a].eventDate), new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT){
+                e.leaveData = res[a];
+                e.created_date = new Date(res[a].eventDate).toISOString();
+              }
+              e.status === AttendaceStatus.HOLiDAY ? this.presents++ : this.absent++;
+            });
             const index = this.highlightedDates.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(res[a].eventDate))
             if(index != -1){
               this.highlightedDates[index] = selectDate;
@@ -342,7 +351,6 @@ export class EmployeeAttendancePage implements OnInit {
               this.highlightedDates.push(selectDate);
             }
           }
-          console.log(this.highlightedDates);
         }
       }
     }, (error) => {})
@@ -353,18 +361,15 @@ export class EmployeeAttendancePage implements OnInit {
     const data = {employeeId: this.employee.guid};
     this.shareServ.getLeaveList(data, 0 * 200, 200).subscribe(res => {
       if(res) {
-        const leaveLogs: ILeaveLogsResponse[] = res;
-
         for (let a = 0; a < res.length; a++) {
-          console.log(res[a].endDate);
           if(res[a].status !== 'Cancel'){
-            const startDate = new Date(res[a].startDate);
+            let startDate = new Date(res[a].startDate);
             const endDate = new Date(res[a].endDate || new Date);
             while (startDate <= endDate) {
               const selectDate : IHighlightedDate = {
                 date: this.returnCustomDate(startDate),
                 backgroundColor: res[a].status === 'Pending' ? '#ef7373' : 'red',
-                textColor: '#fff',
+                textColor: '#333',
               }
               const index = this.highlightedDates.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(startDate))
               if(index != -1){
@@ -372,6 +377,16 @@ export class EmployeeAttendancePage implements OnInit {
               } else {
                 this.highlightedDates.push(selectDate);
               }
+              this.presents = 0;
+              this.absent = 0;
+              this.dateList.forEach((e) => {
+                if(this.checkDates(startDate, new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT){
+                  e.leaveData = res[a];
+                  e.created_date = new Date(startDate).toISOString();
+                  e.status = AttendaceStatus.LEAVE;
+                }
+                e.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+              });
               startDate.setDate(startDate.getDate() + 1);
             }
           }          
@@ -390,10 +405,19 @@ export class EmployeeAttendancePage implements OnInit {
   }
   
 
-  selectDate(event: CustomEvent) {
+  selectDate(event: CustomEvent){
     if(event.detail.value){
       this.pageIndex = 0;
+      const xyz = new Date();
+      let monthDate = new Date(this.attendanceDate);
+      if(monthDate.getFullYear() <= xyz.getFullYear() && monthDate.getMonth() < xyz.getMonth()){
+        monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
+      }
+      if(monthDate.getFullYear() != xyz.getFullYear()){this.getCalendar();}
+      this.createDateList(monthDate);
       this.getMonthLyAttendance();
+      this.getLogs();
+      this.getWorkWeek();
     }
   }
 
@@ -423,7 +447,6 @@ export class EmployeeAttendancePage implements OnInit {
     const uuid = this.attendanceForm.controls['guid'].value;
     this.adminServ.updateEmployeeAttendance(uuid, this.attendanceForm.value).subscribe(res => {
       if(res) {
-        console.log(res);
         this.shareServ.presentToast('Attendance updated successfully', 'top', 'success');
         this.loader.dismiss();
         this.pageIndex = 0;
@@ -478,5 +501,44 @@ export class EmployeeAttendancePage implements OnInit {
       window.location.reload();
       event.target.complete();
     }, 2000);
+  }
+
+  onMouseMove(event: MouseEvent) {
+    this.skipTips();
+  }
+
+  toggleCard(item: AttListItem){
+    console.log(item);
+    if(item.attendanceData != null || item.leaveData != null){
+      item.open_form = !item.open_form
+    }
+  }
+
+  async updateAttendance(event: Event, attendanceData: any){
+    event.stopPropagation();
+    event.preventDefault();
+    const updateForm = await this.modalCtrl.create({
+      component: AttendaceUpdatePage,
+      backdropDismiss: false,
+      cssClass: 'updateFormAtt',
+      handleBehavior: 'cycle',
+      mode: 'md',
+      componentProps: {attendanceDetail: attendanceData, userId: this.employeeId},
+    });
+
+    (await updateForm).present();
+
+    (await updateForm).onDidDismiss().then(result => {
+      console.log(result, 'result');
+    })
+  }
+
+  skipTips(){
+    localStorage.setItem('isFirst' , String(false));
+    this.isFirst = false;
+  }
+
+  checkLeaveType(leaveITem: ILeaveLogsResponse){
+    return leaveITem.status;
   }
 }

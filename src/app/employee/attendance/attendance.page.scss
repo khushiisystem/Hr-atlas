@@ -1,11 +1,14 @@
 .container {
-    padding: 20px 10px;
+    padding: 20px 0px;
     display: flex;
     flex-direction: column;
     row-gap: 20px;
     min-height: 100%;
 }
 
+.attendance_list {
+    background-color: #f7f7f7;
+}
 
 .header-toolbar {
     --ion-toolbar-background: rgb(255, 106, 0);
@@ -37,7 +40,7 @@
 .btn_group{
     display: flex;
     gap: 5px;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 }
 .flex_div_2 {
@@ -49,4 +52,64 @@
     padding: 20px;
     min-height: -webkit-fill-available;
     pointer-events: none;
+}
+
+.cardItem{
+    box-shadow: none;
+    border-radius: 14px;
+    & ion-card-header{
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 10px;
+        background-color: #40a30f38;
+    }
+    &.Present ion-card-header {
+        background-color: #58c95833;
+        color: green;
+        --background: #58c95833;
+        --color: green;
+        
+        & ion-card-title, & ion-card-subtitle{
+            --color: green;
+            margin-top: 0;
+        }
+    }
+    &.Absent ion-card-header{
+        background-color: #ed576b57;
+        color: var(--ion-color-danger-shade);
+        --background: #ed576b57;
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-danger-shade);
+            margin-top: 0;
+        }
+    }
+    &.Holiday ion-card-header{
+        background-color: rgb(99 112 255 / 21%);
+        color: var(--ion-color-tertiary-shade);
+        --background: rgb(99 112 255 / 21%);
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-tertiary-shade);
+            margin-top: 0;
+        }
+    }
+    &.Off ion-card-header{
+        background-color: rgb(201 14 14 / 29%);
+        color: var(--ion-color-tertiary-shade);
+        --background: rgb(201 14 14 / 29%);
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-danger-shade);
+            margin-top: 0;
+        }
+    }
+
+    .expandBtn {
+        --padding-top: 5px;
+        --padding-start: 5px;
+        --padding-end: 5px;
+        --padding-bottom: 5px;
+    }
 }

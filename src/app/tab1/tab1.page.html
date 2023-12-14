@@ -28,7 +28,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="light">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -123,7 +123,7 @@
       </ion-col>
 
       <ion-col size="4" sizeSm="3">
-        <ion-card mode="md" type="button" (click)="attendancePAge()">
+        <ion-card mode="md" type="button" (click)="attendancePage()">
           <ion-card-content>
             <div class="icon_card">
               <ion-icon name="hand-right-outline" aria-hidden="true" size="large"></ion-icon>

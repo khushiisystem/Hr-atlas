@@ -25,6 +25,7 @@ import { EmployeeAttendancePage } from '../admin/employee-attendance/employee-at
 import { LeavesPage } from '../share/leaves/leaves.page';
 import { SalaryPage } from '../admin/salary/salary.page';
 import { EmployeePayrollPage } from '../admin/payroll-setup/employee-payroll/employee-payroll.page';
+import { AttendanceStatusPage } from '../admin/attendance-status/attendance-status.page';
 
 const routes: Routes = [
   {
@@ -179,6 +180,13 @@ const routes: Routes = [
         path: 'employee-attendance',
         title: 'Employee Attendance',
         component: EmployeeAttendancePage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"},
+      },
+      {
+        path: 'attendance-status',
+        title: 'Today\'s Attendance',
+        component: AttendanceStatusPage,
         canActivate:[AuthGuard, RoleGuard],
         data: {role: "Admin"},
       },
