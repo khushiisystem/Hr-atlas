@@ -38,6 +38,9 @@ import { EmployeePayrollPage } from "../admin/payroll-setup/employee-payroll/emp
 import { EmployeePayslipPage } from "../employee/employee-payslip/employee-payslip.page";
 import { HttpClientModule } from "@angular/common/http";
 import { FileOpener } from "@ionic-native/file-opener/ngx";
+import { AttendanceStatusPage } from "../admin/attendance-status/attendance-status.page";
+import { CustomCallendarPageModule } from "../share/components/custom-callendar/custom-callendar.module";
+import { AttendaceUpdatePage } from "../admin/employee-attendance/attendace-update/attendace-update.page";
 
 @NgModule({
   declarations: [
@@ -65,6 +68,8 @@ import { FileOpener } from "@ionic-native/file-opener/ngx";
     AdminTutorialsPage,
     EmployeePayrollPage,
     EmployeePayslipPage,
+    AttendanceStatusPage,
+    AttendaceUpdatePage,
   ],
   imports: [
     IonicModule,
@@ -78,6 +83,7 @@ import { FileOpener } from "@ionic-native/file-opener/ngx";
     EmployeesPageModule,
     LeavesPageModule,
     HttpClientModule,
+    CustomCallendarPageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, RoleGuard, FileOpener],

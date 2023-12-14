@@ -57,6 +57,7 @@ export class LoginPage implements OnInit {
             } else {
               localStorage.setItem('isSwitchable', 'true');
             }
+            localStorage.setItem('isFirst' , String(true))
           });
           this.router.navigateByUrl('/tabs/home');
           this.loader.dismiss();

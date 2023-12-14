@@ -1,0 +1,65 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="previousWeek()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title>{{ currentMonth }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button (click)="nextWeek()">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+</ion-content> -->
+
+<ion-item [detail]="false" class="ion-text-center" [lines]="'none'">
+  <ion-button
+    fill="clear"
+    [shape]="'round'"
+    [slot]="'start'"
+    (click)="decrementWeek()"
+    [disabled]="currentWeek <= 1"
+  >
+    <ion-icon name="chevron-back-outline"></ion-icon>
+  </ion-button>
+  <ion-label color="tertiary" class="dateTitle">{{ currentDate | date:'MMMM yyyy' }}</ion-label>
+  <ion-button
+    fill="clear"
+    [shape]="'round'"
+    [slot]="'end'"
+    (click)="incrementWeek()"
+    [disabled]="currentWeek > weekInYear"
+  >
+    <ion-icon name="chevron-forward-outline"></ion-icon>
+  </ion-button>
+</ion-item>
+
+<ion-row class="date-row datesSec">
+  <ion-col *ngFor="let day of weekDays; index as a;" class="date-col" [size]="12/7">
+    <div class="ion-text-center ion-margin-bottom">
+      <ion-label [color]="a==0 ? 'danger' : 'medium'">{{ day }}</ion-label>
+    </div>
+    <div class="ion-text-center">
+      <ion-button
+        [fill]="isFocusedDay(getDate(weekDates[a]).dateE) ? 'solid' : isToday(getDate(weekDates[a]).dateE) ? 'outline' : 'clear'"
+        [shape]="'round'"
+        [size]="'small'"
+        [color]="a==0 ? 'danger' : 'primary'"
+        class="ion-no-margin ion-no-padding dateBtn"
+        *ngIf="getDate(weekDates[a]).isDate && getDate(weekDates[a]).dateE.getDay() === a"
+        (click)="selectDate(getDate(weekDates[a]).dateE)"
+        [disabled]="(getDate(weekDates[a]).isDate && today.getFullYear() !== getDate(weekDates[a]).dateE.getFullYear()) || isLargest(getDate(weekDates[a]).dateE)"
+        >{{getDate(weekDates[a]).dateE.getDate() }}</ion-button
+      >
+    </div>
+  </ion-col>
+</ion-row>
+<!-- Add your calendar content here -->

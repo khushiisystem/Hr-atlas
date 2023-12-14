@@ -17,7 +17,8 @@ export enum AttendaceStatus {
     PRESENT = 'Present',
     ABSENT = "Absent",
     LEAVE = "Leave",
-    HOLLYDAY = "Hollyday",
+    HOLiDAY = "Holiday",
     ApplyLeave = "ApplyLeave",
-    HALF_DAY = 'Half Day'
+    HALF_DAY = 'Half Day',
+    WEEK_OFF = 'Week Off',
 }

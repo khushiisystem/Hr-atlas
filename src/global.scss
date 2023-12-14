@@ -111,7 +111,7 @@ ion-datetime {
     &.attendance_calendar{
         &::part(calendar-day){
             // color: #da5296;
-            color: #333;
+            color: #000;
             background-color: red;
         }
         & ::part(calendar-day today) {
@@ -140,4 +140,9 @@ ion-datetime {
             color: #333;
         }
     }
+}
+ion-skeleton-text {
+    --border-radius: 9999px;
+    // --background: rgba(188, 0, 255, 0.065);
+    // --background-rgb: 188, 0, 255;
 }

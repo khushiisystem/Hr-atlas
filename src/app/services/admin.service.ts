@@ -5,7 +5,7 @@ import { environment } from "src/environments/environment";
 import { AttendanceSetupRequest, udpateAttendanceRequst } from "../interfaces/request/IAttendanceSetup";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response/IEmployee";
-import { IAttendanceSetupResponse } from "../interfaces/response/IAttendanceSetup";
+import { IAttendanceSetupResponse, IClockInResponce } from "../interfaces/response/IAttendanceSetup";
 import { IAssignWorkWeek, IWorkWeek } from "../interfaces/request/IAssignWorks";
 import { IWorkWeekResponse } from "../interfaces/response/IWorkWeek";
 import { IHollydayRequest, ILeaveSetupRequest } from "../interfaces/request/ILeaveSetup";
@@ -59,6 +59,9 @@ export class AdminService {
     }
     updateEmployeeAttendance(uuid: string, attendanceData: udpateAttendanceRequst): Observable<any> {
         return this.http.put<any>(environment.Api + `api/attendence/${uuid}`, attendanceData);
+    }
+    getDailyAttendance(dateStr: string, pageIndex: number, pageSize: number): Observable<IClockInResponce[]> {
+        return this.http.get<IClockInResponce[]>(environment.Api + `api/attendence/dayAttendance?skip=${pageIndex}&limit=${pageSize}&date=${dateStr}`);
     }
 
     // assign work week

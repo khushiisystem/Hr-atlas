@@ -1,0 +1,59 @@
+// .container {
+//     background-color: rgb(183 183 183 / 48%);
+// }
+.list-item {
+    --ripple-color: var(--ion-color-tertiary);
+    --background-hover: var(--ion-color-tertiary);
+    & .employee_img {width: 40px; height: 40px;}
+    
+    & .skeleton_thumb{
+        width: 30px;
+        height: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+.employee_data{
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px;
+    width: 100%;
+
+    & .role{
+        color: var(--ion-color-primary);
+    }
+}
+
+.roleToggle{
+    .label-text-wrapper{
+        margin-inline: 6px 0;
+    }
+}
+
+ion-list-header ion-label {
+    font-weight: 600;
+    line-height: 1.5;
+    font-size: 1rem;
+}
+
+.searchInput {
+    background-color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    
+    & ion-input {
+        min-height: 40px;
+    }
+}
+app-custom-callendar {
+    position: sticky;
+    top: -50px;
+    z-index: 3;
+    background-color: #fff;
+}
+
+.statusBtn {
+    --padding-start: 0.7em;
+    --padding-end: 0.7em;
+    aspect-ratio: 1;
+}

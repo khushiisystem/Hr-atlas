@@ -447,20 +447,17 @@ export class Tab1Page implements OnInit, AfterViewInit {
     }
   }
 
-  showattendance() {
-    this.router.navigate(['/tabs/attendance']);
-  }
   showleaves() {
     this.router.navigate(['/tabs/leaves']);
   }
   showAllLeaves() {
     this.router.navigateByUrl('/tabs/leaves', {state: {tab: 'requests'}});
   }
-  attendancePAge(){
+  attendancePage(){
     if(this.userRole === 'Employee'){
       this.router.navigate(['/tabs/attendance']);
     } else if(this.userRole === 'Admin'){
-      this.router.navigate(['/tabs/employee-attendance']);
+      this.router.navigate(['/tabs/attendance-status']);
     }
   }
   viewPayroll(){

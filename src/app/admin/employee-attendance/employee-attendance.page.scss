@@ -1,5 +1,5 @@
 .attendance_list {
-    padding: 5px 10px;
+    background-color: #f7f7f7;
 }
 .attendance_Card{
     margin-inline: 5px;
@@ -46,9 +46,115 @@ form {
 .btn_group{
     display: flex;
     gap: 5px;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     padding: 10px;
 
     ion-button {text-transform: capitalize;}
+}
+
+.cardItem{
+    box-shadow: none;
+    border-radius: 14px;
+    & ion-card-header{
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 10px;
+        background-color: #40a30f38;
+    }
+    &.Present ion-card-header {
+        background-color: #58c95833;
+        color: green;
+        --background: #58c95833;
+        --color: green;
+        
+        & ion-card-title, & ion-card-subtitle{
+            --color: green;
+            margin-top: 0;
+        }
+    }
+    &.Absent ion-card-header{
+        background-color: #ed576b57;
+        color: var(--ion-color-danger-shade);
+        --background: #ed576b57;
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-danger-shade);
+            margin-top: 0;
+        }
+    }
+    &.Holiday ion-card-header{
+        background-color: rgb(99 112 255 / 21%);
+        color: var(--ion-color-tertiary-shade);
+        --background: rgb(99 112 255 / 21%);
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-tertiary-shade);
+            margin-top: 0;
+        }
+    }
+    &.Off ion-card-header{
+        background-color: rgb(201 14 14 / 29%);
+        color: var(--ion-color-tertiary-shade);
+        --background: rgb(201 14 14 / 29%);
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-danger-shade);
+            margin-top: 0;
+        }
+    }
+
+    .expandBtn {
+        --padding-top: 5px;
+        --padding-start: 5px;
+        --padding-end: 5px;
+        --padding-bottom: 5px;
+    }
+}
+
+.item1 {
+    --background: #3171e042;
+    --border-color: var(--ion-color-tertiary);
+    --border-radius: 10px;
+    --color: var(--ion-color-tertiary);
+    position: unset;
+    overflow: visible;
+    & ion-label{font-weight: 500; letter-spacing: 1px;}
+}
+.statusCard{
+    height: calc(100% - 48px);
+    box-shadow: none;
+    // &.ion-color-danger{box-shadow: rgba(240, 0, 0, 0.52) 0px 4px 16px;}
+    // &.ion-color-success{box-shadow: #278d4fd4 0px 4px 16px;}
+}
+
+.gasture{
+    position: absolute;
+    // box-shadow: 0 0 100px 400px rgba(0,0,0,0.5);
+    right: 0;
+    left: auto;
+    top: 0;
+    padding-right: 50px;
+    display: flex;
+    align-items: flex-start;
+    background-color: #333;
+
+    & .arrow {
+        width: 5px;
+        height: 5px;
+        border: 10px solid transparent;
+        border-left-color: #fff;
+        margin-top: 15px;
+    }
+    &::before {
+        position: fixed;
+        content: "";
+        height: 100vh;
+        width: 100vw;
+        background-color: #333333c7;
+        z-index: -1;
+        bottom: 0;
+        right: 0;
+    }
 }
