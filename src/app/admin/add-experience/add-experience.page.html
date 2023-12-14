@@ -82,7 +82,7 @@
             <ion-col size="12" sizeSm="6">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" formControlName="jobTitle" placeholder="Job Title" type="text" [required]="true">
-                  <div slot="label">Job Title </div>
+                  <div slot="label">Job Title <ion-text color="danger">*</ion-text></div>
                 </ion-input>
                 <ion-text color="danger" class="error_txt" *ngIf="workInfoForm.controls['jobTitle'].touched && workInfoForm.controls['jobTitle'].errors">
                   Title is required.
@@ -130,10 +130,10 @@
             <ion-col size="12" sizeSm="6" *ngIf="workInfoForm.controls['status'].value === 'InActive'">
               <div class="form-input">
                 <ion-input labelPlacement="floating" fill="outline" [readonly]="true" [value]="getDate('resignationDate') | date" (ionFocus)="activeControl = 'resignationDate'; openCalendar = true" (ionActive)="openCalendar = true">
-                  <div slot="label">Resignation Date</div>
+                  <div slot="label">Resignation Date <ion-text color="danger">*</ion-text></div>
                 </ion-input>
                 <div class="toggleBtn">
-                  <ion-button mode="md" fill="clear" (click)="openCalendar = true">
+                  <ion-button mode="md" fill="clear" (click)="activeControl = 'resignationDate'; openCalendar = true">
                     <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
                   </ion-button>
                 </div>
@@ -142,8 +142,8 @@
   
             <ion-col size="12" sizeSm="6">
               <div class="form-input">
-                <ion-select labelPlacement="floating" fill="outline" formControlName="status" placeholder="Select" interface="action-sheet">
-                  <div slot="label">Status</div>
+                <ion-select labelPlacement="floating" fill="outline" formControlName="status" placeholder="Select" interface="action-sheet" (ionChange)="statusChange($event)">
+                  <div slot="label">Status <ion-text color="danger">*</ion-text></div>
                   <ion-select-option value="Active">Active</ion-select-option>
                   <ion-select-option value="InActive">In Active</ion-select-option>
                 </ion-select>

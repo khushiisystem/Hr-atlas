@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
@@ -91,7 +91,7 @@ export class AddExperiencePage implements OnInit {
       employeeId: [this.employeeId, Validators.required],
       userId: [this.userId, Validators.required],
       employeeType: ['', Validators.required],
-      status: ['', Validators.required],
+      status: ['Active', Validators.required],
       joiningDate: ['', Validators.required],
       resignationDate: [''],
       work_experience: 0,
@@ -103,6 +103,11 @@ export class AddExperiencePage implements OnInit {
       subDepartment: ['', Validators.required],
       workHistory: this.fb.array([]),
     });
+    if(this.workInfoForm.controls["status"].value === 'InActive'){      
+      this.workInfoForm.addControl('resignationDate', new FormControl('', Validators.compose([Validators.required])));
+    } else {
+      this.workInfoForm.removeControl("resignationDate");
+    }
   }
 
   newWorkHistory(): FormArray {
@@ -124,6 +129,14 @@ export class AddExperiencePage implements OnInit {
   }
   removeWorkHistory(index: number){
     this.newWorkHistory().removeAt(index);
+  }
+
+  statusChange(event: any){
+    if(this.workInfoForm.controls["status"].value === 'InActive'){
+      this.workInfoForm.addControl('resignationDate', new FormControl('', Validators.compose([Validators.required])));
+    } else {
+      this.workInfoForm.removeControl("resignationDate");
+    }
   }
 
   getWorkDetail(){
