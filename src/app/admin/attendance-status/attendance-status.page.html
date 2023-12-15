@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title>Attendance Status</ion-title>
 
-    <ion-toggle aria-label="Change Role" labelPlacement="end" justify="end" color="primary" slot="end" routerLink="/tabs/attendance" class="ion-margin-end roleToggle"><small>Admin</small></ion-toggle>
+    <ion-toggle aria-label="Change Role" labelPlacement="end" justify="end" color="primary" slot="end" routerLink="/tabs/attendance" class="ion-margin-end roleToggle" [mode]="'md'"><small>Admin</small></ion-toggle>
     <ion-thumbnail slot="end" class="logo_img ion-margin-end">
       <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>
@@ -15,15 +15,18 @@
 </ion-header>
 
 <ion-content fullscreen="true" color="light">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div class="container">
     <app-custom-callendar (attendDate)="selectDate($event)"></app-custom-callendar>
     <!-- <div class="searchInput ion-padding-horizontal ion-margin-top" style="background-color: #fff;">
       <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()" legacy="false" [color]="'light'"></ion-input>
     </div> -->
   
-    <ion-list *ngIf="isDataLoaded" [inset]="true">
-      <ion-item lines="inset" [button]="true" [detail]="false" type="button" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="selectEmployee(employee)">
-        <ion-avatar class="employee_img" slot="start">
+    <ion-list *ngIf="isDataLoaded" [inset]="true" mode="md">
+      <ion-item lines="inset" [button]="true" [detail]="false" type="button" mode="md" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="selectEmployee(employee)">
+        <ion-avatar class="employee_img" slot="start" mode="md">
           <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
           <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl" />
         </ion-avatar>
@@ -38,7 +41,7 @@
       </ion-item>
     </ion-list>
 
-    <div class="ion-padding ion-text-center" *ngIf="employeeList.length < 1 && attendanceList.length === 0" style="background-color: #fff;">
+    <div class="ion-padding ion-text-center" *ngIf="employeeList.length < 1 || attendanceList.length === 0" style="background-color: #fff;">
       <ion-spinner name="crescent" color="tertiary" *ngIf="!isDataLoaded"></ion-spinner>
       <ion-text *ngIf="isDataLoaded && employeeList.length < 1">Data not found</ion-text>
     </div>

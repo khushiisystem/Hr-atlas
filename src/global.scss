@@ -142,7 +142,12 @@ ion-datetime {
     }
 }
 ion-skeleton-text {
-    --border-radius: 9999px;
+    &:not(.inherit_shap){
+        --border-radius: 9999px;
+    }
     // --background: rgba(188, 0, 255, 0.065);
     // --background-rgb: 188, 0, 255;
+}
+ion-backdrop{
+    opacity: 0.4;
 }
