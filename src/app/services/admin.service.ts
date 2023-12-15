@@ -63,6 +63,9 @@ export class AdminService {
     getDailyAttendance(dateStr: string, pageIndex: number, pageSize: number): Observable<IClockInResponce[]> {
         return this.http.get<IClockInResponce[]>(environment.Api + `api/attendence/dayAttendance?skip=${pageIndex}&limit=${pageSize}&date=${dateStr}`);
     }
+    markAttendEmp(employeeId: string, reqData: any, markDate: Date): Observable<IClockInResponce> {
+        return this.http.post<IClockInResponce>(environment.Api + `api/attendence/markAttendance?id=${employeeId}&time=${markDate.toISOString()}`, reqData);
+    }
 
     // assign work week
     createWorkWeek(data: IWorkWeek): Observable<any> {

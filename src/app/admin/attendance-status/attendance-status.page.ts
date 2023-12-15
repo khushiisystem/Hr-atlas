@@ -90,7 +90,6 @@ export class AttendanceStatusPage implements OnInit {
         return;
       } else {
         this.attendanceList = [...this.attendanceList, ...res];
-        console.log(this.attendanceList, 'list');
         this.isDataLoaded = true;
         this.attendanceLoaded = true;
       }
@@ -164,4 +163,10 @@ export class AttendanceStatusPage implements OnInit {
 
   goBack() {history.back();}
 
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      this.getEmployeeList();
+      event.target.complete();
+    }, 2000);
+  }
 }

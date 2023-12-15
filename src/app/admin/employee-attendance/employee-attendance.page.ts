@@ -39,6 +39,9 @@ export class EmployeeAttendancePage implements OnInit {
   employeeId: string = '';
   employee!: IEmpSelect;
   attendanceLoaded: boolean = false;
+  leaveLoaded: boolean = false;
+  workWeekLoaded: boolean = false;
+  calendarLoaded: boolean = false;
   moreAttendance: boolean = true;
   pageIndex: number = 0;
   attendanceList: IClockInResponce[] = [];
@@ -125,6 +128,7 @@ export class EmployeeAttendancePage implements OnInit {
   }
 
   getWorkWeek(){
+    this.workWeekLoaded =false;
     this.shareServ.employeeAssignedWorkWeek(this.employee.guid).subscribe(res => {
       if(res) {
         this.presents = 0;
@@ -153,9 +157,13 @@ export class EmployeeAttendancePage implements OnInit {
             }
           }
           item.status === AttendaceStatus.LEAVE || item.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+          this.workWeekLoaded = true;
+          this.isAllLoaded();
         });
       }
     }, (error) => {
+      this.workWeekLoaded =true;
+      this.isAllLoaded();
     });
   }
 
@@ -171,13 +179,12 @@ export class EmployeeAttendancePage implements OnInit {
         this.loader.dismiss();
         return;
       } else {
-        this.attendanceLoaded = true;
         this.moreAttendance = res.length > 39;
         
         res.forEach((e: IClockInResponce) => {
           this.attendanceList.push(e);
           const data = {
-            date: this.returnCustomDate(e.created_date),
+            date: this.returnCustomDate(e.clockIn),
             textColor: this.checkStatus(e.status).color,
             backgroundColor: this.checkStatus(e.status).backgroud,
           };
@@ -194,7 +201,7 @@ export class EmployeeAttendancePage implements OnInit {
             if(this.checkDates(new Date(e.created_date), new Date(item.created_date))){
               item.attendanceData = e;
               item.status = e.status;
-              item.created_date = new Date(e.created_date).toISOString();
+              item.created_date = new Date(e.clockIn).toISOString();
             }
             e.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
           });
@@ -203,9 +210,12 @@ export class EmployeeAttendancePage implements OnInit {
         this.openUpdatForm.fill(false);
         this.loader.dismiss();
         this.infiniteScroll.complete();
+        this.attendanceLoaded = true;
+        this.isAllLoaded();
       }
     }, (error) => {
       this.attendanceLoaded = true;
+      this.isAllLoaded();
       this.loader.dismiss();
       this.infiniteScroll.complete();
     });
@@ -321,9 +331,12 @@ export class EmployeeAttendancePage implements OnInit {
   }
 
   getCalendar(){
+    this. calendarLoaded= false;
     this.shareServ.getEventHollyday(moment.utc(this.attendanceDate).format()).subscribe(res => {
       if(res) {
         if(res.length < 1) {
+          this. calendarLoaded= true;
+          this.isAllLoaded();
           this.loader.dismiss();
           return;
         } else {
@@ -351,13 +364,20 @@ export class EmployeeAttendancePage implements OnInit {
               this.highlightedDates.push(selectDate);
             }
           }
+          this. calendarLoaded= true;
+          this.isAllLoaded();
         }
       }
-    }, (error) => {})
+    }, (error) => {
+      this. calendarLoaded= true;
+      this.isAllLoaded();
+    })
   }
 
 
   getLogs(){
+    this.leaveLoaded = false;
+    this.isAllLoaded();
     const data = {employeeId: this.employee.guid};
     this.shareServ.getLeaveList(data, 0 * 200, 200).subscribe(res => {
       if(res) {
@@ -391,7 +411,12 @@ export class EmployeeAttendancePage implements OnInit {
             }
           }          
         }
+        this.leaveLoaded = true;
+        this.isAllLoaded()
       }
+    }, (error) => {
+      this.leaveLoaded = true;
+      this.isAllLoaded();
     });
   }
 
@@ -402,6 +427,42 @@ export class EmployeeAttendancePage implements OnInit {
     const month = String(dateObject.getMonth() + 1).padStart(2, '0');
     const day = String(dateObject.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  markPresent(event: Event, itemData: AttListItem) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.loader.present('');
+    this.adminServ.markAttendEmp(this.employeeId, {id: ''}, new Date(itemData.created_date)).subscribe(res => {
+      if(res && res.status === 'Present'){
+        itemData.attendanceData = res,
+        itemData.status = res.status;
+        itemData.created_date = new Date(res.clockIn).toISOString();
+        itemData.created_user = res.created_user;
+        this.absent--;
+        this.presents++;
+        // const listIndex = this.dateList.findIndex(e => moment(e.created_date).date() === moment(markDate).date());
+        // this.dateList[listIndex] = data;
+        const calindex = this.highlightedDates.findIndex((item) => this.checkDates(new Date(item.date), new Date(itemData.created_date)));
+        if(calindex != -1){
+          this.highlightedDates[calindex].backgroundColor = '#2dd36f';
+          this.highlightedDates[calindex].textColor = '#000';
+        } else {
+          this.highlightedDates.push({
+            date: this.returnCustomDate(res.clockIn),
+            backgroundColor: '#2dd36f',
+            textColor: '#000',
+          });
+        }
+        this.shareServ.presentToast('Marked present', 'top', 'success');
+        this.loader.dismiss();
+      } else {
+        this.loader.dismiss();
+      }
+    }, (error) => {
+      this.shareServ.presentToast(error.errorMessage, 'top', 'danger');
+      this.loader.dismiss();
+    });
   }
   
 
@@ -508,7 +569,6 @@ export class EmployeeAttendancePage implements OnInit {
   }
 
   toggleCard(item: AttListItem){
-    console.log(item);
     if(item.attendanceData != null || item.leaveData != null){
       item.open_form = !item.open_form
     }
@@ -540,5 +600,9 @@ export class EmployeeAttendancePage implements OnInit {
 
   checkLeaveType(leaveITem: ILeaveLogsResponse){
     return leaveITem.status;
+  }
+
+  isAllLoaded(): boolean{
+    return this.leaveLoaded && this.workWeekLoaded && this.calendarLoaded && this.attendanceLoaded;
   }
 }

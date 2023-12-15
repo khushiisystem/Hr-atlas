@@ -42,6 +42,7 @@
         & ion-text{
             white-space: break-spaces;
             overflow: hidden;
+            &.ml-auto{margin-left: auto;}
         }
     }
 }
