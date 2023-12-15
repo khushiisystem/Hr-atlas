@@ -198,7 +198,7 @@ export class EmployeeAttendancePage implements OnInit {
           this.presents = 0;
           this.absent = 0;
           this.dateList.forEach((item) => {
-            if(this.checkDates(new Date(e.created_date), new Date(item.created_date))){
+            if(this.checkDates(new Date(e.clockIn), new Date(item.created_date))){
               item.attendanceData = e;
               item.status = e.status;
               item.created_date = new Date(e.clockIn).toISOString();
