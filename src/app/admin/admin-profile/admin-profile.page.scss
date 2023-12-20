@@ -1,11 +1,36 @@
 .main-header {
-    // box-shadow: none;
-    background-image: linear-gradient(100deg, #4854e0, #53adf9);
-    & ion-toolbar {--background: transparent;}
+    box-shadow: none;
+    // background-image: linear-gradient(100deg, #4854e0, #53adf9);
+    // & ion-toolbar {--background: transparent;}
 }
 ion-content {
     background-image: linear-gradient(100deg, #4854e0, #50c8ff);
     --background: linear-gradient(100deg, #4854e0, #50c8ff);
+}
+.bigAvatarDiv {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+    width: 100%;
+    & > * {
+        box-shadow: 0 -5px 15px -5px rgba(0, 0, 0, 0.25);
+        width: 115px;
+        height: 115px;
+        border-radius: 70px;
+        background-color: #fff;
+        padding: 5px;
+    }
+}
+.pcard {
+    padding-top: 60px;
+    margin-top: 60px;
+
+    & ion-card-header{
+        padding: 0 5px;
+        display: grid;
+        gap: 5px;
+    }
 }
 
 .logoImg{
@@ -18,18 +43,22 @@ ion-content {
     vertical-align: bottom;
 }
 .logo_img {
-    background-color: rgba(255,255,255,0.85);
-    height: 40px;
-    width: 40px;
-    padding: 0.25em;
+    // background-color: rgba(255,255,255,0.85);
+    // height: 40px;
+    // width: 40px;
+    // padding: 0.25em;
+    transform: translateY(-3px);
 }
 .container {
-    padding: 20px 5px 0;
+    position: relative;
+    padding-bottom: 10px;
     min-height: calc(100% - 16px);
 }
-.backBtn{
-    // align-self: self-start;
-    margin-top: 10px;
+
+.topBox{
+    padding-top: 10px;
+    padding-bottom: 5px;
+    // background-image: linear-gradient(100deg, #4854e0, #50c8ff);
 }
 .profile_card {
     --background: transparent;
@@ -142,7 +171,34 @@ ion-accordion ion-item[slot="header"], .btn_item {--ripple-color: var(--ion-colo
     --ion-toolbar-background: rgb(255, 106, 0);
     --ion-color-base: black;
 }
-.settingBtns_item{--padding-start: 5px; --inner-padding-end: 5px; --ripple-color: var(--ion-color-primary);}
+.settingBtns_item{
+    --ripple-color: var(--ion-color-primary);
+    & ion-input {
+        & .label{
+            color: var(--ion-color-medium);
+        }
+    }
+}
+.brandDiv{
+    float: left;
+    top: -5px;
+    /* right: 20px; */
+    left: 20px;
+    position: relative;
+    filter: drop-shadow(-2px 6px 8px rgba(255,255,255,0.5)) drop-shadow(1px 6px 3px black);
+    // background: #fff;
+    // border-radius: 50px;
+    .brandLogo{
+        max-width: 100px;
+        max-height: 70px;
+        img {
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+    }
+}
 
 .loadingContent {
     & ion-card, & ion-item {--background: transparent;}

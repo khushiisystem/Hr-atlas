@@ -1,0 +1,69 @@
+<ion-menu contentId="main-content">
+  <ion-header mode="md" translucent="true">
+    <ion-toolbar color="primary">
+      <ion-avatar slot="start" class="avatar">
+        <ng-container *ngIf="userDetails">
+          <app-name-img [name]="userDetails.firstName.slice(0,1)" bgcolor="rgba(0,0,0,0.1)" [classes]="'sm'" *ngIf="userDetails.imageUrl.trim() === ''"></app-name-img>
+          <img *ngIf="userDetails.imageUrl.trim() !== ''" alt="user" [src]="userDetails.imageUrl" />
+        </ng-container>
+        <ion-skeleton-text [animated]="true" *ngIf="!userDetails"></ion-skeleton-text>
+      </ion-avatar>
+      <ion-title *ngIf="userDetails">
+        {{userDetails.firstName | titlecase}}
+      </ion-title>
+      <div class="ion-padding-horizontal" style="margin-left: 5px;" *ngIf="userDetails">
+        <ion-text color="warning" class="role"><small>{{userRole}}</small></ion-text>
+      </div>
+      
+      <p *ngIf="!userDetails" class="ion-padding">
+        <ion-skeleton-text style="width: 100%; height: 15px;" animated="true"></ion-skeleton-text>
+        <ion-skeleton-text style="width: 43%; height: 10px;" animated="true"></ion-skeleton-text>
+      </p>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <div class="side-content">
+      <ion-list mode="md" *ngIf="userDetails">
+        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/profile', '/tabs/admin-profile'])">
+          <ion-icon name="person-circle-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>My Profile</ion-label>
+        </ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" *ngIf="userRole === 'Admin'" (click)="goNext(['/tabs', '/tabs/settings'])">
+          <ion-icon name="cog-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>Admin Setups</ion-label>
+        </ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/attendance', '/tabs/attendance-status'])">
+          <ion-icon name="calendar-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>{{userRole === 'Employee' ? 'My ' : ''}}Attendance</ion-label>
+        </ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/leaves', '/tabs/leaves'])">
+          <ion-icon name="fast-food-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>{{userRole === 'Employee' ? 'My ' : ''}}Leaves</ion-label>
+        </ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/view-calendar', '/tabs/view-calendar'])">
+          <ion-icon name="calendar-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>Year Calendar</ion-label>
+        </ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/change-password', '/change-password'])">
+          <ion-icon name="key" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>Change Password</ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-list mode="ios" *ngIf="!userDetails">
+        <ion-item lines="none" detail="false" mode="ios" *ngFor="let item of [0,1,2,3,5,4]">
+          <ion-avatar slot="start">
+            <ion-skeleton-text animated="true" style="height: 100%; width: 100%;"></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <ion-skeleton-text animated="true" style="height: 10px; width: 70%;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      
+      <ion-item color="danger" detail="false" lines="none" type="button" mode="md" (click)="logout()" class="sticky-bottom logoutBtn">
+        <ion-icon name="log-out-outline" slot="start" aria-hidden="true"></ion-icon>
+        <ion-label>Logout</ion-label>
+      </ion-item>
+    </div>
+  </ion-content>
+</ion-menu>

@@ -41,6 +41,11 @@
     & ion-button {min-width: 30%;}
 }
 
+.dateItem {
+    --detail-icon-opacity: 0.8;
+    // border-radius: 10px;
+}
+
 .sum_earning_item{
     padding-top: 10px;
     padding-bottom: 10px;

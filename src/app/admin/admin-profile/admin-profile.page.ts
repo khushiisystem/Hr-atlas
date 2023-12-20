@@ -18,7 +18,7 @@ export class AdminProfilePage implements OnInit {
   @ViewChild('accordionGroup', { static: true }) accordionGroup!: IonAccordionGroup;
   userId: string = "";
   adminDetail!: IEmployeeResponse;
-  activeTab: string = "Personal";
+  activeTab: string[] = ["Personal", "Contact", "Address", "Social_info", "Settings"];
   dataLoaded: boolean = false;
   randomList: any[] = [];
 

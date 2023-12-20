@@ -14,13 +14,14 @@
   </div>
 </ion-item> -->
 
-<div class="text-end ion-padding-horizontal ion-margin-bottom">
-  <ion-button mode="md" color="primary" shape="round" type="button" (click)="openCalendar = true">
-    <!-- {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}} -->
-    {{payslipDate | date:'MMMM, y'}}
-    <ion-icon name="chevron-down-outline" aria-hidden="true" slot="end"></ion-icon>
-  </ion-button>
-</div>
+<ion-list inset="true" mode="ios">
+  <ion-item type="button" button="true" shape="round" [detail]="true" detailIcon="chevron-down-outline" color="primary" lines="none" class="dateItem" (click)="openCalendar = true" mode="ios">
+    <ion-label>
+      <h6>Payslip month</h6>
+      <ion-text>{{payslipDate | date:'MMMM, y'}}</ion-text>
+    </ion-label>
+  </ion-item>
+</ion-list>
 <ion-modal [isOpen]="openCalendar" #dateModal [initialBreakpoint]="0.65" [keepContentsMounted]="true" mode="md" [backdropDismiss]="false" [showBackdrop]="true" (didDismiss)="openCalendar = false">
   <ng-template>
     <ion-content>
@@ -51,40 +52,40 @@
 
 <div [ngSwitch]="activeTab">
   <div *ngSwitchCase="'earning'">
-    <form [formGroup]="payslipFrom" class="ion-padding">
-      <div class="form-input">
-        <ion-input type="number" labelPlacement="floating" label="CTC" [fill]="'solid'" aria-label="CTC" formControlName="ctc" [min]="0" [readonly]="true"></ion-input>
-      </div>
+    <form [formGroup]="payslipFrom">
+      <ion-list inset="true" mode="ios">
+        <ion-item mode="ios" detail="false">
+          <ion-input type="number" labelPlacement="floating" label="CTC" [fill]="'solid'" aria-label="CTC" formControlName="ctc" [min]="0" [readonly]="true"></ion-input>
+        </ion-item>
+        <ion-item mode="ios" detail="false">
+          <ion-input type="number" labelPlacement="floating" label="Basic Salary" [fill]="'solid'" aria-label="basics" formControlName="basicSalary" [min]="0" [required]="true" [readonly]="true"></ion-input>
+        </ion-item>
+        <ion-item mode="ios" detail="false">
+          <ion-input type="number" labelPlacement="floating" label="Bonus" [fill]="'solid'" aria-label="Bonus" formControlName="bonus" [min]="0"></ion-input>
+        </ion-item>
+        <ion-item mode="ios" detail="false">
+          <ion-input type="number" labelPlacement="floating" label="Advance Salary" [fill]="'solid'" aria-label="Advance Salary" formControlName="advanceSalary" [min]="0" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-list>
 
-      <div class="form-input">
-        <ion-input type="number" labelPlacement="floating" label="Basic Salary" [fill]="'solid'" aria-label="basics" formControlName="basicSalary" [min]="0" [required]="true" [readonly]="true"></ion-input>
-      </div>
-
-      <div class="form-input">
-        <ion-input type="number" labelPlacement="floating" label="Bonus" [fill]="'solid'" aria-label="Bonus" formControlName="bonus" [min]="0"></ion-input>
-      </div>
-
-      <div class="form-input">
-        <ion-input type="number" labelPlacement="floating" label="Advance Salary" [fill]="'solid'" aria-label="Advance Salary" formControlName="advanceSalary" [min]="0" [readonly]="true"></ion-input>
-      </div>
-
-      <div class="ion-text-end ion-margin-top ion-padding-top">
+      <div class="ion-text-end ion-padding">
         <ion-button color="primary" type="button" mode="ios" [strong]="true" shape="round" (click)="activeTab = 'deductions'">Next</ion-button>
       </div>
     </form>
   </div>
 
   <div *ngSwitchCase="'deductions'">
-    <form [formGroup]="payslipFrom" class="ion-padding">
-      <div class="form-input">
-        <ion-input type="number" labelPlacement="floating" label="Loss Of Pay" [fill]="'solid'" aria-label="LOP" formControlName="lop" [min]="0" [readonly]="true"></ion-input>
-      </div>
+    <form [formGroup]="payslipFrom">
+      <ion-list inset="true" mode="ios">
+        <ion-item mode="ios" detail="false">
+          <ion-input type="number" labelPlacement="floating" label="Loss Of Pay" [fill]="'solid'" aria-label="LOP" formControlName="lop" [min]="0" [readonly]="true"></ion-input>
+        </ion-item>
+        <ion-item mode="ios" detail="false">
+          <ion-input type="number" labelPlacement="floating" label="Deduction Amount" [fill]="'solid'" aria-label="Deduction Amount" formControlName="deductionAmount" [min]="0" [readonly]="true"></ion-input>
+        </ion-item>
+      </ion-list>
 
-      <div class="form-input">
-        <ion-input type="number" labelPlacement="floating" label="Deduction Amount" [fill]="'solid'" aria-label="Deduction Amount" formControlName="deductionAmount" [min]="0" [readonly]="true"></ion-input>
-      </div>
-
-      <div class="ion-text-end btn-group ion-margin-top ion-padding-top">
+      <div class="ion-text-end btn-group ion-padding">
         <ion-button color="primary" type="button" mode="ios" [strong]="true" shape="round" [disabled]="payslipFrom.invalid" (click)="submit()">Submit</ion-button>
       </div>
     </form>

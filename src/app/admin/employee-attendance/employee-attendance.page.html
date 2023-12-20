@@ -231,7 +231,7 @@
               <ion-icon [name]="item.open_form ? 'chevron-up-outline' : 'chevron-down-outline'" slot="icon-only" [size]="'small'"></ion-icon>
             </ion-button>
 
-            <ion-chip color="tertiary" *ngIf="!isWeekOff(item.created_date) && item.status === 'Absent'" (click)="markPresent($event, item)" class="ion-no-margin btnChip">Make Present</ion-chip>
+            <ion-chip color="tertiary" *ngIf="!isWeekOff(item.created_date) && item.status === 'Absent'" (click)="markPresent($event, item)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip>
           </ion-card-header>
           <ion-card-content *ngIf="item.open_form && isAllLoaded()">
             <ion-row class="sort_desc ion-margin-top" *ngIf="item.attendanceData != null">

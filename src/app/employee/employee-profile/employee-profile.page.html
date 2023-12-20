@@ -13,13 +13,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="light">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
   <div class="container loadingContent" *ngIf="!employeeDetail">
-    <ion-card mode="md">
+    <ion-card mode="ios">
       <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
         <div slot="start" class="ion-margin-top">
           <ion-avatar>
@@ -34,7 +34,7 @@
       </ion-item>
     </ion-card>
 
-    <ion-card mode="md" *ngFor="let item of randomList">
+    <ion-card mode="ios" *ngFor="let item of randomList">
       <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
         <div class="emp_name_role">
           <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
@@ -45,7 +45,7 @@
   </div>
   
   <div class="container" *ngIf="employeeDetail">
-    <ion-card mode="md" class="profile_card ion-margin-vertical">
+    <ion-card mode="ios" class="profile_card ion-margin-vertical">
       <ion-item lines="none" class="noBg">
         <div class="emp_avatar" slot="start">
           <ion-avatar class="employee_img">
@@ -62,7 +62,7 @@
       </ion-item>
     </ion-card>
 
-    <ion-card mode="md" class="action_list_card">
+    <!-- <ion-card mode="ios" class="action_list_card"> -->
       <ion-accordion-group #accordionGroup mode="md" [value]="expandedAccordion" (ionChange)="changeAccordion($event)">
         <ion-accordion value="Personal" mode="md">
           <ion-item slot="header" class="accordion_head_item">
@@ -71,7 +71,7 @@
               <ion-text class="sub-header">Personal info, contact info, address, social info</ion-text>
             </div>
           </ion-item>
-          <div class="ion-padding" slot="content">
+          <div class="ion-padding-vertical" slot="content">
             
             <ion-item-divider>
               <div class="personal_info">
@@ -204,7 +204,7 @@
               <ion-text class="sub-header">Basic info, work info, work history</ion-text>
             </div>
           </ion-item>
-          <div class="ion-padding" slot="content">
+          <div class="ion-padding-vertical" slot="content">
             
             <ion-item-divider>
               <div class="basic_info">
@@ -332,28 +332,28 @@
               <ion-text class="sub-header">Personal info, work info</ion-text>
             </div>
           </ion-item>
-          <div class="ion-padding" slot="content">
-            <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" class="btn_item" (click)="editProfile()">
-              <ion-icon name="person-outline" aria-hidden="true" slot="start" color="primary"></ion-icon>
+          <ion-list mode="ios" slot="content">
+            <ion-item lines="none" type="button" [button]="true" [detail]="true" class="btn_item" (click)="editProfile()">
+              <ion-icon name="person-sharp" aria-hidden="true" slot="start" size="small" color="medium"></ion-icon>
               <ion-label color="primary">Edit Profile</ion-label>
             </ion-item>
 
-            <ion-item [lines]="'none'" type="button" [button]="true" [detail]="true" class="btn_item" (click)="setupWorkInfo()">
-              <ion-icon name="construct-outline" aria-hidden="true" slot="start" color="primary"></ion-icon>
+            <ion-item lines="none" type="button" [button]="true" [detail]="true" class="btn_item" (click)="setupWorkInfo()">
+              <ion-icon name="construct-sharp" aria-hidden="true" slot="start" size="small" color="medium"></ion-icon>
               <ion-label color="primary">{{workDetail ? 'Update' : 'Add'}} Work</ion-label>
             </ion-item>
-          </div>
+          </ion-list>
         </ion-accordion>
       </ion-accordion-group>
-    </ion-card>
-    
-    <ion-card type="button" mode="md" *ngIf="userRole === 'Admin'">
-      <ion-item [lines]="'none'" [detail]="true" [button]="true" [mode]="'md'" class="accordion_head_item btn_item" [href]="'employee-work-week/'+employeeId">
-        <div>
-          <ion-label>Work-week</ion-label>
+    <!-- </ion-card> -->
+
+    <ion-list mode="ios" inset="true">
+      <ion-item [detail]="true" type="button" [button]="true" [mode]="'md'" class="accordion_head_item btn_item" [href]="'employee-work-week/'+employeeId">
+        <ion-label>
+          Work-week
           <ion-text class="sub-header">Work-week assigned to the staff</ion-text>
-        </div>
+        </ion-label>
       </ion-item>
-    </ion-card>
+    </ion-list>
   </div>
 </ion-content>

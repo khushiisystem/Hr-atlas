@@ -50,6 +50,7 @@ export class AdminLeavesPage implements OnInit {
   ngOnInit() {
     this.selectedDates = history.state.selectedDates || [];
     this.requestedLeaves();
+    console.log('load');
     this.getLogs();
   }
 
