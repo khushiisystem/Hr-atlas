@@ -160,3 +160,9 @@ ion-backdrop{
     --max-width: calc(100% - 50px);
     --backdrop-opacity: 0.5
 }
+ion-popover {
+    &.filter {
+        --width: initial;
+        --width: fit-content;
+    }
+}

@@ -1,93 +1,121 @@
 <ion-header [translucent]="true" mode="md">
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
-          <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+        <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Employee List</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
+    <!-- <ng-container *ngIf="userRole === 'Admin'">
+      <ion-button mode="ios" color="tertiary" fill="clear" strong="true" id="filterPop" slot="end" aria-label="Filter">
+        <ion-icon name="funnel" aria-hidden="true" aria-label="filter"></ion-icon>
+      </ion-button>
+    </ng-container> -->
+  </ion-toolbar>
+</ion-header>
+
+<ng-container *ngIf="userRole === 'Admin'">
+  <ion-popover trigger="filterPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter">
+    <ng-template>
+      <ion-content>
+        <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+</ng-container>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="container">
+    <!-- <ion-row class="ion-padding-horizontal" *ngIf="searchString.trim() !== '' || employeeList.length > 0 || isHold">
+      <ion-col size="12">
+        <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+      </ion-col>
+    </ion-row> -->
+
+    <div class="stickyTop ion-padding-vertical">
+      <div class="optbar">
+        <ion-item detail="false" lines="none" mode="md">
+          <ion-icon name="search" aria-hidden="true" size="small" slot="start" class="startIcon"></ion-icon>
+          <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+        </ion-item>
+        <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="filterPop" *ngIf="userRole === 'Admin'" class="ion-margin-start ion-no-padding">
+          <ion-icon name="funnel" aria-hidden="true" aria-label="Option"></ion-icon>
         </ion-button>
-      </ion-buttons>
-      <ion-title>Employee List</ion-title>
-      <ion-thumbnail slot="end" class="logo_img ion-margin-end">
-        <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
-      </ion-thumbnail>
-      <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content [fullscreen]="true">
-    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-      <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-    <div class="container ion-padding-top">
-      <ion-row class="ion-padding-horizontal" *ngIf="searchString.trim() !== '' || employeeList.length > 0 || isHold">
-        <ion-col size="12">
-          <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
-        </ion-col>
-      </ion-row>
-  
-      <ion-list *ngIf="isDataLoaded && userRole === 'Admin'">
-        <ion-item lines="none" [button]="false" *ngIf="employeeList.length === 0">
-          <ion-label class="ion-text-center">No any employee.</ion-label>
-        </ion-item>
-  
-        <ion-item-sliding #editSlide [disabled]="lastRoute === '/tabs/settings'" *ngFor="let employee of employeeList; index as i;">
-          <ion-item-options side="start" (ionSwipe)="employeeMoal(employee.guid, 'edit'); editSlide.closeOpened();">
-            <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal(employee.guid, 'edit'); editSlide.closeOpened();" [expandable]="true">
-              <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-  
-          <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile(employee.guid)">
-            <div slot="start" class="check_container">
-              <ion-avatar class="employee_img">
-                <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
-                <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-              </ion-avatar>
-            </div>
-            <div class="employee_data">
-              <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-              <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
-            </div>
-          </ion-item>
-      
-          <!-- <ion-item-options side="end" (ionSwipe)="deleteEmployee(employee.guid); editSlide.closeOpened();">
-            <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(employee.guid); editSlide.closeOpened();" [expandable]="true">
-              <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-            </ion-item-option>
-          </ion-item-options> -->
-        </ion-item-sliding>
-      </ion-list>
-      
-  
-      <ion-list *ngIf="isDataLoaded && userRole === 'Employee'">
-        <ion-item lines="none" [button]="false" *ngIf="!isHold && employeeList.length === 0">
-          <ion-label class="ion-text-center">No any employee.</ion-label>
-        </ion-item>
-  
-        <ion-item lines="full" [button]="true" [detail]="true" class="list-item" (click)="viewProfile(employee.guid)" *ngFor="let employee of employeeList; index as i;">
-            <div slot="start" class="check_container">
-              <ion-avatar class="employee_img">
-                <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
-                <img [alt]="getName(employee)" *ngIf="employee.imageUrl.trim() !== ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-              </ion-avatar>
-            </div>
-            <div class="employee_data">
-              <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-              <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+      </div>
+    </div>
+
+    <ion-list *ngIf="userRole === 'Admin'" mode="ios" inset="false">
+      <ion-item lines="none" [button]="false" *ngIf="isDataLoaded && employeeList.length === 0">
+        <ion-label class="ion-text-center">No any employee.</ion-label>
+      </ion-item>
+
+      <ion-item-sliding #editSlide [disabled]="lastRoute === '/tabs/settings'" *ngFor="let employee of employeeList; index as i;">
+        <ion-item-options side="start" (ionSwipe)="employeeMoal(employee.guid, 'edit'); editSlide.closeOpened();">
+          <ion-item-option color="primary" aria-label="Edit" type="button" (click)="employeeMoal(employee.guid, 'edit'); editSlide.closeOpened();" [expandable]="true">
+            <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+        <ion-item [button]="true" [detail]="true" class="list-item" (click)="viewProfile(employee.guid)">
+          <div slot="start" class="check_container">
+            <ion-avatar class="employee_img">
+              <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+              <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+            </ion-avatar>
+          </div>
+          <div class="employee_data">
+            <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
+            <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
           </div>
         </ion-item>
-      </ion-list>
-    </div>
     
+        <!-- <ion-item-options side="end" (ionSwipe)="deleteEmployee(employee.guid); editSlide.closeOpened();">
+          <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(employee.guid); editSlide.closeOpened();" [expandable]="true">
+            <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options> -->
+      </ion-item-sliding>
+    </ion-list>
     
-    <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadData($any($event))" [position]="'bottom'">
-      <ion-infinite-scroll-content *ngIf="isMoreData" loadingSpinner="bubbles" loadingText="Loading more data...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+
+    <ion-list *ngIf="userRole === 'Employee'" mode="ios" inset="false">
+      <ion-item lines="none" [button]="false" *ngIf="isDataLoaded && employeeList.length === 0">
+        <ion-label class="ion-text-center">No any employee.</ion-label>
+      </ion-item>
+
+      <ion-item [button]="true" [detail]="true" class="list-item" (click)="viewProfile(employee.guid)" *ngFor="let employee of employeeList; index as i;">
+        <div slot="start" class="check_container">
+          <ion-avatar class="employee_img">
+            <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+            <img [alt]="getName(employee)" *ngIf="employee.imageUrl.trim() !== ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+          </ion-avatar>
+        </div>
+        <div class="employee_data">
+          <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
+          <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
   
-    <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="userRole === 'Admin'">
-      <ion-fab-button (click)="employeeMoal(null, 'add')" aria-label="Add Employee">
-        <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-  </ion-content>
   
+  <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadData($any($event))" [position]="'bottom'">
+    <ion-infinite-scroll-content *ngIf="isMoreData" loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="userRole === 'Admin'">
+    <ion-fab-button (click)="employeeMoal(null, 'add')" aria-label="Add Employee">
+      <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

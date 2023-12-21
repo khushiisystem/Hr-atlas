@@ -164,6 +164,7 @@ swiper-slide {
         }
     }
     .list-item {
+        --border-color: var(--ion-color-light);
         // & .employee_img {width: 40px; height: 40px;}
         
         & .skeleton_thumb{
@@ -190,6 +191,11 @@ swiper-slide {
     --padding-start: 0.5em;
     --padding-end: 0.5em;
     --box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.14), 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+.groupTitle{
+    --background: #fff;
+    z-index: 0;
+    color: var(--color-blue-gray);
 }
 
 .dateAvatar{
@@ -220,4 +226,8 @@ swiper-slide {
 
 .customRipple{
     color: var(--ion-color-primary);
+}
+
+ion-popover.filter{
+    --width: 110px
 }

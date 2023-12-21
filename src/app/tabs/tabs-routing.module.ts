@@ -7,7 +7,6 @@ import { ProfilePage } from '../employee/profile/profile.page';
 import { Tab1Page } from '../tab1/tab1.page';
 import { AuthGuard } from '../core/auth.guard';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
-import { EmployeeListPage } from './components/employee-list/employee-list.page';
 import { SettingsPage } from './components/settings/settings.page';
 import { EditProfilePage } from '../employee/edit-profile/edit-profile.page';
 import { EmployeeProfilePage } from '../employee/employee-profile/employee-profile.page';
@@ -75,13 +74,6 @@ const routes: Routes = [
         title: "Add Employee",
         component: AddEmployeePage,
         canActivate: [AuthGuard, RoleGuard],
-        data: {role: "Admin"}
-      },
-      {
-        path: 'employee-list',
-        title: "Employee List",
-        component: EmployeeListPage,
-        canActivate:[AuthGuard, RoleGuard],
         data: {role: "Admin"}
       },
       {

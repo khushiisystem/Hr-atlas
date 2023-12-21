@@ -27,8 +27,6 @@ export class EmployeeWorkWeekPage implements OnInit {
     this.employeeId = this.activeRoute.snapshot.params?.['employeeId'];
     this.weekArray = moment.weekdays();
     this.weekCount();
-    console.log(this.weekArray);
-    console.log(this.numberOfWeek);
     if(this.employeeId.trim() !== ''){
       this.getWorkWeek();
     }

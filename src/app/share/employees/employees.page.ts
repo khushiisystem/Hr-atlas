@@ -73,7 +73,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
     if(this.pageIndex < 1){
       this.employeeList = [];
     }
-    this.adminServ.getEmployees(this.pageIndex * 10, 10).subscribe(res => {
+    this.adminServ.getEmployees('Active', this.pageIndex * 10, 10).subscribe(res => {
       if(res){
         const data: IEmployeeResponse[] = res;
         for(let i=0; i<data.length; i++){
@@ -100,14 +100,21 @@ export class EmployeesPage implements OnInit, OnDestroy {
 
   selectAll(event: CustomEvent) {
     if(event.detail.checked === true){
-      this.employeeList.forEach((e: IEmployeeResponse, index) => {
-        if(!this.selectedEmployee.includes(e.guid)){
-          this.selectedEmployee.push(e.guid);
-        }
-      });
+      this.allSelect();
     } else if(event.detail.checked === false) {
-      this.selectedEmployee = [];
+      this.deselectAll();
     }
+  }
+
+  allSelect(){
+    this.employeeList.forEach((e: IEmployeeResponse, index) => {
+      if(!this.selectedEmployee.includes(e.guid)){
+        this.selectedEmployee.push(e.guid);
+      }
+    });
+  }
+  deselectAll(){
+    this.selectedEmployee = [];
   }
 
   checkEmployee(employee: string) {
@@ -137,7 +144,8 @@ export class EmployeesPage implements OnInit, OnDestroy {
     if(searchValue.trim().length > 2){
       this.isDataLoaded = false;
       const data = {
-        searchString: searchValue
+        searchString: searchValue,
+        status: 'Active'
       }
       this.employeeList = [];
       this.shareServ.searchEmployee(data).subscribe(res => {
