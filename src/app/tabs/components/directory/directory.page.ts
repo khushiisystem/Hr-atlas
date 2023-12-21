@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertController, IonInfiniteScroll, ModalController, NavController } from '@ionic/angular';
 import { Subject, debounceTime } from 'rxjs';
 import { AddEmployeePage } from 'src/app/admin/add-employee/add-employee.page';
+import { EmployeeFilter } from 'src/app/interfaces/enums/leaveCreditPeriod';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
 import { RoleStateService } from 'src/app/services/roleState.service';
@@ -27,6 +28,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   private readonly debounceTimeMs = 1500;
   userId: string = '';
   isHold: boolean = false;
+  empType: 'All' | 'Active' | 'InActive' = 'Active';
 
   constructor(
     private adminServ: AdminService,
@@ -56,7 +58,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     if(this.pageIndex < 1){
       this.employeeList = [];
     }
-    this.adminServ.getEmployees(this.pageIndex * 10, 10).subscribe(res => {
+    this.adminServ.getEmployees(this.empType, this.pageIndex * 10, 10).subscribe(res => {
       if(res){
         const data: IEmployeeResponse[] = res;
         for(let i=0; i<data.length; i++){
@@ -156,7 +158,8 @@ export class DirectoryPage implements OnInit, OnDestroy {
       this.isHold = true;
       this.isDataLoaded = false;
       const data = {
-        searchString: searchValue
+        searchString: searchValue,
+        status: this.empType,
       }
       this.employeeList = [];
       this.shareServ.searchEmployee(data).subscribe(res => {
@@ -171,9 +174,17 @@ export class DirectoryPage implements OnInit, OnDestroy {
       });
     } else if(searchValue.trim() === ''){
       this.isHold = true;
+      this.isDataLoaded = false;
       this.pageIndex = 0;
       this.getEmployeeList();
     }
+  }
+
+  getTypedEmployee(event: 'All' | 'Active' | 'InActive'){
+    this.isDataLoaded = false;
+    this.empType = event;
+    this.pageIndex = 0;
+    this.getEmployeeList();
   }
 
   getName(employee: IEmployeeResponse) {

@@ -134,7 +134,8 @@ export class AdditionalSetupPage implements OnInit {
       this.selectedEmployee = [];
       this.isDataLoaded = false;
       const data = {
-        searchString: searchValue
+        searchString: searchValue,
+        status: 'Active'
       }
       this.employeeList = [];
       this.shareServ.searchEmployee(data).subscribe(res => {
@@ -170,7 +171,7 @@ export class AdditionalSetupPage implements OnInit {
 
   getEmployees(){
     this.isDataLoaded = false;
-    this.shareServ.getAllEmployee(this.pageIndex * 20, 20).subscribe(res => {
+    this.shareServ.getAllEmployee('Active', this.pageIndex * 20, 20).subscribe(res => {
       if(res){
         this.employeeList = res;
         this.isMoreEmployee = res.length > 19;

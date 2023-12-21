@@ -21,8 +21,8 @@ import { IPayslipResponse } from "../interfaces/response/payslipResponse";
 export class AdminService {
     constructor(private http: HttpClient){}
 
-    getEmployees(pageIndex: number, pageSize: number): Observable<any>{
-        return this.http.get<any>(environment.Api + `api/user?skip=${pageIndex}&limit=${pageSize}`);
+    getEmployees(empType: 'All' | 'Active' | 'InActive', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
+      return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}`);
     }
     addEmployees(employeeData: IEmployeeRequest): Observable<IEmployeeResponse>{
         return this.http.post<IEmployeeResponse>(environment.Api + `api/user`, employeeData);

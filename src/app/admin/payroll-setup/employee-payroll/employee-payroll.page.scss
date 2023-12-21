@@ -16,7 +16,8 @@
 
 .tab_segement{
     --ripple-color: var(--ion-color-primary);
-    background-color: rgba(56, 128, 255, 0.1);
+    // background-color: rgba(56, 128, 255, 0.1);
+    background-color: #fff;
     // border: 2px solid var(--ion-color-primary);
 
     ion-segment-button {

@@ -34,8 +34,8 @@ export class ShareService {
 
 
   // APIs for employee
-  getAllEmployee(pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
-    return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?skip=${pageIndex}&limit=${pageSize}`);
+  getAllEmployee(empType: 'All' | 'Active' | 'InActive', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
+    return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}`);
   }
   getEmployeeById(empId: string): Observable<IEmployeeResponse>{
     return this.http.get<IEmployeeResponse>(environment.Api + `api/user/${empId}`);
@@ -63,8 +63,8 @@ export class ShareService {
   }
   downloadPayslip(employeeId: string, slipDate: string | Date): Observable<any> {
     return this.http.get(environment.Api + `api/paySlip/generatepdf?employeeId=${employeeId}&date=${slipDate}`, {
-        responseType: 'blob',
-    })
+      responseType: 'blob',
+    });
   }
 
   public exportFile(res: Blob, fileName: string) {

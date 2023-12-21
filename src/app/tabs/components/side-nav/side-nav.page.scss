@@ -22,3 +22,10 @@ ion-menu{
 .logoutBtn{
     & ion-label{font-weight: 600;}
 }
+ion-list {
+    & ion-item {
+        & ion-icon{
+            color: rgba(var(--ion-color-primary-rgb), 0.9)
+        }
+    }
+}

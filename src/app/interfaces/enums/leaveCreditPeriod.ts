@@ -22,3 +22,9 @@ export enum AttendaceStatus {
     HALF_DAY = 'Half Day',
     WEEK_OFF = 'Week Off',
 }
+
+export enum EmployeeFilter {
+    ALL = 'All',
+    ACTIVE = 'Active',
+    IN_ACTIVE = 'InActive'
+}
