@@ -8,40 +8,96 @@ import { AfterContentInit, Component, Input, OnInit } from '@angular/core';
 export class NameImgPage implements OnInit, AfterContentInit {
   @Input() name: string = "";
   @Input() classes: string = "";
-  bgColor: string = "";
-  textColor: string = "";
-  alphaChar: string = "";
+  @Input('bgcolor') bgColor: string = "";
+  @Input('textcolor') textColor: string = "";
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  ngAfterContentInit(): void {
-    this.alphaChar = this.name.slice(0, 1);
-    this.bgColor = localStorage.getItem("bgColor") || '';
-    this.textColor = localStorage.getItem("textColor") || '';
+  // ngAfterContentInit(): void {
+  //   this.bgColor = localStorage.getItem("bgColor") || '';
+  //   this.textColor = localStorage.getItem("textColor") || '';
 
-    if(this.bgColor.trim() === '' || this.textColor.trim() === ''){
-      let r = Math.floor((Math.random() * 256) - 1);
-      let g = Math.floor((Math.random() * 256) - 1);
-      let b = Math.floor((Math.random() * 256) - 1);
-      // Calculate brightness of randomized colour
-      let brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-      // Calculate brightness of white and black text
-      let lightText = ((255 * 299) + (255 * 587) + (255 * 114)) / 1000;
-      let darkText = ((0 * 299) + (0 * 587) + (0 * 114)) / 1000;
+  //   if(this.bgColor.trim() === '' || this.textColor.trim() === ''){
+  //     let r = Math.floor((Math.random() * 256) - 1);
+  //     let g = Math.floor((Math.random() * 256) - 1);
+  //     let b = Math.floor((Math.random() * 256) - 1);
+  //     // Calculate brightness of randomized colour
+  //     let brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  //     // Calculate brightness of white and black text
+  //     let lightText = ((255 * 299) + (255 * 587) + (255 * 114)) / 1000;
+  //     let darkText = ((0 * 299) + (0 * 587) + (0 * 114)) / 1000;
 
-      this.bgColor = `rgb(${r}, ${g}, ${b})`;
-      if(Math.abs(brightness - lightText) > Math.abs(brightness - darkText)){
-        this.textColor = "rgb(255, 255, 255)";
-      } else {
-        this.textColor = "rgb(0, 0, 0)";
-      }
+  //     this.bgColor = `rgb(${r}, ${g}, ${b})`;
+  //     if(Math.abs(brightness - lightText) > Math.abs(brightness - darkText)){
+  //       this.textColor = "rgb(255, 255, 255)";
+  //     } else {
+  //       this.textColor = "rgb(0, 0, 0)";
+  //     }
       
-      localStorage.setItem("bgColor", this.bgColor);
-      localStorage.setItem("textColor", this.textColor);
+  //     localStorage.setItem("bgColor", this.bgColor);
+  //     localStorage.setItem("textColor", this.textColor);
+  //   }
+  // }
+
+  ngAfterContentInit(): void {
+    // Generate a random hex color if bgColor is not provided
+    if (!this.bgColor) {
+      this.bgColor = this.getRandomHexColor();
     }
+
+    // Ensure bgColor is in rgba format
+    if (!this.isRgbaFormat(this.bgColor)) {
+      this.bgColor = this.hexToRgba(this.bgColor);
+    }
+
+    this.textColor = this.calculateTextColor(this.bgColor);
+  }
+
+  private isRgbaFormat(color: string): boolean {
+    return color.toLowerCase().startsWith("rgba");
+  }
+
+  private hexToRgba(hexColor: string): string {
+    // Convert hex to RGB
+    const bigint = parseInt(hexColor.slice(1), 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    // Convert RGB to RGBA
+    const rgbaColor = `rgba(${r}, ${g}, ${b}, 1)`;
+    return rgbaColor;
+  }
+
+  private getRandomHexColor(): string {
+    // Generate a random hex color code
+    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+  }
+
+  private calculateTextColor(backgroundColor: string): string {
+    // Implement your logic to determine text color based on background color brightness
+    // This is a simple example, adjust it based on your needs
+    const brightness = this.calculateBrightness(backgroundColor);
+    const lightTextColor = "rgb(255, 255, 255)";
+    const darkTextColor = "rgb(0, 0, 0)";
+
+    return brightness > 128 ? darkTextColor : lightTextColor;
+  }
+
+  private calculateBrightness(color: string): number {
+    // Extract RGB values from rgba string
+    const rgbValues = color.match(/\d+/g);
+    if (rgbValues) {
+      const [r, g, b] = rgbValues.map(Number);
+      // Calculate brightness using the formula
+      return (r * 299 + g * 587 + b * 114) / 1000;
+    }
+
+    // Default to a mid-range brightness if extraction fails
+    return 128;
   }
 
 }

@@ -1,0 +1,11 @@
+ion-text{
+    font-size: small;
+    color: rgb(85, 84, 84);
+}
+.btnGroup{
+    justify-content: flex-end;
+
+    & ion-button{
+        font-size: 12px;
+    }
+}

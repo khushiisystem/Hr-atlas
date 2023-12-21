@@ -41,6 +41,7 @@ import { FileOpener } from "@ionic-native/file-opener/ngx";
 import { AttendanceStatusPage } from "../admin/attendance-status/attendance-status.page";
 import { CustomCallendarPageModule } from "../share/components/custom-callendar/custom-callendar.module";
 import { AttendaceUpdatePage } from "../admin/employee-attendance/attendace-update/attendace-update.page";
+import { SideNavPage } from "./components/side-nav/side-nav.page";
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { AttendaceUpdatePage } from "../admin/employee-attendance/attendace-upda
     EmployeePayslipPage,
     AttendanceStatusPage,
     AttendaceUpdatePage,
+    SideNavPage,
   ],
   imports: [
     IonicModule,

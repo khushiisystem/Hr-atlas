@@ -1,27 +1,27 @@
 <ion-tabs>
 
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="home" [disabled]="!userRole || userRole.trim() === ''">
+    <ion-tab-button tab="home" [disabled]="!userDetail || userRole.trim() === ''">
       <ion-icon aria-hidden="true" name="home-outline"></ion-icon>
       <ion-label>Home</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="directory" (click)="clearLastRoute()" [disabled]="!userRole || userRole.trim() === ''">
+    <ion-tab-button tab="directory" (click)="clearLastRoute()" [disabled]="!userDetail || userRole.trim() === ''">
       <ion-icon aria-hidden="true" name="file-tray-full-outline"></ion-icon>
       <ion-label>Directory</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="attendance" *ngIf="userRole === 'Employee'" [disabled]="!userRole || userRole.trim() === ''">
+    <ion-tab-button tab="attendance" *ngIf="userRole === 'Employee'" [disabled]="!userDetail || userRole.trim() === ''">
       <ion-icon aria-hidden="true" name="hand-right-outline"></ion-icon>
       <ion-label>Attendance</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="profile" *ngIf="userRole === 'Employee' && !isSwitchable" [disabled]="!userRole || userRole.trim() === ''">
+    <ion-tab-button tab="profile" *ngIf="userRole === 'Employee' && !isSwitchable" [disabled]="!userDetail || userRole.trim() === ''">
       <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
       <ion-label>Profile</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="admin-profile" *ngIf="userRole === 'Admin' || isSwitchable" [disabled]="!userRole || userRole.trim() === ''">
+    <ion-tab-button tab="admin-profile" *ngIf="userRole === 'Admin' || isSwitchable" [disabled]="!userDetail || userRole.trim() === ''">
       <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
       <ion-label>Profile</ion-label>
     </ion-tab-button>

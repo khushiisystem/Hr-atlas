@@ -133,5 +133,8 @@ export class ShareService {
   }
   getEventHollyday(selectedYear: string | number): Observable<IHollydayResponse[]> {
     return this.http.get<IHollydayResponse[]>(environment.Api + `api/hollyday/allHollyday?date=${selectedYear}`);
-}
+  }
+  upcomingBirthday(): Observable<IEmployeeResponse[]> {
+    return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user/upcomingBirthday`);
+  }
 }

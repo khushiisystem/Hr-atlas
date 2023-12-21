@@ -42,6 +42,10 @@ const routes: Routes = [
     title: "Work Week",
     component: EmployeeWorkWeekPage,
   },
+  {
+    path: 'profile-popup',
+    loadChildren: () => import('./employee/profile-popup/profile-popup.module').then( m => m.ProfilePopupPageModule)
+  },
 ];
 @NgModule({
   imports: [

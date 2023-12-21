@@ -203,7 +203,7 @@ export class EmployeeAttendancePage implements OnInit {
               item.status = e.status;
               item.created_date = new Date(e.clockIn).toISOString();
             }
-            e.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+            item.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
           });
         });
         this.openUpdatForm.length = this.attendanceList.length;

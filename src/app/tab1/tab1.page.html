@@ -1,216 +1,362 @@
-<ion-header [translucent]="true" mode="md">
-  <ion-toolbar>
-    <ion-avatar slot="start" class="user_avatar" *ngIf="userDetails" (click)="showprofile()">
-      <app-name-img [name]="getName()" [classes]="'sm'" *ngIf="userDetails.imageUrl.trim() === ''"></app-name-img>
-      <img *ngIf="userDetails.imageUrl.trim() !== ''" alt="user" [src]="userDetails && userDetails.imageUrl.trim() !== '' ? userDetails.imageUrl: 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-    </ion-avatar>
-
-    <ion-avatar slot="start" class="user_avatar" *ngIf="!userDetails">
-      <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-    </ion-avatar>
-
-    <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === 'Admin'" slot="end" (ionChange)="roleToggle($event)" class="ion-margin-end" [disabled]="!userDetails" *ngIf="isSwitchable">Admin</ion-toggle>
-
-    <ion-buttons slot="end" class="ion-margin-end">
-      <ion-button mode="md" shape="round" [strong]="true" [color]="'primary'" fill="solid" class="ion-text-wrap clock_in_btn" (click)="toggleStopwatch()" *ngIf="userDetails && userRole === 'Employee'">
-        <span class="stopwatch-time">{{ buttonLabel }}</span>
-        <ion-icon slot="end" icon="time"></ion-icon>
-      </ion-button>
-
-      <ion-button mode="md" shape="round" [strong]="true" [color]="'danger'" fill="solid" class="ion-text-wrap clock_in_btn" (click)="logout()" *ngIf="userDetails">
-        <ion-icon name="power" slot="icon-only" size="small"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    <!-- <ion-thumbnail slot="end" class="logo_img ion-margin-end" *ngIf="userRole !== 'Employee'">
-      <ion-img src="../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
-    </ion-thumbnail> -->
-    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true" color="light">
-  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
-  <swiper-container [slidesPerView]="1.25" [spaceBetween]="20" [centeredSlides]="true" [autoplay]="3000" [initialSlide]="0" [freeMode]="true" #swiper [loop]="true" class="banner-slides ion-margin-top" (afterinit)="swiperReady()" (slidechange)="swiperSlideChanged($event)" lazy="true" *ngIf="userRole === 'Admin'">
-    <!-- <ng-container> -->
-      <swiper-slide>
-        <ion-card mode="md" class="">
-          <ion-card-content>
-            <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
-            <small><em>Settings > Calendar setup > leave Setup</em></small>
-          </ion-card-content>
-        </ion-card>
-      </swiper-slide>
-      <swiper-slide>
-        <ion-card mode="md" class="">
-          <ion-card-content>
-            <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
-            <small><em>Settings > Primary setup > Attendance Setup</em></small>
-          </ion-card-content>
-        </ion-card>
-      </swiper-slide>
-    <!-- </ng-container> -->
-    <!-- <swiper-slide>
-      <ion-card mode="md" class=" ion-text-center">
-        <ion-card-header>
-          <ion-label>Slide 3</ion-label>
-        </ion-card-header>
-      </ion-card>
-    </swiper-slide> -->
-  </swiper-container>
-
-  <!-- <img src="../../assets/images/logo.png" alt="Photo" class="logo_img2" /> -->
-
-  <!-- <div class="ion-text-center"><ion-spinner color="medium" *ngIf="!isDataLoaded || !userDetails" name="circular"></ion-spinner></div> -->
-
-  <ion-card mode="ios" color="primary" class="time_card" *ngIf="userDetails && userRole === 'Employee' && isRunning">
-    <ion-card-header>
-      <div>
-        <ion-card-title>Work Duration</ion-card-title>
-        <ion-card-subtitle>Clock In: {{clockInTime | date:'shortTime'}}</ion-card-subtitle>
-      </div>
-      <ion-icon name="time" size="large"></ion-icon>
-    </ion-card-header>
-    <ion-card-content>
-      <div class="flex_div">
-        <ion-label class="stopwatch-time">{{ stopwatchTime }}</ion-label>
-        <ion-button mode="ios" [shape]="'round'" [strong]="true" color="light" (click)="toggleStopwatch()">Clock Out</ion-button>
-      </div>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- <ion-grid *ngIf="!isDataLoaded" class="ion-margin-top">
-    <ion-row class="row_one">
-      <ion-col size="4" sizeSm="3" *ngFor="let card of demoCard">
-        <ion-card mode="md">
-          <ion-card-content>
-            <ion-avatar class="skeleton_avatar">
-              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
-            </ion-avatar>
-            <p><ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text></p>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid> -->
-
-  <div class="flex_div_2" *ngIf="!isDataLoaded">
-    <div class="loader_img">
-      <img src="../../assets/icon/hr-atlas-150x80.png" alt="HR-Atlas">
-    </div>
-    <ion-spinner [color]="'tertiary'"></ion-spinner>
-  </div>
-
-  <ion-grid *ngIf="isDataLoaded && userDetails" class="ion-margin-top">
-    <ion-row class="row_one">
-      <ion-col size="12" class="ion-margin-bottom" *ngIf="userRole === 'Admin'">
-        <ion-button mode="md" shape="round" class="add_emp_btn" (click)="addEmployee()">
-          <ion-icon name="person-add-outline" slot="start"></ion-icon>
-          Add Employees
+<app-side-nav></app-side-nav>
+<div id="main-content" class="ion-page">
+  <ion-header [translucent]="true" mode="md">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <!-- <ion-avatar slot="start" class="user_avatar" *ngIf="userDetails" (click)="showprofile()">
+        <app-name-img [name]="getName()" [classes]="'sm'" *ngIf="userDetails.imageUrl.trim() === ''"></app-name-img>
+        <img *ngIf="userDetails.imageUrl.trim() !== ''" alt="user" [src]="userDetails && userDetails.imageUrl.trim() !== '' ? userDetails.imageUrl: 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+      </ion-avatar>
+  
+      <ion-avatar slot="start" class="user_avatar" *ngIf="!userDetails">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-avatar> -->
+  
+      <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === 'Admin'" slot="end" (ionChange)="roleToggle($event)" class="ion-margin-end roleToggle" [disabled]="!userDetails" *ngIf="isSwitchable">Admin</ion-toggle>
+  
+      <ion-buttons slot="end" class="ion-margin-end" *ngIf="userDetails && userRole === 'Employee'">
+        <ion-button mode="md" shape="round" [strong]="true" [color]="'primary'" fill="solid" class="ion-text-wrap clock_in_btn" (click)="toggleStopwatch()">
+          <span class="stopwatch-time">{{ buttonLabel }}</span>
+          <ion-icon slot="end" icon="time"></ion-icon>
         </ion-button>
-      </ion-col>
-
-      <ion-col size="4" sizeSm="3">
-        <ion-card mode="md" type="button" [routerLink]="['/tabs/directory']">
-          <ion-card-content>
-            <div class="icon_card">
-              <ion-icon name="file-tray-full-outline" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-label>Directory</ion-label>
-          </ion-card-content>
+  
+        <!-- <ion-button mode="md" shape="round" [strong]="true" [color]="'danger'" fill="solid" class="ion-text-wrap clock_in_btn" (click)="logout()" *ngIf="userDetails">
+          <ion-icon name="power" slot="icon-only" size="small"></ion-icon>
+        </ion-button> -->
+      </ion-buttons>
+      <ion-thumbnail slot="start" class="logo_img">
+        <ion-img src="../../assets/icon/no_bg_logo.png" alt="HR-Atlas"></ion-img>
+      </ion-thumbnail>
+      <!-- <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar> -->
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true" color="light">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <swiper-container [slidesPerView]="1.25" [spaceBetween]="20" [centeredSlides]="true" [autoplay]="3000" [initialSlide]="0" [freeMode]="true" #swiper [loop]="true" class="banner-slides ion-margin-top" (afterinit)="swiperReady()" (slidechange)="swiperSlideChanged($event)" lazy="true" *ngIf="userRole === 'Admin'">
+      <!-- <ng-container> -->
+        <swiper-slide>
+          <ion-card mode="md" class="">
+            <ion-card-content>
+              <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
+              <small><em>Settings > Calendar setup > leave Setup</em></small>
+            </ion-card-content>
+          </ion-card>
+        </swiper-slide>
+        <swiper-slide>
+          <ion-card mode="md" class="">
+            <ion-card-content>
+              <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
+              <small><em>Settings > Primary setup > Attendance Setup</em></small>
+            </ion-card-content>
+          </ion-card>
+        </swiper-slide>
+      <!-- </ng-container> -->
+      <!-- <swiper-slide>
+        <ion-card mode="md" class=" ion-text-center">
+          <ion-card-header>
+            <ion-label>Slide 3</ion-label>
+          </ion-card-header>
         </ion-card>
-      </ion-col>
-
-      <ion-col size="4" sizeSm="3">
-        <ion-card mode="md" type="button" (click)="attendancePage()">
-          <ion-card-content>
-            <div class="icon_card">
-              <ion-icon name="hand-right-outline" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-label>Attendance</ion-label>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="4" sizeSm="3">
-        <ion-card mode="md" type="button" [routerLink]="['/tabs/view-calendar']" routerLinkActive="router-link-active" >
-          <ion-card-content>
-            <div class="icon_card">
-              <ion-icon name="calendar-outline" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-label>calendar</ion-label>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="4" sizeSm="3">
-        <ion-card mode="md" type="button" (click)="showleaves()">
-          <ion-card-content>
-            <div class="icon_card">
-              <ion-icon name="fast-food-outline" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-label>Leaves</ion-label>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      
-      <ion-col size="4" sizeSm="3">
-        <ion-card mode="md" type="button" (click)="viewPayroll()">
-          <ion-card-content>
-            <div class="icon_card">
-              <ion-icon name="cash-outline" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-label>Payroll</ion-label>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-
-      <ion-col size="4" sizeSm="3" *ngIf="userRole === 'Admin'">
-        <ion-card mode="md" type="button" [routerLink]="['/tabs/settings']">
-          <ion-card-content>
-            <div class="icon_card">
-              <ion-icon name="cog-outline" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-label>Settings</ion-label>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <div class="leavesRequest ion-padding-vertical" *ngIf="userRole === 'Admin' && requestedLeaveList.length > 0">
-    <h2 class="ion-margin">Leave Requests</h2>
-    <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of requestedLeaveList; index as a">
+      </swiper-slide> -->
+    </swiper-container>
+  
+    <!-- <img src="../../assets/images/logo.png" alt="Photo" class="logo_img2" /> -->
+  
+    <!-- <div class="ion-text-center"><ion-spinner color="medium" *ngIf="!isDataLoaded || !userDetails" name="circular"></ion-spinner></div> -->
+  
+    <ion-card mode="ios" class="welcomeCard">
+      <ion-card-content>
+        <ion-item detail="false" class="welcomeItem" lines="none">
+          <ion-avatar slot="start">
+            <ng-container *ngIf="userDetails">
+              <app-name-img [name]="getName()" [classes]="'sm'" *ngIf="userDetails.imageUrl.trim() === ''"></app-name-img>
+              <img *ngIf="userDetails.imageUrl.trim() !== ''" alt="user" [src]="userDetails.imageUrl" />
+            </ng-container>
+            <ion-skeleton-text [animated]="true" *ngIf="!userDetails"></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label color="tertiary">
+            <h2 *ngIf="userDetails">Welcome, {{userDetails.firstName | titlecase}} {{userDetails.lastName}}</h2>
+            <ion-text *ngIf="userDetails" color="medium"><small>{{userRole}}</small></ion-text>
+            <ion-skeleton-text style="width: 100%;" animated="true" *ngIf="!userDetails"></ion-skeleton-text>
+            <ion-skeleton-text style="width: 50%;" animated="true" *ngIf="!userDetails"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  
+    <ion-card mode="ios" color="primary" class="time_card" *ngIf="userDetails && userRole === 'Employee' && isRunning">
       <ion-card-header>
         <div>
-          <ion-chip *ngIf="leaveItem.employeeDetails" color="tertiary" class="ion-no-margin">
-            <ion-avatar *ngIf="leaveItem.employeeDetails.imageUrl">
-              <img [alt]="leaveItem.employeeDetails.firstName" [src]="leaveItem.employeeDetails.imageUrl" />
-            </ion-avatar>
-            <ion-label>{{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || '' | titlecase}}</ion-label>
-          </ion-chip>
+          <ion-card-title>Work Duration</ion-card-title>
+          <ion-card-subtitle>Clock In: {{clockInTime | date:'shortTime'}}</ion-card-subtitle>
         </div>
-        <div class="ion-text-end">
-          <ion-text>{{leaveItem.leaveType}}</ion-text>
-        </div>
+        <ion-icon name="time" size="large"></ion-icon>
       </ion-card-header>
       <ion-card-content>
-        <p>
-          <ion-text>{{leaveItem.startDate | date:'shortDate'}}</ion-text> - <ion-text>{{leaveItem.endDate | date:'shortDate'}}</ion-text>
-        </p>
-        <p class="purpose"><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
+        <div class="flex_div">
+          <ion-label class="stopwatch-time">{{ stopwatchTime }}</ion-label>
+          <ion-button mode="ios" [shape]="'round'" [strong]="true" color="light" (click)="toggleStopwatch()">Clock Out</ion-button>
+        </div>
       </ion-card-content>
-
-      <div class="ion-text-end">
-        <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
-        <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
-      </div>
     </ion-card>
+  
+    <!-- <ion-grid *ngIf="!isDataLoaded" class="ion-margin-top">
+      <ion-row class="row_one">
+        <ion-col size="4" sizeSm="3" *ngFor="let card of demoCard">
+          <ion-card mode="md">
+            <ion-card-content>
+              <ion-avatar class="skeleton_avatar">
+                <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+              </ion-avatar>
+              <p><ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text></p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
 
-    <div class="ion-text-end" *ngIf="moreRequests">
-      <ion-button fill="clear" color="primary" [strong]="true" size="small" mode="md" (click)="showAllLeaves()">View All</ion-button>
+    <ion-list mode="ios" inset="true" class="eventList">
+      <ion-list-header [color]="!eventsLoaded ? 'light' : ''">
+        <ion-label>
+          <ng-container *ngIf="eventsLoaded">
+            <ion-img src="../../assets/images/event.svg" class="eventIcon" alt="Event"></ion-img>
+            Upcoming Event
+            <h6>{{upcomingEvent ? getDate(upcomingEvent.eventDate) : today | date:'MMMM'}}</h6>
+          </ng-container>
+          <ion-skeleton-text *ngIf="!eventsLoaded" animated="true" style="width: 80%; height: 10px;"></ion-skeleton-text>
+          <ion-skeleton-text *ngIf="!eventsLoaded" animated="true" style="width: 50%; height: 10px;"></ion-skeleton-text>
+        </ion-label>
+      </ion-list-header>
+      <ion-button fill="solid" mode="md" shape="round" size="large" color="primary" aria-label="Add Event" class="ion-no-margin addEventBtn" *ngIf="userRole === 'Admin' && eventsLoaded" (click)="createHollyday()">
+        <ion-icon name="add" aria-hidden="true" aria-label="Add Event" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-item lines="none" detail="false" class="ion-margin-top list-item">
+        <ion-avatar slot="start" [ngClass]="eventsLoaded ? 'dateAvatar bg' : 'dateAvatar'">
+          <ion-label color="light" *ngIf="eventsLoaded">{{upcomingEvent ? getDate(upcomingEvent.eventDate) : today | date:'dd'}}</ion-label>
+          <ion-text color="light" *ngIf="eventsLoaded"><small>{{upcomingEvent ? getDate(upcomingEvent.eventDate) : today | date:'E'}}</small></ion-text>
+          
+          <ion-skeleton-text *ngIf="!eventsLoaded" animated="true"></ion-skeleton-text>
+        </ion-avatar>
+        <ion-skeleton-text *ngIf="!eventsLoaded" animated="true" style="width: 70%; height: 10px;"></ion-skeleton-text>
+        <ion-label *ngIf="eventsLoaded">{{upcomingEvent ? upcomingEvent.eventTitle : 'Nothing else today.'}}</ion-label>
+      </ion-item>
+      <ion-item lines="none" detail="false" class="list-item" *ngIf="eventsLoaded">
+        <ion-button fill="clear" color="primary" mode="ios" strong="true" slot="end" class="ion-no-margin" routerLink="/tabs/view-calendar">
+          View Calendar
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <ion-list mode="ios" inset="true" class="eventList ion-padding-bottom" *ngIf="!birthdayLoaded || nextBirthdays.length > 0">
+      <ion-list-header [color]="!birthdayLoaded ? 'light' : ''">
+        <ion-label>
+          <ng-container *ngIf="birthdayLoaded">
+            <ion-img src="../../assets/images/cake.svg" class="eventIcon" alt="Birthday"></ion-img>
+            Upcoming Birthday
+            <h6>{{getTodaysBirthday().length > 0 ? getTodaysBirthday()[0].dateOfBirth : nextBirthdays[0].dateOfBirth | date:'MMMM'}}</h6>
+          </ng-container>
+          <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 80%; height: 10px;"></ion-skeleton-text>
+          <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 50%; height: 10px;"></ion-skeleton-text>
+        </ion-label>
+      </ion-list-header>
+
+      <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngIf="getTodaysBirthday().length > 0">
+        <ion-avatar slot="start" class="dateAvatar bg">
+          <ion-label color="light">{{ getTodaysBirthday()[0].dateOfBirth | date:'dd' }}</ion-label>
+          <ion-text color="light"><small>{{ getTodaysBirthday()[0].dateOfBirth | date:'E' }}</small></ion-text>
+        </ion-avatar>
+        <ion-label>
+          <ion-chip *ngFor="let item of getTodaysBirthday(); index as a;" class="birthChip">{{item.firstName + " " + item.lastName}}</ion-chip>
+        </ion-label>
+      </ion-item>
+
+      <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngFor="let item of nextBirthdays; index as a;">
+        <ion-avatar slot="start" class="dateAvatar bg">
+          <ion-label color="light">{{ item.dateOfBirth | date:'dd' }}</ion-label>
+          <ion-text color="light"><small>{{ item.dateOfBirth | date:'E' }}</small></ion-text>
+        </ion-avatar>
+        <ion-label>{{item.firstName + " " + item.lastName}}</ion-label>
+      </ion-item>
+
+      <ng-container *ngIf="!birthdayLoaded">
+        <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngFor="let e of [0,1]">
+          <ion-avatar slot="start" class="dateAvatar">
+            <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true"></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 70%; height: 10px;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+
+    <ion-list mode="ios" inset="true" class="attendanceList" *ngIf="userRole === 'Admin'">
+      <ion-list-header>
+        <ion-label>Today's Attendance</ion-label>
+      </ion-list-header>
+      <ion-item lines="inset" [button]="false" [detail]="false" mode="md" class="list-item" *ngFor="let item of attendanceList; index as i;">
+        <ion-avatar class="employee_img" slot="start" mode="md">
+          <app-name-img [name]="item.EmployeeDetails.firstName.slice(0,1)" [classes]="'sm'"></app-name-img>
+        </ion-avatar>
+        <ion-label>{{item.EmployeeDetails.firstName | titlecase}} {{item.EmployeeDetails.lastName || ''}}</ion-label>
+        <ion-button fill="solid" mode="ios" [color]="item.status === 'Absent' ? 'danger' : 'success'" slot="end" shape="round" class="statusBtn" *ngIf="attendanceLoaded">{{item.status.slice(0,1)}}</ion-button>
+        <ion-thumbnail slot="end" *ngIf="!attendanceLoaded" class="skeleton_thumb">
+          <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+        </ion-thumbnail>
+      </ion-item>
+      <ion-item lines="none" detail="false" class="list-item">
+        <ion-button fill="clear" color="primary" mode="ios" strong="true" slot="end" class="ion-no-margin" (click)="attendancePage()">
+          View All
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  
+    <div class="leavesRequest ion-padding-vertical" *ngIf="userRole === 'Admin' && requestedLeaveList.length > 0">
+      <h2 class="ion-margin">Leave Requests</h2>
+      <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of requestedLeaveList; index as a">
+        <ion-card-header>
+          <div>
+            <ion-chip *ngIf="leaveItem.employeeDetails" color="tertiary" class="ion-no-margin">
+              <ion-avatar *ngIf="leaveItem.employeeDetails.imageUrl">
+                <img [alt]="leaveItem.employeeDetails.firstName" [src]="leaveItem.employeeDetails.imageUrl" />
+              </ion-avatar>
+              <ion-label>{{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || '' | titlecase}}</ion-label>
+            </ion-chip>
+          </div>
+          <div class="ion-text-end">
+            <ion-text>{{leaveItem.leaveType}}</ion-text>
+          </div>
+        </ion-card-header>
+        <ion-card-content>
+          <p>
+            <ion-text>{{leaveItem.startDate | date:'shortDate'}}</ion-text> - <ion-text>{{leaveItem.endDate | date:'shortDate'}}</ion-text>
+          </p>
+          <p class="purpose"><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
+        </ion-card-content>
+  
+        <div class="ion-text-end">
+          <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
+          <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
+        </div>
+      </ion-card>
+  
+      <div class="ion-text-end" *ngIf="moreRequests">
+        <ion-button fill="clear" color="primary" [strong]="true" size="small" mode="md" (click)="showAllLeaves()">View All</ion-button>
+      </div>
     </div>
-  </div>
-  <ion-title class="ion-text-center ion-margin-vertical" *ngIf="isDataLoaded && !userDetails">Please Login First</ion-title>
-</ion-content>
+  
+    <!-- <ion-button mode="md" shape="round" class="add_emp_btn ion-margin" strong="true" fill="solid" (click)="addEmployee()">
+      <ion-icon name="person-add-outline" slot="start"></ion-icon>
+      Add Employees
+    </ion-button> -->
+
+    <ion-grid *ngIf="isDataLoaded && userDetails" class="ion-margin-top tabList">
+      <ion-row class="row_one">
+        <ion-col size="12">
+          <ion-item mode="ios" lines="none" detail="false">
+            <ion-label class="tabHeader">Employment</ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" [routerLink]="['/tabs/directory']">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="file-tray-full" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Directory</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" (click)="attendancePage()">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <div class="svg">
+                  <svg width="100%" height="100%" viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg" mirror-in-rtl="true" fill="#000000" stroke="#000000" stroke-width="0.00024000000000000003"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.144"></g><g id="SVGRepo_iconCarrier"> <path d="M7 11c-1.1 0-2-.9-2-2V8c0-1.1.9-2 2-2s2 .9 2 2v1c0 1.1-.9 2-2 2zm-2 6.993L9 18c.55 0 1-.45 1-1v-2c0-1.65-1.35-3-3-3s-3 1.35-3 3v2c0 .552.448.993 1 .993zM19 18h-6c-.553 0-1-.447-1-1s.447-1 1-1h6c.553 0 1 .447 1 1s-.447 1-1 1zm0-4h-6c-.553 0-1-.448-1-1s.447-1 1-1h6c.553 0 1 .448 1 1s-.447 1-1 1zm0-4h-6c-.553 0-1-.448-1-1s.447-1 1-1h6c.553 0 1 .448 1 1s-.447 1-1 1z"></path> <path d="M22 2H2C.9 2 0 2.9 0 4v16c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 17.5c0 .28-.22.5-.5.5h-19c-.28 0-.5-.22-.5-.5v-15c0-.28.22-.5.5-.5h19c.28 0 .5.22.5.5v15z"></path> </g></svg>
+                </div>
+              </div>
+              <ion-text>Attendance</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" [routerLink]="['/tabs/view-calendar']" routerLinkActive="router-link-active" >
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="calendar-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Calendar</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" (click)="showleaves()">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="leaf-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Leaves</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        
+        <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" (click)="viewPayroll()">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="wallet-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Payroll</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size="4" sizeSm="3" *ngIf="userRole === 'Admin'">
+          <ion-card mode="md" type="button" class="ion-activatable" [routerLink]="['/tabs/settings']">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="cog-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Settings</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+        <ion-col size="4" sizeSm="3" *ngIf="userRole === 'Admin'">
+          <ion-card mode="md" type="button" class="ion-activatable" (click)="addEmployee()">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="person-add-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Add Employee</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  
+    <!-- <div class="flex_div_2" *ngIf="!isDataLoaded">
+      <div class="loader_img">
+        <img src="../../assets/icon/hr-atlas-150x80.png" alt="HR-Atlas">
+      </div>
+      <ion-spinner [color]="'tertiary'"></ion-spinner>
+    </div> -->
+
+    <ion-title class="ion-text-center ion-margin-vertical" *ngIf="isDataLoaded && !userDetails">Please Login First</ion-title>
+  </ion-content>
+</div>

@@ -1,66 +1,65 @@
 <ion-header [translucent]="true" mode="md" class="main-header">
-  <ion-toolbar>
-    <ion-button slot="start" mode="md" color="light" type="button" [routerDirection]="'back'" (click)="goBack()" fill="clear" class="noBg noRipple backBtn">
+  <ion-toolbar color="light">
+    <!-- <ion-button slot="start" mode="md" type="button" [routerDirection]="'back'" (click)="goBack()" fill="clear" class="noBg noRipple backBtn">
       <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
-    </ion-button>
-    <ion-avatar slot="start" class="logo_img">
-      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
-    </ion-avatar>
-    <ion-title color="light">Profile</ion-title>
+    </ion-button> -->
+    <ion-thumbnail slot="start" class="logo_img ion-margin-start">
+      <ion-img src="../../../assets/icon/no_bg_logo.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+    <!-- <ion-title>Profile</ion-title> -->
     <ion-button mode="md" slot="end" (click)="logout()" color="danger" fill="solid" shape="round" size="small" [strong]="true" class="smLogoutBtn ion-margin-end">
       <ion-label>Log out</ion-label>
     </ion-button>
-    <ion-progress-bar color="light" type="inderminate" *ngIf="!dataLoaded && !adminDetail"></ion-progress-bar>
+    <ion-progress-bar color="teritary" type="inderminate" *ngIf="!dataLoaded && !adminDetail"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="light">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  
-  <div class="container loadingContent" *ngIf="!adminDetail">
-    <ion-card mode="md">
-      <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
-        <div slot="start" class="ion-margin-top">
-          <ion-avatar>
-            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
-          </ion-avatar>
-        </div>
-  
-        <div class="emp_name_role">
-          <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
-          <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
-        </div>
-      </ion-item>
-    </ion-card>
 
-    <ion-card mode="md" *ngFor="let item of randomList">
-      <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
-        <div class="emp_name_role">
-          <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
-          <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
-        </div>
-      </ion-item>
-    </ion-card>
-  </div>
-
-  <div class="container" *ngIf="adminDetail">
-    <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
-      <div class="emp_avatar" slot="start">
-        <ion-avatar class="employee_img">
+  <div [ngClass]="!dataLoaded || !adminDetail ? 'loadingContent container' : 'container'">
+    <div class="topBox">
+      <!-- <div class="brandDiv">
+        <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas" class="brandLogo"></ion-img>
+      </div> -->
+      <div class="ion-text-center bigAvatarDiv">
+        <ng-container *ngIf="adminDetail">
           <app-name-img [name]="getName()" *ngIf="adminDetail.imageUrl.trim() === ''"></app-name-img>
           <img *ngIf="adminDetail.imageUrl.trim() != ''" [alt]="adminDetail.firstName" [src]="adminDetail.imageUrl" />
+        </ng-container>
+        <ion-avatar *ngIf="!adminDetail">
+          <ion-skeleton-text animated="true" style="width: 100%; height: 100%;"></ion-skeleton-text>
         </ion-avatar>
       </div>
+      <ion-card mode="ios" class="pcard">
+        <ion-card-header class="ion-text-center">
+          <ion-card-title color="primary" *ngIf="adminDetail">{{adminDetail.firstName | titlecase}} {{adminDetail.lastName || "" | titlecase}}</ion-card-title>
+          <ion-card-subtitle *ngIf="adminDetail">{{adminDetail.role}}</ion-card-subtitle>
 
-      <div class="emp_name_role">
-        <ion-label class="emp_name">{{adminDetail.firstName | titlecase}} {{adminDetail.lastName || "" | titlecase}}</ion-label>
-        <ion-text class="emp_role">{{adminDetail.role}}</ion-text>
-      </div>
-    </ion-item>
+          <ion-skeleton-text animated="true" style="width: 95%; height: 15px;" *ngIf="!adminDetail"></ion-skeleton-text>
+          <ion-skeleton-text animated="true" style="width: 40%; height: 10px;" *ngIf="!adminDetail"></ion-skeleton-text>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-button size="small" color="primary" shape="round" strong="true" mode="ios" fill="solid" *ngIf="adminDetail">
+            <ion-icon slot="start" size="small" aria-hidden="true" name="pencil"></ion-icon>
+            <ion-label>Edit Profile</ion-label>
+          </ion-button>
+          <ion-button size="small" color="primary" shape="round" strong="true" mode="ios" fill="outline" routerLink="/tabs/settings" *ngIf="adminDetail">
+            <ion-icon slot="start" size="small" aria-hidden="true" name="cog-outline"></ion-icon>
+            <ion-label>Setups</ion-label>
+          </ion-button>
+          <ion-row *ngIf="!adminDetail">
+            <ion-col size="6" *ngFor="let item of [0,1]">
+              <ion-skeleton-text animated="true" style="width: 90%; height: 35px;" *ngIf="!adminDetail"></ion-skeleton-text>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+    </div>
 
-    <ion-accordion-group expand="inset" #accordionGroup mode="md" [value]="activeTab" (ionChange)="accordionChange($any($event))">
+    <ion-accordion-group #accordionGroup mode="md" [value]="activeTab" multiple="true" (ionChange)="accordionChange($any($event))" *ngIf="adminDetail">
       <ion-accordion value="Personal" mode="md">
         <ion-item slot="header" class="accordion_head_item">
           <div>
@@ -68,35 +67,38 @@
             <ion-text class="sub-header">Name, Gender, Date of Brith, Marital status</ion-text>
           </div>
         </ion-item>
-        <div class="ion-padding" slot="content">
-          <div class="personal_info_content table_row">
-            <ion-row>
-              <ion-col size="12">
-                <ion-label>Full Name</ion-label>
-                <ion-input aria-label="Full Name" [readonly]="true" [value]="adminDetail.firstName + ' '+ adminDetail.lastName || '-'"></ion-input>
-              </ion-col>
-
-              <ion-col size="6">
-                <ion-label>Date of Birth</ion-label>
-                <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="adminDetail.dateOfBirth" [value]="adminDetail.dateOfBirth | date"></ion-input>
-                <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="!adminDetail.dateOfBirth" [value]="'--'"></ion-input>
-              </ion-col>
-
-              <ion-col size="6">
-                <ion-label>Gender</ion-label>
-                <ion-input aria-label="Gender" [readonly]="true" [value]="adminDetail.gender || '-'">
-                  <!-- <div slot="label">Gender</div> -->
-                </ion-input>
-              </ion-col>
-
-              <ion-col size="6">
-                <ion-label>Marital Status</ion-label>
-                <ion-input aria-label="Marital Status" [readonly]="true" [value]="adminDetail.maritalStatus || '-'"></ion-input>
-              </ion-col>
-            </ion-row>
-          </div>
-        </div>
+        <ion-list slot="content" mode="ios">
+          <ion-item lines="none" [button]="false" [detail]="false" mode="ios" class="settingBtns_item">
+            <ion-icon name="person" aria-hidden="true" aria-label="Settings" slot="start" size="small" color="medium"></ion-icon>
+            <ion-input aria-label="Full Name" labelPlacement="floating" [readonly]="true" [value]="adminDetail.firstName + ' '+ adminDetail.lastName || '-'">
+              <div slot="label" class="label">Full Name</div>
+            </ion-input>
+          </ion-item>
+          <ion-item lines="none" [button]="false" [detail]="false" mode="ios" class="settingBtns_item">
+            <ion-icon name="calendar-number-outline" aria-hidden="true" aria-label="Settings" slot="start" size="small" color="medium"></ion-icon>
+            <ion-input aria-label="Date of Birth" labelPlacement="floating" [readonly]="true" *ngIf="adminDetail.dateOfBirth" [value]="adminDetail.dateOfBirth | date">
+              <div slot="label" class="label">Birthday</div>
+            </ion-input>
+            <ion-input aria-label="Date of Birth" labelPlacement="floating" [readonly]="true" *ngIf="!adminDetail.dateOfBirth" [value]="'--'">
+              <div slot="label" class="label">Birthday</div>
+            </ion-input>
+          </ion-item>
+          <ion-item lines="none" [button]="false" [detail]="false" mode="ios" class="settingBtns_item">
+            <ion-icon name="transgender-outline" aria-hidden="true" aria-label="Gender" slot="start" size="small" color="medium"></ion-icon>
+            <ion-input aria-label="Gender" labelPlacement="floating" [readonly]="true" [value]="adminDetail.gender || '-'">
+              <div slot="label" class="label">Gender</div>
+            </ion-input>
+          </ion-item>
+          <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item">
+            <ion-icon name="accessibility-outline" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
+            <ion-input aria-label="Marital Status" labelPlacement="floating" [readonly]="true" [value]="adminDetail.maritalStatus || '-'">
+              <div slot="label" class="label">Marital Status</div>
+            </ion-input>
+          </ion-item>
+        </ion-list>
       </ion-accordion>
+
+      <hr>
 
       <ion-accordion value="Contact" mode="md">
         <ion-item slot="header" class="accordion_head_item">
@@ -131,6 +133,7 @@
           </div>
         </div>
       </ion-accordion>
+      <hr>
 
       <ion-accordion value="Address" mode="md">
         <ion-item slot="header" class="accordion_head_item">
@@ -155,6 +158,7 @@
           </div>
         </div>
       </ion-accordion>
+      <hr>
 
       <ion-accordion value="Social_info" mode="md" *ngIf="adminDetail.linkedinUrl || adminDetail.facebookUrl || adminDetail.twitterUrl">
         <ion-item slot="header" class="accordion_head_item">
@@ -179,6 +183,7 @@
           </div>
         </div>
       </ion-accordion>
+      <hr>
       
       <ion-accordion value="Settings" mode="md">
           <ion-item slot="header" class="accordion_head_item">
@@ -188,25 +193,42 @@
             </div>
           </ion-item>
 
-          <div class="ion-padding" slot="content">                  
-            <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" (click)="editProfile()" class="settingBtns_item">
-              <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" slot="start" color="primary"></ion-icon>
-              <ion-label color="primary">Edit Profile</ion-label>
+          <ion-list slot="content" mode="ios">
+            <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" routerLink="/tabs/view-calendar" class="settingBtns_item">
+              <ion-icon name="calendar-outline" aria-hidden="true" aria-label="Settings" slot="start" size="small" color="medium"></ion-icon>
+              <ion-label>Year Calendar</ion-label>
+            </ion-item>
+            <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" routerLink="/tabs/settings" class="settingBtns_item">
+              <ion-icon name="cog-outline" aria-hidden="true" aria-label="Settings" slot="start" size="small" color="medium"></ion-icon>
+              <ion-label>Settings</ion-label>
+            </ion-item>
+            <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" (click)="editProfile()" class="settingBtns_item">
+              <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" slot="start" size="small" color="medium"></ion-icon>
+              <ion-label>Edit Profile</ion-label>
             </ion-item>
 
-            <ion-item [lines]="'none'" type="button" routerLink="/change-password" [detail]="true" class="settingBtns_item">
-              <ion-icon name="key" aria-hidden="true" aria-label="Change Password" slot="start" color="primary"></ion-icon>
-              <ion-label color="primary">Change Password</ion-label>
+            <ion-item lines="none" type="button" routerLink="/change-password" mode="ios" [detail]="true" class="settingBtns_item">
+              <ion-icon name="key" aria-hidden="true" aria-label="Change Password" slot="start" size="small" color="medium"></ion-icon>
+              <ion-label>Change Password</ion-label>
             </ion-item>
-          </div>
+
+            <ion-item lines="none" [detail]="false" type="button" mode="ios" (click)="logout()">
+              <ion-icon slot="start" name="log-out-outline" aria-hidden="true" size="small" color="danger"></ion-icon>
+              <ion-label color="danger">Log out</ion-label>
+            </ion-item>
+          </ion-list>
       </ion-accordion>
     </ion-accordion-group>
-    
-    <ion-card color="danger" type="button" mode="ios" class="ion-margin logout-card">
-      <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger" (click)="logout()">
-        <ion-label>Log out</ion-label>
-        <ion-icon slot="end" name="log-out-outline" aria-hidden="true" size="large"></ion-icon>
-      </ion-item>
-    </ion-card>
+
+    <ng-container *ngIf="!dataLoaded || !adminDetail">
+      <ion-card mode="ios" *ngFor="let item of randomList">
+        <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
+          <div class="emp_name_role">
+            <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
+          </div>
+        </ion-item>
+      </ion-card>
+    </ng-container>
   </div>
 </ion-content>

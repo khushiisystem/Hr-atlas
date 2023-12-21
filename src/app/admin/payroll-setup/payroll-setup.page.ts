@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import * as moment from 'moment';
 import { IPayrollSetupRequest } from 'src/app/interfaces/request/IPayrollSetup';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
@@ -23,7 +23,10 @@ export class PayrollSetupPage implements OnInit {
     private adminServ: AdminService,
     private loader: LoaderService,
     private shareServ: ShareService,
-  ) { }
+    private platform: Platform,
+  ) { 
+    this.backButtonEvent();
+  }
 
   ngOnInit() {
   }
@@ -50,5 +53,15 @@ export class PayrollSetupPage implements OnInit {
   }
 
   goBack(){history.back();}
+
+  backButtonEvent() {
+    this.platform.backButton.subscribeWithPriority(100, async () => {
+      if (this.employee) {
+        this.reseteEmployee();
+      } else{
+        history.back();
+      }
+    });
+  }
 
 }

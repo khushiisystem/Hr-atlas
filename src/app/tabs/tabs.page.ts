@@ -12,9 +12,11 @@ export class TabsPage {
   userRole: string = "";
   userId: string = "";
   isSwitchable: boolean = false;
+  userDetail: any;
 
   constructor(private roleStateServ: RoleStateService, private adminServ: AdminService, private userStateServ: UserStateService) {
     userStateServ.getState().subscribe(res => {
+      this.userDetail = res;
       if(!res){
         this.userId = localStorage.getItem("userId") || "";
         if(this.userId.trim() !== ""){

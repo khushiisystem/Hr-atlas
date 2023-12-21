@@ -27,20 +27,55 @@ swiper-slide {
     }
 }
 .row_one {
-    row-gap: 5px;
-    justify-content: center;
+    // row-gap: 5px;
+    // justify-content: center;
+    & .tabHeader {
+        color: var(--color-blue-gray);
+        font-weight: 600;
+        font-size: 1.4em;
+    }
     & ion-card {
         margin-inline: 0;
         margin: 0;
         width: 100%;
         height: 100%;
         text-align: center;
-        box-shadow: rgb(82 96 255 / 20%) 0px 3px 1px -2px, rgb(82 96 255 / 14%) 0px 2px 2px 0px, rgb(82 96 255 / 12%) 0px 1px 5px 0px;
+        // box-shadow: rgb(82 96 255 / 20%) 0px 3px 1px -2px, rgb(82 96 255 / 14%) 0px 2px 2px 0px, rgb(82 96 255 / 12%) 0px 1px 5px 0px;
+        box-shadow: none;
+        & ion-card-content{
+            padding-top: 7px;
+            padding-bottom: 7px;
+        }
 
-        & .icon_card {color: var(--color-primary);}
+        & ion-ripple-effect{
+            color: var(--ion-color-primary);
+        }
 
-        & ion-label {
-            color: #333;
+        & .icon_card, .svg {
+            color: var(--ion-color-primary-shade);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            & ion-icon, & .svg {
+                // background-color: #6370ff26;
+                background-color: #4b8dff36;
+                padding: 10px;
+                border-radius: 50px;
+                font-size: 25px;
+            }
+            & svg {
+                width: 25px;
+                height: 25px;
+
+                & path {
+                    fill: var(--ion-color-primary-shade);
+                }
+            }
+        }
+
+        & ion-text {
+            color: var(--color-blue-gray);
+            font-size: 80%;
         }
     }
 }
@@ -81,4 +116,108 @@ swiper-slide {
     }
 
     & .purpose {white-space: pre-line;}
+}
+
+.welcomeCard {
+    box-shadow: none;
+    ion-card-content{
+        padding-inline-start: 0;
+        padding-inline-end: 0;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        .welcomeItem {
+            & ion-avatar {
+                width: 45px;
+                height: 45px;
+            }
+             & h2 {font-weight: 600;}
+        }
+    }
+}
+
+.logo_img{
+    transform: translateY(-3px);
+}
+
+
+.attendanceList, .eventList {
+    // padding-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    box-shadow: none;
+    // box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    transition: transform 500ms cubic-bezier(0.12, 0.72, 0.29, 1) 0s, -webkit-transform 500ms cubic-bezier(0.12, 0.72, 0.29, 1) 0s;
+
+    & ion-list-header{
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background-color: #fff;
+
+        & .eventIcon{
+            max-width: 30px;
+            display: inline-block;
+            vertical-align: middle;
+            // margin-right: 10px;
+            margin-bottom: 5px;
+        }
+    }
+    .list-item {
+        // & .employee_img {width: 40px; height: 40px;}
+        
+        & .skeleton_thumb{
+            width: 30px;
+            height: 30px;
+        }
+
+        &:last-child {
+            position: sticky;
+            bottom: 0;
+            z-index: 1;
+        }
+        & .statusBtn {
+            min-width: 25px;
+            margin-right: 0;
+        }
+    }
+}
+.addEventBtn{
+    position: absolute;
+    top: 30px;
+    right: 16px;
+    z-index: 2;
+    --padding-start: 0.5em;
+    --padding-end: 0.5em;
+    --box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.14), 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.dateAvatar{
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    line-height: 1;
+    width: 45px;
+    height: 45px;
+    &.bg{
+        background-color: var(--ion-color-primary);
+    }
+    & ion-label {
+        font-size: 14px;
+        font-weight: 600;
+    }
+    & ion-text{
+        font-size: 12px;
+    }
+}
+
+.tabList{
+    background-color: var(--ion-color-dark-contrast);
+    padding: 20px 0px;
+}
+
+.customRipple{
+    color: var(--ion-color-primary);
 }

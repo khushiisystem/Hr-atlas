@@ -11,8 +11,17 @@ import { UserStateService } from '../services/userState.service';
 import { AdminService } from '../services/admin.service';
 import { AdminTutorialsPage } from '../admin/admin-tutorials/admin-tutorials.page';
 import Swiper from 'swiper';
-import { ILeaveLogsResponse } from '../interfaces/response/ILeave';
+import { IHollydayResponse, ILeaveLogsResponse } from '../interfaces/response/ILeave';
 import { AuthService } from '../core/auth.service';
+import { ProfilePopupPage } from '../employee/profile-popup/profile-popup.page';
+import { AttendaceStatus } from '../interfaces/enums/leaveCreditPeriod';
+import { IClockInResponce } from '../interfaces/response/IAttendanceSetup';
+import { HollydaySetupPage } from '../admin/hollyday-setup/hollyday-setup.page';
+
+export interface BirthItem {
+  eventDate: Date,
+  empList: IEmployeeResponse[]
+}
 
 @Component({
   selector: 'app-tab1',
@@ -35,12 +44,22 @@ export class Tab1Page implements OnInit, AfterViewInit {
   userDetails!: IEmployeeResponse;
   demoCard: any[] = [];
   requestedLeaveList: ILeaveLogsResponse[] = [];
+  employeeList: IEmployeeResponse[] = [];
+  birthdayList: IEmployeeResponse[] = [];
+  nextBirthdays: IEmployeeResponse[] = [];
+  attendanceList: IClockInResponce[] = [];
+  eventsList: IHollydayResponse[] = [];
+  upcomingEvent?: IHollydayResponse;
   clockInTime: string = '';
   clockInId: string = '';
   isSwitchable: boolean = false;
   leaveDone: boolean = false;
   attendanceDone: boolean = false;
   moreRequests: boolean = false;
+  attendanceLoaded: boolean = false;
+  eventsLoaded: boolean = false;
+  birthdayLoaded: boolean = false;
+  today: Date = new Date();
 
   constructor(
     private router: Router,
@@ -101,14 +120,20 @@ export class Tab1Page implements OnInit, AfterViewInit {
         if(res.role === 'Employee'){
           localStorage.setItem('isSwitchable', 'false');
           this.isSwitchable = false;
+          if(this.userDetails.currentAddress.addressLine1 == null || this.userDetails.currentAddress.addressLine1.trim() == ''){
+            this.openUpdationPopup();
+          }
         } else if(res.role === 'Admin') {
           localStorage.setItem('isSwitchable', 'true');
           this.checkAdminSetups();
           this.getRequests();
+          this.getTodayAttendance(this.today.toISOString(), 0);
           this.isSwitchable = true;
         }
         this.roleStateServ.updateState(this.userDetails.role);
         this.getAttendance();
+        this.getCalendar();
+        this.fetchBirthdays();
         this.isDataLoaded = true;
       }
     });
@@ -143,6 +168,49 @@ export class Tab1Page implements OnInit, AfterViewInit {
         // this.swiper.autoplay.start();
       }
     });
+  }
+
+  getTodayAttendance(dateStr: string, pageIndex: number) {
+    const handleCallback = () => {
+      this.getTodayAttendance(dateStr, pageIndex);
+    };
+    this.attendanceLoaded = false;
+    this.adminServ.getDailyAttendance(dateStr, pageIndex * 5, 5).subscribe(res => {
+      if(res.length < 1){
+        this.attendanceLoaded = true;
+        return;
+      } else {
+        res.forEach(e => {
+          const index = this.attendanceList.findIndex(item => item.employeeId === e.employeeId);
+          if(index == -1 && e.EmployeeDetails != null){
+            this.attendanceList.push(e);
+          }
+        });
+        
+        if (this.attendanceList.length < 5 && res.length > 4) {
+          pageIndex++;
+          handleCallback();
+        } else {
+          this.attendanceLoaded = true;
+        }
+      }
+    }, (error) => {
+      this.attendanceLoaded = true;
+    });
+  }
+
+  getStatus(empId: string){
+    let status: AttendaceStatus = AttendaceStatus.ABSENT;
+    if(this.attendanceList.length < 1){
+      return AttendaceStatus.ABSENT;
+    } else {
+      this.attendanceList.forEach((item) => {
+        if(item.employeeId === empId){
+          status = item.status;
+        }
+      });
+    }
+    return status;
   }
 
   getRequests(){
@@ -183,7 +251,126 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   toggleStopwatch() {
-    !this.isRunning ? this.clockIn() : this.clockOut();
+    if(this.userDetails.currentAddress.addressLine1 !== null && this.userDetails.currentAddress.addressLine1.trim() !== ''){
+      !this.isRunning ? this.clockIn() : this.clockOut();
+    } else {
+      this.openUpdationPopup();
+    }
+  }
+  
+  async openUpdationPopup() {
+    const setPopop = await this.popoverCtrl.create({
+      component: ProfilePopupPage,
+      cssClass: 'profileUpdationPopup',
+      arrow: false,
+      mode: 'ios',
+      size: 'cover',
+      translucent: false,
+      // event: event,
+      backdropDismiss: false,
+      dismissOnSelect: false,
+    });
+
+    await setPopop.present();
+
+    await setPopop.onDidDismiss().then(res => {
+      if(res.role === 'settingProfile'){
+        localStorage.setItem('lastRoute', this.router.url);
+        this.router.navigate([`/tabs/edit-profile/${this.userId}`]);
+      }
+    });
+  }
+  
+  getCalendar(){
+    this.eventsList = [];
+    this.adminServ.getEventHollyday(moment.utc(this.today).format()).subscribe(res => {
+      if(res) {
+        if(res.length < 1) {
+          this.eventsLoaded = true;
+          return;
+        } else {
+          this.eventsList = res;
+          const sortArray = this.eventsList.sort((a,b) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
+          const filteredArray = sortArray.filter((item) => new Date(item.eventDate) >= new Date(this.today))
+          if(filteredArray.length > 0){
+            this.upcomingEvent = filteredArray[0];
+          }
+          this.eventsLoaded = true;
+        }
+      }
+    }, (error) => {
+      this.eventsLoaded = true;
+    });
+  }
+  
+  async createHollyday() {
+    const eventModal = this.modalCtrl.create({
+      component: HollydaySetupPage,
+      mode: 'md',
+      initialBreakpoint: 1,
+      componentProps: {action: 'add', hollyday: null}
+    });
+
+    (await eventModal).present();
+
+    (await eventModal).onDidDismiss().then(result => {
+      if(result && result.role === 'confirm'){
+        this.eventsLoaded = false;
+        this.getCalendar();
+      }
+    });
+  }
+
+  getDate(dateStr: string | Date){
+    return new Date(dateStr);
+  }
+
+  fetchBirthdays(){
+    var result: { [formattedDate: string]: BirthItem } = {};
+    this.shareServ.upcomingBirthday().subscribe(res => {
+      if(!res || res.length < 1) {
+        this.birthdayLoaded = true;
+        return;
+      } else {
+        res.forEach(user => {
+          var formattedDate = moment(user.dateOfBirth).format();
+      
+          if (!result[formattedDate]) {
+            result[formattedDate] = { eventDate: new Date(formattedDate), empList: [] };
+          }
+      
+          result[formattedDate].empList.push(user);
+        });
+      
+        // Convert the result object to an array of values
+        var resultArray = Object.values(result);
+        console.log(resultArray);
+
+        const sortArray = res.sort((a,b) => new Date(a.dateOfBirth).getTime() - new Date(b.dateOfBirth).getTime());
+        if(sortArray.length > 0){
+          this.birthdayList = [...sortArray.slice(0,9)];
+          this.birthdayList.forEach((e) => {
+            if(!this.getTodaysBirthday().includes(e)){
+              this.nextBirthdays.push(e);
+            }
+          });
+        }
+        this.birthdayLoaded = true;
+      }
+    }, (error) => {
+      this.birthdayLoaded = true;
+    });
+  }
+
+  getTodaysBirthday(){
+    const getTime = (timeStr: string | Date) =>{
+      moment(timeStr).date() == moment(this.today).date();
+    }
+    return this.birthdayList.filter((item) => getTime(item.dateOfBirth));
+  }
+
+  mathcDate(dateStr: string | Date, dateStr2: string | Date){
+    return moment(dateStr).year() === moment(dateStr2).year() && moment(dateStr).month() === moment(dateStr2).month() && moment(dateStr).date() === moment(dateStr2).date();
   }
 
   clockIn() {

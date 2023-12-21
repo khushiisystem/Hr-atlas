@@ -45,6 +45,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     });
     this.lastRoute = localStorage.getItem('lastRoute') || "";
     this.isDataLoaded = false;
+    this.pageIndex = 0;
     this.getEmployeeList();
     this.searchSubject.pipe(debounceTime(this.debounceTimeMs)).subscribe((searchValue) => {
       this.searchEmployee(searchValue);
@@ -59,10 +60,12 @@ export class DirectoryPage implements OnInit, OnDestroy {
       if(res){
         const data: IEmployeeResponse[] = res;
         for(let i=0; i<data.length; i++){
-          this.employeeList.push(res[i]);
+          if(!this.employeeList.includes(data[i])){
+            this.employeeList.push(res[i]);
+          }
         }
         
-        this.isMoreData = res.length > 9;
+        this.isMoreData = data.length > 9;
         this.infiniteScroll.complete();
         this.isDataLoaded = true;
       }
