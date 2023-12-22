@@ -7,6 +7,8 @@ import { EditProfilePage } from '../edit-profile/edit-profile.page';
 import { IAddress } from 'src/app/interfaces/request/IEmployee';
 import { IEmployeeResponse, IEmployeeWrokResponse } from 'src/app/interfaces/response/IEmployee';
 import { ShareService } from 'src/app/services/share.service';
+import { IEmplpoyeeWorWeek } from 'src/app/interfaces/response/IEmplpoyeeWorWeek';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-profile',
@@ -18,16 +20,19 @@ export class ProfilePage implements OnInit {
   employeeId: string = "";
   employeeDetail!: IEmployeeResponse;
   workDetail!: IEmployeeWrokResponse;
-  activeTab: string = "";
+  workWeekDetail!: IEmplpoyeeWorWeek;
+  activeTab: string[] = ["experience", "Personal", "Employment", "workWeek", "Contact", "Address", "Social_info"];
+  weekArray: string[] = [];
+  offDays: string[] = [];
   dataLoaded: boolean = false;
+  workLoaded: boolean = false;
+  workWeekLoaded: boolean = false;
   expandedAccordion: string = "Personal";
 
   constructor(
     private router: Router,
     private authServ: AuthService,
     private shareServ: ShareService,
-    private loadingServ: LoaderService,
-    private modalCtrl: ModalController,
   ) { }
 
   ngOnInit() {
@@ -38,6 +43,7 @@ export class ProfilePage implements OnInit {
     if(this.employeeId.trim() !== ''){
       this.getEmployeeDetails();
       this.getWorkDetails();
+      this.getWorkWeek();
     }
   }
 
@@ -58,6 +64,7 @@ export class ProfilePage implements OnInit {
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
       if(res) {
         this.workDetail = res[0];
+        this.workLoaded = true;
       }
     });
   }
@@ -89,6 +96,28 @@ export class ProfilePage implements OnInit {
   //     }
   //   });
   // }
+
+  accordionChange(event: CustomEvent){
+    if(event.detail.value){
+      this.activeTab = event.detail.value;
+    }
+  }
+  
+  getWorkWeek(){
+    this.workWeekLoaded = false;
+    this.offDays = [];
+    this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(res => {
+      if(res) {
+        this.workWeekDetail = res;
+        this.weekArray = moment.weekdays();
+        this.offDays = this.workWeekDetail.workweekDetails.weekOff;
+        this.workWeekLoaded = true;
+      }
+    }, (error) => {
+      this.workWeekLoaded = true;
+    });
+  }
+
   editProfile(){
     localStorage.setItem('lastRoute', this.router.url);
     this.router.navigate([`/tabs/edit-profile/${this.employeeId}`]);

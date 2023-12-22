@@ -154,6 +154,7 @@ swiper-slide {
         top: 0;
         z-index: 2;
         background-color: #fff;
+        --color: var(--color-blue-gray, #263636);
 
         & .eventIcon{
             max-width: 30px;

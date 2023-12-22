@@ -1,6 +1,67 @@
 .container {
     ion-title{display: block; text-align: center;}
 }
+.stickyTop {
+    position: sticky;
+    top: 50px;
+    z-index: 3;
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255,255,255,0.8);
+    transition: all 0.3s ease;
+}
+
+.optbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin: 0 16px;
+    transition: all 0.5s ease;
+
+    & ion-button {
+        --box-shadow: none;
+        text-transform: capitalize;
+        // min-height: 32px;
+        transition: all 0.3s ease;
+    }
+
+    & ion-item {
+        --min-height: 30px;
+        --background: var(--ion-color-light);
+        border-radius: 50px;
+        flex: 1 1 0%;
+        transition: all 0.3s ease;
+        z-index: 0;
+
+        & .startIcon {
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-right: 10px;
+        }
+
+        & ion-input {
+            min-height: 40px;
+            outline: none;
+            border: none;
+            font-size: 14px;
+            --highlight-color-valid: var(--ion-color-tertiary);
+        }
+    }
+}
+.expandBtn{
+    margin-top: 20px;
+    align-self: center;
+}
+form {
+    & ion-buttons {
+        margin-top: 30px;
+        justify-content: flex-end;
+        gap: 10px;
+        & .formBtn{
+            flex: 0 0 100px;
+        }
+    }
+}
 .tab_segement {
     position: sticky;
     top: 0;
@@ -37,6 +98,13 @@
         &.sso {border-left: 5px solid var(--color-primary);}
         &.so {border-left: 5px solid var(--ion-color-primary);}
     }
+}
+
+.listLbl{
+    max-height: 250px;
+    overflow-y: overlay;
+    scroll-behavior: smooth;
+    clip-rule: evenodd;
 }
 
 .list-item {

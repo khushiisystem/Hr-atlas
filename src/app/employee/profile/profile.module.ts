@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonSkeletonText, IonicModule } from '@ionic/angular';
 
 import { ProfilePageRoutingModule } from './profile-routing.module';
 
@@ -19,6 +19,7 @@ import { AuthGuard } from 'src/app/core/auth.guard';
     NameImgPageModule,
   ],
   declarations: [ProfilePage],
-  providers:[AuthGuard]
+  providers:[AuthGuard, IonSkeletonText],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ProfilePageModule {}

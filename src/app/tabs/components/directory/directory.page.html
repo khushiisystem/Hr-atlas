@@ -19,7 +19,7 @@
 </ion-header>
 
 <ng-container *ngIf="userRole === 'Admin'">
-  <ion-popover trigger="filterPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter">
+  <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" size="auto" side="bottom" alignment="end" class="filter">
     <ng-template>
       <ion-content>
         <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
@@ -74,7 +74,7 @@
           </div>
           <div class="employee_data">
             <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-            <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+            <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle}}</small></ion-text>
           </div>
         </ion-item>
     
@@ -101,7 +101,7 @@
         </div>
         <div class="employee_data">
           <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-          <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+          <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle}}</small></ion-text>
         </div>
       </ion-item>
     </ion-list>

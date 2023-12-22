@@ -81,7 +81,7 @@
           </ion-avatar>
           <ion-label color="tertiary">
             <h2 *ngIf="userDetails">Welcome, {{userDetails.firstName | titlecase}} {{userDetails.lastName}}</h2>
-            <ion-text *ngIf="userDetails" color="medium"><small>{{userRole}}</small></ion-text>
+            <ion-text *ngIf="userDetails" color="medium"><small>{{userDetails && userDetails.employeeWorkDetails ? userDetails.employeeWorkDetails.jobTitle : userRole}}</small></ion-text>
             <ion-skeleton-text style="width: 100%;" animated="true" *ngIf="!userDetails"></ion-skeleton-text>
             <ion-skeleton-text style="width: 50%;" animated="true" *ngIf="!userDetails"></ion-skeleton-text>
           </ion-label>

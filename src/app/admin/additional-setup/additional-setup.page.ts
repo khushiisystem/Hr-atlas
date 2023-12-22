@@ -35,7 +35,7 @@ export class AdditionalSetupPage implements OnInit {
   randomCard: any[] = [];
   selectedEmployee: any[] = [];
   employeeList: IEmployeeResponse[] = [];
-  isDataLoaded: boolean = false;
+  isEmployeeLoaded: boolean = false;
   pageIndex: number = 0;
   isMoreEmployee: boolean = false;
   searchString: string = "";
@@ -72,14 +72,20 @@ export class AdditionalSetupPage implements OnInit {
   
   selectAll(event: CustomEvent) {
     if(event.detail.checked === true){
-      this.employeeList.forEach((e: IEmployeeResponse, index) => {
-        if(!this.selectedEmployee.includes(e.guid)){
-          this.selectedEmployee.push(e.guid);
-        }
-      });
+      this.markAll();
     } else if(event.detail.checked === false) {
       this.selectedEmployee = [];
     }
+  }
+  markAll(){
+    this.employeeList.forEach((e: IEmployeeResponse, index) => {
+      if(!this.selectedEmployee.includes(e.guid)){
+        this.selectedEmployee.push(e.guid);
+      }
+    });
+  }
+  unMarkAll(){
+    this.selectedEmployee = [];
   }
 
   selectEmployee(employee: string) {
@@ -132,7 +138,7 @@ export class AdditionalSetupPage implements OnInit {
   searchEmployee(searchValue: string){
     if(searchValue.trim().length > 3){
       this.selectedEmployee = [];
-      this.isDataLoaded = false;
+      this.isEmployeeLoaded = false;
       const data = {
         searchString: searchValue,
         status: 'Active'
@@ -141,11 +147,11 @@ export class AdditionalSetupPage implements OnInit {
       this.shareServ.searchEmployee(data).subscribe(res => {
         if(res){
           this.employeeList = res;
-          this.isDataLoaded = true;
+          this.isEmployeeLoaded = true;
         }
       }, (error) => {
         console.log(error, "search error");
-        this.isDataLoaded = true;
+        this.isEmployeeLoaded = true;
       });
     } else {
       this.getEmployees();
@@ -170,14 +176,16 @@ export class AdditionalSetupPage implements OnInit {
   }
 
   getEmployees(){
-    this.isDataLoaded = false;
+    this.isEmployeeLoaded = false;
     this.shareServ.getAllEmployee('Active', this.pageIndex * 20, 20).subscribe(res => {
       if(res){
         this.employeeList = res;
         this.isMoreEmployee = res.length > 19;
-        this.isDataLoaded = true;
+        this.isEmployeeLoaded = true;
       }
-    })
+    }, (error) => {
+      this.isEmployeeLoaded = true;
+    });
   }
 
   next(){
@@ -230,7 +238,7 @@ export class AdditionalSetupPage implements OnInit {
 
   getWorkWeek(){
     this.sheetBtns = [];
-    this.isDataLoaded = false;
+    this.isEmployeeLoaded = false;
     this.adminServ.getWorkWeek(0, 10).subscribe(res => {
       if(res) {
         this.workWeekList = res;
@@ -244,10 +252,10 @@ export class AdditionalSetupPage implements OnInit {
           };
           this.sheetBtns.push(btnObj);
         });
-        this.isDataLoaded = true;
+        this.isEmployeeLoaded = true;
       }
     }, (error) => {
-      this.isDataLoaded = true;
+      this.isEmployeeLoaded = true;
     });
   }
 
