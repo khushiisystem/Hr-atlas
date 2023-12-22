@@ -23,13 +23,21 @@ ion-content {
     }
 }
 .pcard {
-    padding-top: 60px;
+    padding-top: 45px;
     margin-top: 60px;
 
     & ion-card-header{
-        padding: 0 5px;
+        // padding: 0 5px;
         display: grid;
         gap: 5px;
+    }
+
+    & ion-buttons{
+        gap: 10px;
+        & ion-button{
+            --padding-start: 16px;
+            --padding-end: 16px;
+        }
     }
 }
 
@@ -51,7 +59,7 @@ ion-content {
 }
 .container {
     position: relative;
-    padding-bottom: 10px;
+    // padding-bottom: 10px;
     min-height: calc(100% - 16px);
 }
 
@@ -103,7 +111,21 @@ ion-accordion-group{
 
 ion-accordion ion-item[slot="header"], .btn_item {--ripple-color: var(--ion-color-primary)}
 .accordion_head_item {
-    & div {padding: 15px 0; white-space: break-spaces; overflow: hidden; line-height: 1.5;}
+    & label{--color: var(--color-blue-gray);}
+    // & div {padding: 15px 0; white-space: break-spaces; overflow: hidden; line-height: 1.5;}
+    .svgimg{
+        max-width: 30px;
+        max-height: 30px;
+        overflow: hidden;
+        margin-right: 16px;
+        & svg {
+            fill: var(--ion-color-primary);
+        }
+    }
+
+    & ion-icon[slot='start'] {
+        margin-right: 16px;
+    }
     & .sub-header {
         font-size: 0.8rem;
         color: var(--ion-color-medium);
@@ -169,14 +191,37 @@ ion-accordion ion-item[slot="header"], .btn_item {--ripple-color: var(--ion-colo
 
 .header-toolbar {
     --ion-toolbar-background: rgb(255, 106, 0);
-    --ion-color-base: black;
+    --ion-color-base: var(--color-blue-gray);
 }
 .settingBtns_item{
     --ripple-color: var(--ion-color-primary);
+    &.addressItem{
+        & ion-icon[slot='start']{
+            align-self: self-start;
+            margin-top: 10px;
+        }
+    }
     & ion-input {
+        --color: var(--color-blue-gray);
+        font-size: 0.9em;
         & .label{
             color: var(--ion-color-medium);
+            font-size: 16px;
         }
+    }
+}
+.weekDaysItem{
+    & ion-icon[slot="start"]{
+        margin-top: 10px;
+        align-self: flex-start;
+    }
+
+    & ion-label{margin-right: 0;}
+
+    & ion-chip {
+        transform: translateX(-4px);
+        font-size: 0.8em; font-weight: 600;
+        transition: all 0.3s ease;
     }
 }
 .brandDiv{

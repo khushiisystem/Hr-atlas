@@ -1,391 +1,394 @@
 <ion-header [translucent]="true" mode="md" class="main-header">
   <ion-toolbar>
-    <ion-button slot="start" mode="md" color="light" type="button" [routerDirection]="'back'" (click)="goBack()" fill="clear" class="noBg noRipple backBtn">
+    <!-- <ion-button slot="start" mode="md" color="light" type="button" [routerDirection]="'back'" (click)="goBack()" fill="clear" class="noBg noRipple backBtn">
       <ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon>
-    </ion-button>
-    <ion-avatar slot="start" class="logo_img">
-      <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
-    </ion-avatar>
-    <ion-title color="light">Profile</ion-title>
-    <ion-button mode="md" slot="end" (click)="logout()" color="danger" fill="solid" shape="round" size="small" [strong]="true" class="smLogoutBtn ion-margin-end" *ngIf="employeeDetail">
+    </ion-button> -->
+    <ion-thumbnail slot="start" class="logo_img ion-margin-start">
+      <ion-img src="../../../assets/icon/no_bg_logo.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+    <ion-title>My Profile</ion-title>
+    <ion-button mode="md" slot="end" (click)="logout()" color="danger" fill="solid" shape="round" size="small" [strong]="true" class="smLogoutBtn ion-margin-end"*ngIf="employeeDetail">
       <ion-label>Log out</ion-label>
     </ion-button>
     <ion-progress-bar color="light" type="inderminate" *ngIf="!dataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="light">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div class="container loadingContent" *ngIf="!employeeDetail">
-    <ion-card mode="ios">
-      <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
-        <div slot="start" class="ion-margin-top">
-          <ion-avatar>
-            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
-          </ion-avatar>
-        </div>
-  
-        <div class="emp_name_role">
-          <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
-          <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
-        </div>
-      </ion-item>
-    </ion-card>
-
-    <ion-card mode="ios" *ngFor="let item of [1,2,3]">
-      <ion-item lines="none" class="noBg ion-margin-bottom" mode="md" button="false">
-        <div class="emp_name_role">
-          <ion-skeleton-text [animated]="true" style="width: 90%;"></ion-skeleton-text>
-          <ion-skeleton-text [animated]="true" style="width: 50%;"></ion-skeleton-text>
-        </div>
-      </ion-item>
-    </ion-card>
-  </div>
-    <div class="container" *ngIf="employeeDetail">
-        <ion-card mode="md" class="profile_card ion-margin">
-          <ion-item lines="none" class="noBg">
-            <div class="emp_avatar" slot="start">
-              <ion-avatar class="employee_img">
-                <app-name-img [name]="getName()" *ngIf="employeeDetail.imageUrl.trim() === ''"></app-name-img>
-                <img *ngIf="employeeDetail.imageUrl.trim() != ''" alt="Employee" [src]="employeeDetail.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
-              </ion-avatar>
-              <!-- <span class="edit_btn">
-                <ion-icon name="pencil" aria-hidden="true"></ion-icon>
-              </span> -->
-            </div>
-    
-            <div class="emp_name_role">
-              <ion-label class="emp_name">{{employeeDetail.firstName | titlecase}} {{employeeDetail.lastName || "" | titlecase}}</ion-label>
-              <ion-text class="emp_role" *ngIf="employeeDetail.employeeWorkDetails">{{employeeDetail.employeeWorkDetails.jobTitle}}</ion-text>
-            </div>
-          </ion-item>
-        </ion-card>
-    
-        <ion-accordion-group expand="inset" #accordionGroup mode="md">
-          <ion-accordion value="Personal" mode="md">
-            <ion-item slot="header" class="accordion_head_item">
-              <div>
-                <ion-label>Personal</ion-label>
-                <ion-text class="sub-header">Personal info, contact info, address, social info</ion-text>
-              </div>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              
-              <ion-item-divider>
-                <div class="personal_info">
-                  <div class="nested_item ion-margin-bottom">
-                    <ion-label>Personal Information</ion-label>
-                    <div class="toggle_btn" slot="end">
-                      <ion-icon></ion-icon>
-                    </div>
-                    <ion-ripple-effect></ion-ripple-effect>
-                  </div>
-    
-                  <div class="personal_info_content table_row">
-                    <ion-row>
-                      <ion-col size="12">
-                        <ion-label>Full Name</ion-label>
-                        <ion-input aria-label="Full Name" [readonly]="true" [value]="employeeDetail.firstName + ' '+ employeeDetail.lastName || '-'"></ion-input>
-                      </ion-col>
-        
-                      <ion-col size="6">
-                        <ion-label>Date of Birth</ion-label>
-                        <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="employeeDetail.dateOfBirth" [value]="employeeDetail.dateOfBirth | date"></ion-input>
-                        <ion-input aria-label="Date of Birth" [readonly]="true" *ngIf="!employeeDetail.dateOfBirth" [value]="'--'"></ion-input>
-                      </ion-col>
-        
-                      <ion-col size="6">
-                        <ion-label>Gender</ion-label>
-                        <ion-input aria-label="Gender" [readonly]="true" [value]="employeeDetail.gender || '-'">
-                          <!-- <div slot="label">Gender</div> -->
-                        </ion-input>
-                      </ion-col>
-        
-                      <ion-col size="6">
-                        <ion-label>Marital Status</ion-label>
-                        <ion-input aria-label="Marital Status" [readonly]="true" [value]="employeeDetail.maritalStatus || '-'"></ion-input>
-                      </ion-col>
-                    </ion-row>
-                  </div>
-                </div>
-              </ion-item-divider>
-  
-              <ion-item-divider>
-                <div class="contact_info ion-margin-top ion-padding-top">
-                  <div class="nested_item ion-margin-bottom">
-                    <ion-label>Contact Information</ion-label>
-                    <div class="toggle_btn" slot="end">
-                      <ion-icon></ion-icon>
-                    </div>
-                  </div>
-    
-                  <div class="contact_info_content table_row">
-                    <ion-row>
-                      <ion-col size="12">
-                        <ion-label>Phone Number</ion-label>
-                        <ion-input aria-label="Phone Number" [value]="employeeDetail.mobileNumber || '-'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="12">
-                        <ion-label>Alternate Phone Number</ion-label>
-                        <ion-input aria-label="Alternate Phone Number" [value]="employeeDetail.alternateMobileNumber || '-'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="12">
-                        <ion-label>Personal Email</ion-label>
-                        <ion-input aria-label="Personal Email" [value]="employeeDetail.email || '-'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="12">
-                        <ion-label>Official Email</ion-label>
-                        <ion-input aria-label="Official Email" [value]="employeeDetail.officialEmail || '-'"></ion-input>
-                      </ion-col>
-                    </ion-row>
-                  </div>
-                </div>
-              </ion-item-divider>
-  
-              <ion-item-divider>
-                <div class="address_info ion-margin-top ion-padding-top">
-                  <div class="nested_item ion-margin-bottom">
-                    <ion-label>Address</ion-label>
-                    <div class="toggle_btn" slot="end">
-                      <ion-icon></ion-icon>
-                    </div>
-                  </div>
-    
-                  <div class="address_info_content table_row">
-                    <ion-row>
-                      <ion-col size="12">
-                        <ion-label>Current Address</ion-label>
-                        <ion-input aria-label="Current Address" [value]="employeeDetail.permanentAddress ? getAddress(employeeDetail.currentAddress) : '-'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="12">
-                        <ion-label>Permanent Address</ion-label>
-                        <ion-input aria-label="Permanent Address" [value]="employeeDetail.permanentAddress ? getAddress(employeeDetail.permanentAddress) : '-'"></ion-input>
-                      </ion-col>
-                    </ion-row>
-                  </div>
-                </div>
-              </ion-item-divider>
-  
-              <ion-item [lines]="'none'" [button]="false" *ngIf="employeeDetail.linkedinUrl || employeeDetail.facebookUrl || employeeDetail.twitterUrl">
-                <div class="social_info ion-margin-top ion-padding-top">
-                  <div class="nested_item ion-margin-bottom">
-                    <ion-label>Social Information</ion-label>
-                    <div class="toggle_btn" slot="end">
-                      <ion-icon></ion-icon>
-                    </div>
-                  </div>
-                  
-                  <div class="social_info_content">
-                    <div class="social_links">                 
-                      <a class="link_item linkedin" [href]="employeeDetail.linkedinUrl" rel="noopener" target="_blank" *ngIf="employeeDetail.linkedinUrl">
-                        <ion-icon name="logo-linkedin" aria-hidden="true" size="large"></ion-icon>
-                      </a>
-                      <a class="link_item fb" [href]="employeeDetail.facebookUrl" rel="noopener" target="_blank" *ngIf="employeeDetail.facebookUrl">
-                        <ion-icon name="logo-facebook" aria-hidden="true" size="large"></ion-icon>
-                      </a>
-                      <a class="link_item twitter" [href]="employeeDetail.twitterUrl" rel="noopener" target="_blank" *ngIf="employeeDetail.twitterUrl">
-                        <ion-icon name="logo-twitter" aria-hidden="true" size="large"></ion-icon>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </ion-item>
-            </div>
-          </ion-accordion>
-          
-          <ion-accordion value="Team" mode="md">
-              <ion-item slot="header" class="accordion_head_item">
-                  <div>
-                      <ion-label>Team</ion-label>
-                      <!-- <ion-text class="sub-header">Basic info, work info, work history</ion-text> -->
-                  </div>
-              </ion-item>
-              <div class="ion-padding" slot="content">
-                <ion-label>Comming Soon!</ion-label>
-              </div>
-          </ion-accordion>
-          
-          <ion-accordion value="Work" mode="md">
-            <ion-item slot="header" class="accordion_head_item">
-              <div>
-                <ion-label>Work</ion-label>
-                <ion-text class="sub-header">Basic info, work info, work history</ion-text>
-              </div>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              
-              <ion-item-divider>
-                <div class="basic_info">
-                  <div class="nested_item ion-margin-bottom">
-                    <ion-label>Basic Information</ion-label>
-                    <div class="toggle_btn" slot="end">
-                      <ion-icon></ion-icon>
-                    </div>
-                  </div>
-    
-                  <div class="basic_info_content table_row">
-                    <ion-row>
-                      <ion-col size="12">
-                        <ion-label>Employee ID</ion-label>
-                        <ion-input aria-label="Employee ID" *ngIf="!workDetail && employeeDetail" [value]="employeeDetail.employeeId"></ion-input>
-                        <ion-input aria-label="Employee ID" *ngIf="workDetail" [value]="workDetail.employeeId"></ion-input>
-                        <ion-input aria-label="Employee ID" *ngIf="!workDetail && !employeeDetail" [value]="'--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="6">
-                        <ion-label>Employee Type</ion-label>
-                        <ion-input aria-label="Employee Type" [value]="workDetail ? workDetail.employeeType : '--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="6">
-                        <ion-label>Status</ion-label>
-                        <ion-input aria-label="Status" [value]="workDetail ? workDetail.status : '--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="6">
-                        <ion-label>Date of Joining</ion-label>
-                        <ion-input aria-label="Date of Joining" *ngIf="workDetail && workDetail.joiningDate" [value]="workDetail.joiningDate | date"></ion-input>
-                        <ion-input aria-label="Date of Joining" *ngIf="!workDetail || !workDetail.joiningDate" [value]="'--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="6">
-                        <ion-label>Work Experience</ion-label>
-                        <ion-input aria-label="Work Experience" [value]="workDetail ? workDetail.work_experience : '--'"></ion-input>
-                      </ion-col>                  
-    
-                      <ion-col size="12">
-                        <ion-label>Work Location</ion-label>
-                        <ion-input aria-label="Work Location" [value]="workDetail ? workDetail.workLocation : '--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="6">
-                        <ion-label>Probation Period</ion-label>
-                        <ion-input aria-label="Probation Period" [value]="workDetail ? workDetail.probationPeriod : '--'"></ion-input>
-                      </ion-col>
-                    </ion-row>
-                  </div>
-                </div>
-              </ion-item-divider>
-  
-              <ion-item-divider *ngIf="workDetail">
-                <div class="work_info ion-margin-top ion-padding-top">
-                  <div class="nested_item ion-margin-bottom">
-                    <ion-label>Work Information</ion-label>
-                    <div class="toggle_btn" slot="end">
-                      <ion-icon></ion-icon>
-                    </div>
-                  </div>
-    
-                  <div class="work_info_content table_row">
-                    <ion-row>
-                      <ion-col size="12">
-                        <ion-label>Designation</ion-label>
-                        <ion-input aria-label="Designation" [value]="workDetail ? workDetail.designation : '--'"></ion-input>
-                      </ion-col>
-  
-                      <ion-col size="12">
-                        <ion-label>Job Title</ion-label>
-                        <ion-input aria-label="Job Title" [value]="workDetail ? workDetail.jobTitle : '--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="12">
-                        <ion-label>Department</ion-label>
-                        <ion-input aria-label="Department" [value]="workDetail ? workDetail.department : '--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="12">
-                        <ion-label>Sub Department</ion-label>
-                        <ion-input aria-label="Sub Department" [value]="workDetail ? workDetail.subDepartment : '--'"></ion-input>
-                      </ion-col>
-                    </ion-row>
-                  </div>
-                </div>
-              </ion-item-divider>
-  
-              <ion-item [lines]="'none'" [button]="false" *ngIf="workDetail && workDetail.workHistory.length > 0">
-                <div class="work_history_info ion-margin-top ion-padding-top">
-                  <div class="nested_item ion-margin-bottom">
-                    <ion-label>Work History</ion-label>
-                    <div class="toggle_btn" slot="end">
-                      <ion-icon></ion-icon>
-                    </div>
-                  </div>
-    
-                  <div class="work_history_info_content table_row" *ngFor="let history of workDetail.workHistory; index as a;">
-                    <ion-row>
-                      <ion-col size="12">
-                        <ion-label>Department</ion-label>
-                        <ion-input aria-label="Department" [value]="history.department ? history.department : '--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="12">
-                        <ion-label>Designation</ion-label>
-                        <ion-input aria-label="Designation" [value]="history.designation ? history.designation : '--'"></ion-input>
-                      </ion-col>
-    
-                      <ion-col size="12">
-                        <ion-label>From - To</ion-label>
-                        <ion-input aria-label="Work Duration" *ngIf="history.from && history.to " [value]="(history.from | date) + ' - '+ (history.to | date) "></ion-input>
-                        <ion-input aria-label="Work Duration" *ngIf="!history.from || !history.to " [value]="'--'"></ion-input>
-                      </ion-col>
-                    </ion-row>
-                  </div>
-                </div>
-              </ion-item>
-            </div>
-          </ion-accordion>
-
-          <ion-accordion value="Settings" mode="md">
-              <ion-item slot="header" class="accordion_head_item">
-                <div>
-                  <ion-label>Settings</ion-label>
-                  <ion-text class="sub-header">Edit profile, Change Password</ion-text>
-                </div>
-              </ion-item>
-
-              <div class="ion-padding" slot="content">                  
-                <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" (click)="editProfile()" class="settingBtns_item">
-                  <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" slot="start" color="primary"></ion-icon>
-                  <ion-label color="primary">Edit Profile</ion-label>
-                </ion-item>
-
-                <ion-item [lines]="'full'" type="button" [button]="true" [detail]="true" class="settingBtns_item" (click)="setupWorkInfo()" *ngIf="employeeDetail.role === 'Admin'">
-                  <ion-icon name="person" aria-hidden="true" slot="start" color="primary"></ion-icon>
-                  <ion-label color="primary">{{workDetail ? 'Update' : 'Add'}} Work</ion-label>
-                </ion-item>
-
-                <ion-item [lines]="'full'" type="button" routerLink="/change-password" [detail]="true" class="settingBtns_item">
-                  <ion-icon name="key" aria-hidden="true" aria-label="Change Password" slot="start" color="primary"></ion-icon>
-                  <ion-label color="primary">Change Password</ion-label>
-                </ion-item>
-              </div>
-          </ion-accordion>
-        </ion-accordion-group>
-        
-        <ion-card type="button" mode="ios" class="ion-margin">
-          <ion-item [lines]="'none'" [detail]="true" [button]="true" [mode]="'md'" class="accordion_head_item btn_item" (click)="workWeek()">
-            <div>
-              <ion-label>Work-week</ion-label>
-              <ion-text class="sub-header">Work-week assigned to the staff</ion-text>
-            </div>
-          </ion-item>
-        </ion-card>
-
-        <ion-card color="danger" type="button" mode="ios" class="ion-margin logout-card">
-          <ion-item [lines]="'none'" [detail]="false" [button]="true" [mode]="'md'" color="danger" (click)="logout()">
-            <ion-label>Log Out</ion-label>
-            <ion-icon slot="end" name="log-out-outline" aria-hidden="true" size="large"></ion-icon>
-          </ion-item>
-        </ion-card>
-        <!-- <ion-card (click)="openWorkPage() ">
-          <ion-card-header color="danger "> Work </ion-card-header>
-        </ion-card> -->
+  <div class="topBox ion-margin-bottom">
+    <div class="bannerDiv"></div>
+    <div class="bigAvatarDiv">
+      <ng-container *ngIf="employeeDetail">
+        <app-name-img [name]="getName()" *ngIf="employeeDetail.imageUrl.trim() === ''"></app-name-img>
+        <img *ngIf="employeeDetail.imageUrl.trim() != ''" [alt]="employeeDetail.firstName" [src]="employeeDetail.imageUrl" />
+      </ng-container>
+      <ion-avatar *ngIf="!employeeDetail">
+        <ion-skeleton-text animated="true" style="width: 100%; height: 100%"></ion-skeleton-text>
+      </ion-avatar>
     </div>
+    <ion-list mode="ios" class="pcard" lines="none">
+      <ion-list-header>
+        <ion-label>
+          {{employeeDetail ? employeeDetail.firstName + ' ' + employeeDetail.lastName : '' | titlecase}}
+          <p *ngIf="employeeDetail">{{employeeDetail.role}}</p>
+          <ion-skeleton-text animated="true" style="width: 95%; height: 15px" *ngIf="!employeeDetail"></ion-skeleton-text>
+          <ion-skeleton-text animated="true" style="width: 40%; height: 10px" *ngIf="!employeeDetail"></ion-skeleton-text>
+        </ion-label>
+        <ion-button mode="ios" shape="round" size="small" fill="clear" color="tertiary" aria-label="Edit Profile" class="editSmallBtn" *ngIf="employeeDetail">
+          <ion-icon name="pencil" slot="icon-only" aria-label="Edit"></ion-icon>
+        </ion-button>
+      </ion-list-header>
+      <ion-item detail="false">
+        <ion-label class="ion-text-wrap">
+          <p *ngIf="employeeDetail">
+            {{employeeDetail.employeeWorkDetails.jobTitle}} -
+            {{employeeDetail.employeeId}} -
+            {{employeeDetail.employeeWorkDetails.department}}
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ion-accordion-group #accordionGroup mode="ios" [value]="activeTab" multiple="true" (ionChange)="accordionChange($any($event))">      
+    <ion-accordion value="experience" mode="ios" class="ion-padding-vertical" *ngIf="!workLoaded || (workDetail && workDetail.workHistory)">
+      <ion-item slot="header" class="accordion_head_item" lines="none">
+        <ion-label class="ion-text-wrap">
+          <h2 *ngIf="workDetail && workDetail.workHistory">Experience</h2>
+          <p *ngIf="workDetail && workDetail.workHistory">Department, Job Title, Employee Type</p>
+          <ion-skeleton-text *ngIf="!workDetail || !workDetail.workHistory" [animated]="true" style="width: 50%; height: 12px"></ion-skeleton-text>
+          <ion-skeleton-text *ngIf="!workDetail || !workDetail.workHistory" [animated]="true" style="width: 90%; height: 7px"></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+      <div class="historySec" slot="content" *ngIf="workDetail">
+        <ion-list mode="md" lines="none" *ngFor="let history of workDetail.workHistory; index as a;">
+          <ion-list-header mode="ios">
+            <ion-label>
+              {{history.jobTitle}}
+              <p>{{history.from | date}} - {{history.to | date}}</p>
+            </ion-label>
+          </ion-list-header>
+          <ion-item detail="false" class="settingBtns_item">
+            <ion-label class="ion-text-wrap">
+              <p>Designation</p>
+              <h2>{{history.designation}}</h2>
+            </ion-label>
+          </ion-item>
+          <ion-item detail="false" class="settingBtns_item">
+            <ion-label class="ion-text-wrap">
+              <p>Department</p>
+              <h2>{{history.department}}</h2>
+            </ion-label>
+          </ion-item>
+          <ion-item detail="false" class="settingBtns_item">
+            <ion-label class="ion-text-wrap">
+              <p>Employee Type</p>
+              <h2>{{history.employeeType}}</h2>
+            </ion-label>
+          </ion-item>
+          <ion-item detail="false" class="settingBtns_item">
+            <ion-label class="ion-text-wrap">
+              <p>Experience</p>
+              <h2>{{history.work_experience}} year(s)</h2>
+            </ion-label>
+          </ion-item>
+          <hr *ngIf="a < workDetail.workHistory.length - 1"/>
+        </ion-list>
+      </div>
+    </ion-accordion>
+    <hr />
+
+    <ion-accordion value="Employment" mode="ios" class="ion-padding-vertical" *ngIf="!workLoaded || workDetail">
+      <ion-item slot="header" class="accordion_head_item" lines="none">
+        <ion-label class="ion-text-wrap">
+          <h2 *ngIf="employeeDetail">Employment Info</h2>
+          <p *ngIf="employeeDetail">Department, Job Title, Employee Type</p>
+          <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 50%; height: 12px"></ion-skeleton-text>
+          <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 90%; height: 7px"></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+      <ion-list mode="ios" class="employmentSec" slot="content" lines="none">
+        <ng-container *ngIf="workDetail">
+          <ion-item mode="ios" detail="false" class="settingBtns_item">
+            <ion-icon name="id-card" size="small" color="medium" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <p>{{workDetail.employeeId}}</p>
+              <h2>{{workDetail.jobTitle || '--'}}</h2>
+            </ion-label>
+            <ion-icon slot="end" name="ellipse" [color]="workDetail.status === 'Active' ? 'success' : 'danger'" size="small"></ion-icon>
+          </ion-item>
+          <ion-item mode="ios" detail="false" class="settingBtns_item">
+            <ion-icon name="briefcase" size="small" color="medium" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <p>Job Type</p>
+              <h2>{{workDetail.employeeType || '--'}}</h2>
+            </ion-label>
+          </ion-item>
+          <ion-item mode="ios" detail="false" class="settingBtns_item">
+            <ion-icon name="calendar-number" size="small" color="medium" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <p>Notice Period</p>
+              <h2>{{workDetail.probationPeriod || '0'}} days</h2>
+            </ion-label>
+          </ion-item>
+          <ion-item mode="ios" detail="false" class="settingBtns_item">
+            <ion-icon name="location" size="small" color="medium" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <p>Work Location</p>
+              <h2>{{workDetail.workLocation || '--'}}</h2>
+            </ion-label>
+          </ion-item>
+          <ion-item mode="ios" detail="false" class="settingBtns_item">
+            <ion-icon name="calendar-number" size="small" color="medium" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <p>Joining Date</p>
+              <h2>{{workDetail.joiningDate | date}}</h2>
+            </ion-label>
+          </ion-item>
+          <ion-item mode="ios" detail="false" class="settingBtns_item">
+            <ion-icon name="business" size="small" color="medium" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <p>Department</p>
+              <h2>{{workDetail.department || '--'}}</h2>
+            </ion-label>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </ion-accordion>
+    <hr />
+
+    <ion-accordion value="Personal" mode="ios" class="ion-padding-vertical">
+      <ion-item slot="header" class="accordion_head_item" lines="none">
+        <ion-label class="ion-text-wrap">
+          <h2 *ngIf="employeeDetail">Personal Info</h2>
+          <p *ngIf="employeeDetail">Name, Gender, Date of Brith, Marital status</p>
+          <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 50%; height: 12px"></ion-skeleton-text>
+          <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 90%; height: 7px"></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+      <ion-list slot="content" mode="ios">
+        <ion-item lines="none" [button]="false" [detail]="false" mode="ios" class="settingBtns_item" *ngIf="employeeDetail">
+          <ion-icon name="person" aria-hidden="true" aria-label="Settings" slot="start" size="small" color="medium" ></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <p>Full Name</p>
+            <h2>{{employeeDetail.firstName + ' '+ employeeDetail.lastName || '-'}}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" [button]="false" [detail]="false" mode="ios" class="settingBtns_item" *ngIf="employeeDetail && employeeDetail.dateOfBirth">
+          <ion-icon name="calendar-number" aria-hidden="true" aria-label="Settings" slot="start" size="small" color="medium"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <p>Birthday</p>
+            <h2>{{employeeDetail.dateOfBirth | date}}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" [button]="false" [detail]="false" mode="ios" class="settingBtns_item" *ngIf="employeeDetail">
+          <ion-icon [name]="employeeDetail.gender ? employeeDetail.gender === 'Male' ? 'man' : 'woman' : 'transgender'" aria-hidden="true" aria-label="Gender" slot="start" size="small" color="medium"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <p>Gender</p>
+            <h2>{{employeeDetail.gender || '-'}}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item" *ngIf="employeeDetail && employeeDetail.maritalStatus">
+          <ion-icon [name]="employeeDetail.maritalStatus === 'Married' ? 'heart-sharp' : 'heart-half'" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <p>Marital Status</p>
+            <h2>{{employeeDetail.maritalStatus}}</h2>
+          </ion-label>
+        </ion-item>
+        <ng-container *ngIf="!employeeDetail || !dataLoaded ">
+          <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item" *ngFor="let item of [0,1,2,3,4]">
+            <ion-avatar slot="start">
+              <ion-skeleton-text [animated]="true" style="width: 100%; height: 100%"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <ion-skeleton-text [animated]="true" style="width: 150px"></ion-skeleton-text>
+              <ion-skeleton-text [animated]="true" style="width: 90%"></ion-skeleton-text>
+            </ion-label>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </ion-accordion>
+    <hr />
+
+    <ion-accordion value="Contact" mode="ios" class="ion-padding-vertical">
+      <ion-item slot="header" class="accordion_head_item" lines="none">
+        <ion-label class="ion-text-wrap">
+          <h2 *ngIf="employeeDetail">Contact Info</h2>
+          <p *ngIf="employeeDetail">Mobile Number, Email</p>
+          <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 50%; height: 12px"></ion-skeleton-text>
+          <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 90%; height: 7px"></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <div class="contact_info_content table_row" *ngIf="employeeDetail">
+          <ion-row>
+            <ion-col size="12">
+              <ion-label>Phone Number</ion-label>
+              <ion-input aria-label="Phone Number" [value]="employeeDetail.mobileNumber || '-'"></ion-input>
+            </ion-col>
+
+            <ion-col size="12">
+              <ion-label>Alternate Phone Number</ion-label>
+              <ion-input aria-label="Alternate Phone Number" [value]="employeeDetail.alternateMobileNumber || '-'"></ion-input>
+            </ion-col>
+
+            <ion-col size="12">
+              <ion-label>Personal Email</ion-label>
+              <ion-input aria-label="Personal Email" [value]="employeeDetail.email || '-'"></ion-input>
+            </ion-col>
+
+            <ion-col size="12">
+              <ion-label>Official Email</ion-label>
+              <ion-input aria-label="Official Email" [value]="employeeDetail.officialEmail || '-'"></ion-input>
+            </ion-col>
+          </ion-row>
+        </div>
+        <ng-container *ngIf="!employeeDetail || !dataLoaded ">
+          <ion-item class="settingBtns_item" mode="ios" lines="none" [button]="false" [detail]="false" *ngFor="let item of [0,1,2,3,4]">
+            <ion-avatar slot="start">
+              <ion-skeleton-text [animated]="true" style="width: 100%; height: 100%"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <ion-skeleton-text [animated]="true" style="width: 150px"></ion-skeleton-text>
+              <ion-skeleton-text [animated]="true" style="width: 90%"></ion-skeleton-text>
+            </ion-label>
+          </ion-item>
+        </ng-container>
+      </div>
+    </ion-accordion>
+    <hr />
+
+    <ion-accordion value="workWeek" class="ion-padding-vertical" mode="ios" *ngIf="workWeekDetail || !workWeekLoaded">
+      <ion-item slot="header" class="accordion_head_item" lines="none" mode="ios">
+        <ion-label class="ion-text-wrap">
+          <h2 *ngIf="workDetail">Work Week</h2>
+          <p *ngIf="workDetail">Asigned Working days, Day off</p>
+          <ion-skeleton-text animated="true" style="width: 150px; height: 12px" *ngIf="!workDetail"></ion-skeleton-text>
+          <ion-skeleton-text animated="true" style="width: 80%; height: 7px"*ngIf="!workDetail"></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+
+      <ion-list slot="content" mode="ios">
+        <ion-item lines="none" class="weekDaysItem" [detail]="false" mode="ios" routerLink="/employee-work-week/{{employeeId}}">
+          <ion-label class="ion-text-wrap">
+            <ng-container *ngIf="workWeekDetail">
+              <ion-chip
+                [color]="offDays.includes(day) ? 'danger' : 'success'"
+                *ngFor="let day of weekArray"
+                >{{day.slice(0,2)}}</ion-chip
+              >
+            </ng-container>
+            <ng-container *ngIf="!workWeekDetail || !workWeekLoaded">
+              <ion-skeleton-text animated="true" style="width: 90%; height: 10px"></ion-skeleton-text>
+              <ion-buttons class="d-flex">
+                <ion-skeleton-text animated="true" style="width: 100px; height: 30px" *ngFor="let item of [0,1,2,3,4,5,6]"></ion-skeleton-text>
+              </ion-buttons>
+            </ng-container>
+          </ion-label>
+        </ion-item>
+        <ion-item lines="none" [detail]="false" mode="ios" *ngIf="workWeekDetail">
+          <ion-button fill="clear" strong="true" color="primary" slot="end" shape="round" mode="ios" size="small" aria-label="View all days" (click)="workWeek()">View All Days</ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-accordion>
+    <hr />
+
+    <ion-accordion mode="ios" class="ion-padding-vertical" value="Address" *ngIf="!dataLoaded || (employeeDetail && employeeDetail.currentAddress)">
+      <ion-item slot="header" class="accordion_head_item" lines="none">
+        <ion-label class="ion-text-wrap">
+          <h2 *ngIf="employeeDetail">Address</h2>
+          <p *ngIf="employeeDetail">Current Address, Permanent Address</p>
+          <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 50%; height: 12px"></ion-skeleton-text>
+          <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 90%; height: 7px"></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+      <ion-list mode="ios" lines="none" class="addresses" slot="content">
+        <ion-item [detail]="false" class="addressItem settingBtns_item" *ngIf="employeeDetail">
+          <ion-icon name="location" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <h6>Current Address</h6>
+            <p>{{getAddress(employeeDetail.currentAddress)}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-item [detail]="false" class="addressItem settingBtns_item" *ngIf="employeeDetail">
+          <ion-icon name="location" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <h6>Permanent Address</h6>
+            <p>{{getAddress(employeeDetail.permanentAddress)}}</p>
+          </ion-label>
+        </ion-item>
+        <ng-container *ngIf="!employeeDetail || !dataLoaded ">
+          <ion-item [detail]="false" *ngFor="let item of [0,1,2,3,4]">
+            <ion-avatar slot="start">
+              <ion-skeleton-text [animated]="true" style="width: 100%; height: 100%"></ion-skeleton-text>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">
+              <ion-skeleton-text [animated]="true" style="width: 90%"></ion-skeleton-text>
+              <ion-skeleton-text [animated]="true" style="width: 150px"></ion-skeleton-text>
+            </ion-label>
+          </ion-item>
+        </ng-container>
+      </ion-list>
+    </ion-accordion>
+    <hr />
+
+    <ion-accordion value="Social_info" mode="ios" class="ion-padding-vertical" *ngIf="employeeDetail && (employeeDetail.linkedinUrl || employeeDetail.facebookUrl || employeeDetail.twitterUrl)">
+      <ion-item slot="header" class="accordion_head_item" lines="none">
+        <ion-label class="ion-text-wrap">
+          <h2>Social Media</h2>
+          <p>Facebook, LinkedIn, Twitter</p>
+        </ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <div class="social_info_content">
+          <div class="social_links">
+            <a class="link_item linkedin" rel="noopener" target="_blank" [href]="employeeDetail.linkedinUrl" *ngIf="employeeDetail.linkedinUrl">
+              <ion-icon name="logo-linkedin" aria-hidden="true" size="large"></ion-icon>
+            </a>
+            <a class="link_item fb" rel="noopener" target="_blank" [href]="employeeDetail.facebookUrl" *ngIf="employeeDetail.facebookUrl">
+              <ion-icon name="logo-facebook" aria-hidden="true" size="large"></ion-icon>
+            </a>
+            <a class="link_item twitter" rel="noopener" target="_blank" *ngIf="employeeDetail.twitterUrl" [href]="employeeDetail.twitterUrl">
+              <ion-icon name="logo-twitter" aria-hidden="true" size="large"></ion-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+
+  <ion-list mode="ios" class="ion-padding-vertical">
+    <ng-container *ngIf="employeeDetail">
+      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" routerLink="/tabs/view-calendar" class="settingBtns_item">
+        <ion-chip slot="start" color="medium">
+          <ion-icon name="calendar" aria-hidden="true" aria-label="Settings" size="small"></ion-icon>
+        </ion-chip>
+        <ion-label>Year Calendar</ion-label>
+      </ion-item>
+      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" (click)="editProfile()" class="settingBtns_item">
+        <ion-chip slot="start" color="medium">
+          <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" size="small"></ion-icon>
+        </ion-chip>
+        <ion-label>Edit Profile</ion-label>
+      </ion-item>
+
+      <ion-item lines="none" type="button" routerLink="/change-password" mode="ios" [detail]="true" class="settingBtns_item">
+        <ion-chip slot="start" color="medium">
+          <ion-icon name="key" aria-hidden="true" aria-label="Change Password" size="small"></ion-icon>
+        </ion-chip>
+        <ion-label>Change Password</ion-label>
+      </ion-item>
+    </ng-container>
+
+    <ion-item lines="none" [detail]="false" type="button" mode="ios" class="settingBtns_item logoutBtn" (click)="logout()">
+      <ion-chip slot="start" color="danger">
+        <ion-icon name="log-out" aria-hidden="true" size="small"></ion-icon>
+      </ion-chip>
+      <ion-label color="danger">Log out</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

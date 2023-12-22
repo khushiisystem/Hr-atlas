@@ -69,6 +69,7 @@ ion-header {
     display: block;
     margin: 5px;
     font-size: clamp(10px, 0.75rem, 12px);
+    font-weight: 500;
 }
 .noRipple{--ripple-color: transparent}
 .noBg {--background: transparent; --background-color: transparent;}
@@ -164,5 +165,6 @@ ion-popover {
     &.filter {
         --width: initial;
         --width: fit-content;
+        // --backdrop-opacity: 0.02
     }
 }

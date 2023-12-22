@@ -36,7 +36,6 @@ export class LoginPage implements OnInit {
   }
 
   login(){
-    console.log(this.loginForm.value);
     if(this.loginForm.invalid){
       this.shareServ.presentToast('Form is not completed.', 'top', 'danger');
       return;
@@ -47,7 +46,6 @@ export class LoginPage implements OnInit {
         if(res){
           this.shareServ.presentToast('Login successful.', 'top', 'success');
           this.isInProgress = false;
-          this.loginForm.reset();
           const userId = localStorage.getItem('userId') || "";
           this.shareServ.getEmployeeById(userId).subscribe(async res => {
             this.userStateServ.updateState(res);
@@ -61,6 +59,7 @@ export class LoginPage implements OnInit {
           });
           this.router.navigateByUrl('/tabs/home');
           this.loader.dismiss();
+          this.loginForm.reset();
         }
       }, (error) => {
         this.shareServ.presentToast(error.error.Message, 'top', 'danger');

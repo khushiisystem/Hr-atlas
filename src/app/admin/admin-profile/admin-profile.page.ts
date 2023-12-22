@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { IonAccordionGroup, ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/core/auth.service';
 import { EditProfilePage } from 'src/app/employee/edit-profile/edit-profile.page';
@@ -22,12 +22,13 @@ export class AdminProfilePage implements OnInit {
   adminDetail!: IEmployeeResponse;
   workDetail!: IEmployeeWrokResponse;
   workWeekDetail!: IEmplpoyeeWorWeek;
-  activeTab: string[] = ["Personal", "Contact", "Address", "Social_info", "Settings"];
+  activeTab: string[] = ["Personal", "Employment", "workWeek", "Contact", "Address", "Social_info", "Settings"];
   dataLoaded: boolean = false;
   workLoaded: boolean = false;
   randomList: any[] = [];
   weekArray: string[] = [];
   numberOfWeek: string[] = [];
+  offDays: string[] = [];
   workWeekLoaded: boolean = false;
 
   constructor(
@@ -41,9 +42,12 @@ export class AdminProfilePage implements OnInit {
     this.userId = localStorage.getItem('userId') || "";
     if(this.userId.trim() !== ''){
       this.getAdminProfile();
-      this.getEmployeeWork();
-      this.getWorkWeek();
     }
+  }
+
+  ionViewWillEnter(){
+    this.getEmployeeWork();
+    this.getWorkWeek();
   }
 
   getAdminProfile(){
@@ -72,12 +76,13 @@ export class AdminProfilePage implements OnInit {
   }
 
   getWorkWeek(){
-    this.weekArray = moment.weekdays();
-    this.weekCount();
     this.workWeekLoaded = false;
+    this.offDays = [];
     this.shareServ.employeeAssignedWorkWeek(this.userId).subscribe(res => {
       if(res) {
         this.workWeekDetail = res;
+        this.weekArray = moment.weekdays();
+        this.offDays = this.workWeekDetail.workweekDetails.weekOff;
         this.workWeekLoaded = true;
       }
     }, (error) => {
@@ -85,18 +90,16 @@ export class AdminProfilePage implements OnInit {
     });
   }
 
-  weekCount() {
-    const today = new Date();
-    const firstOfMonth = new Date(today.getFullYear(), today.getMonth()-1, 1);
-    const lastOfMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-
-    const used = firstOfMonth.getDay() + lastOfMonth.getDate();
-
-    let i=0;
-    while (i < Math.ceil( used / 7)) {
-      this.numberOfWeek.push('box');
-      i++;
+  workDetailModal(){
+    let navigationExtras: NavigationExtras = {
+      queryParams: {
+        action: this.workDetail ? 'edit' : 'add',
+        employeeId: this.adminDetail.employeeId,
+        userId: this.userId,
+      }
     }
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/employee/workinfo`], navigationExtras);
   }
 
   getWorkingDays(): string[] {

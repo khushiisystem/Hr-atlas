@@ -38,6 +38,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   pageIndex: number = 0;
   userRole: string = "";
   searchString: string = "";
+  empType: 'All' | 'Active' | 'InActive' = 'Active';
   selectedEmployee: any[] = [];
   payslipDate: Date = new Date();
   today: Date = new Date();
@@ -73,7 +74,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
     if(this.pageIndex < 1){
       this.employeeList = [];
     }
-    this.adminServ.getEmployees('Active', this.pageIndex * 10, 10).subscribe(res => {
+    this.adminServ.getEmployees(this.empType, this.pageIndex * 10, 10).subscribe(res => {
       if(res){
         const data: IEmployeeResponse[] = res;
         for(let i=0; i<data.length; i++){
@@ -89,6 +90,12 @@ export class EmployeesPage implements OnInit, OnDestroy {
       this.isDataLoaded = true;
       this.infiniteScroll.complete();
     });
+  }
+  
+  getTypedEmployee(event: 'All' | 'Active' | 'InActive'){
+    this.empType = event;
+    this.pageIndex = 0;
+    this.getEmployeeList();
   }
 
   loadData(event: InfiniteScrollCustomEvent){
@@ -145,7 +152,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
       this.isDataLoaded = false;
       const data = {
         searchString: searchValue,
-        status: 'Active'
+        status: this.empType
       }
       this.employeeList = [];
       this.shareServ.searchEmployee(data).subscribe(res => {

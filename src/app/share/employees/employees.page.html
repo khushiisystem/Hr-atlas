@@ -5,21 +5,16 @@
         <ion-icon name="search" aria-hidden="true" size="small" slot="start" class="startIcon"></ion-icon>
         <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
       </ion-item>
-      <!-- <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="optionPop" class="ion-no-margin ion-no-padding">
+      <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="optionPop" class="ion-margin-start ion-no-padding" *ngIf="userRole === 'Admin'">
         <ion-icon name="ellipsis-vertical" aria-hidden="true" aria-label="Option"></ion-icon>
-      </ion-button> -->
+      </ion-button>
     </div>
-    <ion-popover trigger="optionPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter">
+    <ion-popover trigger="optionPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter" *ngIf="userRole === 'Admin'">
       <ng-template>
         <ion-content>
-          <ion-item lines="none" detail="false" type="button" button="true" mode="ios" (click)="allSelect()">Select All</ion-item>
-          <ion-item lines="none" detail="false" type="button" button="true" mode="ios" *ngIf="selectedEmployee.length > 0" (click)="deselectAll()">Unselect All</ion-item>
-          <ion-item lines="none" detail="false" type="button" button="true" mode="ios" (click)="openCalendar = true">
-            <ion-label class="ion-text-wrap">
-              Change date
-              <p>{{payslipDate | date:'MMM, y'}}</p>
-            </ion-label>
-          </ion-item>
+          <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
+          <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item>
+          <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
         </ion-content>
       </ng-template>
     </ion-popover>
@@ -83,7 +78,7 @@
       </div>
       <div class="employee_data" (click)="!isChecklist ? null : selectEmployee(employee)">
         <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-        <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text>
+        <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle}}</small></ion-text>
       </div>
     </ion-item>
   </ion-list>

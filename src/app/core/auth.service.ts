@@ -85,6 +85,7 @@ export class AuthService {
     localStorage.clear();
     this.roleStatServ.updateState("");
     this.userSateSer.updateState(null);
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
+    window.location.reload();
   }
 }
