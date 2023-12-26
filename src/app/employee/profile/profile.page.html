@@ -273,7 +273,7 @@
       </ion-item>
 
       <ion-list slot="content" mode="ios">
-        <ion-item lines="none" class="weekDaysItem" [detail]="false" mode="ios" routerLink="/employee-work-week/{{employeeId}}">
+        <ion-item lines="none" class="weekDaysItem" [detail]="false" mode="ios">
           <ion-label class="ion-text-wrap">
             <ng-container *ngIf="workWeekDetail">
               <ion-chip
@@ -287,6 +287,9 @@
               <ion-buttons class="d-flex">
                 <ion-skeleton-text animated="true" style="width: 100px; height: 30px" *ngFor="let item of [0,1,2,3,4,5,6]"></ion-skeleton-text>
               </ion-buttons>
+            </ng-container>
+            <ng-container *ngIf="!workWeekDetail && workWeekLoaded">
+              Work week not assigned yet.
             </ng-container>
           </ion-label>
         </ion-item>

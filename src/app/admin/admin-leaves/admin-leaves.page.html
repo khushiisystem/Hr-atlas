@@ -120,7 +120,11 @@
     </ion-card>
   </div>
 
-  <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadMoreData($any($event))" [position]="'bottom'" *ngIf="moreRequests || moreLogs">
+  <ion-infinite-scroll #requestsInfiniteScroll (ionInfinite)="loadRequests($any($event))" [position]="'bottom'" *ngIf="activeTab === 'requests' && moreRequests">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <ion-infinite-scroll #logsInfiniteScroll (ionInfinite)="loadLogs($any($event))" [position]="'bottom'" *ngIf="activeTab === 'logs' && moreLogs">
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </div>

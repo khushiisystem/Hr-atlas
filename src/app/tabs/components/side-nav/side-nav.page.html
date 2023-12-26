@@ -3,7 +3,7 @@
     <ion-toolbar color="primary">
       <ion-avatar slot="start" class="avatar">
         <ng-container *ngIf="userDetails">
-          <app-name-img [name]="userDetails.firstName.slice(0,1)" bgcolor="rgba(0,0,0,0.1)" [classes]="'sm'" *ngIf="userDetails.imageUrl.trim() === ''"></app-name-img>
+          <app-name-img [name]="userDetails.firstName.slice(0,1)" bgcolor="rgba(0,0,0,0.1)" *ngIf="userDetails.imageUrl.trim() === ''"></app-name-img>
           <img *ngIf="userDetails.imageUrl.trim() !== ''" alt="user" [src]="userDetails.imageUrl" />
         </ng-container>
         <ion-skeleton-text [animated]="true" *ngIf="!userDetails"></ion-skeleton-text>

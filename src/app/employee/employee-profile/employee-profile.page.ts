@@ -8,6 +8,8 @@ import { RoleStateService } from 'src/app/services/roleState.service';
 import { ShareService } from 'src/app/services/share.service';
 import { AddExperiencePage } from 'src/app/admin/add-experience/add-experience.page';
 import { AddEmployeePage } from 'src/app/admin/add-employee/add-employee.page';
+import { IEmplpoyeeWorWeek } from 'src/app/interfaces/response/IEmplpoyeeWorWeek';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-employee-profile',
@@ -21,6 +23,11 @@ export class EmployeeProfilePage {
   workDetail!: IEmployeeWrokResponse;
   expandedAccordion: string = "Personal";
   dataLoaded: boolean = false;
+  workWeekLoaded: boolean = false;
+  workLoaded: boolean = false;
+  workWeekDetail!: IEmplpoyeeWorWeek;
+  offDays: string[] = [];
+  weekArray: string[] = [];
   randomList: any[] = [];
   userRole: string | null = "";
 
@@ -39,6 +46,7 @@ export class EmployeeProfilePage {
     if(this.employeeId.trim() !== ''){
       this.getEmployeeDetails();
       this.getWorkDetails();
+      this.getWorkWeek();
     }
     this.roleStateServ.getState().subscribe(res => {
       this.userRole = res || localStorage.getItem('userRole');
@@ -65,7 +73,25 @@ export class EmployeeProfilePage {
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
       if(res) {
         this.workDetail = res[0];
+        this.workLoaded = true;
       }
+    }, (error) => {
+      this.workLoaded = true;
+    });
+  }
+
+  getWorkWeek(){
+    this.workWeekLoaded = false;
+    this.offDays = [];
+    this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(res => {
+      if(res) {
+        this.workWeekDetail = res;
+        this.weekArray = moment.weekdays();
+        this.offDays = this.workWeekDetail.workweekDetails.weekOff;
+        this.workWeekLoaded = true;
+      }
+    }, (error) => {
+      this.workWeekLoaded = true;
     });
   }
 
@@ -94,8 +120,11 @@ export class EmployeeProfilePage {
   }
 
   getAddress(add: IAddress){
-    const fullAddress = `${add.addressLine1}, ${add.addressLine2}, ${add.city}, ${add.state}, ${add.country}, ${add.zipCode}`;
-    return fullAddress;
+    const fullAddress = Object.values(add).join(', ');
+    return Object.values(add).filter((e) => e.trim() !== '').length > 0 ? fullAddress : '';
+  }
+  isAvailableAddress(){
+    return this.getAddress(this.employeeDetail.currentAddress) !== '' && this.getAddress(this.employeeDetail.permanentAddress) !== '';
   }
 
   getName() {
@@ -148,6 +177,10 @@ export class EmployeeProfilePage {
     this.expandedAccordion = '';
     this.dataLoaded = false;
     this.employeeId = '';
+  }
+
+  workWeek() {
+    this.router.navigate([`/employee-work-week/${this.employeeId}`]);
   }
 
 }
