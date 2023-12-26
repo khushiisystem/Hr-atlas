@@ -143,6 +143,10 @@ export class AddExperiencePage implements OnInit {
     this.adminServ.getWorkByEmployeeId(this.userId).subscribe(res => {
       if(res){
         this.workInfoForm.patchValue(res[0]);
+        res[0].workHistory.forEach((history, index) => {
+          this.addWorkHistory();
+          ((this.workInfoForm.controls['workHistory'] as FormArray).controls[index] as FormGroup).patchValue(history);
+        });
         this.employeeWorkId = res[0].guid;
         this.isDataLoaded = true;
       }

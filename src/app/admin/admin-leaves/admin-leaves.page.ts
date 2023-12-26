@@ -13,7 +13,8 @@ import { ShareService } from 'src/app/services/share.service';
   styleUrls: ['./admin-leaves.page.scss'],
 })
 export class AdminLeavesPage implements OnInit {
-  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
+  @ViewChild("requestsInfiniteScroll") requestsInfiniteScroll!: IonInfiniteScroll;
+  @ViewChild('logsInfiniteScroll') logsInfiniteScroll!: IonInfiniteScroll;
   @Input() leaveType?: string;
   selectedDates: string[] = [];
   requestLoaded: boolean = false;
@@ -95,8 +96,8 @@ export class AdminLeavesPage implements OnInit {
           this.leaveLogs.push(res[i]);
         }
         this.moreLogs = res.length > 19;
-        if(this.activeTab === 'logs' && !this.moreLogs && this.infiniteScroll){
-          this.infiniteScroll.complete();
+        if(this.logsInfiniteScroll && !this.moreLogs){
+          this.logsInfiniteScroll.complete();
         }
         this.logsLoaded = true;
       }
@@ -122,8 +123,9 @@ export class AdminLeavesPage implements OnInit {
           this.requestedLeaveList.push(res[i]);
         }
         this.moreRequests = res.length > 19;
-        if(this.activeTab === 'requests'  && this.infiniteScroll && !this.moreRequests){
-          this.infiniteScroll.complete();
+        if(this.requestsInfiniteScroll){
+          if(!this.moreRequests){
+          this.requestsInfiniteScroll.complete();}
         }
         this.requestLoaded = true;
       }
@@ -166,25 +168,17 @@ export class AdminLeavesPage implements OnInit {
     return {leaveStatus: leaveStatus, color: color};
   }
 
-  loadRequests(){
+  loadRequests(event: any){
     if (this.moreRequests) {
       this.pageNumber++;
       this.requestedLeaves();
     }
   }
 
-  loadLogs(){
+  loadLogs(event: any){
     if (this.moreLogs) {
       this.logPageNumber++;
       this.getLogs();
-    }
-  }
-
-  loadMoreData(event: any){
-    if(this.activeTab === 'requests'){
-      this.loadRequests();
-    } else if(this.activeTab === 'logs'){
-      this.loadLogs();
     }
   }
 }

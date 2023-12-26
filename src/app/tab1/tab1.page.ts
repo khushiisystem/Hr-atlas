@@ -223,7 +223,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
         if(res.length < 1){return;}
 
         for(let i=0; i < res.length; i++){
-          this.requestedLeaveList.push(res[i]);
+          if(!this.requestedLeaveList.includes(res[i])){
+            this.requestedLeaveList.push(res[i]);
+          }
         }
         this.moreRequests = res.length > 2 ? true : false;
       }
