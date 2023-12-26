@@ -344,7 +344,6 @@ export class EmployeeAttendancePage implements OnInit {
           this.presents = 0;
           this.eventsList = res;
           for (let a = 0; a < res.length; a++) {
-            this.highlightedDates = [];
             const selectDate : IHighlightedDate = {
               date: this.returnCustomDate(res[a].eventDate),
               backgroundColor: '#f58f0d',
@@ -352,8 +351,9 @@ export class EmployeeAttendancePage implements OnInit {
             }
             this.dateList.forEach((e) => {
               if(this.checkDates(new Date(res[a].eventDate), new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT){
-                e.leaveData = res[a];
+                // e.leaveData = res[a];
                 e.created_date = new Date(res[a].eventDate).toISOString();
+                e.status = AttendaceStatus.HOLiDAY;
               }
               e.status === AttendaceStatus.HOLiDAY ? this.presents++ : this.absent++;
             });
@@ -474,7 +474,7 @@ export class EmployeeAttendancePage implements OnInit {
       if(monthDate.getFullYear() <= xyz.getFullYear() && monthDate.getMonth() < xyz.getMonth()){
         monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
       }
-      if(monthDate.getFullYear() != xyz.getFullYear()){this.getCalendar();}
+      this.getCalendar();
       this.createDateList(monthDate);
       this.getMonthLyAttendance();
       this.getLogs();
