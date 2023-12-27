@@ -43,7 +43,7 @@
         </ion-card-header>
         <ion-card-content>
           <ion-buttons>
-            <ion-button size="small" color="primary" shape="round" strong="true" mode="ios" fill="solid" *ngIf="adminDetail">
+            <ion-button size="small" color="primary" shape="round" strong="true" mode="ios" fill="solid" *ngIf="adminDetail" (click)="editProfile()">
               <ion-icon slot="start" size="small" aria-hidden="true" name="pencil"></ion-icon>
               <ion-label>Edit Profile</ion-label>
             </ion-button>

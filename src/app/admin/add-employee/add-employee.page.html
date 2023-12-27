@@ -11,306 +11,119 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="container">
-    <form [formGroup]="employeeForm" *ngIf="isDataLoaded">
-      <ion-card mode="md" class="personal_card">
-        <ion-card-header class="card_header" (click)="expandCard('personal_card')">
-          <ion-card-title>Personal Information</ion-card-title>
-          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
-            <ion-icon [name]="isExpanded('personal_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-card-header>
-        <ion-card-content *ngIf="isExpanded('personal_card')">
-          <ion-row class="row_one">
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="firstName" placeholder="First Name" type="text">
-                  <div slot="label">First Name <ion-text color="danger">*</ion-text></div>
-                </ion-input>
-              </div>
-              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
-                {{employeeForm.controls['firstName'].value ? 'Please enter a valid name.' : 'First name is required'}}
-              </ion-text>
-            </ion-col>
-  
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="lastName" placeholder="Last Name" type="text">
-                  <div slot="label">Last Name</div>
-                </ion-input>
-              </div>
-              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['lastName'].errors">
-                Please enter a valid name.
-              </ion-text>
-            </ion-col>
-  
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-select labelPlacement="floating" fill="outline" formControlName="role" placeholder="Select" interface="action-sheet">
-                  <div slot="label">Role <ion-text color="danger">*</ion-text></div>
-                  <ion-select-option value="Admin">Admin</ion-select-option>
-                  <ion-select-option value="Employee">Employee</ion-select-option>
-                </ion-select>
-              </div>
-              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['lastName'].errors">
-                Please enter a valid name.
-              </ion-text>
-            </ion-col>
-
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" [readonly]="true" [value]="getDate() | date" (ionFocus)="openCalendar = true" (ionActive)="openCalendar = true">
-                  <div slot="label">Date of birth</div>
-                </ion-input>
-                <div class="toggleBtn">
-                  <ion-button mode="md" fill="clear" (click)="openCalendar = true">
-                    <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
-                  </ion-button>
-                </div>
-              </div>
-            </ion-col>
-  
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-select labelPlacement="floating" fill="outline" formControlName="gender" placeholder="Select" interface="action-sheet">
-                  <div slot="label">Gender</div>
-                  <ion-select-option value="Male">Male</ion-select-option>
-                  <ion-select-option value="Female">Female</ion-select-option>
-                </ion-select>
-              </div>
-            </ion-col>
-  
-            <ion-col size="12" sizeSm="6">
-              <div class="form-input">
-                <ion-select labelPlacement="floating" fill="outline" formControlName="maritalStatus" placeholder="Select" interface="action-sheet">
-                  <div slot="label">Marital Status</div>
-                  <ion-select-option value="Married">Married</ion-select-option>
-                  <ion-select-option value="Unmarried">Unmarried</ion-select-option>
-                </ion-select>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card mode="md" class="contact_card ion-margin-top">
-        <ion-card-header class="card_header" (click)="expandCard('contact_card')">
-          <ion-card-title>Contact Information</ion-card-title>
-          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
-            <ion-icon [name]="isExpanded('contact_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-card-header>
-        <ion-card-content *ngIf="isExpanded('contact_card')">
-          <ion-row class="row_one">
-            <ion-col size="12">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="mobileNumber" placeholder="Mobile Number" type="tel">
-                  <div slot="label">Mobile Number <ion-text color="danger">*</ion-text></div>
-                </ion-input>
-              </div>
-              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['mobileNumber'].touched && employeeForm.controls['mobileNumber'].errors">
-                {{employeeForm.controls['mobileNumber'].value ? 'Please enter a valid number.' : 'Mobile number is required'}}
-              </ion-text>
-            </ion-col>
-            
-            <ion-col size="12">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="alternateMobileNumber" placeholder="Alternate Mobile Number" type="tel">
-                  <div slot="label">Alternate Mobile Number </div>
-                </ion-input>
-              </div>
-              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['alternateMobileNumber'].touched && employeeForm.controls['alternateMobileNumber'].errors">Please enter a valid number.</ion-text>
-            </ion-col>
-
-            <ion-col size="12">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="email" placeholder="Enter Email" type="email">
-                  <div slot="label">Personal Email</div>
-                </ion-input>
-              </div>
-              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['email'].touched && employeeForm.controls['email'].errors">
-                {{employeeForm.controls['email'].value ? 'Please enter a valid email.' : 'Email is required'}}
-              </ion-text>
-            </ion-col>
-
-            <ion-col size="12">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="officialEmail" placeholder="Enter Email" type="email">
-                  <div slot="label">Official Email <ion-text color="danger">*</ion-text></div>
-                </ion-input>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card mode="md" class="address_card ion-margin-top">
-        <ion-card-header class="card_header" (click)="expandCard('address_card')">
-          <ion-card-title>Addresses</ion-card-title>
-          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
-            <ion-icon [name]="isExpanded('address_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-card-header>
-        <ion-card-content *ngIf="isExpanded('address_card')">
-          <ion-row class="row_one ion-margin-bottom ion-padding-bottom" formGroupName="currentAddress">
-            <ion-col size="12">
-              <h2>Current Address</h2>
-            </ion-col>
-            <ion-col size="12" sizeMd="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine1" placeholder="Address Line 1" type="text">
-                  <div slot="label">Address Line 1</div>
-                </ion-input>
-              </div>
-            </ion-col>
-  
-            <ion-col size="12" sizeMd="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine2" placeholder="Address Line 2" type="text">
-                  <div slot="label">Address Line 2</div>
-                </ion-input>
-              </div>
-            </ion-col>
-
-            <ion-col size="6" sizeMd="4">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="city" placeholder="City" type="text">
-                  <div slot="label">City</div>
-                </ion-input>
-              </div>
-            </ion-col>
-  
-            <ion-col size="6" sizeMd="4">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="state" placeholder="State" type="text">
-                  <div slot="label">State</div>
-                </ion-input>
-              </div>
-            </ion-col>
-  
-            <ion-col size="6" sizeMd="4">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="country" placeholder="Country" type="text">
-                  <div slot="label">Country</div>
-                </ion-input>
-              </div>
-            </ion-col>
-  
-            <ion-col size="6" sizeMd="4">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="zipCode" placeholder="Zip Code" type="text">
-                  <div slot="label">Zip Code</div>
-                </ion-input>
-              </div>
-            </ion-col>
-          </ion-row>
-
-          <!-- ---------------------------------- permanent address ------------------------- -->
-          <ion-row class="row_one" formGroupName="permanentAddress">
-            <ion-col size="12">
-              <h2>Permanent Address</h2>
-            </ion-col>
-            <ion-col size="12">
-              <ion-checkbox labelPlacement="end" color="primary" [checked]="isSameAddress" (ionChange)="sameAddress($any($event))">Same as current address</ion-checkbox>
-            </ion-col>
-            <ion-col size="12" sizeMd="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine1" placeholder="Address Line 1" type="text">
-                  <div slot="label">Address Line 1</div>
-                </ion-input>
-              </div>
-            </ion-col>
-  
-            <ion-col size="12" sizeMd="6">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="addressLine2" placeholder="Address Line 2" type="text">
-                  <div slot="label">Address Line 2</div>
-                </ion-input>
-              </div>
-            </ion-col>
-
-            <ion-col size="6" sizeMd="4">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="city" placeholder="City" type="text">
-                  <div slot="label">City</div>
-                </ion-input>
-              </div>
-            </ion-col>
-  
-            <ion-col size="6" sizeMd="4">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="state" placeholder="State" type="text">
-                  <div slot="label">State</div>
-                </ion-input>
-              </div>
-            </ion-col>
-  
-            <ion-col size="6" sizeMd="4">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="country" placeholder="Country" type="text">
-                  <div slot="label">Country</div>
-                </ion-input>
-              </div>
-            </ion-col>
-  
-            <ion-col size="6" sizeMd="4">
-              <div class="form-input">
-                <ion-input labelPlacement="floating" fill="outline" formControlName="zipCode" placeholder="Zip Code" type="text">
-                  <div slot="label">Zip Code</div>
-                </ion-input>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card mode="md" class="social_card ion-margin-top">
-        <ion-card-header class="card_header" (click)="expandCard('social_card')">
-          <ion-card-title>Social Profile</ion-card-title>
-          <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
-            <ion-icon [name]="isExpanded('social_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
-          </ion-button>
-        </ion-card-header>
-        <ion-card-content *ngIf="isExpanded('social_card')">
-          <div class="social_items">
-            <div class="social_icons linkedin">
-              <ion-icon name="logo-linkedin" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-input label="Linkedin" labelPlacement="floating" fill="outline" formControlName="linkedinUrl" placeholder="Linkedin" type="url"></ion-input>
-          </div>
-
-          <div class="social_items">
-            <div class="social_icons fb">
-              <ion-icon name="logo-facebook" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-input label="Facebook" labelPlacement="floating" fill="outline" formControlName="facebookUrl" placeholder="Facebook" type="url"></ion-input>
-          </div>
-
-          <div class="social_items">
-            <div class="social_icons twitter">
-              <ion-icon name="logo-twitter" aria-hidden="true" size="large"></ion-icon>
-            </div>
-            <ion-input label="Twitter" labelPlacement="floating" fill="outline" formControlName="twitterUrl" placeholder="Twitter" type="url"></ion-input>
-          </div>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-modal [isOpen]="openCalendar" [initialBreakpoint]="0.5" mode="md">
-        <ng-template>        
-          <ion-content>
-            <ion-datetime presentation="date" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="selectDate($any($event))" [value]="getDate().toISOString()">
-              <span slot="title">Date of Birth</span>
-              <ion-buttons slot="buttons">
-                <ion-button mode="md" color="danger" (click)="datetime.cancel();openCalendar = false">Cancel</ion-button>
-                <ion-button mode="md" color="primary" (click)="datetime.confirm();openCalendar = false">Done</ion-button>
-              </ion-buttons>
-            </ion-datetime>
-          </ion-content>
-        </ng-template>
-      </ion-modal>
-    </form>
+<ion-content [fullscreen]="true" color="light">
+  <div class="ion-padding-horizontal ion-margin-top">
+    <ion-note color="medium">All * fields are mandatory.</ion-note>
   </div>
+
+  <form [formGroup]="employeeForm" *ngIf="isDataLoaded">
+    <ion-list mode="ios" class="ion-padding-bottom" inset="true">
+      <ion-list-header>
+        <ion-label>Personal Information</ion-label>
+      </ion-list-header>
+      <ion-item detail="false">
+        <ion-input labelPlacement="floating" fill="solid" formControlName="firstName" placeholder="First Name" type="text" [errorText]="getError(employeeForm.get('firstName'), 'Name is required', 'Please inter a valid name.')" maxlength="120" minlength="2" inputmode="text" [enterkeyhint]="'next'" autocomplete="name" autofocus="true">
+          <div slot="label">First Name <ion-text color="danger">*</ion-text></div>
+        </ion-input>
+      </ion-item>
+      <ion-item detail="false">
+        <ion-input labelPlacement="floating" fill="solid" formControlName="lastName" placeholder="Last Name" type="text" inputmode="text" [enterkeyhint]="'next'">
+          <div slot="label">Last Name</div>
+        </ion-input>
+      </ion-item>
+      <ion-item detail="false">
+        <ion-input labelPlacement="floating" fill="solid" formControlName="mobileNumber" placeholder="Mobile Number" maxlength="10" minlength="10" inputmode="tel"[enterkeyhint]="'next'" type="tel" autocomplete="mobileNumber" [errorText]="getError(employeeForm.get('mobileNumber'), 'Mobile number is required', 'Please inter a valid number.')">
+          <div slot="label">Mobile Number <ion-text color="danger">*</ion-text></div>
+        </ion-input>
+      </ion-item>
+      <ion-item detail="false">
+        <ion-input labelPlacement="floating" fill="solid" formControlName="email" placeholder="Personal Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="email" [errorText]="getError(employeeForm.get('email'), '', 'Please inter a valid email.')">
+          <div slot="label">Personal Email</div>
+        </ion-input>
+      </ion-item>
+      <ion-item detail="false">
+        <ion-input labelPlacement="floating" fill="solid" formControlName="officialEmail" placeholder="Official Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="officialEmail" [errorText]="getError(employeeForm.get('officialEmail'), 'Official email is required', 'Please inter a valid email.')">
+          <div slot="label">Official Email <ion-text color="danger">*</ion-text></div>
+        </ion-input>
+      </ion-item>
+      <ion-item detail="false">
+        <ion-select labelPlacement="floating" fill="solid" formControlName="role" placeholder="Role" interface="action-sheet">
+          <div slot="label">Role <ion-text color="danger">*</ion-text></div>
+          <ion-select-option value="Admin">Admin</ion-select-option>
+          <ion-select-option value="Employee">Employee</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <ion-list mode="ios" class="ion-padding-bottom" inset="true">
+      <ion-list-header>
+        <ion-label>Addresses Information</ion-label>
+      </ion-list-header>
+
+      <ion-item-group formGroupName="currentAddress">
+        <!-- <ion-item-divider>
+          <ion-label>Current Address</ion-label>
+        </ion-item-divider> -->
+        <ion-item detail="false">
+          <ion-input labelPlacement="floating" fill="solid" formControlName="addressLine1" placeholder="Address Line 1" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line1">
+            <div slot="label">Address Line 1</div>
+          </ion-input>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-input labelPlacement="floating" fill="solid" formControlName="addressLine2" placeholder="Address Line 2" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2">
+            <div slot="label">Address Line 2</div>
+          </ion-input>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-input labelPlacement="floating" fill="solid" formControlName="city" placeholder="City" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="city">
+            <div slot="label">City</div>
+          </ion-input>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-input labelPlacement="floating" fill="solid" formControlName="state" placeholder="State" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="state">
+            <div slot="label">State</div>
+          </ion-input>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-input labelPlacement="floating" fill="solid" formControlName="country" placeholder="Country" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="country">
+            <div slot="label">Country</div>
+          </ion-input>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-input labelPlacement="floating" fill="solid" formControlName="zipCode" placeholder="Zip Code" type="text" inputmode="numeric" [enterkeyhint]="'go'" autocomplete="on" minlength="4" maxlength="6" counter="true" [errorText]="getError(getChildCtrl('currentAddress').get('zipCode'), '', 'Please inter a valid zip code.')">
+            <div slot="label">Zip Code</div>
+          </ion-input>
+        </ion-item>
+      </ion-item-group>
+    </ion-list>
+
+
+    <!-- <ion-list mode="ios" class="ion-paddng-vertical" inset="true">
+      <ion-list-header (click)="expandCard('personal_card')">
+        <ion-label>Personal Information</ion-label>
+        <ion-button mode="md" fill="clear" class="card_toggle_btn noBg noRipple" color="medium">
+          <ion-icon [name]="isExpanded('personal_card') ? 'chevron-up-outline' : 'chevron-down-outline'" aria-hidden="true" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-list-header>
+      <ion-item detail="false">
+        
+      </ion-item>
+    </ion-list> -->
+
+    <ion-modal trigger="dobCalendar" [initialBreakpoint]="0.5" mode="md" #dobModal (ionDidDismiss)="openCalendar = false;">
+      <ng-template>        
+        <ion-content>
+          <ion-datetime presentation="date" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="selectDate($any($event))" formControlName="dateOfBirth">
+            <span slot="title">Date of Birth</span>
+            <ion-buttons slot="buttons">
+              <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss();">Cancel</ion-button>
+              <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss();">Done</ion-button>
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </form>
 </ion-content>
 <ion-footer *ngIf="isDataLoaded">
   <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid || isInProgress" color="primary" (click)="submit()" expand="full" shape="round">

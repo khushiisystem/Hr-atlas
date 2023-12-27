@@ -244,8 +244,9 @@ export class AttendancePage implements OnInit {
             this.highlightedDates.push(selectDate);
             this.dateList.forEach((e) => {
               if(this.checkDates(new Date(holiday.eventDate), new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT){
-                e.leaveData = holiday;
+                e.leaveData = null;
                 e.created_date = new Date(holiday.eventDate).toISOString();
+                e.status = AttendaceStatus.HOLiDAY;
               }
               e.status === AttendaceStatus.HOLiDAY ? this.presents++ : this.absent++;
             });

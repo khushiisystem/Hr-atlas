@@ -126,6 +126,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
         } else if(res.role === 'Admin') {
           localStorage.setItem('isSwitchable', 'true');
           this.checkAdminSetups();
+          this.requestedLeaveList = [];
           this.getRequests();
           this.getTodayAttendance(this.today.toISOString(), 0);
           this.isSwitchable = true;
