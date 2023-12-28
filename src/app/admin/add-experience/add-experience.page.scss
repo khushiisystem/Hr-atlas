@@ -1,5 +1,26 @@
-.container {
-    padding: 20px 0px;
+// .container {
+//     padding: 20px 0px;
+// }
+ion-card{
+    border-radius: 10px;
+    // box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
+    box-shadow: none;
+    margin-inline: 16px;
+    margin-bottom: 24px;
+    margin-top: 24px;
+}
+ion-input, ion-select {
+    &.input-fill-solid, &.select-fill-solid {
+        --background: #f9fafd;
+        --border-color: #e7e5e5;
+
+        &.has-focus{
+            --background: #ededed;
+        }
+    }
+}
+.addExpBtn {
+    --detail-icon-opacity: 0.9;
 }
 .row_one {
     row-gap: 10px;
@@ -12,26 +33,28 @@
     font-size: 1rem;
     margin: 10px;
 }
-.card_header {
-    flex-direction: row;
-    gap: 10px;
-     
-    & ion-card-title{margin-top: 5px;}
-
-    & ion-button {
-        align-self: flex-start;
-        margin: 0 -10px 0 auto;
-        width: 40px;
-        --padding-end: 0;
-        --padding-start: 0;
-    }
-}
 
 .workExp_btnGroup {
-    gap: 10px;
+    gap: 5px;
     justify-content: flex-end;
 
-    ion-button {min-width: 110px;}
+    ion-button {
+        &:not(.button-round){
+            --padding-end: 10px;
+            --padding-start: 10px;
+            --border-radius: 5px;
+        }
+    }
+}
+.calenderBtns{
+    padding-inline-end: 16px;
+    ion-button {
+        &:not(.button-round){
+            --padding-end: 10px;
+            --padding-start: 10px;
+            --border-radius: 5px;
+        }
+    }
 }
 
 

@@ -24,8 +24,8 @@ export class EditProfilePage implements OnInit {
   openCalendar: boolean = false;
   today: Date = new Date();
   userId: string = '';
-  imgUrl: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
-  isSameAddress: boolean = false;
+  // imgUrl: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
+  imgUrl: string = '';
   expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card']
 
   constructor(
@@ -46,8 +46,8 @@ export class EditProfilePage implements OnInit {
       firstName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
       lastName: ['', Validators.compose([Validators.maxLength(50)])],
       email: ['', Validators.compose([Validators.email])],
-      officialEmail: ['', Validators.compose([Validators.email])],
-      mobileNumber: ['', Validators.compose([Validators.required, Validators.minLength(10), Validators.maxLength(10)])],
+      officialEmail: [''],
+      mobileNumber: [''],
       alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10)])],
       dateOfBirth: '',
       gender: ['Male', Validators.required],
@@ -105,8 +105,7 @@ export class EditProfilePage implements OnInit {
   }
 
   sameAddress(event: CustomEvent){
-    this.isSameAddress = event.detail.checked;
-    if(this.isSameAddress){
+    if(event.detail.checked === true){
       (this.employeeForm.controls['permanentAddress'] as FormGroup).patchValue((this.employeeForm.controls['currentAddress'] as FormGroup).value);
     } else {
       (this.employeeForm.controls['permanentAddress'] as FormGroup).reset();
@@ -168,7 +167,7 @@ export class EditProfilePage implements OnInit {
           this.router.navigate([lastRoute], {replaceUrl: true});
         }
       }, (error) =>{
-        this.shareServ.presentToast(error.error.message, 'top', 'danger');
+        this.shareServ.presentToast(error.error || error.error.message, 'top', 'danger');
         this.loader.dismiss();
       });
     }
@@ -179,11 +178,18 @@ export class EditProfilePage implements OnInit {
     this.router.navigate([lastRoute]);
   }
   getName() {
-    if(this.employeeDetail.lastName && this.employeeDetail.lastName.trim() !== ''){
-      return `${this.employeeDetail.firstName.slice(0,1)}${this.employeeDetail.lastName.slice(0,1)}`;
+    if(this.employeeDetail){
+      if(this.employeeDetail.lastName && this.employeeDetail.lastName.trim() !== ''){
+        return `${this.employeeDetail.firstName.slice(0,1)}${this.employeeDetail.lastName.slice(0,1)}`;
+      } else {
+        return `${this.employeeDetail.firstName.slice(0,2)}`;
+      }
     } else {
-      return `${this.employeeDetail.firstName.slice(0,2)}`;
+      return 'UK';
     }
+  }
+  getGroup(ctrlName: string) {
+    return this.employeeForm.get(ctrlName) as FormGroup;
   }
 
 }
