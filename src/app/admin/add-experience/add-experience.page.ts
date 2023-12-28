@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
@@ -40,6 +40,8 @@ export class AddExperiencePage implements OnInit {
   isDataLoaded: boolean = false;
   isInProgress: boolean = false;
   expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card'];
+  touchedCtrls: string[] = [];
+  workType: string[] = ['Work From Home', 'Work From Office'];
   deparmentList: Department[] = [
     {
       name: 'HR Department',
@@ -155,35 +157,47 @@ export class AddExperiencePage implements OnInit {
     });
   }
 
-  selectDate(event: DatetimeCustomEvent){
+  selectDate(event: DatetimeCustomEvent, ctrlName: string){
     const nonNesteCtrls : string[] = ['joiningDate', 'resignationDate'];
-    if(nonNesteCtrls.includes(this.activeControl)){
-      if(this.activeControl === nonNesteCtrls[0]){
+    if(nonNesteCtrls.includes(ctrlName)){
+      if(ctrlName === nonNesteCtrls[0]){
         this.workInfoForm.patchValue({
-          joiningDate: moment.utc(event.detail.value).format()
+          joiningDate: moment(event.detail.value).utc().format()
         });
-      } else if(this.activeControl === nonNesteCtrls[1]) {
+      } else if(ctrlName === nonNesteCtrls[1]) {
         this.workInfoForm.patchValue({
-          resignationDate: moment.utc(event.detail.value).format()
+          resignationDate: moment(event.detail.value).utc().format()
         });
       }
-    } else {
-
     }
   }
   
-  selectExpDate(event: DatetimeCustomEvent){
+  selectExpDate(event: DatetimeCustomEvent, ctrlName: string){
     const nesteCtrls : string[] = ['from', 'to'];
-    if(this.activeControl === nesteCtrls[0]){
+    if(ctrlName === nesteCtrls[0]){
       ((this.workInfoForm.controls['workHistory'] as FormArray).controls[this.formIndex] as FormGroup).patchValue({
-        from: moment.utc(event.detail.value).format()
+        from: moment(event.detail.value).utc().format()
       });
       this.minDate = new Date((event.detail.value as string));
-    } else if(this.activeControl === nesteCtrls[1]) {
+    } else if(ctrlName === nesteCtrls[1]) {
       ((this.workInfoForm.controls['workHistory'] as FormArray).controls[this.formIndex] as FormGroup).patchValue({
-        to: moment.utc(event.detail.value).format()
+        to: moment(event.detail.value).utc().format()
       });
     };
+    this.formIndex = -1;
+  }
+
+  toggleCtrl(ctrlName: string, frmIndex?: number){
+    this.activeControl = ctrlName;
+    this.openCalendar = true;
+    this.formIndex = frmIndex ?? -1;
+    if(!this.touchedCtrls.includes(`${ctrlName}${frmIndex??''}`)){
+      this.touchedCtrls.push(`${ctrlName}${frmIndex??''}`);
+    }
+  }
+  modalDismiss(){
+    this.activeControl = '';
+    this.openCalendar = false;
   }
 
   getNestedCtrl(ctrlName: string, index: number) {
@@ -268,6 +282,22 @@ export class AddExperiencePage implements OnInit {
       this.isInProgress = false;
       this.loader.dismiss();
     });
+  }
+
+  getError(ctrlName: AbstractControl<any> | null, errorMsg: string, invalidMsg?: string){
+    if(ctrlName && ctrlName.touched && ctrlName.errors){
+      if(ctrlName.value !== '' && ctrlName.invalid){
+        return invalidMsg ?? '';
+      } else {
+        return errorMsg;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  getChildCtrl(groupName: string): FormGroup{
+    return (this.workInfoForm.get(groupName) as FormGroup);
   }
 
   goBack(){history.back();}

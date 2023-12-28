@@ -50,9 +50,10 @@ ion-header {
 
     & .password_input input,
     & .flex_input input {
-        padding-right: 35px;
+        padding-right: 50px;
+        // max-width: calc(100% - 50px);
     }
-
+    
     & .toggleBtn {
         position: absolute;
         right: 2px;
@@ -63,6 +64,25 @@ ion-header {
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
+        & ion-note, ion-text {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            display: -webkit-box;
+            font-size: 80%;
+        }
+    }
+}
+ion-input, ion-select {
+    &.input-fill-solid, &.select-fill-solid {
+        --background: #f9fafd;
+        --border-color: #e7e5e5;
+
+        &.has-focus{
+            --background: #ededed;
+        }
     }
 }
 .error_txt {

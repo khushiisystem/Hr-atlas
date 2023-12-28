@@ -13,20 +13,27 @@
 }
 
 .img-div {
-    max-width: 120px;
-    border-radius: 50%;
-    margin: 0 auto 40px;
     position: relative;
-    box-shadow: 0px 0px 0 2px rgba(0,0,0,0.25);
-
+    min-height: 50px;
+    padding: 32px;
+    
     & .img-container{
-        display: flex;
+        position: relative;
+        display: inline-flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         aspect-ratio: 1;
         overflow: hidden;
         border-radius: 50%;
+        width: 100%;
+        max-width: 120px;
+        box-shadow: 0px 0px 0 5px rgba(255, 255, 255, 0.9);
+        position: absolute;
+        z-index: 1;
+        top: 10px;
+
+        & app-name-img, & ion-img {width: 100%;}
     }
 
     & img {
@@ -87,6 +94,39 @@
     }
 
     & ion-input{max-width: calc(100% - 65px);}
+}
+
+ion-list-header {
+    color: var(--color-blue-gray);
+    & ion-label {
+        & h2{
+            font-size: 20px;
+            font-weight: bold;
+        }
+        & ion-note {
+            font-size: 12px;
+        }
+    }
+}
+.list_flex{
+    display: flex;
+    flex-wrap: wrap;
+    & .listItem{
+        flex: 1 1 calc(475px - 32px);
+        // max-width: calc(575px - 32px);
+        width: 100%;
+
+    }
+}
+
+ion-list.personalInfoList {
+    padding-top: 70px;
+}
+ion-item-group.deactive {opacity: 0.5; pointer-events: none; user-select: none;}
+ion-card {
+    border-radius: 10px;
+    margin-inline: 16px;
+    box-shadow: none;
 }
 
 ion-footer {background-color: #fff;}

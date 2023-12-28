@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
@@ -65,7 +65,7 @@ export class AddEmployeePage implements OnInit {
         city: [''],
         state: [''],
         country: [''],
-        zipCode: ['']
+        zipCode: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(6)])]
       }),
       permanentAddress: this.fb.group({
         addressLine1: [''],
@@ -73,7 +73,7 @@ export class AddEmployeePage implements OnInit {
         city: [''],
         state: [''],
         country: [''],
-        zipCode: ['']
+        zipCode: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(6)])]
       }),
       linkedinUrl: [''],
       facebookUrl: [''],
@@ -139,14 +139,15 @@ export class AddEmployeePage implements OnInit {
   }
   
   submit(){
-    if(this.employeeForm.invalid){
-      return;
-    } else {
-      this.isInProgress = true;
-      this.loader.present('');
-      console.log(this.employeeForm.value, "form");
-      this.action === 'add' ? this.addEmployee() : this.updateEmployee();
-    }
+    console.log(this.employeeForm.value);
+    // if(this.employeeForm.invalid){
+    //   return;
+    // } else {
+    //   this.isInProgress = true;
+    //   this.loader.present('');
+    //   console.log(this.employeeForm.value, "form");
+    //   this.action === 'add' ? this.addEmployee() : this.updateEmployee();
+    // }
   }
 
   addEmployee(){
@@ -188,5 +189,21 @@ export class AddEmployeePage implements OnInit {
   goBack(){
     const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
     this.router.navigateByUrl(lastRoute);
+  }
+
+  getError(ctrlName: AbstractControl<any> | null, errorMsg: string, invalidMsg?: string){
+    if(ctrlName && ctrlName.touched && ctrlName.errors){
+      if(ctrlName.value !== '' && ctrlName.invalid){
+        return invalidMsg ?? '';
+      } else {
+        return errorMsg;
+      }
+    } else {
+      return null;
+    }
+  }
+
+  getChildCtrl(groupName: string): FormGroup{
+    return (this.employeeForm.get(groupName) as FormGroup);
   }
 }

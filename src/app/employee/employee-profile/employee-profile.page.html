@@ -359,7 +359,7 @@
 
   <ion-list mode="ios" class="ion-padding-vertical" *ngIf="userRole === 'Admin' || !employeeDetail">
     <ng-container *ngIf="employeeDetail">
-      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" class="settingBtns_item">
+      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" class="settingBtns_item" (click)="editProfile()">
         <ion-chip slot="start" color="medium">
           <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" size="small"></ion-icon>
         </ion-chip>
