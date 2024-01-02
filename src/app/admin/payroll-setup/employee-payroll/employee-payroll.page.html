@@ -25,7 +25,7 @@
 <ion-modal [isOpen]="openCalendar" #dateModal [initialBreakpoint]="0.65" [keepContentsMounted]="true" mode="md" [backdropDismiss]="false" [showBackdrop]="true" (didDismiss)="openCalendar = false">
   <ng-template>
     <ion-content>
-      <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [(ngModel)]="payslipDate" [max]="today.toISOString()" (ngModelChange)="getPayslipOfTheMonth();">
+      <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [(ngModel)]="payslipDate" [max]="today.toISOString()" (ngModelChange)="getPayStructure();">
         <ion-label slot="title">Select Year and Month</ion-label>
         <ion-buttons slot="buttons">
           <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateModal.dismiss();">Cancel</ion-button>
@@ -55,16 +55,16 @@
     <form [formGroup]="payslipFrom">
       <ion-list inset="true" mode="ios">
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="CTC" [fill]="'solid'" aria-label="CTC" formControlName="ctc" [min]="0" [readonly]="true"></ion-input>
+          <ion-input type="number" labelPlacement="floating" label="CTC" aria-label="CTC" formControlName="ctc" [min]="0" [readonly]="true"></ion-input>
         </ion-item>
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Basic Salary" [fill]="'solid'" aria-label="basics" formControlName="basicSalary" [min]="0" [required]="true" [readonly]="true"></ion-input>
+          <ion-input type="number" labelPlacement="floating" label="Basic Salary" aria-label="basics" formControlName="basicSalary" [min]="0" [required]="true" [readonly]="true"></ion-input>
         </ion-item>
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Bonus" [fill]="'solid'" aria-label="Bonus" formControlName="bonus" [min]="0"></ion-input>
+          <ion-input type="number" labelPlacement="floating" label="Bonus" aria-label="Bonus" formControlName="bonus" [min]="0"></ion-input>
         </ion-item>
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Advance Salary" [fill]="'solid'" aria-label="Advance Salary" formControlName="advanceSalary" [min]="0" [readonly]="true"></ion-input>
+          <ion-input type="number" labelPlacement="floating" label="Advance Salary" aria-label="Advance Salary" formControlName="advanceSalary" [min]="0" [readonly]="true"></ion-input>
         </ion-item>
       </ion-list>
 
@@ -78,10 +78,10 @@
     <form [formGroup]="payslipFrom">
       <ion-list inset="true" mode="ios">
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Loss Of Pay" [fill]="'solid'" aria-label="LOP" formControlName="lop" [min]="0" [readonly]="true"></ion-input>
+          <ion-input type="number" labelPlacement="floating" label="Loss Of Pay" aria-label="LOP" formControlName="lop" [min]="0" [readonly]="true"></ion-input>
         </ion-item>
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Deduction Amount" [fill]="'solid'" aria-label="Deduction Amount" formControlName="deductionAmount" [min]="0" [readonly]="true"></ion-input>
+          <ion-input type="number" labelPlacement="floating" label="Deduction Amount" aria-label="Deduction Amount" formControlName="deductionAmount" [min]="0" [readonly]="true"></ion-input>
         </ion-item>
       </ion-list>
 

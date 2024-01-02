@@ -13,6 +13,13 @@
     /* Set a fixed height for the columns */
     padding: 0;
 }
+.applyBtn{
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    --padding-end: 16px;
+    --padding-start: 16px;
+    margin-right: 16px;
+}
 ion-segment {
     // box-shadow: 8px 0px 5px rgb(77 141 255);
     position: sticky;
@@ -33,20 +40,15 @@ ion-segment {
     }
 }
 .leave_card {
-    ion-card-header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-
-        & .apply-button {
-            margin-inline: 0;
-            margin: 0 0 0 5px;
-            text-transform: capitalize;
-        }
-    }
-
-    & ion-row{margin-left: -5px; margin-right: -5px;}
-    & .purpose {white-space: pre-line;}
+    margin-inline: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+    box-shadow: none;
+    // & ion-button {
+    //     --padding-top: 6px;
+    //     --padding-bottom: 6px;
+    // }
 }
 
 .log_card {

@@ -112,6 +112,7 @@ export class EmployeeLeavesPage implements OnInit {
     this.shareServ.leaveApply(event).subscribe(res => {
       if(res){
         this.showApplyForm = false;
+        this.selectedLeaveType = '';
         this.shareServ.presentToast('Leave requested successfully', 'top', 'success');
         this.loader.dismiss();
         this.getLogs();

@@ -51,8 +51,10 @@ export class HollydaySetupPage implements OnInit {
     return formValue ? new Date(moment(formValue).format()) : '';
   }
   setEventDate(event: DatetimeCustomEvent){
+    const select = new Date(event.detail.value as string);
+    select.setHours(0,0,0);
     this.holdayForm.patchValue({
-      eventDate: moment.utc(event.detail.value).format()
+      eventDate: moment(select).utc().format()
     });
     this.openCalendar1 = false;
   }

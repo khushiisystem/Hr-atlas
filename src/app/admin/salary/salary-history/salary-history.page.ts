@@ -11,6 +11,7 @@ export class SalaryHistoryPage implements OnInit {
   incrementHistory: ISalarySetupResponse[] = [];
   isLoaded: boolean = false;
   moreData: boolean = true;
+  isExpanded: boolean = false;
   pageIndex: number = 0;
   @Input() employeeId: string ='';
 

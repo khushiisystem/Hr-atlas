@@ -13,7 +13,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" color="light">
   <ng-container *ngIf="!employee && employeeId.trim() === ''">
     <app-employees [isChecklist]="false" (employee)="selectEmploye($event)"></app-employees>
   </ng-container>
