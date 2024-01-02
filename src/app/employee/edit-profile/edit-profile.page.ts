@@ -115,7 +115,7 @@ export class EditProfilePage implements OnInit {
   checkSameAddress(){
     const permanentAdd = (this.employeeForm.controls['permanentAddress'] as FormGroup).value;
     const currentAdd = (this.employeeForm.controls['currentAddress'] as FormGroup).value;
-    return permanentAdd || currentAdd ? JSON.stringify(currentAdd) === JSON.stringify(permanentAdd) : false;
+    return permanentAdd && currentAdd && Object.values(permanentAdd)[0] !== '' && Object.values(currentAdd)[0] !== '' ? JSON.stringify(currentAdd) === JSON.stringify(permanentAdd) : false;
   }
 
   handleInput(event: Event){
