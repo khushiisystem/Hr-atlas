@@ -17,7 +17,7 @@
       <ion-row class="row_one">
         <ion-col size="12">
           <div class="form-input">
-            <ion-input labelPlacement="floating" fill="outline" formControlName="emailOrPhone" placeholder="Enter email">
+            <ion-input labelPlacement="floating" fill="outline" formControlName="emailOrPhone" placeholder="Enter email" autocomplete="email" type="email" inputmode="email" [enterkeyhint]="'next'">
               <div slot="label">Email <ion-text color="danger">*</ion-text></div>
             </ion-input>
           </div>
@@ -28,7 +28,7 @@
   
         <ion-col size="12">
           <div class="form-input">
-            <ion-input labelPlacement="floating" fill="outline" class="password_input" formControlName="password" placeholder="password" [type]="showPassword ? 'text' : 'password'">
+            <ion-input labelPlacement="floating" fill="outline" class="password_input" formControlName="password" placeholder="password" [type]="showPassword ? 'text' : 'password'" autocomplete="password" [enterkeyhint]="'done'">
               <div slot="label">Password <ion-text color="danger">*</ion-text></div>
             </ion-input>
   

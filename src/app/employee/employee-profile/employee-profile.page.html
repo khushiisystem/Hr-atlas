@@ -315,7 +315,7 @@
     </ng-container>
   </ion-list>
 
-  <ion-list mode="ios" lines="none" class="addresses ion-margin-bottom" *ngIf="employeeDetail && (employeeDetail.linkedinUrl || employeeDetail.facebookUrl || employeeDetail.twitterUrl)">
+  <ion-list mode="ios" lines="none" class="ion-margin-bottom" *ngIf="employeeDetail && (employeeDetail.linkedinUrl || employeeDetail.facebookUrl || employeeDetail.twitterUrl)">
     <ion-list-header mode="ios">
       <ion-label class="ion-text-wrap">
         <h2 *ngIf="employeeDetail">Social Media</h2>
@@ -323,25 +323,25 @@
         <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 90%; height: 7px"></ion-skeleton-text>
       </ion-label>
     </ion-list-header>
-    <ion-item [detail]="false" class="settingBtns_item" *ngIf="employeeDetail.linkedinUrl">
+    <ion-item [detail]="false" class="settingBtns_item socialLink" *ngIf="employeeDetail.linkedinUrl">
       <ion-icon name="logo-linkedin" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="primary"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h6>Linkedin</h6>
-        <p>{{employeeDetail.linkedinUrl}}</p>
+        <a href="{{employeeDetail.linkedinUrl}}" target="_blank">{{employeeDetail.linkedinUrl}}</a>
       </ion-label>
     </ion-item>
-    <ion-item [detail]="false" class="settingBtns_item" *ngIf="employeeDetail.facebookUrl">
+    <ion-item [detail]="false" class="settingBtns_item socialLink" *ngIf="employeeDetail.facebookUrl">
       <ion-icon name="logo-facebook" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="primary"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h6>Facebook</h6>
-        <p>{{employeeDetail.facebookUrl}}</p>
+        <a href="{{employeeDetail.facebookUrl}}" target="_blank">{{employeeDetail.facebookUrl}}</a>
       </ion-label>
     </ion-item>
-    <ion-item [detail]="false" class="settingBtns_item" *ngIf="employeeDetail.twitterUrl">
+    <ion-item [detail]="false" class="settingBtns_item socialLink" *ngIf="employeeDetail.twitterUrl">
       <ion-icon name="logo-twitter" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="secondary"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h6>Twitter</h6>
-        <p>{{employeeDetail.twitterUrl}}</p>
+        <a href="{{employeeDetail.twitterUrl}}" target="_blank">{{employeeDetail.twitterUrl}}</a>
       </ion-label>
     </ion-item>
     <ng-container *ngIf="!employeeDetail || !dataLoaded ">

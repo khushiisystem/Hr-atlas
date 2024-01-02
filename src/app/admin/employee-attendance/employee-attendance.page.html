@@ -58,21 +58,21 @@
   </ion-grid>
 
   <div class="btn_group {{!isFirst ? 'stickyCalender' : ''}}" *ngIf="employee">
-    <ion-button mode="md" color="primary" shape="round" type="button" (click)="dateModal = true" fill="solid" mode="md" [strong]="true">
+    <ion-button mode="md" color="primary" shape="round" type="button" id="monthSelect" (click)="dateModal = true" fill="solid" mode="md" [strong]="true">
       {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}
       <ion-icon name="chevron-down-outline" aria-hidden="true" slot="end"></ion-icon>
     </ion-button>
     <!-- <ion-button (click)="showCalendar = true" mode="md" [strong]="true" [shape]="'round'" color="secondary" fill="solid">Calendar View</ion-button> -->
   </div>
 
-  <ion-modal [isOpen]="dateModal" [initialBreakpoint]="0.5" mode="md" [showBackdrop]="true" (didDismiss)="dateModal = false">
+  <ion-modal trigger="monthSelect" [initialBreakpoint]="0.5" mode="md" [showBackdrop]="true" (didDismiss)="dateModal = false" #dateSelectModal>
     <ng-template>
       <ion-content>
-        <ion-datetime presentation="month-year" size="cover" [(ngModel)]="attendanceDate" mode="md" #yearMonth (ionChange)="selectDate($any($event));">
+        <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [value]="attendanceDate" [max]="today.toISOString()" [min]="minDate.toISOString()" (ionChange)="selectDate($any($event));">
           <ion-label slot="title">Select Year and Month</ion-label>
           <ion-buttons slot="buttons">
-            <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateModal = false;">Cancel</ion-button>
-            <ion-button mode="md" color="primary" (click)="yearMonth.confirm(); dateModal = false;">Done</ion-button>
+            <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateSelectModal.dismiss();">Cancel</ion-button>
+            <ion-button mode="md" color="primary" (click)="yearMonth.confirm(); dateSelectModal.dismiss();">Done</ion-button>
           </ion-buttons>
         </ion-datetime>
       </ion-content>
@@ -81,7 +81,7 @@
   <ion-modal [isOpen]="showCalendar" [showBackdrop]="true" [initialBreakpoint]="0.6" (didDismiss)="showCalendar = false" [backdropDismiss]="true">
     <ng-template>
       <ion-content>
-        <ion-datetime presentation="date" size="cover" mode="md" [highlightedDates]="highlightedDates" class="attendance_calendar"></ion-datetime>
+        <ion-datetime presentation="date" size="cover" mode="md" [highlightedDates]="highlightedDates" [max]="today.toISOString()" class="attendance_calendar"></ion-datetime>
       </ion-content>
     </ng-template>
   </ion-modal>

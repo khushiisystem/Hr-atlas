@@ -1,36 +1,13 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="previousWeek()">
-        <ion-icon name="chevron-back-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    
-    <ion-title>{{ currentMonth }}</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="nextWeek()">
-        <ion-icon name="chevron-forward-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content>
-  
-</ion-content> -->
-
 <ion-item [detail]="false" class="ion-text-center" [lines]="'none'">
   <ion-button
     fill="clear"
     [shape]="'round'"
     [slot]="'start'"
     (click)="decrementWeek()"
-    [disabled]="currentWeek <= 1"
   >
     <ion-icon name="chevron-back-outline"></ion-icon>
   </ion-button>
-  <ion-label color="tertiary" class="dateTitle">{{ currentDate | date:'MMMM yyyy' }}</ion-label>
+  <ion-label color="tertiary" class="dateTitle">{{ getFormatedDate(displayDate) | date:'MMMM yyyy' }}</ion-label>
   <ion-button
     fill="clear"
     [shape]="'round'"
@@ -52,13 +29,13 @@
         [fill]="isFocusedDay(getDate(weekDates[a]).dateE) ? 'solid' : isToday(getDate(weekDates[a]).dateE) ? 'outline' : 'clear'"
         [shape]="'round'"
         [size]="'small'"
-        [color]="a==0 ? 'danger' : 'primary'"
+        [color]="a==0 ? 'danger' : isHoliday(weekDates[a]) ? 'warning' : 'primary'"
         class="ion-no-margin ion-no-padding dateBtn"
-        *ngIf="getDate(weekDates[a]).isDate && getDate(weekDates[a]).dateE.getDay() === a"
         (click)="selectDate(getDate(weekDates[a]).dateE)"
-        [disabled]="(getDate(weekDates[a]).isDate && today.getFullYear() !== getDate(weekDates[a]).dateE.getFullYear()) || isLargest(getDate(weekDates[a]).dateE)"
+        [disabled]="(today.getFullYear() < getDate(weekDates[a]).dateE.getFullYear()) || isLargest(getDate(weekDates[a]).dateE) || isHoliday(weekDates[a]) || a == 0"
         >{{getDate(weekDates[a]).dateE.getDate() }}</ion-button
-      >
+        >
+        <!-- *ngIf="getDate(weekDates[a]).isDate && getDate(weekDates[a]).dateE.getDay() === a" -->
     </div>
   </ion-col>
 </ion-row>
