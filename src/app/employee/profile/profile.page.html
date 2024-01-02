@@ -38,7 +38,7 @@
           <ion-skeleton-text animated="true" style="width: 95%; height: 15px" *ngIf="!employeeDetail"></ion-skeleton-text>
           <ion-skeleton-text animated="true" style="width: 40%; height: 10px" *ngIf="!employeeDetail"></ion-skeleton-text>
         </ion-label>
-        <ion-button mode="ios" shape="round" size="small" fill="clear" color="tertiary" aria-label="Edit Profile" class="editSmallBtn" *ngIf="employeeDetail">
+        <ion-button mode="ios" shape="round" size="small" fill="clear" color="tertiary" aria-label="Edit Profile" class="editSmallBtn" *ngIf="employeeDetail" (click)="editProfile()">
           <ion-icon name="pencil" slot="icon-only" aria-label="Edit"></ion-icon>
         </ion-button>
       </ion-list-header>

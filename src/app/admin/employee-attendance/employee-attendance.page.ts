@@ -61,6 +61,7 @@ export class EmployeeAttendancePage implements OnInit {
   presents: number = 0;
   absent: number = 0;
   isFirst: boolean = false;
+  minDate: Date = new Date();
 
   constructor(
     private shareServ: ShareService,
@@ -72,6 +73,7 @@ export class EmployeeAttendancePage implements OnInit {
   ) { 
     const abc = localStorage.getItem('isFirst') || false;
     this.isFirst = abc === 'true' ? true : false;
+    this.minDate.setFullYear(2000, 1, 1);
   }
 
   ngOnInit() {
@@ -470,8 +472,9 @@ export class EmployeeAttendancePage implements OnInit {
     if(event.detail.value){
       this.pageIndex = 0;
       const xyz = new Date();
-      let monthDate = new Date(this.attendanceDate);
-      if(monthDate.getFullYear() <= xyz.getFullYear() && monthDate.getMonth() < xyz.getMonth()){
+      let monthDate = new Date(event.detail.value as string);
+      this.attendanceDate = monthDate.toISOString();
+      if(monthDate.getFullYear() < xyz.getFullYear() || monthDate.getMonth() < xyz.getMonth()){
         monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
       }
       this.getCalendar();

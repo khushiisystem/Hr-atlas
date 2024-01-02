@@ -54,10 +54,13 @@
 
 .settingBtns_item{
     --ripple-color: var(--ion-color-primary);
-    &.addressItem{
+    &.addressItem, &.socialLink{
         & ion-icon[slot='start']{
             align-self: self-start;
             margin-top: 10px;
+        }
+        & a {
+            text-decoration: none;
         }
     }
     & ion-chip[slot='start']{

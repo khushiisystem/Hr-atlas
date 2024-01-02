@@ -38,6 +38,7 @@ export class AttendancePage implements OnInit {
   dateModal: boolean = false;
   moreData: boolean = false;
   today: Date = new Date();
+  minDate: Date = new Date();
   attendanceDate: any;
   attendanceStatus: string[] = ['Present', 'Absent'];
   expandedCards: number[] = [0];
@@ -59,6 +60,7 @@ export class AttendancePage implements OnInit {
   ) {
     const abc = localStorage.getItem('isFirst') || false;
     this.isFirst = abc === 'true' ? true : false;
+    this.minDate.setFullYear(2000, 1, 1);
   }
 
   ngOnInit() {
@@ -75,7 +77,7 @@ export class AttendancePage implements OnInit {
   getMonthLyAttendance(){
     this.dataLoaded = false;
     this.moreData = true;
-    this.loader.present('');
+    // this.loader.present('');
     this.shareServ.monthlyAttendance(this.userId, this.attendanceDate, this.pageIndex * 0, 40).subscribe(res => {
       if(res.length < 1){
         this.moreData = false;
@@ -454,8 +456,9 @@ export class AttendancePage implements OnInit {
     if(event.detail.value){
       this.pageIndex = 0;
       const xyz = new Date();
-      let monthDate = new Date(this.attendanceDate);
-      if(monthDate.getFullYear() <= xyz.getFullYear() && monthDate.getMonth() < xyz.getMonth()){
+      let monthDate = new Date(event.detail.value as string);
+      this.attendanceDate = monthDate.toISOString();
+      if(monthDate.getFullYear() < xyz.getFullYear() || monthDate.getMonth() < xyz.getMonth()){
         monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
       }
       if(monthDate.getFullYear() != xyz.getFullYear()){this.getCalendar();}
