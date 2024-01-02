@@ -82,9 +82,11 @@ export class ViewCalendarPage implements OnInit {
           this.loader.dismiss();
           return;
         } else {
-          this.eventsList = res;
+          const abcList = res;
+          this.eventsList = abcList.sort((a: IHollydayResponse, b: IHollydayResponse) => new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime());
           this.isDataLoaded = true;
           this.loader.dismiss();
+          console.log(new Date(abcList[0].eventDate).getTime(), new Date(abcList[1].eventDate).getTime() )
         }
       }
     }, (error) => {

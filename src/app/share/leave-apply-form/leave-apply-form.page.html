@@ -41,7 +41,7 @@
       </div>
     </ion-col>
   </ion-row>
-  <ion-button mode="md" fill="solid" expand="block" color="primary" shape="round" [disabled]="leaveApplyForm.invalid" (click)="submitForm()">Apply Leave</ion-button>
+  <ion-button mode="md" fill="solid" expand="block" color="primary" shape="round" strong="true" [disabled]="leaveApplyForm.invalid" (click)="submitForm()">Apply Leave</ion-button>
 </form>
 
 <ion-modal [isOpen]="openCalendar && selectedCtrl === 'startDate'" [initialBreakpoint]="0.5" mode="md" [keepContentsMounted]="true">

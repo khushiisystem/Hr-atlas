@@ -1,5 +1,5 @@
-<div *ngIf="employee" class="ion-padding">
-  <form [formGroup]="salarySetupForm" (ionChange)="calculateTotal();" (ionInput)="calculateTotal()">
+<div *ngIf="employee" class="ion-margin-bottom">
+  <form [formGroup]="salarySetupForm" (ionChange)="calculateTotal();" (ionInput)="calculateTotal()" class="ion-padding">
     <ion-row class="form_row">
       <ion-col size="12" sizeSm="6">
         <div class="form-input" (click)="openCalendar1 = true">
