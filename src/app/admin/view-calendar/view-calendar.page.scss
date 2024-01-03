@@ -1,65 +1,78 @@
-.container{padding: 10px;}
-.calendar_row {
-    --gap: 10px;
-    --line-thickness: 2px;
-    --line-offset: calc(var(--gap) / 2);
-    overflow: hidden;
-    border: var(--line-thickness) solid var(--ion-color-medium);
-    row-gap: var(--line-thickness);
+.container{padding-bottom: 80px;}
 
-    & > ion-col {
-        display: flex;
-        align-items: center;
-        position: relative;
-        gap: var(--gap);
-        &:not(.th) {
-            padding-top: 7px;
-            padding-bottom: 7px;
+.calendar_card {
+    border-radius: 10px;
+    box-shadow: none;
+    margin-inline: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    & table {
+        width: 100%;
+        & tr {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 5px;
         }
-        &.th {
+        & td {
+            display: flex;
+            align-items: center;
             justify-content: center;
-            background-color: var(--ion-color-primary);
-            color: var(--ion-color-light);
-        }
-    
-        &::before, &::after {
-            content: '';
-            position: absolute;
-            background-color: var(--ion-color-medium);
-            top: calc(var(--line-offset) * -1);
-            left: 0;
-        }
-        &::after{
-            width: 2px;
-            height: 100vh;
-        }
-        &::before{
-            width: 100vw;
-            height: 2px;
-        }
-        &:nth-of-type(odd)::after{left: calc(var(--line-offset) * -1);}
-
-        & ion-text{
-            white-space: break-spaces;
-            overflow: hidden;
-            &.ml-auto{margin-left: auto;}
+            & span {
+                display: inline-flex;
+                border-radius: 50%;
+                padding: 5px;
+                align-items: center;
+                justify-content: center;
+                height: 40px;
+                width: 40px;
+                color: var(--color-blue-gray);
+                &.active{
+                    background-color: var(--ion-color-tertiary);
+                    color: var(--ion-color-tertiary-contrast);
+                    font-weight: 600;
+                }
+            }
         }
     }
 }
 
-.bigBtn {
-    margin: 5px auto;
-    max-width: 350px;
-    min-height: 46px;
-    font-size: 1rem;
+ion-list.eventList{
+    border-radius: 10px;
+}
+.date_avatar {
+    background-color: var(--ion-color-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & ion-text{
+        color: var(--ion-color-tertiary-contrast);
+        font-weight: 500;
+    }
 }
 
-.flex_div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 20px 0;
+ion-segment {
+    background-color: var(--ion-color-tertiary-contrast);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    & ion-segment-button{
+        font-size: 0.8rem;
+        text-transform: capitalize;
+        // font-weight: 500;
+        & ion-icon {margin-right: 5px;}
+        // &.segment-button-checked{
+            color: var(--ion-color-tertiary);
+            font-weight: 600;
+        // }
+    }
+}
 
-    & h4 {margin-top: 4px;}
+.optionITem.edit {
+    color: var(--ion-color-tertiary);
+}
+.optionITem.delete {
+    color: var(--ion-color-danger);
+}
+.calendarControls {
+    & ion-label {font-weight: 600;}
 }

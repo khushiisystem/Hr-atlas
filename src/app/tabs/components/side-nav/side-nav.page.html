@@ -28,10 +28,6 @@
           <ion-icon name="person-circle-outline" slot="start" aria-hidden="true"></ion-icon>
           <ion-label>My Profile</ion-label>
         </ion-item>
-        <ion-item lines="none" detail="false" type="button" button="true" *ngIf="userRole === 'Admin'" (click)="goNext(['/tabs', '/tabs/settings'])">
-          <ion-icon name="cog-outline" slot="start" aria-hidden="true"></ion-icon>
-          <ion-label>Admin Setups</ion-label>
-        </ion-item>
         <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/attendance', '/tabs/attendance-status'])">
           <ion-icon name="calendar-outline" slot="start" aria-hidden="true"></ion-icon>
           <ion-label>{{userRole === 'Employee' ? 'My ' : ''}}Attendance</ion-label>
@@ -43,6 +39,14 @@
         <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/view-calendar', '/tabs/view-calendar'])">
           <ion-icon name="calendar-outline" slot="start" aria-hidden="true"></ion-icon>
           <ion-label>Year Calendar</ion-label>
+        </ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" *ngIf="userRole === 'Admin'" (click)="goNext(['/tabs', '/tabs/salary'])">
+          <ion-icon name="wallet-outline" aria-hidden="true" slot="start" aria-label="Additional setup"></ion-icon>
+          <ion-label>Salary Setup</ion-label>
+        </ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" *ngIf="userRole === 'Admin'" (click)="goNext(['/tabs', '/tabs/settings'])">
+          <ion-icon name="cog-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>Settings</ion-label>
         </ion-item>
         <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/change-password', '/change-password'])">
           <ion-icon name="key" slot="start" aria-hidden="true"></ion-icon>

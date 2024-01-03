@@ -1,0 +1,4 @@
+<ion-text [ngClass]="showReadMore && textString.length > this.maxLength ? 'normal' : ''">
+  {{showReadMore ? trimmedText : textString }}
+  <span class="textToggleBtn" *ngIf="textString.length > this.maxLength" (click)="toggleReadMore()">{{ buttonText }}</span>
+</ion-text>

@@ -102,7 +102,7 @@
             </ion-col>
 
             <ion-col size="12" sizeSm="6">
-              <div class="form-input" id="joiningDate" (click)="toggleCtrl('joiningDate')">
+              <div class="form-input" (click)="toggleCtrl('joiningDate')">
                 <ion-input labelPlacement="floating" fill="solid" readonly="true" [value]="getDate('joiningDate') | date:'yyyy-MM-dd'" required="true" type="date">
                   <div slot="label">Joinig Date <ion-text color="danger">*</ion-text></div>
                 </ion-input>
@@ -306,7 +306,7 @@
         </ion-modal>
       </ng-container>
 
-      <ion-modal trigger="joiningDate" #joiningModal [initialBreakpoint]="0.5" mode="md">
+      <ion-modal [isOpen]="openCalendar && activeControl === 'joiningDate'" #joiningModal [initialBreakpoint]="0.5" mode="md">
         <ng-template>
           <ion-content>
             <ion-datetime presentation="date" mode="md" [size]="'cover'" #datetime preferWheel="true" (ionChange)="selectDate($any($event), 'joiningDate')">

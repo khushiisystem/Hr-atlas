@@ -130,6 +130,17 @@ ion-input, ion-select {
     & ion-button {min-width: 90px;}
 }
 
+.emptyDiv {
+    display: flex;
+    height: 100%;
+    min-height: calc(100vh - 200px);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+}
+
 // attendance calendar
 ion-datetime {
     &.attendance_calendar{
