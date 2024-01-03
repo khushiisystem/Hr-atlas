@@ -44,28 +44,28 @@
   <ion-button mode="md" fill="solid" expand="block" color="primary" shape="round" strong="true" [disabled]="leaveApplyForm.invalid" (click)="submitForm()">Apply Leave</ion-button>
 </form>
 
-<ion-modal [isOpen]="openCalendar && selectedCtrl === 'startDate'" [initialBreakpoint]="0.5" mode="md" [keepContentsMounted]="true">
+<ion-modal [isOpen]="openCalendar && selectedCtrl === 'startDate'" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.7, 1]">
   <ng-template>        
     <ion-content>
-      <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="true" #datetime (ionChange)="selectDate($any($event))">
+      <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
         <span slot="title">Select {{selectedCtrl}} Date</span>
         <ion-buttons slot="buttons">
-          <ion-button mode="md" color="danger" (click)="datetime.cancel();openCalendar = false">Cancel</ion-button>
-          <ion-button mode="md" color="primary" (click)="datetime.confirm();openCalendar = false">Done</ion-button>
+          <ion-button mode="ios" color="danger" (click)="datetime.cancel();openCalendar = false">Cancel</ion-button>
+          <ion-button mode="ios" color="primary" (click)="datetime.confirm();openCalendar = false">Done</ion-button>
         </ion-buttons>
       </ion-datetime>
     </ion-content>
   </ng-template>
 </ion-modal>
       
-<ion-modal [isOpen]="openCalendar && selectedCtrl === 'endDate'" [initialBreakpoint]="0.5" mode="md" [keepContentsMounted]="true">
+<ion-modal [isOpen]="openCalendar && selectedCtrl === 'endDate'" [initialBreakpoint]="0.75" [breakpoints]="[0.7, 1]" mode="ios" [keepContentsMounted]="true">
   <ng-template>
     <ion-content>
-      <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="true" [min]="minEndDate ? minEndDate : ''" #datetime2 (ionChange)="selectEndDate($any($event))">
+      <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" [min]="minEndDate ? minEndDate : ''" #datetime2 (ionChange)="selectEndDate($any($event))">
         <span slot="title">Select {{selectedCtrl}} Date</span>
         <ion-buttons slot="buttons">
-          <ion-button mode="md" color="danger" (click)="datetime2.cancel();openCalendar = false">Cancel</ion-button>
-          <ion-button mode="md" color="primary" (click)="datetime2.confirm();openCalendar = false">Done</ion-button>
+          <ion-button mode="ios" color="danger" (click)="datetime2.cancel();openCalendar = false">Cancel</ion-button>
+          <ion-button mode="ios" color="primary" (click)="datetime2.confirm();openCalendar = false">Done</ion-button>
         </ion-buttons>
       </ion-datetime>
     </ion-content>

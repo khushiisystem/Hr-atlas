@@ -13,7 +13,7 @@ import { ShareService } from 'src/app/services/share.service';
   styleUrls: ['./employee-leaves.page.scss'],
 })
 export class EmployeeLeavesPage implements OnInit {
-  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
+  @ViewChild('emplogList') infiniteScroll!: IonInfiniteScroll;
   selectedDates: string[] = [];
   toggleChecked: boolean = false;
   showApplyForm: boolean = false;
@@ -26,6 +26,7 @@ export class EmployeeLeavesPage implements OnInit {
   userID: string = '';
   openCalendar: boolean = false;
   moreData: boolean = false;
+  logsLoaded: boolean = false;
   platformType: string = "";
   platformBtn: string = "";
   activeTab: string = 'status'
@@ -132,11 +133,11 @@ export class EmployeeLeavesPage implements OnInit {
           this.leaveLogs.push(res[i]);
         }
         this.moreData = res.length > 9;
-        this.infiniteScroll.complete();
+        this.logsLoaded = true;
       }
     }, (error) => {
       this.moreData = false;
-      this.infiniteScroll.complete();
+      this.logsLoaded = true;
     });
   }
 
@@ -149,7 +150,6 @@ export class EmployeeLeavesPage implements OnInit {
 
   getLeaveStatus(){
     this.shareServ.getLeaveStatus().subscribe(res => {
-      console.log(res, 'status');
       if(res){
         this.leaveStatus = res;
       }
@@ -200,7 +200,6 @@ export class EmployeeLeavesPage implements OnInit {
     this.loader.present('');
     this.shareServ.cancelLeave(leaveId).subscribe(res => {
       if(res){
-        console.log(res, 'cancel leave res');
         this.shareServ.presentToast("Leave canceled.", 'top', 'success');
         this.loader.dismiss();
         this.getLogs();

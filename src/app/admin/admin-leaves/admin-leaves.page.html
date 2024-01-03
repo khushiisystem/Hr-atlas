@@ -10,12 +10,11 @@
 
   <div *ngIf="activeTab === 'requests'">
     <div class="ion-text-center ion-margin" *ngIf="!requestLoaded"><ion-spinner name="circular" color="tertiary"></ion-spinner></div>
-    
-    <ion-card *ngIf="requestLoaded && requestedLeaveList.length < 1">
-        <ion-card-content class="ion-text-center">
-            <ion-label color="dark">No any request.</ion-label>
-        </ion-card-content>
-    </ion-card>
+
+    <div class="emptyDiv" *ngIf="requestLoaded && requestedLeaveList.length < 1">
+      <img src="../../../assets/images/empty_trash.svg" class="emptyImg" alt="Empty">
+      <ion-label class="ion-text-wrap">No any request.</ion-label>
+    </div>
 
     <ion-card class="log_card" mode="md" *ngFor="let leaveItem of requestedLeaveList; index as a">
       <ion-card-header>
@@ -66,12 +65,11 @@
 
   <div *ngIf="activeTab === 'logs'">
     <div class="ion-text-center ion-margin" *ngIf="!logsLoaded"><ion-spinner name="circular" color="tertiary"></ion-spinner></div>
-    
-    <ion-card *ngIf="logsLoaded && leaveLogs.length < 1">
-        <ion-card-content class="ion-text-center">
-            <ion-label color="dark">No any leave assigned you.</ion-label>
-        </ion-card-content>
-    </ion-card>
+
+    <div class="emptyDiv" *ngIf="logsLoaded && leaveLogs.length < 1">
+      <img src="../../../assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
+      <ion-label class="ion-text-wrap">No any leave assigned you.</ion-label>
+    </div>
 
     <ion-card class="log_card" mode="md" *ngFor="let leaveItem of leaveLogs; index as a">
       <ion-card-header>
@@ -112,7 +110,10 @@
               </div>
             </ion-col>
           </ion-row>
-          <p class="purpose"><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
+          <p class="purpose">
+            <strong>Purpose: </strong>
+            <read-more-text [textString]="leaveItem.purpose" [maxLength]="100"></read-more-text>
+          </p>
       </ion-card-content>
       
       <ion-button type="button" color="danger" fill="clear" *ngIf="leaveItem.status === 'Pending'" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>

@@ -74,11 +74,11 @@
   </div>
 
   <div *ngIf="activeTab === 'logs'">
-    <ion-card mode="ios" *ngIf="leaveLogs.length < 1">
-      <ion-item class="ion-text-center" [lines]="'none'" [detail]="false">
-        <ion-label>Logs are empty.</ion-label>
-      </ion-item>
-    </ion-card>
+    <div class="emptyDiv" *ngIf="logsLoaded && leaveLogs.length < 1">
+      <img src="../../../assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
+      <ion-label class="ion-text-wrap">Logs are empty.</ion-label>
+    </div>
+
     <ion-card class="log_card" *ngFor="let leaveItem of leaveLogs; index as a">
       <ion-card-header>
         <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
@@ -114,7 +114,8 @@
           </ion-col>
         </ion-row>
         <p class="purpose">
-          <strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text>
+          <strong>Purpose: </strong>
+          <read-more-text [textString]="leaveItem.purpose" [maxLength]="100"></read-more-text>
         </p>
         <div class="flexItem">
           <ion-button *ngIf="leaveItem.status === 'Pending'" color="danger" mode="md" fill="solid" [strong]="true" shape="round" class="cancelBtn" (click)="cancelLeave(leaveItem.guid)">Cancel Leave</ion-button>
@@ -123,8 +124,8 @@
     </ion-card>
     
     
-    <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadLogs($any($event))" [position]="'bottom'">
-      <ion-infinite-scroll-content *ngIf="moreData" loadingSpinner="bubbles" loadingText="Loading more data...">
+    <ion-infinite-scroll #emplogList (ionInfinite)="loadLogs($any($event))" [position]="'bottom'" *ngIf="moreData">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
       </ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </div>

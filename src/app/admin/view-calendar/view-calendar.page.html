@@ -13,60 +13,116 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="container">
-
-    <div class="flex_div">
-      <h4 class="ion-padding-horizontal ion-text-center">Calendar of the year</h4>
-      <ion-button color="tertiary" mode="ios" [id]="'openModal'" size="small">
-        <span *ngIf="selectedDate">{{getDate(selectedDate).getFullYear()}}</span>
-        <span *ngIf="!selectedDate">Select Year</span>
-        <ion-icon name="chevron-down-outline" slot="end" [ariaHidden]="true" size="small"></ion-icon>
-      </ion-button>
-    </div>
-
-    <h5 class="ion-text-center" *ngIf="isDataLoaded && eventsList.length === 0">Calendar is not available.</h5>
-
-    <ion-grid [hidden]="!isDataLoaded" *ngIf="eventsList.length > 0">
-      <ion-row class="calendar_row">
-        <ion-col size="6" class="th ion-text-center">
-          <h5><ion-text>Event Name</ion-text></h5>
-        </ion-col>
-        <ion-col size="6" class="th ion-text-center">
-          <h5><ion-text>Event Date</ion-text></h5>
-        </ion-col>
-        <ng-container *ngFor="let event of eventsList">
-          <ion-col size="6">
-            <ion-text>{{event.eventTitle}}</ion-text>
-          </ion-col>
-          <ion-col size="6">
-            <ion-text class="ml-auto">{{getDate(event.eventDate) | date:'EEE, dd MMM'}}</ion-text>
-            <ion-button mode="md" fill="clear" color="primary" [strong]="true" size="small" shape="round" (click)="createHollyday(event, 'update')" aria-label="Edit" *ngIf="userRole === 'Admin'">
-              <ion-icon name="pencil-outline" size="small" aria-hidden="true" slot="icon-only" mode="md"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ng-container>
-      </ion-row>
-    </ion-grid>
-
+<ion-content [fullscreen]="true" color="light">
+  <div [ngClass]="userRole === 'Admin' ? 'container' : ''">
+    <ion-segment [(ngModel)]="activView" mode="md" class="tab_segement" color="tertiary">
+      <ion-segment-button value="listView" layout="icon-start">
+        <ion-icon name="list"></ion-icon>
+        <ion-label>List View</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="calendarView" layout="icon-start">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <ion-label>Calendar View</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   
-    <ion-modal [trigger]="'openModal'" mode="md" #modal [keepContentsMounted]="true" [initialBreakpoint]="0.5">
-      <ng-template>
-        <ion-content>
-          <ion-datetime [preferWheel]="true" [presentation]="'year'" mode="md" [size]="'cover'" [showDefaultTitle]="true" #yearDateTime (ionChange)="selectYear($any($event))">
-            <ion-label slot="title">Select Effective Date</ion-label>
+    <ion-list inset="true" mode="ios" *ngIf="activView === 'calendarView'">
+      <ion-item detail="false" class="calendarControls">
+        <ion-button slot="start" color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementMonth()" aria-label="Previous Month">
+          <ion-icon slot="icon-only" name="chevron-back" aria-label="Previous Month"></ion-icon>
+        </ion-button>
+        <ion-label class="ion-text-center">{{ currentMonth.format('MMMM YYYY') }}</ion-label>
+        <ion-button slot="end" color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementMonth()" aria-label="Previous Month">
+          <ion-icon slot="icon-only" name="chevron-forward" aria-label="Previous Month"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+    
+    <ion-card class="calendar_card" *ngIf="activView === 'calendarView'">
+      <ion-card-content>
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let day of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']">{{ day }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let week of dates">
+              <td *ngFor="let date of week">
+                <span [ngClass]="isHoliday(date ?? '') ? 'active' : ''">{{ date ? getMomentDate(date) : '' }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ion-card-content>
+    </ion-card>
+  
+    <ion-list inset="true" mode="md" class="eventList" *ngIf="activView === 'calendarView' && filterByMonth().length > 0">
+      <ion-item *ngFor="let event of filterByMonth(); index as a;" detail="false">
+        <ion-avatar slot="start" class="date_avatar">
+          <ion-text>{{event.eventDate | date:'dd'}}</ion-text>
+        </ion-avatar>
+        <ion-label class="ion-text-wrap">{{event.eventTitle}}</ion-label>
+        <ion-button slot="end" fill="clear" mode="ios" color="dark" aria-label="Option" id="moreOption" (click)="presentPopover($event, event)" *ngIf="userRole === 'Admin'">
+          <ion-icon name="ellipsis-vertical" aria-label="Option"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+  
+    <ng-container *ngIf="activView === 'listView'">
+      <ion-list inset="true" mode="md" class="eventList" *ngFor="let month of monthsList">
+        <ion-list-header>
+          <ion-label>{{month | date:'MMMM, yyyy'}}</ion-label>
+        </ion-list-header>
+        <ion-item *ngFor="let event of filterByMonth(month); index as a;" detail="false">
+          <ion-avatar slot="start" class="date_avatar">
+            <ion-text>{{event.eventDate | date:'dd'}}</ion-text>
+          </ion-avatar>
+          <ion-label class="ion-text-wrap">{{event.eventTitle}}</ion-label>
+          <ion-button slot="end" fill="clear" mode="ios" color="dark" aria-label="Option" id="moreOption" (click)="presentPopover($event, event)" *ngIf="userRole === 'Admin'">
+            <ion-icon name="ellipsis-vertical" aria-label="Option"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+  
+      <!-- <ion-list inset="true" mode="md" class="eventList">
+        <ion-item-group *ngFor="let month of monthsList">
+          <ion-item-divider>
+            <ion-label>{{month | date:'MMMM, yyyy'}}</ion-label>
+          </ion-item-divider>
+          <ion-item *ngFor="let event of filterByMonth(month); index as a;" detail="false">
+            <ion-avatar slot="start" class="date_avatar">
+              <ion-text>{{event.eventDate | date:'dd'}}</ion-text>
+            </ion-avatar>
+            <ion-label class="ion-text-wrap">{{event.eventTitle}}</ion-label>
+            <ion-button slot="end" fill="clear" mode="ios" color="dark" aria-label="Option" id="moreOption" (click)="presentPopover($event, event)" *ngIf="userRole === 'Admin'">
+              <ion-icon name="ellipsis-vertical" aria-label="Option"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-item-group>
+      </ion-list> -->
 
-            <ion-buttons slot="buttons" class="datemodal_btns">
-              <ion-button color="danger" shape="round" [strong]="true" class="cancel_btn" (click)="yearDateTime.cancel(); modal.dismiss(null, 'cancel')">Cancel</ion-button>
-              <ion-button color="primary" fill="solid" shape="round" [strong]="true" class="saveBtn" [disabled]="yearDateTime.isDateEnabled" (click)="yearDateTime.confirm();">Done</ion-button>
-            </ion-buttons>
-          </ion-datetime>
-        </ion-content>
-      </ng-template>
-    </ion-modal>
-
+      <ion-list mode="ios" inset="true" *ngIf="isDataLoaded && eventsList.length < 1">
+        <ion-item detail="false">
+          <ion-label class="ion-text-center">Events not created.</ion-label>
+        </ion-item>
+      </ion-list>
+    </ng-container>
   </div>
+
+  <ion-popover [isOpen]="selectedEvent != null" size="auto" side="bottom" alignment="end" class="filter" (didDismiss)="selectedEvent = null" dismissOnSelect="true" showBackdrop="false" #popover>
+    <ng-template>
+      <ion-content>
+        <ion-item lines="none" detail="false" type="button" button="true" mode="ios" class="optionITem edit" (click)="createHollyday(selectedEvent, 'update')">Edit</ion-item>
+        <ion-item lines="none" detail="false" type="button" button="true" mode="ios" class="optionITem delete" (click)="deleteEvent()">Delete</ion-item>
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+
+  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="isDataLoaded && userRole === 'Admin'">
+    <ion-fab-button (click)="createHollyday({}, 'add')" aria-label="Add Event" mode="ios">
+      <ion-icon name="add" aria-hidden="true" aria-label="Add Event"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  
 </ion-content>
-<ion-footer mode="md" *ngIf="isDataLoaded && userRole === 'Admin'">
-  <ion-button [expand]="'full'" [shape]="'round'" [strong]="true" [mode]="'ios'" color="primary" class="bigBtn" [disabled]="!isDataLoaded" (click)="createHollyday({}, 'add')">Add Event</ion-button>
-</ion-footer>

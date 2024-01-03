@@ -41,6 +41,7 @@ import { AttendanceStatusPage } from "../admin/attendance-status/attendance-stat
 import { CustomCallendarPageModule } from "../share/components/custom-callendar/custom-callendar.module";
 import { AttendaceUpdatePage } from "../admin/employee-attendance/attendace-update/attendace-update.page";
 import { SideNavPage } from "./components/side-nav/side-nav.page";
+import { ReadMorePageModule } from "../share/components/read-more/read-more.module";
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { SideNavPage } from "./components/side-nav/side-nav.page";
     SideNavPage,
   ],
   imports: [
+    ReadMorePageModule,
     IonicModule,
     CommonModule,
     FormsModule,

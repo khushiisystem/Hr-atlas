@@ -109,6 +109,8 @@ export class HollydaySetupPage implements OnInit {
         this.shareServ.presentToast('Event Deleted Successfully', 'top', 'success');
         this.loader.dismiss();
         this.modalCtrl.dismiss('deleted', 'confirm');
+      } else {
+        this.loader.dismiss()
       }
     }, (error) => {
       console.log(error.error.message);
