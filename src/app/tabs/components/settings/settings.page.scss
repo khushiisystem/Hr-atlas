@@ -1,48 +1,36 @@
-ion-item, ion-card {
-    --ripple-color: var(--ion-color-primary)
-}
+ion-card {
+    margin-inline: 16px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    border-radius: 14px;
+    transition: transform 500ms cubic-bezier(0.12, 0.72, 0.29, 1) 0s, -webkit-transform 500ms cubic-bezier(0.12, 0.72, 0.29, 1) 0s;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
 
-ion-accordion ion-item[slot="header"], .btn_item {--ripple-color: var(--ion-color-primary)}
-.accordion_head_item {
-    & div {
-        padding: 15px 0;
-        white-space: break-spaces;
-        overflow: hidden;
-        line-height: 1.5;
-
-        // & ion-label {color: var(--ion-color-primary);}
+    & ion-card-header{
+        padding-inline: 20px;
+        padding-top: 20px;
+        padding-bottom: 16px;
     }
-    & .sub-header {
-        font-size: 0.8rem;
-        color: var(--ion-color-primary);
-        white-space: nowrap;
-        display: block;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
+
+    & ion-card-title {
+        font-weight: 700;
+        // font-size: ;
     }
-}
-
-.nested_item {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-
-    & ion-label {font-size: 1rem; color: var(--ion-color-dark);}
-}
-.decorative-line {
-    height: 2px;
-    background-color: #fff;
-    margin: 10px 0;
-}
-
-.header-toolbar {
-    --ion-toolbar-background: rgb(255, 106, 0);
-    --ion-color-base: black;
-}
-.nested_item_btn{--padding-start: 5px; --inner-padding-end: 5px; --ripple-color: var(--ion-color-primary);}
-
-.loadingContent {
-    & ion-card, & ion-item {--background: transparent;}
+    & ion-list {
+        background-color: var(--ion-color-base);
+    }
+    & ion-item-divider{
+        --background: var(--ion-color-base);
+        --padding-start: 0px;
+        font-weight: 500;
+        
+    }
+    & ion-item-group{
+        &:not(:first-child){
+            margin-top: 16px;
+        }
+    }
+    & ion-item {
+        --padding-start: 0px;
+    }
 }

@@ -187,8 +187,7 @@ export class AddEmployeePage implements OnInit {
   }
 
   goBack(){
-    const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
-    this.router.navigateByUrl(lastRoute);
+    history.back();
   }
 
   getError(ctrlName: AbstractControl<any> | null, errorMsg: string, invalidMsg?: string){

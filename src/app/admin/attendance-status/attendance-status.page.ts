@@ -1,15 +1,12 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { IonInfiniteScroll, IonToggle } from '@ionic/angular';
-import { Subject, debounceTime } from 'rxjs';
 import { IRoles } from 'src/app/interfaces/enums/IRoles';
 import { AttendaceStatus } from 'src/app/interfaces/enums/leaveCreditPeriod';
 import { IClockInResponce } from 'src/app/interfaces/response/IAttendanceSetup';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
-import { LoaderService } from 'src/app/services/loader.service';
 import { RoleStateService } from 'src/app/services/roleState.service';
-import { ShareService } from 'src/app/services/share.service';
 
 interface InfiniteScrollCustomEvent extends CustomEvent {
   target: HTMLIonInfiniteScrollElement;
@@ -73,6 +70,7 @@ export class AttendanceStatusPage implements OnInit {
         }
         this.isMoreData = res.length > 29;
       }
+      this.today.setHours(0,0,0);
       this.getTodayAttendance(this.today.toISOString());
     }, (error) => {
       this.isMoreData = false;
@@ -148,6 +146,8 @@ export class AttendanceStatusPage implements OnInit {
   selectAttendanceDate(event: any){
     if(event.detail.value){
       this.attendanceDate = new Date(event.detail.value);
+      this.pageIndex = 0;
+      this.attendanceList = [];
       this.getTodayAttendance(this.attendanceDate.toISOString());
     }
   }

@@ -66,6 +66,10 @@ export class SettingsPage implements OnInit {
   salarysetup(){
     this.router.navigate(['/tabs/salary']);
   }
+  addEmployee(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/add-employee/add/${null}`])
+  }
 
   accordionChange(event: CustomEvent){
     if(event.detail.value){

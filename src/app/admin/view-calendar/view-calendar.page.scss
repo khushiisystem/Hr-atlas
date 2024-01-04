@@ -74,5 +74,7 @@ ion-segment {
     color: var(--ion-color-danger);
 }
 .calendarControls {
+    --padding-start: 5px;
+    --inner-padding-end: 5px;
     & ion-label {font-weight: 600;}
 }
