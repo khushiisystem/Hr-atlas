@@ -141,6 +141,20 @@ ion-input, ion-select {
     gap: 10px;
 }
 
+.cardActions {
+    padding-inline: 10px;
+    padding-bottom: 10px;
+}
+.nameAvatar {
+    display: flex;
+    justify-content: center;
+    background-color: var(--ion-color-primary);
+    align-items: center;
+    color: var(--ion-color-primary-contrast);
+    font-size: 18px;
+    font-weight: 500;
+}
+
 // attendance calendar
 ion-datetime {
     &.attendance_calendar{

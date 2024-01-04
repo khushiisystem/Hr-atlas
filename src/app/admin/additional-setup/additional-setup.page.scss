@@ -75,7 +75,8 @@ form {
         --indicator-color: var(--ion-color-primary);
         // --background-hover: var(--color-primary);
         // --background-focused: var(--color-primary);
-        --color-checked: var(--ion-color-light);
+        --color-checked: var(--ion-color-primary-contrast);
+        text-transform: capitalize;
         &.segment-button-checked {
             background-color: var(--ion-color-primary);
             color: var(--ion-color-light);

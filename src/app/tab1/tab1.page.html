@@ -50,7 +50,7 @@
         <swiper-slide>
           <ion-card mode="md" class="">
             <ion-card-content>
-              <ion-text>Please setup the leaves before to create an employee.</ion-text><br>
+              <ion-text>Please setup the attendance before to create an employee.</ion-text><br>
               <small><em>Settings > Primary setup > Attendance Setup</em></small>
             </ion-card-content>
           </ion-card>
@@ -243,18 +243,18 @@
               <ion-label>{{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || '' | titlecase}}</ion-label>
             </ion-chip>
           </div>
-          <div class="ion-text-end">
-            <ion-text>{{leaveItem.leaveType}}</ion-text>
-          </div>
         </ion-card-header>
         <ion-card-content>
           <p>
-            <ion-text>{{leaveItem.startDate | date:'shortDate'}}</ion-text> - <ion-text>{{leaveItem.endDate | date:'shortDate'}}</ion-text>
+            <b>Type: <ion-text>{{leaveItem.leaveType}}</ion-text> </b>
+          </p>
+          <p>
+            <ion-text>{{leaveItem.startDate | date:'dd/MM/YYYY'}}</ion-text> - <ion-text>{{leaveItem.endDate | date:'dd/MM/YYYY'}}</ion-text>
           </p>
           <p class="purpose"><strong>Purpose: </strong> <ion-text>{{leaveItem.purpose}}</ion-text></p>
         </ion-card-content>
   
-        <div class="ion-text-end">
+        <div class="ion-text-end cardActions">
           <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
           <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
         </div>

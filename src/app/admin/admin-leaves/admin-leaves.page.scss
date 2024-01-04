@@ -1,4 +1,3 @@
-
 .tab_segment {
     position: sticky;
     top: 0;
@@ -9,7 +8,8 @@
         border-bottom: 2px solid var(--ion-color-primary);
         color: var(--ion-color-primary);
         --indicator-color: var(--ion-color-primary);
-        --color-checked: var(--ion-color-light);
+        --color-checked: var(--ion-color-primary-contrast);
+        text-transform: capitalize;
         &.segment-button-checked {
             font-weight: 600;
             background-color: var(--ion-color-primary);
@@ -18,16 +18,32 @@
     }
 }
 .log_card {
-    color: var(--ion-color-dark-tint);
+    // color: var(--ion-color-dark-tint);
     box-shadow: rgb(82 96 255 / 14%) 0px 4px 16px;
-    border-radius: 8px;
-    margin-inline: 16px;
-    margin-top: 24px;
-    margin-bottom: 24px;
+    // box-shadow: none;
+    transition: transform 0.5s ease;
     & ion-card-header {
         flex-direction: row;
-        justify-content: space-between;
-        gap: 20px;
+        // justify-content: space-between;
+        // align-items: center;
+        gap: 1rem;
+    }
+    & .cardTitle {
+        font-size: 1rem;
+        color: var(--color-blue-gray);
+        font-weight: bold;
+        // flex: 0 0 calc(100% - 90px);
+        max-width: calc(100% - 90px);
+        text-overflow: ellipsis;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+        align-self: center;
+    }
+    & ion-icon{
+        align-self: flex-start;
+        margin-left: auto;
     }
     & ion-row{margin-left: -5px; margin-right: -5px;}
     & .flex-div {
@@ -38,4 +54,26 @@
     }
 
     & .purpose {white-space: pre-line;}
+
+    & ion-avatar {
+        width: 40px;
+        height: 40px;
+    }
+    &:hover, &:focus {
+        transform: scale3d(0.97,0.97,0.97);
+        transition: transform 0.5s ease;
+    }
+}
+.cardActions {
+    padding-inline: 10px;
+    padding-bottom: 10px;
+}
+.nameAvatar {
+    display: flex;
+    justify-content: center;
+    background-color: var(--ion-color-primary);
+    align-items: center;
+    color: var(--ion-color-primary-contrast);
+    font-size: 18px;
+    font-weight: 500;
 }

@@ -1,11 +1,11 @@
 <div>
   <ion-segment [(ngModel)]="activeTab" mode="md" class="tab_segment">
-      <ion-segment-button value="requests">
-          <ion-label>Requestes</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="logs">
-          <ion-label>Logs</ion-label>
-      </ion-segment-button>
+    <ion-segment-button value="requests">
+      <ion-label>Requestes</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="logs">
+      <ion-label>Logs</ion-label>
+    </ion-segment-button>
   </ion-segment>
 
   <div *ngIf="activeTab === 'requests'">
@@ -16,7 +16,7 @@
       <ion-label class="ion-text-wrap">No any request.</ion-label>
     </div>
 
-    <ion-card class="log_card" mode="md" *ngFor="let leaveItem of requestedLeaveList; index as a">
+    <!-- <ion-card class="log_card" mode="md" *ngFor="let leaveItem of requestedLeaveList; index as a">
       <ion-card-header>
         <div>
           <ion-card-subtitle *ngIf="leaveItem.employeeDetails">
@@ -60,6 +60,36 @@
 
       <ion-button type="button" color="danger" fill="clear" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
       <ion-button type="button" color="primary" fill="clear" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
+    </ion-card> -->
+    
+    <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of requestedLeaveList; index as a">
+      <ion-card-header>
+        <ion-avatar class="nameAvatar" *ngIf="!leaveItem.employeeDetails.imageUrl || leaveItem.employeeDetails.imageUrl.trim() === ''">
+          <span>{{leaveItem.employeeDetails.firstName.substring(0,1)}}</span>
+        </ion-avatar>
+        <ion-avatar *ngIf="leaveItem.employeeDetails.imageUrl && leaveItem.employeeDetails.imageUrl.trim() !== ''">
+          <img [alt]="leaveItem.employeeDetails.firstName" [src]="leaveItem.employeeDetails.imageUrl" />
+        </ion-avatar>
+        <ion-label class="cardTitle">{{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || '' | titlecase}}</ion-label>
+        <ion-icon name="ellipse" aria-hidden="true" aria-label="status" [color]="getStatus(leaveItem.status).color"></ion-icon>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <b>Type: <ion-text>{{leaveItem.leaveType}}</ion-text> </b>
+        </p>
+        <p>
+          <ion-text>{{leaveItem.startDate | date}}</ion-text> - <ion-text>{{leaveItem.endDate | date}}</ion-text>
+        </p>
+        <p class="purpose">
+          <strong>Purpose: </strong>
+          <read-more-text [textString]="leaveItem.purpose" [maxLength]="100"></read-more-text>
+        </p>
+      </ion-card-content>
+
+      <div class="ion-text-end cardActions">
+        <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
+        <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
+      </div>
     </ion-card>
   </div>
 
@@ -71,7 +101,40 @@
       <ion-label class="ion-text-wrap">No any leave assigned you.</ion-label>
     </div>
 
-    <ion-card class="log_card" mode="md" *ngFor="let leaveItem of leaveLogs; index as a">
+    <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of leaveLogs; index as a">
+      <ion-card-header>
+        <ion-avatar class="nameAvatar" *ngIf="!leaveItem.employeeDetails.imageUrl || leaveItem.employeeDetails.imageUrl.trim() === ''">
+          <span>{{leaveItem.employeeDetails.firstName.substring(0,1)}}</span>
+        </ion-avatar>
+        <ion-avatar *ngIf="leaveItem.employeeDetails.imageUrl && leaveItem.employeeDetails.imageUrl.trim() !== ''">
+          <img [alt]="leaveItem.employeeDetails.firstName" [src]="leaveItem.employeeDetails.imageUrl" />
+        </ion-avatar>
+        <ion-label class="cardTitle">{{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || '' | titlecase}}</ion-label>
+        <ion-icon name="ellipse" aria-hidden="true" aria-label="status" [color]="getStatus(leaveItem.status).color"></ion-icon>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          <b>Type: <ion-text>{{leaveItem.leaveType}}</ion-text> </b>
+        </p>
+        <p>
+          <b>Status: </b> <ion-text [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-text>
+        </p>
+        <p>
+          <ion-text>{{leaveItem.startDate | date}}</ion-text> - <ion-text>{{leaveItem.endDate | date}}</ion-text>
+        </p>
+        <p class="purpose">
+          <strong>Purpose: </strong>
+          <read-more-text [textString]="leaveItem.purpose" [maxLength]="100"></read-more-text>
+        </p>
+      </ion-card-content>
+
+      <div class="ion-text-end cardActions">
+        <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" *ngIf="leaveItem.status === 'Pending'" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
+        <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small" *ngIf="leaveItem.status === 'Pending'" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
+      </div>
+    </ion-card>
+
+    <!-- <ion-card class="log_card" mode="md" *ngFor="let leaveItem of leaveLogs; index as a">
       <ion-card-header>
         <div>
           <ion-card-subtitle *ngIf="leaveItem.employeeDetails">
@@ -118,7 +181,7 @@
       
       <ion-button type="button" color="danger" fill="clear" *ngIf="leaveItem.status === 'Pending'" (click)="leaveApprovel(leaveItem.guid, false)">Cancel</ion-button>
       <ion-button type="button" color="primary" fill="clear" *ngIf="leaveItem.status === 'Pending'" (click)="leaveApprovel(leaveItem.guid, true)">Approve</ion-button>
-    </ion-card>
+    </ion-card> -->
   </div>
 
   <ion-infinite-scroll #requestsInfiniteScroll (ionInfinite)="loadRequests($any($event))" [position]="'bottom'" *ngIf="activeTab === 'requests' && moreRequests">

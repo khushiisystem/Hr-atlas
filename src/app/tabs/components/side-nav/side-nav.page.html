@@ -38,7 +38,7 @@
         </ion-item>
         <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/view-calendar', '/tabs/view-calendar'])">
           <ion-icon name="calendar-outline" slot="start" aria-hidden="true"></ion-icon>
-          <ion-label>Year Calendar</ion-label>
+          <ion-label>Calendar</ion-label>
         </ion-item>
         <ion-item lines="none" detail="false" type="button" button="true" *ngIf="userRole === 'Admin'" (click)="goNext(['/tabs', '/tabs/salary'])">
           <ion-icon name="wallet-outline" aria-hidden="true" slot="start" aria-label="Additional setup"></ion-icon>

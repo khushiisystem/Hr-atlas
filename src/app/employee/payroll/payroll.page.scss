@@ -32,7 +32,8 @@
         border-bottom: 2px solid var(--ion-color-primary);
         color: var(--ion-color-primary);
         --indicator-color: var(--ion-color-primary);
-        --color-checked: var(--ion-color-light);
+        --color-checked: var(--ion-color-primary-contrast);
+        text-transform: capitalize;
         &.segment-button-checked {
             font-weight: 600;
             background-color: var(--ion-color-primary);

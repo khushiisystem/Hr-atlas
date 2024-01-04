@@ -13,91 +13,104 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" color="light">
-  <ion-accordion-group expand="inset" #accordionGroup mode="md" [value]="activeTab" (ionChange)="accordionChange($any($event))">
-    <ion-accordion value="Primary" mode="md">
-      <ion-item slot="header" class="accordion_head_item">
-        <div>
-          <ion-label>Primary Setups</ion-label>
-          <ion-text class="sub-header">Attendance Setup, Employee Attendance</ion-text>
-        </div>
-      </ion-item>
-      <div class="ion-padding" slot="content">
-        <ion-item [lines]="'full'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="attendanceSetup()">
-          <ion-icon name="hourglass-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-          <ion-label color="primary">Attendance Setup</ion-label>
-        </ion-item>
-
-        <ion-item [lines]="'none'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" [routerLink]="['/tabs/attendance-status']" routerLinkActive="router-link-active" >
-          <ion-icon name="people-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-          <ion-label color="primary">Employee Attendance</ion-label>
-        </ion-item>
-      </div>
-    </ion-accordion>
-
-    <ion-accordion value="leaves" mode="md">
-      <ion-item slot="header" class="accordion_head_item">
-        <div>
-          <ion-label>Calendar Setup</ion-label>
-          <ion-text class="sub-header">Leave Setup, Hollyday Setup, View Calendar</ion-text>
-        </div>
-      </ion-item>
-      <div class="ion-padding" slot="content">
-        <ion-item [lines]="'full'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="leaveSetupModal()">
-          <ion-icon name="fast-food-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-          <ion-label color="primary">Leave Setup</ion-label>
-        </ion-item>
-
-        <ion-item [lines]="'full'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="hollydaySetup()">
-          <ion-icon name="calendar-number-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-          <ion-label color="primary">Hollyday Setup</ion-label>
-        </ion-item>
-
-        <ion-item [lines]="'none'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" [routerLink]="['/tabs/view-calendar']" routerLinkActive="router-link-active" >
-          <ion-icon name="calendar-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-          <ion-label color="primary">View Calendar</ion-label>
-        </ion-item>
-      </div>
-    </ion-accordion>
-
-    <ion-accordion value="Finance" mode="md">
-      <ion-item slot="header" class="accordion_head_item">
-        <div>
-          <ion-label>Finance Management</ion-label>
-          <ion-text class="sub-header">Salary setup, Payroll Setup, Salary structure list</ion-text>
-        </div>
-        </ion-item>
-      <div class="ion-padding" slot="content">
-        <!-- <ion-item [lines]="'full'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="additionalsetup()">
-          <ion-icon name="bar-chart-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-          <ion-label color="primary">View Increments List</ion-label>
-        </ion-item> -->
-
-        <ion-item [lines]="'full'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="salarysetup()">
-          <ion-icon name="receipt-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-          <ion-label color="primary">Salary Setup</ion-label>
-        </ion-item>
-
-        <ion-item [lines]="'none'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="payrollSetup()">
-          <ion-icon name="wallet-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-          <ion-label color="primary">Payroll Setup</ion-label>
-        </ion-item>
-      </div>
-    </ion-accordion>
-    
-    <ion-accordion value="Settings" mode="md">
-        <ion-item slot="header" class="accordion_head_item">
-          <div>
-            <ion-label>Additional Setup</ion-label>
-            <ion-text class="sub-header">Create Work weeks, Assign work week</ion-text>
-          </div>
-        </ion-item>
-
-        <div class="ion-padding" slot="content">
-          <ion-item [lines]="'none'" [detail]="true" mode="ios" type="button" [button]="true" class="nested_item_btn" (click)="additionalsetup()">
-            <ion-icon name="calendar-outline" aria-hidden="true" slot="start" aria-label="Additional setup" color="primary"></ion-icon>
-            <ion-label color="primary">Work Week setup</ion-label>
+  <ion-card mode="md" color="primary">
+    <ion-card-header>
+      <ion-card-title>Employment</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list mode="ios">
+        <ion-item-group>
+          <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="addEmployee()">
+            <ion-icon size="small" name="person-add" aria-hidden="true" slot="start" aria-label="Attendance setup"></ion-icon>
+            <ion-label>Add Employee</ion-label>
           </ion-item>
-        </div>
-    </ion-accordion>
-  </ion-accordion-group>
+          <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="additionalsetup()">
+            <ion-icon size="small" name="calendar" aria-hidden="true" slot="start" aria-label="Work week"></ion-icon>
+            <ion-label>Assign Work Week</ion-label>
+          </ion-item>
+        </ion-item-group>
+        <ion-item-group>
+          <ion-item-divider>
+            <ion-label>Attendance</ion-label>
+          </ion-item-divider>
+          <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="attendanceSetup()">
+            <ion-icon size="small" name="timer" aria-hidden="true" slot="start" aria-label="Attendance setup"></ion-icon>
+            <ion-label>Clock-in, Clock-out</ion-label>
+          </ion-item>
+          <ion-item [detail]="true" type="button" [button]="true" color="primary" [routerLink]="['/tabs/attendance-status']">
+            <ion-icon size="small" name="list" aria-hidden="true" slot="start" aria-label="Employee Attendance"></ion-icon>
+            <ion-label>Employee Attendance</ion-label>
+          </ion-item>
+        </ion-item-group>
+        <ion-item-group>
+          <ion-item-divider>
+            <ion-label>Leave</ion-label>
+          </ion-item-divider>
+          <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="leaveSetupModal()">
+            <ion-icon size="small" name="fast-food" aria-hidden="true" slot="start" aria-label="Leave setup"></ion-icon>
+            <ion-label>Leave Setup</ion-label>
+          </ion-item>
+          <ion-item [detail]="true" type="button" lines="none" [button]="true" color="primary" [routerLink]="['/tabs/view-calendar']">
+            <ion-icon size="small" name="calendar" aria-hidden="true" slot="start" aria-label="Calendar View"></ion-icon>
+            <ion-label>Calendar Holiday</ion-label>
+          </ion-item>
+        </ion-item-group>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <!-- <ion-card mode="md" color="primary">
+    <ion-card-header>
+      <ion-card-title>Leave</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list mode="ios">
+        <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="leaveSetupModal()">
+          <ion-icon size="small" name="fast-food" aria-hidden="true" slot="start" aria-label="Leave setup"></ion-icon>
+          <ion-label>Leave Setup</ion-label>
+        </ion-item>
+        <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="hollydaySetup()">
+          <ion-icon size="small" name="calendar-number" aria-hidden="true" slot="start" aria-label="Holiday setup"></ion-icon>
+          <ion-label>Holiday Setup</ion-label>
+        </ion-item>
+        <ion-item [detail]="true" type="button" lines="none" [button]="true" color="primary" [routerLink]="['/tabs/view-calendar']">
+          <ion-icon size="small" name="calendar" aria-hidden="true" slot="start" aria-label="Calendar View"></ion-icon>
+          <ion-label>Calendar Holiday</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card> -->
+  <ion-card mode="md" color="tertiary">
+    <ion-card-header>
+      <ion-card-title>Finance Management</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list mode="ios">
+        <ion-item [detail]="true" type="button" [button]="true" color="tertiary" (click)="salarysetup()">
+          <ion-icon size="small" name="receipt" aria-hidden="true" slot="start" aria-label="Additional setup"></ion-icon>
+          <ion-label>Salary Setup</ion-label>
+        </ion-item>
+        <ion-item [detail]="true" type="button" lines="none" [button]="true" color="tertiary" (click)="payrollSetup()">
+          <ion-icon size="small" name="wallet" aria-hidden="true" slot="start" aria-label="Additional setup"></ion-icon>
+          <ion-label>Payroll Setup</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  <!-- <ion-card mode="md" color="tertiary">
+    <ion-card-header>
+      <ion-card-title>Leaves</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list mode="ios">
+        <ion-item [detail]="true" type="button" [button]="true" color="tertiary">
+          <ion-icon name="" aria-hidden="true" slot="start" aria-label="Additional setup"></ion-icon>
+          <ion-label></ion-label>
+        </ion-item>
+        <ion-item [detail]="true" type="button" lines="none" [button]="true" color="tertiary">
+          <ion-icon name="calendar-outline" aria-hidden="true" slot="start" aria-label="Additional setup"></ion-icon>
+          <ion-label></ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card> -->
 </ion-content>

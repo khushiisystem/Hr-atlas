@@ -90,7 +90,6 @@ export class ViewCalendarPage implements OnInit {
   presentPopover(e: Event, event: IHollydayResponse) {
     this.popover.event = e;
     this.selectedEvent = event;
-    console.log(this.selectedEvent)
   }
 
   selectYear(event: DatetimeCustomEvent){
@@ -169,6 +168,20 @@ export class ViewCalendarPage implements OnInit {
       this.selectedDate = this.currentMonth;
       this.getCalendar();
     }
+    this.generateDates();
+  }
+
+  incrementYear() {
+    this.currentMonth.add(1, 'year');
+    this.selectedDate = this.currentMonth;
+    this.getCalendar();
+    this.generateDates();
+  }
+
+  decrementYear() {
+    this.currentMonth.subtract(1, 'year');
+    this.selectedDate = this.currentMonth;
+    this.getCalendar();
     this.generateDates();
   }
 
