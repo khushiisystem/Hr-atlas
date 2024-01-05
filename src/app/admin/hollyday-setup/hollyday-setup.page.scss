@@ -1,8 +1,10 @@
+ion-toolbar{
+    --background: var(--ion-color-primary-contrast);
+    --opacity: 1;
+}
 form {
-    padding-top: 16px;
+    padding-top: 36px;
     padding-bottom: 16px;
-    
-    ion-row {row-gap: 10px;}
     
     .submitBtn {
         max-width: 300px;
@@ -10,11 +12,19 @@ form {
         margin-right: auto;
         font-size: 1rem;
         height: 45px;
-        font-weight: 600;
 
-        &:not(.deleteBtn){
-            --background: rgb(255, 106, 0);
-            --color: #fff;
-        }
+        // &:not(.deleteBtn){
+        //     --background: rgb(255, 106, 0);
+        //     --color: #fff;
+        // }
+    }
+}
+ion-item {
+    --detail-icon-opacity: 0.85;
+    --detail-icon-color: var(--ion-color-medium);
+    & ion-icon[slot='end'] {
+        margin-inline-end: -6px;
+        font-size: var(--detail-icon-font-size);
+        opacity: var(--detail-icon-opacity);
     }
 }

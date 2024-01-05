@@ -71,6 +71,10 @@
         <ion-button mode="md" fill="solid" expand="block" color="danger" shape="round" strong="true" class="ion-margin-top" (click)="showApplyForm = false; selectedLeaveType = ''">Cancel</ion-button>
       </ion-card-content>
     </ion-card>
+
+    <div class="ion-text-center" *ngIf="!leaveStatus || !leaveStatus">
+      <ion-spinner name="circular" color="primary"></ion-spinner>
+    </div>
   </div>
 
   <div *ngIf="activeTab === 'logs'">
@@ -79,47 +83,19 @@
       <ion-label class="ion-text-wrap">Logs are empty.</ion-label>
     </div>
 
-    <ion-card class="log_card" *ngFor="let leaveItem of leaveLogs; index as a">
-      <ion-card-header>
-        <ion-card-title>{{leaveItem.leaveType}}</ion-card-title>
-        <div class="ion-text-end">
-          <ion-chip [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-chip>
-        </div>
-      </ion-card-header>
+    <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of leaveLogs; index as a">
       <ion-card-content>
-        <ion-row class="ion-margin-bottom">
-          <ion-col size="6">
-            <div class="flex-div">
-              <ion-label>Applied On</ion-label>
-              <ion-text>{{leaveItem.created_date | date}}</ion-text>
-            </div>
-          </ion-col>
-          <ion-col size="6">
-            <div class="flex-div">
-              <ion-label>Day Type</ion-label>
-              <ion-text>{{leaveItem.dayType}}</ion-text>
-            </div>
-          </ion-col>
-          <ion-col size="6">
-            <div class="flex-div">
-              <ion-label>From</ion-label>
-              <ion-text>{{leaveItem.startDate | date}}</ion-text>
-            </div>
-          </ion-col>
-          <ion-col size="6">
-            <div class="flex-div">
-              <ion-label>To</ion-label>
-              <ion-text>{{leaveItem.endDate | date}}</ion-text>
-            </div>
-          </ion-col>
-        </ion-row>
+        <ion-icon name="ellipse" class="statusIcon" aria-hidden="true" aria-label="status" [color]="getStatus(leaveItem.status).color"></ion-icon>
+        <p>
+          <b>Type: <ion-text>{{leaveItem.leaveType}}</ion-text> </b>
+        </p>
+        <p>
+          <ion-text color="medium">{{leaveItem.startDate | date}}</ion-text> - <ion-text>{{leaveItem.endDate | date}}</ion-text>
+        </p>
         <p class="purpose">
           <strong>Purpose: </strong>
           <read-more-text [textString]="leaveItem.purpose" [maxLength]="100"></read-more-text>
         </p>
-        <div class="flexItem">
-          <ion-button *ngIf="leaveItem.status === 'Pending'" color="danger" mode="md" fill="solid" [strong]="true" shape="round" class="cancelBtn" (click)="cancelLeave(leaveItem.guid)">Cancel Leave</ion-button>
-        </div>
       </ion-card-content>
     </ion-card>
     

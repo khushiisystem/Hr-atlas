@@ -100,7 +100,7 @@ export class SalarySetupPage implements OnInit {
     // } else if(reviceSalary){
     //   this.calculatedValue = currentCtc;
     // }
-    if(this.previousSalary > 0){
+    if(this.previousSalary > 0 && currentCtc >= 0){
       const percent = ((currentCtc - this.previousSalary) / this.previousSalary) * 100;
       this.salarySetupForm.patchValue({
         increment: percent.toFixed(2),

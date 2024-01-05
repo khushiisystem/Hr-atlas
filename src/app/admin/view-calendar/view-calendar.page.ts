@@ -54,8 +54,11 @@ export class ViewCalendarPage implements OnInit {
   async createHollyday(events: IHollydayResponse | any, action: 'add' | 'update') {
     const eventModal = this.modalCtrl.create({
       component: HollydaySetupPage,
-      mode: 'md',
-      initialBreakpoint: 1,
+      mode: 'ios',
+      initialBreakpoint: 0.9,
+      breakpoints: [0.75, 0.85, 1],
+      showBackdrop: true,
+      backdropDismiss: false,
       componentProps: {action: action, hollyday: events}
     });
 
@@ -139,16 +142,24 @@ export class ViewCalendarPage implements OnInit {
     this.dates = [];
 
     while (currentDate.isSameOrBefore(endOfMonth)) {
-      const weekIndex = currentDate.week() - startOfMonth.week() + (startOfMonth.weekday() === 0 ? 1 : 0);
+      let weekIndex = currentDate.week() - startOfMonth.week() + (startOfMonth.weekday() === 0 ? 1 : 0);
+      let dayIndex = currentDate.weekday();
+  
+      if (weekIndex < 0) {
+        // If the weekIndex is negative, adjust for the previous year
+        weekIndex += moment(currentDate).subtract(1, 'year').weeksInYear();
+      }
+
       if (!this.dates[weekIndex]) {
         this.dates[weekIndex] = [];
       }
-      this.dates[weekIndex][currentDate.weekday()] = moment(currentDate);
+
+      this.dates[weekIndex][dayIndex] = moment(currentDate);
       currentDate.add(1, 'day');
     }
 
     // Fill empty slots with null or empty string
-    this.dates = this.dates.map(week => week.map(day => (day ? day : '')));
+    this.dates = this.dates.map((week) => week.map((day) => (day ? day : '')));
   }
 
   incrementMonth() {
