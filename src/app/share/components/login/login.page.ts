@@ -57,7 +57,7 @@ export class LoginPage implements OnInit {
             }
             localStorage.setItem('isFirst' , String(true))
           });
-          this.router.navigateByUrl('/tabs/home');
+          this.router.navigate(['/tabs/home'], {replaceUrl: true});
           this.loader.dismiss();
           this.loginForm.reset();
         }

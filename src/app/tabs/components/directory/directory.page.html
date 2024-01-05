@@ -5,7 +5,7 @@
         <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>Employee List</ion-title>
+    <ion-title>{{userRole}}</ion-title>
     <ion-thumbnail slot="end" class="logo_img ion-margin-end">
       <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>
@@ -17,18 +17,6 @@
     </ng-container> -->
   </ion-toolbar>
 </ion-header>
-
-<ng-container *ngIf="userRole === 'Admin'">
-  <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" size="auto" side="bottom" alignment="end" class="filter">
-    <ng-template>
-      <ion-content>
-        <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
-        <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item>
-        <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
-      </ion-content>
-    </ng-template>
-  </ion-popover>
-</ng-container>
 
 <ion-content [fullscreen]="true">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
@@ -52,6 +40,18 @@
         </ion-button>
       </div>
     </div>
+
+    <ng-container *ngIf="userRole === 'Admin'">
+      <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" size="auto" side="bottom" alignment="end" class="filter">
+        <ng-template>
+          <ion-content>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+    </ng-container>
 
     <ion-list *ngIf="userRole === 'Admin'" mode="ios" inset="false">
       <ion-item lines="none" [button]="false" *ngIf="isDataLoaded && employeeList.length === 0">

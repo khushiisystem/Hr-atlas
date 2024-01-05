@@ -27,6 +27,7 @@ export class EmployeeLeavesPage implements OnInit {
   openCalendar: boolean = false;
   moreData: boolean = false;
   logsLoaded: boolean = false;
+  statusLoaded: boolean = false;
   platformType: string = "";
   platformBtn: string = "";
   activeTab: string = 'status'
@@ -149,11 +150,14 @@ export class EmployeeLeavesPage implements OnInit {
   }
 
   getLeaveStatus(){
+    this.statusLoaded = false;
     this.shareServ.getLeaveStatus().subscribe(res => {
       if(res){
         this.leaveStatus = res;
+        this.statusLoaded = true;
       }
     }, (error) => {
+      this.statusLoaded = true;
       console.log(error, "error status");
     });
   }

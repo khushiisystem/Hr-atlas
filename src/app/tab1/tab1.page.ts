@@ -309,8 +309,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
   async createHollyday() {
     const eventModal = this.modalCtrl.create({
       component: HollydaySetupPage,
-      mode: 'md',
-      initialBreakpoint: 1,
+      mode: 'ios',
+      initialBreakpoint: 0.75,
+      breakpoints: [0.75, 0.85, 1],
+      showBackdrop: true,
+      backdropDismiss: false,
       componentProps: {action: 'add', hollyday: null}
     });
 

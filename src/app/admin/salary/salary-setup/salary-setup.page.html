@@ -60,7 +60,7 @@
       <ion-row class="form_row">
         <ion-col size="12" sizeMd="6">
           <div class="form-input">
-            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Advance" formControlName="advanceSalary" min="0" [enterkeyhint]="'next'" [inputmode]="'decimal'" [step]="100">
+            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Advance" formControlName="advanceSalary" #advanceSal min="0" [enterkeyhint]="'next'" [inputmode]="'decimal'" [step]="100">
               <div slot="label">Advance Salary</div>
             </ion-input>
           </div>
@@ -68,7 +68,7 @@
 
         <ion-col size="12" sizeMd="6">
           <div class="form-input">
-            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Deduction" formControlName="deductionAmount" min="0" [enterkeyhint]="'next'" [inputmode]="'decimal'" [step]="100">
+            <ion-input type="number" labelPlacement="floating" fill="outline" placeholder="Deduction" formControlName="deductionAmount" min="0" [max]="advanceSal.value ? advanceSal.value : 0" [enterkeyhint]="'next'" [inputmode]="'decimal'" [step]="100" [readonly]="!advanceSal.value || advanceSal.value === 0">
               <div slot="label">Deduction Amount</div>
             </ion-input>
           </div>
