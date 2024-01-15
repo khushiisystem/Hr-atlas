@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RoleStateService } from '../services/roleState.service';
 import { AdminService } from '../services/admin.service';
 import { UserStateService } from '../services/userState.service';
+import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-tabs',
@@ -14,7 +15,7 @@ export class TabsPage {
   isSwitchable: boolean = false;
   userDetail: any;
 
-  constructor(private roleStateServ: RoleStateService, private adminServ: AdminService, private userStateServ: UserStateService) {
+  constructor(private roleStateServ: RoleStateService, private adminServ: AdminService, private userStateServ: UserStateService, public authService: AuthService) {
     userStateServ.getState().subscribe(res => {
       this.userDetail = res;
       if(!res){
@@ -29,6 +30,10 @@ export class TabsPage {
             } else if(res.role === 'Admin') {
               localStorage.setItem('isSwitchable', 'true');
               this.isSwitchable = true;
+            }
+          },(error)=>{
+            if (error.status == 401 && error.statusText == 'Unauthorized'){
+              this.authService.signOut();
             }
           });
         }    

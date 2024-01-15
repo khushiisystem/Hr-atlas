@@ -16,7 +16,7 @@ export const ROLES = {
   providedIn: 'root',
 })
 export class AuthService {
-  header!: HttpHeaders;
+  // header!: HttpHeaders;
   headers!: HttpHeaders | { [header: string]: string | string[] };
   currentUser!: Observable<string>;
   private currentUserSubject!: BehaviorSubject<string>;
@@ -34,7 +34,7 @@ export class AuthService {
         : false
     );
 
-    this.header = new HttpHeaders({
+    this.headers = new HttpHeaders({
       'Content-Type': 'Application/json',
       Authentication: `Barear ${this.currentUserSubject}`,
     });
