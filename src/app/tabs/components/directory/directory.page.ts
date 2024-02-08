@@ -142,11 +142,12 @@ export class DirectoryPage implements OnInit, OnDestroy {
     this.searchString = "";
     this.searchSubject.complete();
 
+    const isSwitchable = localStorage.getItem("isSwitchable");
     if(this.userId === empId){
-      if(this.userRole === 'Admin'){
-        this.router.navigateByUrl(`/tabs/admin-profile`);
-      } else if(this.userRole === 'Employee'){
+      if(this.userRole === 'Employee' && !isSwitchable){
         this.router.navigateByUrl(`/tabs/profile`);
+      } else if(isSwitchable || isSwitchable?.toString().trim().toLocaleLowerCase() === "true"){
+        this.router.navigateByUrl(`/tabs/admin-profile`);
       }
     } else {
       this.router.navigateByUrl(`/tabs/employee-profile/${empId}`);

@@ -39,25 +39,20 @@ export class SalarySetupPage implements OnInit {
     const today = new Date();
     this.maxDate = today;
     this.maxDate.setFullYear(today.getFullYear() + 1, today.getMonth(), today.getDate());
-    this.formSetup();
     if(this.employee) {
       this.employeeId = this.employee.guid;
       this.getPreviousRevision();
-      this.salarySetupForm.patchValue({
-        employeeId: this.employeeId
-      });
     }
+    this.formSetup();
   }
 
   formSetup(){
     this.salarySetupForm = this.fb.group({
-      employeeId: ['', Validators.required],
-      effectiveDate: ['', Validators.required],
+      employeeId: [this.employeeId, Validators.required],
+      effectiveDate: [moment.utc().format(), Validators.required],
       lastIncrementDate: [''],
       current_ctc: ['', Validators.compose([Validators.required, Validators.min(0)])],
       increment: 0,
-      advanceSalary: 0,
-      deductionAmount: 0,
     });
   }
 
@@ -88,6 +83,7 @@ export class SalarySetupPage implements OnInit {
       }
     }, (error) => {
       this.isInProcess = false;
+      this.shareServ.presentToast(error.error.Message, "top", "danger");
     });
   }
 

@@ -9,10 +9,11 @@ import { EmployeeLeavesPage } from 'src/app/employee/employee-leaves/employee-le
 import { AdminLeavesPage } from 'src/app/admin/admin-leaves/admin-leaves.page';
 import { LeaveApplyFormPage } from '../leave-apply-form/leave-apply-form.page';
 import { ReadMorePageModule } from '../components/read-more/read-more.module';
+import { LeaveCardPage } from '../components/leave-card/leave-card.page';
 
 @NgModule({
-    exports: [LeavesPage, EmployeeLeavesPage, AdminLeavesPage, LeaveApplyFormPage],
-    declarations: [LeavesPage, EmployeeLeavesPage, AdminLeavesPage, LeaveApplyFormPage],
+    exports: [LeavesPage, EmployeeLeavesPage, AdminLeavesPage, LeaveApplyFormPage, LeaveCardPage],
+    declarations: [LeavesPage, EmployeeLeavesPage, AdminLeavesPage, LeaveApplyFormPage, LeaveCardPage],
     imports: [
         CommonModule,
         FormsModule,

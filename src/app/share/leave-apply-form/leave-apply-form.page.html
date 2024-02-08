@@ -1,73 +1,75 @@
 <form [formGroup]="leaveApplyForm">
-  <ion-row class="ion-margin-bottom">
-    <ion-col size="12" sizeSm="6">
-      <div class="form-input">
-        <ion-input labelPlacement="floating" fill="outline" [readonly]="true" (ionFocus)="openCalendar = true; selectedCtrl = 'startDate'" (ionActive)="openCalendar = true; selectedCtrl = 'startDate'" [value]="getDate('startDate') | date">
-          <div slot="label">Start Date <ion-text color="danger">*</ion-text></div>
-        </ion-input>
-        <div class="toggleBtn">
-          <ion-button mode="md" fill="clear" (click)="openCalendar = true; selectedCtrl = 'startDate'">
-            <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
-          </ion-button>
-        </div>
-      </div>
+  <ion-row formGroupName="from">
+    <ion-col size="6" id="startdate">
+      <ion-input labelPlacement="floating" color="light" fill="solid" [value]="getDate('startDate') | date" [errorText]="getFormGroup('from').controls['date'].touched && getFormGroup('from').controls['date'].errors ? 'Start date is required' : ''" [required]="true" class="dateInput">
+        <div slot="label">From <ion-text color="danger">*</ion-text></div>
+      </ion-input>
     </ion-col>
-    <ion-col size="12" sizeSm="6">
-      <div class="form-input">
-        <ion-select labelPlacement="floating" fill="outline" formControlName="dayType" interface="action-sheet" [required]="true">
-          <div slot="label">Leave Day <ion-text color="danger">*</ion-text></div>
-          <ion-select-option value="Full Day">Full Day</ion-select-option>
-          <ion-select-option value="Half Day">Half Day</ion-select-option>
-        </ion-select>
-      </div>
+    <ion-col size="6">
+      <ion-select labelPlacement="floating" color="light" fill="solid" formControlName="dayType" interface="action-sheet" [required]="true">
+        <div slot="label">Leave Day <ion-text color="danger">*</ion-text></div>
+        <ion-select-option value="Full Day">Full Day</ion-select-option>
+        <ion-select-option value="Half Day">Half Day</ion-select-option>
+      </ion-select>
     </ion-col>
-    <ion-col size="12" sizeSm="6" *ngIf="leaveApplyForm.controls['dayType'].value === 'Full Day'">
-      <div class="form-input">
-        <ion-input labelPlacement="floating" fill="outline" [readonly]="true" (ionFocus)="openCalendar = true; selectedCtrl = 'endDate'" (ionActive)="openCalendar = true; selectedCtrl = 'endDate'" [value]="getDate('endDate') | date">
-          <div slot="label">End Date <ion-text color="danger">*</ion-text></div>
-        </ion-input>
-        <div class="toggleBtn">
-          <ion-button mode="md" fill="clear" (click)="openCalendar = true; selectedCtrl = 'endDate'">
-            <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
-          </ion-button>
-        </div>
-      </div>
-    </ion-col>
-    <ion-col size="12">
-      <div class="form-input">
-        <ion-textarea labelPlacement="floating" fill="outline" placeholder="Leave purpose" [required]="true" formControlName="purpose" rows="5">
-          <div slot="label">Purpose <ion-text color="danger">*</ion-text></div>
-        </ion-textarea>
-      </div>
-    </ion-col>
+    
+    <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.7, 1]" #startDateModal>
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>Start Date</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
+            <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
+            <ion-buttons slot="buttons">
+              <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
+              <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
   </ion-row>
+
+  <ion-row formGroupName="to">
+    <ion-col size="6" id="endDate">
+      <ion-input labelPlacement="floating" color="light" fill="solid" [value]="getDate('endDate') | date" [errorText]="getFormGroup('to').controls['date'].touched && getFormGroup('to').controls['date'].errors ? 'End date is required' : ''" class="dateInput">
+        <div slot="label">To</div>
+      </ion-input>
+    </ion-col>
+    <ion-col size="6">
+      <ion-select labelPlacement="floating" color="light" fill="solid" formControlName="dayType" interface="action-sheet" [required]="getFormGroup('to').controls['date'].value">
+        <div slot="label">Leave Day <ion-text color="danger" *ngIf="getFormGroup('to').controls['date'].value">*</ion-text></div>
+        <ion-select-option value="Full Day">Full Day</ion-select-option>
+        <ion-select-option value="Half Day">Half Day</ion-select-option>
+      </ion-select>
+    </ion-col>
+    <ion-modal trigger="endDate" [initialBreakpoint]="0.75" [breakpoints]="[0.7, 1]" mode="ios" [keepContentsMounted]="true" #endDateModal>
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-title>End Date</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content>
+          <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" [min]="minEndDate ? minEndDate : ''" #datetime2 (ionChange)="selectEndDate($any($event))">
+            <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
+            <ion-buttons slot="buttons">
+              <ion-button mode="ios" color="danger" (click)="datetime2.cancel();endDateModal.dismiss()">Cancel</ion-button>
+              <ion-button mode="ios" color="primary" (click)="datetime2.confirm();endDateModal.dismiss()">Done</ion-button>
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </ion-row>
+
+  <ion-textarea labelPlacement="floating" fill="solid" placeholder="Leave purpose" [required]="true" formControlName="purpose" rows="3">
+    <div slot="label">Purpose <ion-text color="danger">*</ion-text></div>
+  </ion-textarea>
+  <ion-item [lines]="'none'" [detail]="false" class="spaceItem"></ion-item>
+
   <ion-button mode="md" fill="solid" expand="block" color="primary" shape="round" strong="true" [disabled]="leaveApplyForm.invalid" (click)="submitForm()">Apply Leave</ion-button>
 </form>
-
-<ion-modal [isOpen]="openCalendar && selectedCtrl === 'startDate'" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.7, 1]">
-  <ng-template>        
-    <ion-content>
-      <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
-        <span slot="title">Select {{selectedCtrl}} Date</span>
-        <ion-buttons slot="buttons">
-          <ion-button mode="ios" color="danger" (click)="datetime.cancel();openCalendar = false">Cancel</ion-button>
-          <ion-button mode="ios" color="primary" (click)="datetime.confirm();openCalendar = false">Done</ion-button>
-        </ion-buttons>
-      </ion-datetime>
-    </ion-content>
-  </ng-template>
-</ion-modal>
-      
-<ion-modal [isOpen]="openCalendar && selectedCtrl === 'endDate'" [initialBreakpoint]="0.75" [breakpoints]="[0.7, 1]" mode="ios" [keepContentsMounted]="true">
-  <ng-template>
-    <ion-content>
-      <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" [min]="minEndDate ? minEndDate : ''" #datetime2 (ionChange)="selectEndDate($any($event))">
-        <span slot="title">Select {{selectedCtrl}} Date</span>
-        <ion-buttons slot="buttons">
-          <ion-button mode="ios" color="danger" (click)="datetime2.cancel();openCalendar = false">Cancel</ion-button>
-          <ion-button mode="ios" color="primary" (click)="datetime2.confirm();openCalendar = false">Done</ion-button>
-        </ion-buttons>
-      </ion-datetime>
-    </ion-content>
-  </ng-template>
-</ion-modal>

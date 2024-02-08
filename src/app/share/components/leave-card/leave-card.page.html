@@ -1,0 +1,62 @@
+<ion-card class="log_card" mode="ios" *ngIf="leaveItem">
+  <ion-card-header>
+    <ion-avatar class="nameAvatar" *ngIf="leaveItem.employeeDetails && !leaveItem.employeeDetails.imageUrl || leaveItem.employeeDetails.imageUrl.trim() === ''">
+      <span *ngIf="leaveItem.employeeDetails.firstName">{{leaveItem.employeeDetails.firstName.substring(0,1)}}</span>
+    </ion-avatar>
+    <ion-avatar *ngIf="leaveItem.employeeDetails && leaveItem.employeeDetails.imageUrl && leaveItem.employeeDetails.imageUrl.trim() !== ''">
+      <img [alt]="leaveItem.employeeDetails.firstName" [src]="leaveItem.employeeDetails.imageUrl" />
+    </ion-avatar>
+    <ion-label class="cardTitle" *ngIf="leaveItem.employeeDetails">{{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || '' | titlecase}}</ion-label>
+    <ion-skeleton-text *ngIf="!leaveItem.employeeDetails" animated="true" style="width: 90%; height: 20px;"></ion-skeleton-text>
+    <ion-icon name="ellipse" aria-hidden="true" aria-label="status" [color]="getStatus(leaveItem.status).color"></ion-icon>
+  </ion-card-header>
+  <ion-card-content>
+    <p>
+      <b>Type: <ion-text>{{leaveItem.leaveType}}</ion-text> </b>
+    </p>
+    <p>
+      <b>Status: </b> <ion-text [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-text>
+    </p>
+    <p *ngIf="!leaveItem.from">
+      <ion-text color="medium">{{leaveItem.startDate | date}}</ion-text><ion-text color="medium" *ngIf="leaveItem.endDate"> - {{getDate(leaveItem.endDate) | date}}</ion-text> &middot; <ion-note>{{leaveItem.dayType}}</ion-note>
+    </p>
+    <p *ngIf="leaveItem.from">
+      <ion-text color="medium">{{getDate(leaveItem.from.date) | date}} &middot; {{leaveItem.from.dayType}}</ion-text>
+    </p>
+    <p *ngIf="leaveItem.to && leaveItem.to.date != null">
+      <ion-text color="medium">{{getDate(leaveItem.to.date || "") | date}} &middot; {{leaveItem.to.dayType}}</ion-text>
+    </p>
+    <p class="purpose">
+      <strong>Purpose: </strong>
+      <read-more-text [textString]="leaveItem.purpose" [maxLength]="100"></read-more-text>
+    </p>
+  </ion-card-content>
+
+  <div class="ion-text-end cardActions" *ngIf="userRole.trim() !== '' && isLoggedIn">
+    <ng-container *ngIf="userRole === 'Employee'">
+      <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" *ngIf="leaveItem.status === 'Pending'" (click)="leaveAction('Cancel')">Cancel Leave</ion-button>
+    </ng-container>
+    <ng-container *ngIf="userRole === 'Admin'">
+      <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" *ngIf="leaveItem.status === 'Pending'" (click)="leaveAction('Reject')">Cancel</ion-button>
+      <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small" *ngIf="leaveItem.status === 'Pending'" (click)="leaveAction('Accept')">Approve</ion-button>
+    </ng-container>
+  </div>
+</ion-card>
+
+<!-- Skeleton card -->
+<ion-card class="log_card" mode="ios" *ngIf="!leaveItem">
+  <ion-card-header>
+    <ion-avatar>
+      <ion-skeleton-text [animated]="true" style="width: 100%; height: 100%;"></ion-skeleton-text>
+    </ion-avatar>
+    <ion-skeleton-text animated="true" style="width: calc(100% - 60px); height: 20px; align-self: center;"></ion-skeleton-text>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-skeleton-text [animated]="true" style="width: 50%; height: 14px;"></ion-skeleton-text>
+    <ion-skeleton-text [animated]="true" style="width: 90%; height: 10px;" *ngFor="let item of [1,2,]"></ion-skeleton-text>
+  </ion-card-content>
+
+  <div class="ion-padding-horizontal ion-padding-bottom flexActions">
+    <ion-skeleton-text [animated]="true" style="width: min(50%, 100px); height: 30px;" *ngFor="let item of [1,2]"></ion-skeleton-text>
+  </div>
+</ion-card>

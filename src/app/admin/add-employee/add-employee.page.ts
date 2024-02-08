@@ -140,14 +140,14 @@ export class AddEmployeePage implements OnInit {
   
   submit(){
     console.log(this.employeeForm.value);
-    // if(this.employeeForm.invalid){
-    //   return;
-    // } else {
-    //   this.isInProgress = true;
-    //   this.loader.present('');
-    //   console.log(this.employeeForm.value, "form");
-    //   this.action === 'add' ? this.addEmployee() : this.updateEmployee();
-    // }
+    if(this.employeeForm.invalid){
+      return;
+    } else {
+      this.isInProgress = true;
+      this.loader.present('');
+      console.log(this.employeeForm.value, "form");
+      this.action === 'add' ? this.addEmployee() : this.updateEmployee();
+    }
   }
 
   addEmployee(){

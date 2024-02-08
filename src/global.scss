@@ -155,6 +155,16 @@ ion-input, ion-select {
     font-weight: 500;
 }
 
+// alert
+ion-alert{
+    --ion-text-color: #3b4557;
+    .alert-button {
+        // &.ion-activatable{}
+        // &.alert-button-role-cancel{}
+        &.cancelBtn, &.deleteBtn{font-weight: 600;}
+    }
+}
+
 // attendance calendar
 ion-datetime {
     &.attendance_calendar{

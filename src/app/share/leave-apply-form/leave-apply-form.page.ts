@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatetimeCustomEvent, Platform } from '@ionic/angular';
 import * as moment from 'moment';
-import { ILeaveApplyrequest } from 'src/app/interfaces/request/ILeaveApply';
+import { ILeaveRequest } from 'src/app/interfaces/request/ILeaveApply';
+import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 
 @Component({
@@ -12,21 +13,23 @@ import { ShareService } from 'src/app/services/share.service';
 })
 export class LeaveApplyFormPage implements OnInit {
   @Input() leaveType: string = "";
-  @Output() saveForm: EventEmitter<ILeaveApplyrequest> = new EventEmitter<ILeaveApplyrequest>();
+  @Output() saveForm: EventEmitter<string> = new EventEmitter<string>();
   leaveApplyForm!: FormGroup;
   selectedCtrl: string = '';
   openCalendar: boolean = false;
   minDate: Date = new Date();
   maxDate: Date = new Date();
   minEndDate: any;
+  leaveStartForm!: FormGroup;
+  leaveEndForm!: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private platform: Platform,
-    private shareServ: ShareService
+    private shareServ: ShareService,
+    private loader: LoaderService,
   ) {
     this.platform.backButton.subscribeWithPriority(5, () => {
-      console.log('Another handler was called!');
       shareServ.presentToast('Another handler was called!', 'top', 'dark');
     });
   }
@@ -37,50 +40,82 @@ export class LeaveApplyFormPage implements OnInit {
     this.minDate.setDate(this.minDate.getDate() + 2);
     this.maxDate = this.minDate;
     this.leaveApplyForm = this.fb.group({
-      startDate: ['', Validators.required],
+      from: this.fb.group({
+        date: ['', Validators.required],
+        dayType: ['', Validators.required],
+      }),
+      to: this.fb.group({
+        date: [''],
+        dayType: [''],
+      }),
       purpose: ['', Validators.required],
       leaveType: [this.leaveType, Validators.required],
-      dayType: ['', Validators.required],
-      endDate: [''],
     });
+    // (this.leaveApplyForm.get('from') as FormGroup).controls['dayType']?.disable();
+    (this.leaveApplyForm.get('to') as FormGroup).controls['dayType']?.disable();
+  }
+
+  get getEndDate() {
+    return (this.leaveApplyForm.controls['to'] as FormGroup).controls['date'].value;
+  }
+
+  getFormGroup(ctrlName: string): FormGroup{
+    return (this.leaveApplyForm.controls[ctrlName] as FormGroup);
   }
 
   getDate(ctrlName: string){
-    const formDate = this.leaveApplyForm.controls[ctrlName].value;
-    return formDate != '' ? new Date(formDate) : "";
+    if(ctrlName === 'endDate'){
+      const formDate = (this.leaveApplyForm.controls['to'] as FormGroup).controls['date'].value;
+      return formDate != '' ? new Date(formDate) : "";
+    } else {
+      const formDate = (this.leaveApplyForm.controls['from'] as FormGroup).controls['date'].value;
+      return formDate != '' ? new Date(formDate) : "";
+    }
   }
 
   selectDate(event: DatetimeCustomEvent){
-    this.leaveApplyForm.patchValue({
-      startDate: new Date(event.detail.value as string).toISOString()
+    (this.leaveApplyForm.controls['from'] as FormGroup).patchValue({
+      date: moment(event.detail.value).utc().format(),
     });
-    this.minEndDate = event.detail.value;
-    if(this.leaveApplyForm.controls['endDate'].value){
+    this.minEndDate = new Date(moment(event.detail.value).add(1, "day").format()).toISOString();
+    if(this.getEndDate){
+      const lastLeaveDate = new Date(this.getEndDate);
       const startDate = new Date(event.detail.value as string);
-      const endDate = new Date(this.leaveApplyForm.controls['endDate'].value);
-      if(startDate > endDate){
-        this.leaveApplyForm.patchValue({endDate: ''});
+      
+      if(startDate > lastLeaveDate){
+        (this.leaveApplyForm.controls['to'] as FormGroup).patchValue({date: '', dayType: ''});
+        (this.leaveApplyForm.get('to') as FormGroup).controls['dayType']?.disable();
       }
     }
-    this.maxDate = new Date(event.detail.value as string);
-    
-    console.log(this.leaveApplyForm.value);
+    // (this.leaveApplyForm.get('from') as FormGroup).controls['dayType']?.enable();
   }
 
   selectEndDate(event: DatetimeCustomEvent){
-    this.leaveApplyForm.patchValue({
-      endDate: new Date(event.detail.value as string).toISOString()
+    (this.leaveApplyForm.controls['to'] as FormGroup).patchValue({
+      date: moment(event.detail.value as string).utc().format()
     });
+    (this.leaveApplyForm.get('to') as FormGroup).controls['dayType']?.enable();
   }
 
   submitForm(){
     if(this.leaveApplyForm.valid){
-      if(this.leaveApplyForm.controls['dayType'].value === 'Half Day'){
-        this.leaveApplyForm.patchValue({
-          endDate: this.leaveApplyForm.controls['startDate'].value
-        });
+      let reqData: ILeaveRequest = this.leaveApplyForm.value;
+      const endDate = (this.leaveApplyForm.get('to') as FormGroup).controls['date'].value;
+      if(endDate.toString().trim() === ""){
+        reqData.to.date = null;
       }
-      this.saveForm.emit(this.leaveApplyForm.value);
+
+      this.loader.present('');
+      this.shareServ.leaveApply(this.leaveApplyForm.value).subscribe(res => {
+        if(res){
+          this.shareServ.presentToast('Leave requested successfully', 'top', 'success');
+          this.loader.dismiss();
+          this.saveForm.emit("success");
+        }
+      }, (error) => {
+        this.shareServ.presentToast(error.error.message || 'Something went wrong', 'top', 'danger');
+        this.loader.dismiss();
+      });
     }
   }
 }

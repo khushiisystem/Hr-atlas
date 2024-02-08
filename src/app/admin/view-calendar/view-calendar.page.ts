@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { DatetimeChangeEventDetail, IonModal, IonPopover, ModalController } from '@ionic/angular';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { DatetimeChangeEventDetail, GestureController, GestureDetail, IonContent, IonModal, IonPopover, ModalController } from '@ionic/angular';
 import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
@@ -21,11 +21,14 @@ interface DatetimeCustomEvent extends CustomEvent {
 export class ViewCalendarPage implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
   @ViewChild('popover') popover!: IonPopover;
+  @ViewChild(IonContent, { read: ElementRef }) tabsContent!: ElementRef<HTMLIonContentElement>;
   eventsList: IHollydayResponse[] = [];
   isDataLoaded: boolean = false;
   selectedDate: any;
   userRole: string = '';
   activView: string = 'listView';
+  tabs: Array<{value: string, label: string, icon: string}> = [{label: "List View", value: "listView", icon: "list"}, {label: "Calendar View", value: "calendarView", icon: "calendar-outline"}];
+  private isTabChangeTriggered = false;
 
   currentMonth: moment.Moment = moment();
   dates: (moment.Moment | string | null)[][] = [];
@@ -38,6 +41,9 @@ export class ViewCalendarPage implements OnInit {
     private loader: LoaderService,
     private modalCtrl: ModalController,
     private roleStateServ: RoleStateService,
+    private el: ElementRef,
+    private gestureCtrl: GestureController,
+    private cdRef: ChangeDetectorRef,
   ) { 
     roleStateServ.getState().subscribe(res => {
       this.userRole = res;
@@ -48,6 +54,42 @@ export class ViewCalendarPage implements OnInit {
     this.selectedDate = new Date();
     this.getCalendar();
     this.generateDates();
+  }
+
+  ngAfterViewInit(): void {
+    const gesture = this.gestureCtrl.create({
+      el: this.tabsContent.nativeElement,
+      threshold: 0,
+      onStart: () => this.onStart(),
+      onMove: (detail) => this.onMove(detail),
+      onEnd: () => this.onEnd(),
+      gestureName: 'change-tab-in-adminLeaves',
+    });
+
+    gesture.enable();
+  }
+
+  private onStart() {
+    this.isTabChangeTriggered = false;
+    this.cdRef.detectChanges();
+  }
+  
+  private onMove(detail: GestureDetail) {
+    if(this.isTabChangeTriggered){return;}
+    const tabIndex = this.tabs.findIndex((tab) => tab.value === this.activView);
+    
+    if(detail.deltaX < -90 && tabIndex < this.tabs.length-1){
+      this.activView = this.tabs[tabIndex+1].value;
+      this.isTabChangeTriggered = true;
+    } else if(detail.deltaX > 90 && tabIndex > 0){
+      this.activView = this.tabs[tabIndex-1].value;
+      this.isTabChangeTriggered = true;
+    }
+  }
+
+  private onEnd() {
+    this.isTabChangeTriggered = false;
+    this.cdRef.detectChanges();
   }
 
 

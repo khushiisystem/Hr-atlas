@@ -1,31 +1,31 @@
-form {
-    background-color: #fff;
-    ion-row {row-gap: 10px;}
+.formCard {
+    max-width: 500px;
+    margin-inline: auto;
+    border-radius: 20px;
+    & ion-card-header{border-radius: 20px 20px 0 0;}
+    & ion-card-title {font-size: 24px;}
+    & ion-card-content {
+        padding-top: 20px;
+        -webkit-padding-top: 20px;
+        padding-bottom: 20px;
+        -webkit-padding-bottom: 20px;
+    }
 
-    .sub_total{
-        min-height: 56px;
-        border: 1px solid #b3b3b3;
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        line-height: 1.5;
-        padding-top: 7px;
-        padding-bottom: 7px;
-
-        & > * {padding-top: 4px; padding-bottom: 4px;}
+    & ion-item {
+        --detail-icon-opacity: 0.5;
+        --padding-start: 10px;
+        &:not(:first-of-type, .errorItem) {margin-top: 13px;}
+        &:is(.descrease){--detail-icon-color: var(--ion-color-danger);}
+        &:is(.increase){--detail-icon-color: var(--ion-color-success);}
     }
 }
+
+ion-item{max-width: 500px; margin-inline: auto;}
+
 .submitBtn {
-    --background: rgb(255, 106, 0);
-    --color: #fff;
-    max-width: 300px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-top: 32px;
     font-size: 1rem;
     height: 45px;
-    font-weight: 600;
 }
 
 fieldset {

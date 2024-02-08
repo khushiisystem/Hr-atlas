@@ -1,1 +1,13 @@
 ion-row {margin-right: -5px; margin-left: -5px;}
+.input-fill-solid.sc-ion-input-md-h, .textarea-fill-solid.sc-ion-textarea-md-h{
+    --background: #f9fafd;
+    --border-color: #e7e5e5;
+}
+.spaceItem{
+    opacity: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    pointer-events: none;
+}
+.dateInput{pointer-events: none;}

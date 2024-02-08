@@ -48,10 +48,6 @@ ion-segment {
     }
 
     & .purpose {white-space: pre-line; color: var(--color-blue-gray);}
-    &:hover, &:focus {
-        transform: scale3d(0.97,0.97,0.97);
-        transition: transform 0.5s ease;
-    }
 }
 .nameAvatar {
     display: flex;

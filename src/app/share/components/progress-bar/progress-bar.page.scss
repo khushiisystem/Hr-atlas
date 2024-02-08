@@ -1,0 +1,24 @@
+.progressbar {
+  height: 100%;
+  width: 100%;
+  min-width: 30px;
+  min-height: 30px;
+  aspect-ratio: 1;
+  background-color: transparent;
+  background-image: conic-gradient(var(--barColor, #333) var(--angle, 0), #ffffff8f 0deg);
+  border-radius: 100vw;
+  position: relative;
+  transition: all 0.5s ease;
+  perspective: 500px;
+
+  span {
+    inset: 10px;
+    position: absolute;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 100vw;
+    font-size: clamp(12px, 8vw, 25px);
+  }
+}

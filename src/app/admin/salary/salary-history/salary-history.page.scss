@@ -3,11 +3,11 @@
     box-shadow: none;
     & ion-card-title {
         color: var(--color-blue-gray);
+        font-size: 22px;
     }
+    & ion-card-content {padding-bottom: 20px; -webkit-padding-bottom: 20px;}
 
-    & ion-item {
-        --border-color: #e1e9fb;
-    }
+    & ion-item {--border-color: #e1e9fb; --color: #6f6f7a;}
 }
 .historyItem {
     color: var(--ion-color-dark);

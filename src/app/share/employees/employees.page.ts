@@ -95,6 +95,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   getTypedEmployee(event: 'All' | 'Active' | 'InActive'){
     this.empType = event;
     this.pageIndex = 0;
+    this.selectedEmployee = [];
     this.getEmployeeList();
   }
 
