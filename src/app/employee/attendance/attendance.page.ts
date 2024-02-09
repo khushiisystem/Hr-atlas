@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { GestureController, GestureDetail, IonContent, IonInfiniteScroll } from '@ionic/angular';
 import * as moment from 'moment';
 import { AttendaceStatus } from 'src/app/interfaces/enums/leaveCreditPeriod';
 import { IClockInResponce } from 'src/app/interfaces/response/IAttendanceSetup';
@@ -30,8 +30,8 @@ export interface AttListItem {
   templateUrl: './attendance.page.html',
   styleUrls: ['./attendance.page.scss'],
 })
-export class AttendancePage implements OnInit {
-  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
+export class AttendancePage implements OnInit, AfterViewInit {
+  @ViewChild(IonContent, { read: ElementRef }) container!: ElementRef<HTMLIonContentElement>;
   attendanceList: IClockInResponce[] = [];
   dateList: AttListItem[] = [];
   dataLoaded: boolean = false;
@@ -52,11 +52,20 @@ export class AttendancePage implements OnInit {
   presents: number = 0;
   absent: number = 0;
   isFirst: boolean = false;
+  private isTabChangeTriggered = false;
+
+  currentMonth: moment.Moment = moment();
+  dates: (moment.Moment | string | null)[][] = [];
+  monthsList: (string | Date)[] = [];
+  selectedEvent?: IHollydayResponse | null;
 
   constructor(
     public router: Router,
     private shareServ: ShareService,
-    private loader: LoaderService
+    private loader: LoaderService,
+    private el: ElementRef,
+    private gestureCtrl: GestureController,
+    private cdRef: ChangeDetectorRef,
   ) {
     const abc = localStorage.getItem('isFirst') || false;
     this.isFirst = abc === 'true' ? true : false;
@@ -71,14 +80,51 @@ export class AttendancePage implements OnInit {
     this.attendanceDate = this.today.toISOString();
     if(this.userId.trim() !== ''){
       this.createDateList(this.attendanceDate);
+      this.getCalendar();
     }
+  }
+
+  ngAfterViewInit(): void {
+    const gesture = this.gestureCtrl.create({
+      el: this.container.nativeElement,
+      threshold: 0,
+      onStart: () => this.onStart(),
+      onMove: (detail) => this.onMove(detail),
+      onEnd: () => this.onEnd(),
+      gestureName: 'change-attendanceView',
+    });
+    console.log(this.container);
+
+    gesture.enable();
+  }
+
+  private onStart() {
+    this.isTabChangeTriggered = false;
+    this.cdRef.detectChanges();
+  }
+  
+  private onMove(detail: GestureDetail) {
+    console.log(detail);
+    if(this.isTabChangeTriggered){return;}
+    if(detail.deltaX < -90){
+      this.showCalendar = true;
+      this.isTabChangeTriggered = true;
+    } else if(detail.deltaX > 90){
+      this.showCalendar = false;
+      this.isTabChangeTriggered = true;
+    }
+  }
+
+  private onEnd() {
+    this.isTabChangeTriggered = false;
+    this.cdRef.detectChanges();
   }
 
   getMonthLyAttendance(){
     this.dataLoaded = false;
     this.moreData = true;
     // this.loader.present('');
-    this.shareServ.monthlyAttendance(this.userId, this.attendanceDate, this.pageIndex * 0, 40).subscribe(res => {
+     this.shareServ.monthlyAttendance(this.userId, this.attendanceDate, this.pageIndex * 0, 40).subscribe(res => {
       if(res.length < 1){
         this.moreData = false;
         this.dataLoaded = true;
@@ -113,14 +159,10 @@ export class AttendancePage implements OnInit {
           });
         })
         this.loader.dismiss();
-        if(this.infiniteScroll){
-          this.infiniteScroll.complete();
-        }
       }
     }, (error) => {
       this.dataLoaded = true;
       this.loader.dismiss();
-      this.infiniteScroll.complete();
     });
   }
 
@@ -132,7 +174,6 @@ export class AttendancePage implements OnInit {
       if(res) {
         if(res.length < 1){
           this.moreData = false;
-          this.infiniteScroll.complete();
           this.loader.dismiss();
           return;
         }
@@ -166,15 +207,10 @@ export class AttendancePage implements OnInit {
           this.moreData = true;
         } else {this.moreData = false;}
 
-        if(this.infiniteScroll){
-          this.infiniteScroll.complete();
-        }
-
       }
       this.dataLoaded = true;
       this.loader.dismiss();
     }, (error) => {
-      this.infiniteScroll.complete();
       this.dataLoaded = true;
       this.moreData = false;
       this.loader.dismiss();
@@ -204,19 +240,19 @@ export class AttendancePage implements OnInit {
                 this.highlightedDates.splice(index, 1);
               }
               this.highlightedDates.push(selectDate);
+              this.presents = 0;
+              this.absent = 0;
+              this.dateList.forEach((e) => {
+                if(this.checkDates(startDate, new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT){
+                  e.leaveData = leave;
+                  e.created_date = new Date(startDate).toISOString();
+                  e.status = AttendaceStatus.LEAVE;
+                }
+                e.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+  
+              });
               startDate.setDate(startDate.getDate() + 1);
             }
-            this.presents = 0;
-            this.absent = 0;
-            this.dateList.forEach((e) => {
-              if(this.checkDates(startDate, new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT){
-                e.leaveData = leave;
-                e.created_date = new Date(startDate).toISOString();
-                e.status = AttendaceStatus.LEAVE;
-              }
-              e.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
-
-            });
           }
         });
       }
@@ -390,27 +426,9 @@ export class AttendancePage implements OnInit {
     return data;
   }
 
-  setStartEndDate(dateString: Date){
-    const startDate = new Date(dateString);
-    startDate.setDate(1);
-    let endDate = new Date(dateString);
-    if(new Date().getFullYear() === new Date(dateString).getFullYear()){
-      if(new Date().getMonth() === new Date(dateString).getMonth()){
-        endDate.setDate(new Date(dateString).getDate());
-      } else {
-        if(new Date().getMonth() > new Date(dateString).getMonth()){
-          endDate.setMonth(endDate.getMonth()+1, 0);
-        } else {return;}
-      }
-    } else {
-      if(new Date().getFullYear() > new Date(dateString).getFullYear()) {
-        endDate.setMonth(endDate.getMonth()+1, 0);
-      } else {return;}
-    }
-    this.createDateList(startDate);
-  }
-
   async createDateList(selectedDate: string | Date) {
+    this.generateDates();
+
     let lastDate = new Date(selectedDate);
     let beginDate = new Date(selectedDate);
     beginDate.setDate(1);
@@ -430,9 +448,7 @@ export class AttendancePage implements OnInit {
       this.dateList.push(data);
     }
     this.toggleCard(this.dateList[0]);
-
     this.getMonthLyAttendance();
-    this.getCalendar();
     this.getWorkWeek();
     this.getLogs();
   }
@@ -462,6 +478,7 @@ export class AttendancePage implements OnInit {
         monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
       }
       if(monthDate.getFullYear() != xyz.getFullYear()){this.getCalendar();}
+      this.currentMonth = moment(monthDate);
       this.createDateList(monthDate);
       this.getMonthLyAttendance();
       this.getLogs();
@@ -543,6 +560,101 @@ export class AttendancePage implements OnInit {
       window.location.reload();
       event.target.complete();
     }, 2000);
+  }
+
+  generateDates() {
+    const startOfMonth = moment(this.currentMonth).startOf('month');
+    const endOfMonth = moment(this.currentMonth).endOf('month');
+    const currentDate = moment(startOfMonth);
+
+    this.dates = [];
+
+    while (currentDate.isSameOrBefore(endOfMonth)) {
+      let weekIndex = currentDate.week() - startOfMonth.week() + (startOfMonth.weekday() === 0 ? 1 : 0);
+      let dayIndex = currentDate.weekday();
+  
+      if (weekIndex < 0) {
+        // If the weekIndex is negative, adjust for the previous year
+        weekIndex += moment(currentDate).subtract(1, 'year').weeksInYear();
+      }
+
+      if (!this.dates[weekIndex]) {
+        this.dates[weekIndex] = [];
+      }
+
+      this.dates[weekIndex][dayIndex] = moment(currentDate);
+      currentDate.add(1, 'day');
+    }
+
+    // Fill empty slots with null or empty string
+    this.dates = this.dates.map((week) => week.map((day) => (day ? day : '')));
+  }
+
+  incrementMonth() {
+    const previousMonth = new Date(this.currentMonth.format('YYYY/MM/DD'));
+    this.currentMonth.add(1, 'month');
+    if(moment(this.currentMonth).isSameOrAfter(this.today, "year") && moment(this.currentMonth).isSame(this.today, "month")){
+      this.attendanceDate = new Date(this.today).toISOString();
+    } else {
+      this.attendanceDate = new Date(moment(this.currentMonth).endOf("month").format()).toISOString();
+    }
+    this.pageIndex = 0;
+    if(!moment(this.attendanceDate).isSame(previousMonth, "year")){this.getCalendar();}
+    this.createDateList(this.attendanceDate);
+  }
+
+  decrementMonth() {
+    const previousMonth = new Date(this.currentMonth.format('YYYY/MM/DD'));
+    this.currentMonth.subtract(1, 'month');
+    this.pageIndex = 0;
+    this.attendanceDate = new Date(moment(this.currentMonth).endOf("month").format()).toISOString();
+    if(!moment(this.attendanceDate).isSame(previousMonth, "year")){this.getCalendar();}
+    this.createDateList(this.attendanceDate);
+  }
+
+  incrementYear() {
+    const updateYear = moment(this.currentMonth).add(1, 'year');
+    if(moment(updateYear).isAfter(this.today, "month")){
+      this.currentMonth = moment(this.today);
+      this.attendanceDate = new Date(this.today).toISOString();
+    } else{
+      this.currentMonth.add(1, 'year');
+      const atDate = moment(this.currentMonth).endOf("month").format();
+      this.attendanceDate = new Date(atDate).toISOString();
+    }
+    this.pageIndex = 0;
+    this.getCalendar();
+    this.createDateList(this.attendanceDate);
+  }
+
+  decrementYear() {
+    this.currentMonth.subtract(1, 'year');
+    const atDate = moment(this.currentMonth).endOf("month").format();
+    this.attendanceDate = new Date(atDate).toISOString();
+    this.pageIndex = 0;
+    this.getCalendar();
+    this.createDateList(this.attendanceDate);
+  }
+
+  getMomentDate(inputDate: string | moment.Moment){
+    if(inputDate instanceof moment){
+      return inputDate.format('D');
+    } else {
+      return '';
+    }
+  }
+
+  getStatusByDate(date1: string | moment.Moment){
+    if(date1 == ''){return null;}
+    const index = this.dateList.findIndex((event: AttListItem) => moment(date1).format('yyyy/MM/DD') === moment(event.created_date).format('yyyy/MM/DD'));
+    return this.dateList[index];
+  }
+
+  isNextMonth(){
+    return (moment(this.today).year() <= moment(this.attendanceDate).year()) && (moment(this.attendanceDate).isAfter(this.today, 'month') || moment(this.attendanceDate).isSame(this.today, 'month'));
+  }
+  isNextYear(){
+    return moment(this.today).year() - moment(this.attendanceDate).year() >= 1;
   }
 
 }

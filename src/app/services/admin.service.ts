@@ -14,6 +14,7 @@ import { IEmployeeWorkRequest } from "../interfaces/request/IEmployeeWork";
 import { ISalarySetupRequest } from "../interfaces/request/ISalarySetup";
 import { ISalarySetupResponse } from "../interfaces/response/ISalaryResponse";
 import { IPayslipResponse } from "../interfaces/response/payslipResponse";
+import { ICreditLogsRequest, ICreditLogsResponse } from "../interfaces/request/IPayrollSetup";
 
 @Injectable({
     providedIn: 'root'
@@ -132,7 +133,14 @@ export class AdminService {
     getEmployeePayslip(payslipData: {employeeId: string, date: string}): Observable<IPayslipResponse> {
         return this.http.get<IPayslipResponse>(environment.Api + `api/paySlip?employeeId=${payslipData.employeeId}&date=${payslipData.date}`);
     }
-    createIndividualPayslip(payslipData: IPayslipResponse): Observable<any> {
-        return this.http.post<any>(environment.Api + `api/paySlip`, payslipData);
+    createPayrollLog(payslipData: ICreditLogsRequest): Observable<ICreditLogsResponse> {
+        return this.http.post<ICreditLogsResponse>(environment.Api + `api/payrollHistory`, payslipData);
     }
+    updatePayrollHistory(logId: string, payslipData: ICreditLogsRequest): Observable<ICreditLogsResponse> {
+        return this.http.post<ICreditLogsResponse>(environment.Api + `api/payrollHistory/${logId}`, payslipData);
+    }
+    getLogHistoryByEmployeeId(employeeId: string): Observable<ICreditLogsResponse[]> {
+        return this.http.get<ICreditLogsResponse[]>(environment.Api + `api/payrollHistory?employeeId=${employeeId}`);
+    }
+
 }

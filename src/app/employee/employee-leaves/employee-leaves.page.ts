@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { DatetimeCustomEvent, IonInfiniteScroll } from '@ionic/angular';
-import { ILeaveApplyrequest } from 'src/app/interfaces/request/ILeaveApply';
+import { AlertController, DatetimeCustomEvent, IonInfiniteScroll } from '@ionic/angular';
+import { ILeaveRequest } from 'src/app/interfaces/request/ILeaveApply';
 import { ILeaveStatus } from 'src/app/interfaces/response/IAttendanceSetup';
 import { ILeaveLogsResponse } from 'src/app/interfaces/response/ILeave';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
+import { LeaveAction } from 'src/app/share/components/leave-card/leave-card.page';
 
 @Component({
   selector: 'app-employee-leaves',
@@ -39,6 +40,7 @@ export class EmployeeLeavesPage implements OnInit {
     private router: Router,
     private shareServ: ShareService,
     private loader: LoaderService,
+    private alertCtrl: AlertController,
   ) { 
     this.userID = localStorage.getItem('userId') || '';
   }
@@ -49,42 +51,8 @@ export class EmployeeLeavesPage implements OnInit {
     this.getLogs();
   }
 
-  calculateCreditedLeaves(): number {
-    return this.getMonthNumber() * 1.5;
-  }
-
-  getAppliedLeaves(): number {
-    return 5;
-  }
-
-  getPenalty(): number {
-    return 2;
-  }
-
-  getCreditedData(): string {
-    return '365';
-  }
-
-  getCreditedDataForLossOfPay(): string {
-    return '365';
-  }
-
-  getAppliedDataForLossOfPay(): string {
-    return '10';
-  }
-
-  getPenaltyForLossOfPay(): number {
-    return 2;
-  }
-
-  submitLeave() {
-    this.showApplyForm = false;
-    this.startDate = '';
-    this.endDate = '';
-    this.leaveType = 'fullDay';
-    this.purpose = ''; 
-    // this.showApplyFormForCasualLeave = false;
-    // this.showApplyFormForLossOfPay = false;
+  getDate(dateStr: Date | string) {
+    return new Date(dateStr);
   }
 
   private getMonthNumber(): number {
@@ -96,45 +64,40 @@ export class EmployeeLeavesPage implements OnInit {
     const today = new Date();
     return today.toISOString(); 
   }
-  getDate(){
-    // const formDate = this.employeeForm.controls['dateOfBirth'].value;
-    // return new Date(formDate != '' ? formDate : this.maxDate);
-  }
 
   selectDate(event: DatetimeCustomEvent){
     // this.employeeForm.patchValue({
     //   dateOfBirth: moment.utc(event.detail.value).format()
     // });
-    this.getDate();
+    // this.getDate();
     // console.log(this.employeeForm.value);
   }
 
-  leaveApply(event: ILeaveApplyrequest){
-    this.loader.present('');
-    this.shareServ.leaveApply(event).subscribe(res => {
-      if(res){
-        this.showApplyForm = false;
-        this.selectedLeaveType = '';
-        this.shareServ.presentToast('Leave requested successfully', 'top', 'success');
-        this.loader.dismiss();
-        this.getLogs();
-        this.getLeaveStatus();
-      }
-    }, (error) => {
-      this.shareServ.presentToast(error.error.message || 'Something went wrong', 'top', 'danger');
-      this.loader.dismiss();
-    })
+  leaveApply(event: string){
+    if(event === 'success'){
+      this.logsLoaded = false;
+      this.showApplyForm = !this.showApplyForm;
+      this.selectedLeaveType = '';
+      this.pageNumber = 0;
+      this.getLogs();
+      this.getLeaveStatus();
+    }
   }
 
   getLogs(){
+    this.logsLoaded = false;
     const data = { employeeId: this.userID, };
     this.shareServ.getLeaveList(data, this.pageNumber * 10, 10).subscribe(res => {
       if(res) {
+        if(this.pageNumber < 1){this.leaveLogs = [];}
         for(let i=0; i<res.length; i++){
-          this.leaveLogs.push(res[i]);
+          if(!this.leaveLogs.some((item) => item.guid === res[i].guid )){
+            this.leaveLogs.push(res[i]);
+          }
         }
         this.moreData = res.length > 9;
         this.logsLoaded = true;
+        this.loader.dismiss();
       }
     }, (error) => {
       this.moreData = false;
@@ -200,19 +163,46 @@ export class EmployeeLeavesPage implements OnInit {
     this.getLogs();
   }
 
-  cancelLeave(leaveId: string) {
-    this.loader.present('');
-    this.shareServ.cancelLeave(leaveId).subscribe(res => {
-      if(res){
-        this.shareServ.presentToast("Leave canceled.", 'top', 'success');
-        this.loader.dismiss();
-        this.getLogs();
-      }
-    }, (error) => {
-      console.log(error, "error");
-      this.shareServ.presentToast("Something went wrong.", 'top', 'danger');
-      this.loader.dismiss();
-    })
+  leaveAction(event: LeaveAction){
+    if(event.action === "Cancel" && event.leaveId){
+      this.cancelLeave(event.leaveId);
+    }
+  }
+
+  async cancelLeave(leaveId: string) {
+    const cancelAlert = await this.alertCtrl.create({
+      header: 'Leave Cancel',
+      subHeader: 'Are you sure, you want to cancel leave?',
+      mode: 'md',
+      buttons: [{
+        text: 'No',
+        role: 'cancel',
+        cssClass: 'cancelBtn',
+        handler: () => {}
+      },{
+        text: 'Yes',
+        role: 'confirm',
+        cssClass: 'deleteBtn',
+        handler: () => {
+          this.loader.present('');
+
+          this.shareServ.cancelLeave(leaveId).subscribe(res => {
+            if(res){
+              this.shareServ.presentToast("Leave canceled.", 'top', 'success');
+              this.pageNumber = 0;
+              this.getLogs();
+              this.getLeaveStatus();
+            }
+          }, (error) => {
+            console.log(error, "error");
+            this.shareServ.presentToast("Something went wrong.", 'top', 'danger');
+            this.loader.dismiss();
+          });
+        }
+      },]
+    });
+
+    await cancelAlert.present();
   }
 
 }

@@ -16,13 +16,9 @@
 <ion-content [fullscreen]="true" color="light">
   <div [ngClass]="userRole === 'Admin' ? 'container' : ''">
     <ion-segment [(ngModel)]="activView" mode="md" class="tab_segement" color="tertiary">
-      <ion-segment-button value="listView" layout="icon-start">
-        <ion-icon name="list"></ion-icon>
-        <ion-label>List View</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="calendarView" layout="icon-start">
-        <ion-icon name="calendar-outline"></ion-icon>
-        <ion-label>Calendar View</ion-label>
+      <ion-segment-button *ngFor="let tab of tabs" [value]="tab.value" layout="icon-start">
+        <ion-icon [name]="tab.icon"></ion-icon>
+        <ion-label>{{tab.label}}</ion-label>
       </ion-segment-button>
     </ion-segment>
   

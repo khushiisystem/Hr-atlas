@@ -72,7 +72,7 @@
       </ion-card-content>
     </ion-card>
 
-    <div class="ion-text-center" *ngIf="!leaveStatus || !leaveStatus">
+    <div class="ion-text-center ion-padding" *ngIf="!leaveStatus">
       <ion-spinner name="circular" color="primary"></ion-spinner>
     </div>
   </div>
@@ -83,21 +83,35 @@
       <ion-label class="ion-text-wrap">Logs are empty.</ion-label>
     </div>
 
-    <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of leaveLogs; index as a">
+    <div class="ion-text-center ion-padding" *ngIf="!logsLoaded">
+      <ion-spinner name="circular" color="primary"></ion-spinner>
+    </div>
+    <leave-card *ngFor="let leaveItem of leaveLogs; index as a" [leaveItem]="leaveItem" (actionReturn)="leaveAction($event)"></leave-card>
+
+    <!-- <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of leaveLogs; index as a">
       <ion-card-content>
         <ion-icon name="ellipse" class="statusIcon" aria-hidden="true" aria-label="status" [color]="getStatus(leaveItem.status).color"></ion-icon>
         <p>
           <b>Type: <ion-text>{{leaveItem.leaveType}}</ion-text> </b>
         </p>
-        <p>
-          <ion-text color="medium">{{leaveItem.startDate | date}}</ion-text> - <ion-text>{{leaveItem.endDate | date}}</ion-text>
+        <p *ngIf="!leaveItem.from">
+          <ion-text color="medium">{{leaveItem.startDate | date}}</ion-text><ion-text color="medium" *ngIf="leaveItem.endDate"> - {{getDate(leaveItem.endDate) | date}}</ion-text> &middot; <ion-note>{{leaveItem.dayType}}</ion-note>
+        </p>
+        <p *ngIf="leaveItem.from">
+          <ion-text color="medium">{{getDate(leaveItem.from.date) | date}} &middot; {{leaveItem.from.dayType}}</ion-text>
+        </p>
+        <p *ngIf="leaveItem.to && leaveItem.to.date != null">
+          <ion-text color="medium">{{getDate(leaveItem.to.date || "") | date}} &middot; {{leaveItem.to.dayType}}</ion-text>
         </p>
         <p class="purpose">
           <strong>Purpose: </strong>
           <read-more-text [textString]="leaveItem.purpose" [maxLength]="100"></read-more-text>
         </p>
       </ion-card-content>
-    </ion-card>
+      <div *ngIf="leaveItem.status === 'Pending'" class="ion-text-end ion-padding-bottom">
+        <ion-button color="danger" mode="ios" fill="clear" size="small" [strong]="true" (click)="cancelLeave(leaveItem.guid)">Cancel Leave</ion-button>
+      </div>
+    </ion-card> -->
     
     
     <ion-infinite-scroll #emplogList (ionInfinite)="loadLogs($any($event))" [position]="'bottom'" *ngIf="moreData">

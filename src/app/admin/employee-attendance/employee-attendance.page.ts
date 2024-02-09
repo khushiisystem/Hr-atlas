@@ -62,6 +62,7 @@ export class EmployeeAttendancePage implements OnInit {
   absent: number = 0;
   isFirst: boolean = false;
   minDate: Date = new Date();
+  dates: (moment.Moment | string | null)[][] = [];
 
   constructor(
     private shareServ: ShareService,
@@ -96,6 +97,25 @@ export class EmployeeAttendancePage implements OnInit {
     });
 
     this.manageForm();
+  }
+
+  get getPresent(): number {
+    return this.dateList.reduce((pres, item) => {
+      return item.status === AttendaceStatus.PRESENT || item.status === AttendaceStatus.WEEK_OFF || item.status === AttendaceStatus.HOLiDAY ? pres + 1 : pres;
+    }, 0);
+  }
+  get getLeaves(): number {
+    return this.dateList.reduce((leave, item) => {
+      return item.status === AttendaceStatus.LEAVE ? leave + 1 : leave;
+    }, 0);
+  }
+  get getAbsent(): number {
+    return this.dateList.reduce((abs, item) => {
+      return item.status === AttendaceStatus.ABSENT ? abs + 1 : abs;
+    }, 0);
+  }
+  get getLastDate(): number {
+    return new Date(moment(this.attendanceDate).endOf('month').format()).getDate();
   }
 
   manageForm(){
@@ -315,6 +335,33 @@ export class EmployeeAttendancePage implements OnInit {
       this.dateList.push(data);
     }
     this.toggleCard(this.dateList[0]);
+    this.generateDates(selectedDate);
+  }
+
+  generateDates(selectedDate: string | Date) {
+    const startOfMonth = moment(selectedDate).startOf('month');
+    const endOfMonth = moment(selectedDate).endOf('month');
+    const currentDate = moment(startOfMonth);
+
+    this.dates = [];
+
+    while (currentDate.isSameOrBefore(endOfMonth)) {
+      let weekIndex = currentDate.week() - startOfMonth.week() + (startOfMonth.weekday() === 0 ? 1 : 0);
+      let dayIndex = currentDate.weekday();
+  
+      if (weekIndex < 0) {
+        weekIndex += moment(currentDate).subtract(1, 'year').weeksInYear();
+      }
+
+      if (!this.dates[weekIndex]) {
+        this.dates[weekIndex] = [];
+      }
+
+      this.dates[weekIndex][dayIndex] = moment(currentDate);
+      currentDate.add(1, 'day');
+    }
+
+    this.dates = this.dates.map((week) => week.map((day) => (day ? day : '')));
   }
   
   checkDates(date1: Date, date2: Date): boolean{
@@ -441,8 +488,6 @@ export class EmployeeAttendancePage implements OnInit {
         itemData.status = res.status;
         itemData.created_date = new Date(res.clockIn).toISOString();
         itemData.created_user = res.created_user;
-        this.absent--;
-        this.presents++;
         // const listIndex = this.dateList.findIndex(e => moment(e.created_date).date() === moment(markDate).date());
         // this.dateList[listIndex] = data;
         const calindex = this.highlightedDates.findIndex((item) => this.checkDates(new Date(item.date), new Date(itemData.created_date)));
@@ -470,19 +515,22 @@ export class EmployeeAttendancePage implements OnInit {
 
   selectDate(event: CustomEvent){
     if(event.detail.value){
-      this.pageIndex = 0;
-      const xyz = new Date();
-      let monthDate = new Date(event.detail.value as string);
-      this.attendanceDate = monthDate.toISOString();
-      if(monthDate.getFullYear() < xyz.getFullYear() || monthDate.getMonth() < xyz.getMonth()){
-        monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
-      }
-      this.getCalendar();
-      this.createDateList(monthDate);
-      this.getMonthLyAttendance();
-      this.getLogs();
-      this.getWorkWeek();
+      this.fetchAll(event.detail.value as string);
     }
+  }
+  
+  fetchAll(dateStr: string){
+    this.pageIndex = 0;
+    const xyz = new Date();
+    let monthDate = new Date(dateStr);
+    this.attendanceDate = monthDate.toISOString();
+    if(monthDate.getFullYear() < xyz.getFullYear() || monthDate.getMonth() < xyz.getMonth()){
+      monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
+    }
+    this.createDateList(monthDate);
+    this.getMonthLyAttendance();
+    this.getLogs();
+    this.getWorkWeek();
   }
 
   getMonthYear() {
@@ -607,5 +655,70 @@ export class EmployeeAttendancePage implements OnInit {
 
   isAllLoaded(): boolean{
     return this.leaveLoaded && this.workWeekLoaded && this.calendarLoaded && this.attendanceLoaded;
+  }
+
+  incrementMonth() {
+    const previousMonth = new Date(this.attendanceDate);
+    const currentMonth = moment(previousMonth).add(1, "month");
+    if(moment(currentMonth).isSameOrAfter(this.today, "year") && moment(currentMonth).isSame(this.today, "month")){
+      this.attendanceDate = new Date(this.today).toISOString();
+    } else {
+      this.attendanceDate = new Date(moment(currentMonth).endOf("month").format()).toISOString();
+    }
+    this.fetchAll(this.attendanceDate);
+    if(!moment(previousMonth).isSame(this.attendanceDate, "year")){
+      this.getCalendar();
+    }
+  }
+
+  decrementMonth() {
+    const previousMonth = new Date(this.attendanceDate);
+    const currentMonth = moment(previousMonth).subtract(1, "month");
+    this.attendanceDate = new Date(moment(currentMonth).endOf("month").format()).toISOString();
+    this.fetchAll(this.attendanceDate);
+    if(!moment(previousMonth).isSame(this.attendanceDate, "year")){
+      this.getCalendar();
+    }
+  }
+
+  incrementYear() {
+    const updateYear = moment(this.attendanceDate).add(1, 'year');
+    if(moment(updateYear).isAfter(this.today, "month")){
+      this.attendanceDate = new Date(this.today).toISOString();
+    } else{
+      const atDate = moment(updateYear).endOf("month").format();
+      this.attendanceDate = new Date(atDate).toISOString();
+    }
+    this.getCalendar();
+    this.fetchAll(this.attendanceDate);
+  }
+
+  decrementYear() {
+    const currentMonth = moment(this.attendanceDate).subtract(1, 'year');
+    const atDate = moment(currentMonth).endOf("month").format();
+    this.attendanceDate = new Date(atDate).toISOString();
+    this.getCalendar();
+    this.fetchAll(this.attendanceDate);
+  }
+
+  getMomentDate(inputDate: string | moment.Moment){
+    if(inputDate instanceof moment){
+      return inputDate.format('D');
+    } else {
+      return '';
+    }
+  }
+
+  getStatusByDate(date1: string | moment.Moment){
+    if(date1 == ''){return null;}
+    const index = this.dateList.findIndex((event: AttListItem) => moment(date1).format('yyyy/MM/DD') === moment(event.created_date).format('yyyy/MM/DD'));
+    return this.dateList[index];
+  }
+
+  isNextMonth(){
+    return (moment(this.today).year() <= moment(this.attendanceDate).year()) && (moment(this.attendanceDate).isAfter(this.today, 'month') || moment(this.attendanceDate).isSame(this.today, 'month'));
+  }
+  isNextYear(){
+    return moment(this.today).year() - moment(this.attendanceDate).year() >= 1;
   }
 }

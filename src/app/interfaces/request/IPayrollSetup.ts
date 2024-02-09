@@ -1,12 +1,14 @@
-export interface IPayrollSetupRequest {
+import { IGeneric } from "../response/IGeneric";
+export interface ICreditLogsRequest {
     employeeId: string,
-    ctc: number,
-    hra: number,
-    basics: number,
-    lop: number,
-    salary: number,
-    totalSalary: number,
-    currency: string,
-    comment: string,
-    payslipDate: string | Date,
+    bonus: number,
+    compOff: number,
+    advanceAmount: number,
+    description: string,
+    deductionAmount: number,
+    otherDeduction: number,
+}
+
+export interface ICreditLogsResponse extends IGeneric, ICreditLogsRequest {
+    remainingAmount: number,
 }

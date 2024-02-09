@@ -7,65 +7,26 @@
     </ion-buttons>
     <ion-title><span *ngIf="employee">{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</span>
       <span *ngIf="!employee">Employee Attendance</span></ion-title>
-    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+    <div slot="end" class="ion-margin-end toggleview">
+      <ion-button type="button" [fill]="showCalendar ? 'clear' : 'solid'" shape="round" mode="ios" color="tertiary" size="small" aria-label="List View" (click)="showCalendar = !showCalendar">
+        <ion-icon aria-hidden="true" size="small" slot="icon-only" name="list"></ion-icon>
+      </ion-button>
+      <ion-button type="button" [fill]="!showCalendar ? 'clear' : 'solid'" shape="round" mode="ios" color="tertiary" size="small" aria-label="Calendar View" (click)="showCalendar = !showCalendar">
+        <ion-icon aria-hidden="true" size="small" slot="icon-only" name="calendar"></ion-icon>
+      </ion-button>
+    </div>
+    <!-- <ion-thumbnail slot="end" class="logo_img ion-margin-end">
       <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
-    </ion-thumbnail>
+    </ion-thumbnail> -->
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" (click)="onMouseMove($event)">
+<ion-content [fullscreen]="true" color="light" (click)="onMouseMove($event)">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-grid style="background-color: #fff;">
-    <ion-row>
-      <ion-col size="12">
-        <ion-item lines="none" class="item1 ion-margin-top" [detail]="false" [mode]="'ios'">
-          <ion-label class="">Status of the month</ion-label>
-          <ion-button [fill]="'clear'" [size]="'small'" [shape]="'round'" color="tertiary" slot="end" (click)="showCalendar = !showCalendar">
-            <ion-icon [name]="!showCalendar ? 'calendar' : 'calendar-number-outline'" slot="icon-only" color="tirtiary"></ion-icon>
-          </ion-button>
-          <div *ngIf="isFirst" class="gasture">
-            <ion-card class="ion-no-margin">
-              <ion-card-content>
-                <p style="margin: 0;">Tap of the icon to open calendar view.</p>
-              </ion-card-content>
-            </ion-card>
-            <span class="arrow"></span>
-          </div>
-        </ion-item>
-      </ion-col>
-      <ion-col class="ion-text-center" size="6">
-        <ion-card mode="ios" [color]="'success'" class="statusCard">
-          <ion-card-header>
-            <ion-text>days</ion-text>
-            <ion-card-title>{{presents}}<small>/{{dateList.length}}</small></ion-card-title>
-            <ion-card-subtitle>Present</ion-card-subtitle>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-      <ion-col class="ion-text-center" size="6">
-        <ion-card mode="ios" [color]="'danger'" class="statusCard">
-          <ion-card-header>
-            <ion-text>days</ion-text>
-            <ion-card-title>{{absent}}<small>/{{dateList.length}}</small></ion-card-title>
-            <ion-card-subtitle>Absent</ion-card-subtitle>
-          </ion-card-header>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <div class="btn_group {{!isFirst ? 'stickyCalender' : ''}}" *ngIf="employee">
-    <ion-button mode="md" color="primary" shape="round" type="button" id="monthSelect" (click)="dateModal = true" fill="solid" mode="md" [strong]="true">
-      {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}
-      <ion-icon name="chevron-down-outline" aria-hidden="true" slot="end"></ion-icon>
-    </ion-button>
-    <!-- <ion-button (click)="showCalendar = true" mode="md" [strong]="true" [shape]="'round'" color="secondary" fill="solid">Calendar View</ion-button> -->
-  </div>
-
-  <ion-modal trigger="monthSelect" [initialBreakpoint]="0.5" mode="md" [showBackdrop]="true" (didDismiss)="dateModal = false" #dateSelectModal>
+  <ion-modal [isOpen]="dateModal" [initialBreakpoint]="0.5" mode="md" [showBackdrop]="true" (didDismiss)="dateModal = false" #dateSelectModal>
     <ng-template>
       <ion-content>
         <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [value]="attendanceDate" [max]="today.toISOString()" [min]="minDate.toISOString()" (ionChange)="selectDate($any($event));">
@@ -78,146 +39,114 @@
       </ion-content>
     </ng-template>
   </ion-modal>
-  <ion-modal [isOpen]="showCalendar" [showBackdrop]="true" [initialBreakpoint]="0.6" (didDismiss)="showCalendar = false" [backdropDismiss]="true">
-    <ng-template>
-      <ion-content>
-        <ion-datetime presentation="date" size="cover" mode="md" [highlightedDates]="highlightedDates" [max]="today.toISOString()" class="attendance_calendar"></ion-datetime>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+
+  <div *ngIf="showCalendar" class="calendarView">
+    <ion-list inset="true" mode="ios">
+      <ion-item detail="false" class="calendarControls">
+        <ion-buttons slot="start">
+          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementYear()" aria-label="Previous Month">
+            <img src="../../../assets/icon/left_arrows.svg" alt="Previous" width="30" height="30">
+          </ion-button>
+          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementMonth()" aria-label="Next Year">
+            <ion-icon slot="icon-only" name="chevron-back" aria-label="Previous Month"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label class="ion-text-center">{{ attendanceDate | date:"MMMM yyyy" }}</ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementMonth()" aria-label="Next Month" [disabled]="isNextMonth()">
+            <ion-icon slot="icon-only" name="chevron-forward" aria-label="Previous Month"></ion-icon>
+          </ion-button>
+          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementYear()" aria-label="Next year" [disabled]="!isNextYear()">
+            <img src="../../../assets/icon/right_arrows.svg" alt="Next" width="30" height="30">
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+
+    
+    <ion-card class="calendar_card">
+      <ion-card-content>
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let day of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']">{{ day }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let week of dates">
+              <td *ngFor="let date of week">
+                <span [ngClass]="getStatusByDate(date ?? '') ? getStatusByDate(date ?? '')?.status : ''">{{ date ? getMomentDate(date) : '' }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ion-card-content>
+    </ion-card>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" sizeSm="4">
+          <circular-progress-bar [value]="getPresent" [maxValue]="getLastDate" color="var(--ion-color-success)"></circular-progress-bar>
+          <ion-item lines="none" [detail]="false" color="light">
+            <ion-label class="ion-text-center">Present</ion-label>
+          </ion-item>
+        </ion-col>
+        <ion-col size="6" sizeSm="4">
+          <circular-progress-bar [value]="getAbsent + getLeaves" [maxValue]="getLastDate" color="var(--ion-color-danger)"></circular-progress-bar>
+          <ion-item lines="none" [detail]="false" color="light">
+            <ion-label class="ion-text-center">Absent</ion-label>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
     <!-- ------------ attendance list ----------------- -->
-    <div class="attendance_list" [hidden]="!employee">
-      <!-- <ion-card mode="ios" color="light" *ngIf="employee">
-        <ion-item [lines]="'none'" [detail]="false">
-          <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-          <ion-button slot="end" mode="md" fill="clear" [strong]="true" aria-label="Chnage employee" color="primary" (click)="reseteEmployee()">
-            <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon>
-          </ion-button>
+    <div class="attendance_list" [hidden]="!employee || showCalendar">
+      <ion-list [inset]="true" mode="ios">
+        <ion-item lines="none" class="item1" [detail]="true" color="primary" type="button" [button]="true" [mode]="'ios'" (click)="dateModal = true" detailIcon="chevron-down">
+          <ion-icon [name]="'calendar'" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <h2>Attendance of the month</h2>
+            <p>{{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}</p>
+          </ion-label>
         </ion-item>
-      </ion-card> -->
-      <!-- <div class="ion-text-center" *ngIf="attendanceLoaded && attendanceList.length < 1">
-        <ion-label>Attendance not available of this month.</ion-label>
-      </div> -->
-      <!-- <ion-item *ngFor="let listItem of attendanceDateList">
-        <ion-label>{{listItem.created_date | date:'shortTime'}}</ion-label>
-      </ion-item> -->
-      <!-- <ng-container *ngFor="let attendanceItem of attendanceList; index as i;">
-        <ion-card class="attendance_Card" mode="md">
-          <ion-card-header (click)="collapseCard(i)">
-            <ion-card-title>{{attendanceItem.created_date | date}}</ion-card-title>
-            <ion-text class="attendance_status" [color]="getStatus(attendanceItem.status)">{{attendanceItem.status}}</ion-text>
-          </ion-card-header>
-          <ion-card-content *ngIf="expandedCards.includes(i)">
-            <ion-row class="sort_desc ion-margin-top" *ngIf="attendanceItem.status === 'Present' || attendanceItem.status === 'Absent'">
-              <ion-col size="6">
-                <ion-text>In Time</ion-text>
-              </ion-col>
-              <ion-col size="6">
-                <ion-label>{{attendanceItem.clockIn | date:'mediumTime'}}</ion-label>
-              </ion-col>
-              <ion-col size="6">
-                <ion-text>Out Time</ion-text>
-              </ion-col>
-              <ion-col size="6">
-                <ion-label *ngIf="!attendanceItem.clockOut">--</ion-label>
-                <ion-label *ngIf="attendanceItem.clockOut">{{attendanceItem.clockOut | date:'mediumTime'}}</ion-label>
-              </ion-col>
-              <ion-col size="6">
-                <ion-text>Work Duration <small>(HH:MM:SS)</small></ion-text>
-              </ion-col>
-              <ion-col size="6">
-                <ion-label>{{attendanceItem.workingTime ? attendanceItem.workingTime.slice(0, 7) : '--'}}</ion-label>
-              </ion-col>
-            </ion-row>
-
-            <ion-button type="button" mode="md" color="primary" fill="solid" [strong]="true" class="ion-margin-top update_btn" *ngIf="!isWeekOff(attendanceItem.created_date) && openUpdatForm[i] == false" (click)="openForm(attendanceItem, i)">
-              <ion-label>Update Attendance</ion-label>
-            </ion-button>
-            <form [formGroup]="attendanceForm" *ngIf="openUpdatForm[i] === true" class="ion-padding-top">
-              <h6>Fill the form</h6>
-              <ion-row class="form_row">
-                <ion-col size="12">
-                  <div class="form-input">
-                    <ion-select mode="md" labelPlacement="floating" formControlName="status" fill="outline" [interface]="'action-sheet'" [compareWith]="compareStatus" (ionChange)="selectStatus($event)">
-                      <div slot="label">Status <ion-text color="danger">*</ion-text></div>
-                      <ion-select-option value="Present">Present</ion-select-option>
-                      <ion-select-option value="Absent">Absent</ion-select-option>
-                    </ion-select>
-                  </div>
-                </ion-col>
-
-                <ion-col size="12" sizeMd="6" *ngIf="attendanceForm.controls['status'].value === 'Present'">
-                  <div class="form-input" [id]="'clockInModal'">
-                    <ion-input labelPlacement="floating" fill="outline" (ionFocus)="modal.present()" [value]="getFormDate('clockIn') | date:'shortTime'" placeholder="In Time" [readonly]="true">
-                      <div slot="label">Clock In Time <ion-text color="danger">*</ion-text></div>
-                    </ion-input>
-                    <div class="toggleBtn">
-                      <ion-button mode="md" slot="end" fill="clear" color="medium">
-                        <ion-icon name="time-outline"></ion-icon>
-                      </ion-button>
-                    </div>
-                  </div>
-                  <ion-text color="danger" class="error_txt" *ngIf="attendanceForm.controls['clockIn'].touched && attendanceForm.controls['clockIn'].errors"
-                  >Clock In Time is required</ion-text>
-                </ion-col>
-      
-                <ion-col size="12" sizeMd="6" *ngIf="attendanceForm.controls['status'].value === 'Present'">
-                  <div class="form-input" [id]="'clockOutModal'">
-                    <ion-input labelPlacement="floating" fill="outline" (ionFocus)="modal2.present()" [value]="getFormDate('clockOut') | date:'shortTime'" placeholder="Out Time" [readonly]="true">
-                      <div slot="label">Clock Out Time <ion-text color="danger">*</ion-text></div>
-                    </ion-input>
-                    <div class="toggleBtn">
-                      <ion-button mode="md" slot="end" fill="clear" color="medium">
-                        <ion-icon name="time-outline"></ion-icon>
-                      </ion-button>
-                    </div>
-                  </div>
-                  <ion-text color="danger" class="error_txt" *ngIf="attendanceForm.controls['clockOut'].touched && attendanceForm.controls['clockOut'].errors"
-                  >Clock Out time is required</ion-text>
-                </ion-col>
-
-                <ion-col size="6">
-                  <ion-button mode="md" color="danger" shape="round" fill="solid" expand="full" [strong]="true" (click)="closeForm()">Cancel</ion-button>
-                </ion-col>
-                <ion-col size="6">
-                  <ion-button mode="md" color="primary" shape="round" expand="full" [disabled]="attendanceForm.invalid" fill="solid" [strong]="true" (click)="submitForm()">Save</ion-button>
-                </ion-col>
-              </ion-row>
-
-
-              <ion-modal [trigger]="'clockInModal'" #modal [initialBreakpoint]="0.5" [showBackdrop]="true" [keepContentsMounted]="true">
-                <ng-template>
-                  <ion-content>
-                    <ion-datetime [presentation]="'time'" mode="md" [size]="'cover'" (ionChange)="setClockInTime($any($event))" #clockIn>
-                      <ion-label slot="title" >Clock In Time</ion-label>
-                      <ion-buttons slot="buttons">
-                        <ion-button mode="md" color="danger" (click)="modal.dismiss(clockIn.cancel(), 'cancel')">Cancel</ion-button>
-                        <ion-button mode="md" color="primary" (click)="modal.dismiss(clockIn.confirm(), 'confirm')">Set</ion-button>
-                      </ion-buttons>
-                    </ion-datetime>
-                  </ion-content>
-                </ng-template>
-              </ion-modal>
-
-              <ion-modal [trigger]="'clockOutModal'" #modal2 [initialBreakpoint]="0.5" [showBackdrop]="true" [keepContentsMounted]="true">
-                <ng-template>
-                  <ion-content>
-                    <ion-datetime [presentation]="'time'" mode="md" [size]="'cover'" (ionChange)="setClockOutTime($any($event))" #clockOut>
-                      <ion-label slot="title" >Clock Out Time</ion-label>
-                      <ion-buttons slot="buttons">
-                        <ion-button mode="md" color="danger" (click)="modal2.dismiss(clockOut.cancel(), 'cancel')">Cancel</ion-button>
-                        <ion-button mode="md" color="primary" (click)="modal2.dismiss(clockOut.confirm(), 'confirm')">Set</ion-button>
-                      </ion-buttons>
-                    </ion-datetime>
-                  </ion-content>
-                </ng-template>
-              </ion-modal>
-            </form>
-          </ion-card-content>
-        </ion-card>
-      </ng-container> -->
-
+      </ion-list>
+      <!-- <ion-grid style="background-color: #fff;">
+        <ion-row>
+          <ion-col size="12">
+          </ion-col>
+          <ion-col class="ion-text-center" size="6">
+            <ion-card mode="ios" [color]="'success'" class="statusCard">
+              <ion-card-header>
+                <ion-text>days</ion-text>
+                <ion-card-title>{{presents}}<small>/{{getLastDate}}</small></ion-card-title>
+                <ion-card-subtitle>Present</ion-card-subtitle>
+              </ion-card-header>
+            </ion-card>
+          </ion-col>
+          <ion-col class="ion-text-center" size="6">
+            <ion-card mode="ios" [color]="'danger'" class="statusCard">
+              <ion-card-header>
+                <ion-text>days</ion-text>
+                <ion-card-title>{{absent}}<small>/{{getLastDate}}</small></ion-card-title>
+                <ion-card-subtitle>Absent</ion-card-subtitle>
+              </ion-card-header>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid> -->
+      <ion-list [inset]="true" mode="ios">
+        <ion-item>
+          <ion-icon color="success" slot="start" name="list-circle" size="large"></ion-icon>
+          <ion-label>Present</ion-label>
+          <ion-note slot="end">{{getPresent}}/{{getLastDate}}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-icon color="danger" slot="start" name="list-circle" size="large"></ion-icon>
+          <ion-label>Absent</ion-label>
+          <ion-note slot="end">{{getAbsent}}/{{getLastDate}}</ion-note>
+        </ion-item>
+      </ion-list>
 
       <ng-container *ngFor="let item of dateList; index as a;">
         <ion-card mode="md" class="cardItem {{isAllLoaded() ? item.status : ''}}">
@@ -256,15 +185,24 @@
               </ion-col>
             </ion-row>
             <div *ngIf="item.leaveData != null">
-              <ion-chip color="tertiary" class="ion-margin-top">
+              <!-- <ion-chip color="tertiary" class="ion-margin-top">
                 <ion-icon name="calendar" size="small"></ion-icon>
                 <ion-label>{{item.leaveData.startDate | date}} - {{item.leaveData.endDate | date}}</ion-label>
-              </ion-chip>
-              <div class="ion-padding-vertical">
-                <ion-text>{{item.leaveData.purpose}}</ion-text>
+              </ion-chip> -->
+              <div class="ion-margin-top leaveDate">
+                <ion-label color="tertiary" class="ion-text-wrap">
+                  <ion-icon name="calendar" size="small"></ion-icon>
+                  <ion-label>{{item.leaveData.startDate | date}} - {{item.leaveData.endDate | date}}</ion-label>
+                </ion-label>
               </div>
+              <p>
+                <b><ion-text>{{item.leaveData.leaveType}}</ion-text></b> &middot; {{item.leaveData.dayType}}
+              </p>
+              <p class="purpose">
+                <read-more-text [textString]="item.leaveData.purpose" [maxLength]="100"></read-more-text>
+              </p>
               <div class="ion-text-end">
-                <ion-chip [color]="item.leaveData.status === 'Accept' ? 'success' : item.leaveData.status === 'Pending' ? 'warining' : 'danger' ">
+                <ion-chip [color]="item.leaveData.status === 'Accept' ? 'success' : item.leaveData.status === 'Pending' ? 'warning' : 'danger' ">
                   {{item.leaveData.status === 'Accept' ? 'Accepted' : item.leaveData.status === 'Pending' ? 'Pending' : item.leaveData.status === 'Reject' ? 'Rejected' : item.leaveData.status}}
                 </ion-chip>
               </div>

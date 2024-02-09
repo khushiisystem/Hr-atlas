@@ -3,11 +3,10 @@ import { Injectable } from "@angular/core";
 import { ToastController } from "@ionic/angular";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
-import { IPayrollSetupRequest } from "../interfaces/request/IPayrollSetup";
 import { IOTPRequest, IOptVerifyRequest, IResetPasswordRequest } from "../interfaces/request/IOtpRequest";
 import { IEmployeeRequest } from "../interfaces/request/IEmployee";
 import { IEmployeeResponse, IEmployeeWrokResponse } from "../interfaces/response/IEmployee";
-import { ILeaveApplyrequest } from "../interfaces/request/ILeaveApply";
+import { ILeaveRequest } from "../interfaces/request/ILeaveApply";
 import { IClockInResponce } from "../interfaces/response/IAttendanceSetup";
 import { IHollydayResponse, ILeaveLogsResponse, ILeaveSetupResponse, ILeaveStatus } from "../interfaces/response/ILeave";
 import { IEmplpoyeeWorWeek } from "../interfaces/response/IEmplpoyeeWorWeek";
@@ -58,11 +57,8 @@ export class ShareService {
       }
     });
   }
-  setEmployeePayroll(empId: string, session: string | Date, payrollData: IPayrollSetupRequest): Observable<any>{
-    return this.http.post<any>(environment.Api + `api/payroll/employee/${empId}?session=${session}`, payrollData);
-  }
   downloadPayslip(employeeId: string, slipDate: string | Date): Observable<any> {
-    return this.http.get(environment.Api + `api/paySlip/generatepdf?employeeId=${employeeId}&date=${slipDate}`, {
+    return this.http.get(environment.Api + `api/paySlip/generatepdf?employeeId=${employeeId}&payslipDate=${slipDate}`, {
       responseType: 'blob',
     });
   }
@@ -105,8 +101,8 @@ export class ShareService {
   clockOut(clockinId: string): Observable<IClockInResponce> {
     return this.http.put<IClockInResponce>(environment.Api + `api/attendence/clockOut/${clockinId}`, {});
   }
-  leaveApply(leaveData: ILeaveApplyrequest): Observable<ILeaveApplyrequest> {
-    return this.http.post<ILeaveApplyrequest>(environment.Api + `api/applyLeave`, leaveData);
+  leaveApply(leaveData: ILeaveRequest): Observable<ILeaveRequest> {
+    return this.http.post<ILeaveRequest>(environment.Api + `api/applyLeave`, leaveData);
   }
   cancelLeave(leaveId: string): Observable<any> {
     return this.http.put<any>(environment.Api + `api/applyLeave/cancelLeave/${leaveId}`, {});

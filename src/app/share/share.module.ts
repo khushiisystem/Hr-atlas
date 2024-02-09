@@ -11,6 +11,7 @@ import { ForgotPasswordPage } from './components/forgot-password/forgot-password
 import { ChangePasswordPage } from './components/change-password/change-password.page';
 import { CommonModule } from '@angular/common';
 import { NgOtpInputModule } from 'ng-otp-input';
+import { ProgressBarPageModule } from './components/progress-bar/progress-bar.module';
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import { NgOtpInputModule } from 'ng-otp-input';
     ReactiveFormsModule,
     CommonModule,
     NgOtpInputModule,
+    ProgressBarPageModule,
   ],
   exports: [ChangePasswordPage,],
   declarations: [SharePage, LoginPage, ForgotPasswordPage, ChangePasswordPage,],

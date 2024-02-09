@@ -1,11 +1,12 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonInfiniteScroll } from '@ionic/angular';
+import { GestureController, GestureDetail, IonInfiniteScroll } from '@ionic/angular';
 import { ILeaveLogsResponse } from 'src/app/interfaces/response/ILeave';
 import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { RoleStateService } from 'src/app/services/roleState.service';
 import { ShareService } from 'src/app/services/share.service';
+import { LeaveAction } from 'src/app/share/components/leave-card/leave-card.page';
 
 @Component({
   selector: 'app-admin-leaves',
@@ -15,6 +16,7 @@ import { ShareService } from 'src/app/services/share.service';
 export class AdminLeavesPage implements OnInit {
   @ViewChild("requestsInfiniteScroll") requestsInfiniteScroll!: IonInfiniteScroll;
   @ViewChild('logsInfiniteScroll') logsInfiniteScroll!: IonInfiniteScroll;
+  @ViewChild('tabsContent', { read: ElementRef }) tabsContent!: ElementRef<HTMLDivElement>;
   @Input() leaveType?: string;
   selectedDates: string[] = [];
   requestLoaded: boolean = false;
@@ -29,6 +31,8 @@ export class AdminLeavesPage implements OnInit {
   leaveLogs: ILeaveLogsResponse[] = [];
   requestedLeaveList: ILeaveLogsResponse[] = [];
   userRole: string = '';
+  tabs: Array<{value: string, label: string}> = [{label: "Requests", value: "requests"}, {label: "logs", value: "logs"}]
+  private isTabChangeTriggered = false;
 
   constructor(
     private router: Router,
@@ -36,6 +40,9 @@ export class AdminLeavesPage implements OnInit {
     private adminServ: AdminService,
     private roleStateServ: RoleStateService,
     private loader: LoaderService,
+    private el: ElementRef,
+    private gestureCtrl: GestureController,
+    private cdRef: ChangeDetectorRef,
   ) {
     this.roleStateServ.getState().subscribe(res => {
       if(res){
@@ -54,12 +61,54 @@ export class AdminLeavesPage implements OnInit {
     this.getLogs();
   }
 
-  goBack() {history.back();}
+  ngAfterViewInit(): void {
+    const gesture = this.gestureCtrl.create({
+      el: this.tabsContent.nativeElement,
+      threshold: 0,
+      onStart: () => this.onStart(),
+      onMove: (detail) => this.onMove(detail),
+      onEnd: () => this.onEnd(),
+      gestureName: 'change-tab-in-adminLeaves',
+    });
 
-  leaveApprovel(leaveId: string, approvel: boolean){
+    gesture.enable();
+  }
+
+  private onStart() {
+    this.isTabChangeTriggered = false;
+    this.cdRef.detectChanges();
+  }
+  
+  private onMove(detail: GestureDetail) {
+    if(this.isTabChangeTriggered){return;}
+    const tabIndex = this.tabs.findIndex((tab) => tab.value === this.activeTab);
+    
+    if(detail.deltaX < -90 && tabIndex < this.tabs.length-1){
+      this.activeTab = this.tabs[tabIndex+1].value;
+      this.isTabChangeTriggered = true;
+    } else if(detail.deltaX > 90 && tabIndex > 0){
+      this.activeTab = this.tabs[tabIndex-1].value;
+      this.isTabChangeTriggered = true;
+    }
+  }
+
+  private onEnd() {
+    this.isTabChangeTriggered = false;
+    this.cdRef.detectChanges();
+  }
+
+  goBack() {history.back();}
+  
+  getDate(dateStr: Date | string) {
+    return new Date(dateStr);
+  }
+
+  leaveApprovel(event: LeaveAction){
+    const approvel: boolean = event.action === "Accept";
+    
     this.loader.present('');
     const leaveData = {
-      leaveGuid: leaveId,
+      leaveGuid: event.leaveId,
       aproveLeave: approvel
     }
     this.adminServ.leaveApprove(leaveData).subscribe(res => {
@@ -69,11 +118,13 @@ export class AdminLeavesPage implements OnInit {
         } else {
           this.shareServ.presentToast('Responded', 'top', 'success');
         }
-        this.loader.dismiss();
-        this.pageNumber = 0;
+        const requestIndex = this.requestedLeaveList.findIndex((item) => item.guid === event.leaveId);
+        this.requestedLeaveList.splice(requestIndex, 1);
         this.logPageNumber = 0;
+        this.pageNumber = 0;
         this.requestedLeaves();
         this.getLogs();
+        this.loader.dismiss();
       }
     }, (error) => {
       this.shareServ.presentToast(error.error.message, 'top', 'danger');
@@ -84,15 +135,15 @@ export class AdminLeavesPage implements OnInit {
   getLogs(){
     this.logsLoaded = false;
     const data = {};
-    if(this.logPageNumber < 1){
-      this.leaveLogs = []
-    }
     this.shareServ.getLeaveList(data, this.logPageNumber * 20, 20).subscribe(res => {
       if(res) {
         if(res.length < 1){this.moreLogs = false; this.logsLoaded = true;}
         
+        if(this.logPageNumber < 1){this.leaveLogs = [];}
         for(let i=0; i < res.length; i++){
-          this.leaveLogs.push(res[i]);
+          if(!this.leaveLogs.some((item: ILeaveLogsResponse) => item.guid === res[i].guid)){
+            this.leaveLogs.push(res[i]);
+          }
         }
         this.moreLogs = res.length > 19;
         if(this.logsInfiniteScroll && !this.moreLogs){
@@ -111,15 +162,15 @@ export class AdminLeavesPage implements OnInit {
     const data = {
       status: 'Pending'
     };
-    if(this.pageNumber < 1){
-      this.requestedLeaveList = []
-    }
     this.shareServ.getLeaveList(data, this.pageNumber * 20, 20).subscribe(res => {
       if(res) {
         if(res.length < 1){this.moreRequests = false; this.requestLoaded = true;}
 
+        if(this.pageNumber < 1){this.requestedLeaveList = [];}
         for(let i=0; i < res.length; i++){
-          this.requestedLeaveList.push(res[i]);
+          if(!this.requestedLeaveList.some((item: ILeaveLogsResponse) => item.guid === res[i].guid)){
+            this.requestedLeaveList.push(res[i]);
+          }
         }
         this.moreRequests = res.length > 19;
         if(this.requestsInfiniteScroll){

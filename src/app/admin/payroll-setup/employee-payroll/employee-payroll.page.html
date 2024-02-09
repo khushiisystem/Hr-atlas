@@ -1,70 +1,72 @@
-<!-- <ion-item [lines]="'full'" class="ion-margin-bottom" *ngIf="employeeDetail">
-  <div class="emp_avatar" slot="start">
-    <ion-avatar class="employee_img">
-      <app-name-img [name]="getName(employeeDetail)" [classes]="''" *ngIf="employeeDetail.imageUrl.trim() === ''"></app-name-img>
-      <img [alt]="employeeDetail.firstName" *ngIf="employeeDetail.imageUrl.trim() !== ''" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-    </ion-avatar>
-  </div>
+<div class="sticky_div">
+  <ion-segment [scrollable]="false" [swipeGesture]="true" [(ngModel)]="activeTab" mode="ios" class="tab_segement">
+    <ion-segment-button *ngFor="let tabItem of tabs; index as a;" [value]="tabItem.value">
+      <ion-label>{{tabItem.label}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</div>
 
-  <ion-label class="emp_name">{{employeeDetail.firstName | titlecase}} {{employeeDetail.lastName || '' | titlecase}}</ion-label>
-
-  <div class="emp_salary text-end" slot="end">
-    <ion-text><small>Net Pay</small><br></ion-text>
-    <ion-label class="net_salary" color="danger">{{2000 | currency: "INR"}}</ion-label>
-  </div>
-</ion-item> -->
-
-<ion-list inset="true" mode="ios">
-  <ion-item type="button" button="true" shape="round" [detail]="true" detailIcon="chevron-down-outline" color="primary" lines="none" class="dateItem" (click)="openCalendar = true" mode="ios">
+<ion-list inset="true" mode="ios" *ngIf="activeTab !== 'history'">
+  <ion-item type="button" button="true" [detail]="true" detailIcon="chevron-down-outline" color="primary" lines="none" class="dateItem" (click)="openCalendar = true" mode="ios">
     <ion-label>
       <h6>Payslip month</h6>
-      <ion-text>{{payslipDate | date:'MMMM, y'}}</ion-text>
+      <ion-text>{{payrollDate | date:'MMMM, y'}}</ion-text>
     </ion-label>
   </ion-item>
 </ion-list>
-<ion-modal [isOpen]="openCalendar" #dateModal [initialBreakpoint]="0.65" [keepContentsMounted]="true" mode="md" [backdropDismiss]="false" [showBackdrop]="true" (didDismiss)="openCalendar = false">
+<ion-modal [isOpen]="openCalendar" #dateModal [initialBreakpoint]="0.65" [breakpoints]="[0.5, 0.8]" [keepContentsMounted]="true" mode="ios" [backdropDismiss]="false" [showBackdrop]="true" (didDismiss)="openCalendar = false">
   <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Select Year and Month</ion-title>
+      </ion-toolbar>
+    </ion-header>
     <ion-content>
-      <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [(ngModel)]="payslipDate" [max]="today.toISOString()" (ngModelChange)="getPayStructure();">
-        <ion-label slot="title">Select Year and Month</ion-label>
+      <ion-datetime presentation="month-year" color="tertiary" size="cover" mode="md" #yearMonth [(ngModel)]="payrollDate" [max]="today.toISOString()" (ngModelChange)="getPayStructure();">
         <ion-buttons slot="buttons">
-          <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateModal.dismiss();">Cancel</ion-button>
-          <ion-button mode="md" color="primary" [disabled]="!payslipDate" (click)="yearMonth.confirm(); dateModal.dismiss();">Done</ion-button>
+          <ion-button mode="ios" [strong]="true" color="danger" (click)="yearMonth.cancel(); dateModal.dismiss();">Cancel</ion-button>
+          <ion-button mode="ios" [strong]="true" color="primary" [disabled]="!payrollDate" (click)="yearMonth.confirm(); dateModal.dismiss();">Done</ion-button>
         </ion-buttons>
       </ion-datetime>
     </ion-content>
   </ng-template>
 </ion-modal>
 
-<div class="sticky_div">
-  <ion-segment [scrollable]="true" [(ngModel)]="activeTab" class="tab_segement">
-    <ion-segment-button value="earning">
-      <ion-label>Earning</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="deductions">
-      <ion-label>Deductions</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="payslip" [disabled]="payslipFrom.invalid">
-      <ion-label>Payslip</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-</div>
-
-<div [ngSwitch]="activeTab">
+<div [ngSwitch]="activeTab" #tabsContent style="flex: 1;">
   <div *ngSwitchCase="'earning'">
-    <form [formGroup]="payslipFrom">
+    <form [formGroup]="extraIncomeForm">
       <ion-list inset="true" mode="ios">
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="CTC" aria-label="CTC" formControlName="ctc" [min]="0" [readonly]="true"></ion-input>
+          <ion-label>CTC</ion-label>
+          <ion-note slot="end">{{currentCtc | currency:'INR'}}</ion-note>
+          <!-- <ion-input type="text" labelPlacement="floating" label="CTC" aria-label="CTC" [value]="" [min]="0" [readonly]="true" [tabIndex]="-1" class="untouched"></ion-input> -->
         </ion-item>
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Basic Salary" aria-label="basics" formControlName="basicSalary" [min]="0" [required]="true" [readonly]="true"></ion-input>
+          <ion-label>Basic</ion-label>
+          <ion-note slot="end">{{basicSalary | currency:'INR'}}</ion-note>
+          <!-- <ion-input type="text" labelPlacement="fixed" label="Basic Salary" aria-label="basics" [value]="basicSalary | number:'0.1-2' | currency:'INR'" [min]="0" [required]="true" [readonly]="true" [tabIndex]="-1" class="untouched"></ion-input> -->
         </ion-item>
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Bonus" aria-label="Bonus" formControlName="bonus" [min]="0"></ion-input>
+          <ion-input type="number" labelPlacement="fixed" aria-label="Bonus" formControlName="bonus" class="ion-text-end" [min]="0" [step]="100" [tabIndex]="1">
+            <p slot="label">Bonus <ion-note>&#8377;</ion-note></p>
+          </ion-input>
         </ion-item>
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Advance Salary" aria-label="Advance Salary" formControlName="advanceSalary" [min]="0" [readonly]="true"></ion-input>
+          <ion-input type="number" labelPlacement="fixed" aria-label="CompOff" formControlName="compOff" class="ion-text-end" [min]="0" [step]="100">
+            <p slot="label">CompOff <ion-note>&#8377;</ion-note></p>
+          </ion-input>
+        </ion-item>
+        <ion-item mode="ios" detail="false">
+          <ion-input type="number" labelPlacement="fixed" aria-label="Advance Salary" formControlName="advanceAmount" class="ion-text-end"  [min]="0"  [step]="100">
+            <p slot="label">Advance <ion-note>&#8377;</ion-note></p>
+          </ion-input>
+        </ion-item>
+      </ion-list>
+
+      <ion-list inset="true" mode="ios" *ngIf="previousLog">
+        <ion-item mode="ios" detail="false">
+          <ion-label>Remaining Amount</ion-label>
+          <ion-note slot="end">{{previousLog.remainingAmount | currency:'INR'}}</ion-note>
         </ion-item>
       </ion-list>
 
@@ -75,25 +77,33 @@
   </div>
 
   <div *ngSwitchCase="'deductions'">
-    <form [formGroup]="payslipFrom">
+    <form [formGroup]="extraIncomeForm">
       <ion-list inset="true" mode="ios">
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Loss Of Pay" aria-label="LOP" formControlName="lop" [min]="0" [readonly]="true"></ion-input>
+          <ion-input type="number" labelPlacement="fixed" aria-label="Deduction Amount" formControlName="deductionAmount" class="ion-text-end" [min]="0" [step]="100" [enterkeyhint]="'next'" [inputmode]="'decimal'">
+            <ion-text slot="label">Advance Pay Deduction <ion-note>&#8377;</ion-note></ion-text>
+          </ion-input>
         </ion-item>
         <ion-item mode="ios" detail="false">
-          <ion-input type="number" labelPlacement="floating" label="Deduction Amount" aria-label="Deduction Amount" formControlName="deductionAmount" [min]="0" [readonly]="true"></ion-input>
+          <ion-input type="number" labelPlacement="fixed" aria-label="Extra Deduction" formControlName="otherDeduction" class="ion-text-end" [min]="0" [step]="100" [enterkeyhint]="'done'" [inputmode]="'decimal'">
+            <ion-text slot="label">Other Deductions <ion-note>&#8377;</ion-note></ion-text>
+          </ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-list inset="true" mode="ios" class="ion-padding-bottom">
+        <ion-item mode="ios" detail="false">
+          <ion-textarea rows="3" labelPlacement="floating" label="Description" aria-label="description"></ion-textarea>
         </ion-item>
       </ion-list>
 
       <div class="ion-text-end btn-group ion-padding">
-        <ion-button color="primary" type="button" mode="ios" [strong]="true" shape="round" [disabled]="payslipFrom.invalid" (click)="submit()">Submit</ion-button>
+        <ion-button color="primary" type="button" mode="ios" [strong]="true" shape="round" [disabled]="checkFormValidation()" (click)="submit()">Submit</ion-button>
       </div>
     </form>
   </div>
 
-  <div *ngSwitchCase="'payslip'">
-    <app-employee-payslip *ngIf="paySlip" [payslipData]="paySlip"></app-employee-payslip>
+  <div *ngSwitchCase="'history'">
+    <advance-pay-card *ngFor="let history of logHistory" [advancePayDetail]="history"></advance-pay-card>
   </div>
-  
   <div *ngSwitchDefault></div>
 </div>

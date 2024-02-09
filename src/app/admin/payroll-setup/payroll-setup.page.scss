@@ -6,3 +6,8 @@
         font-size: 0.8em;
     }
 }
+app-employee-payroll{
+    min-height: calc(100% - var(--offset-bottom, 10px));
+    display: flex;
+    flex-direction: column;
+}

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
 import { ShareService } from '../services/share.service';
@@ -17,6 +17,7 @@ import { ProfilePopupPage } from '../employee/profile-popup/profile-popup.page';
 import { AttendaceStatus } from '../interfaces/enums/leaveCreditPeriod';
 import { IClockInResponce } from '../interfaces/response/IAttendanceSetup';
 import { HollydaySetupPage } from '../admin/hollyday-setup/hollyday-setup.page';
+import { LeaveAction } from '../share/components/leave-card/leave-card.page';
 
 export interface BirthItem {
   eventDate: Date,
@@ -218,13 +219,12 @@ export class Tab1Page implements OnInit, AfterViewInit {
     const data = {
       status: 'Pending'
     };
-    this.requestedLeaveList = []
     this.shareServ.getLeaveList(data, 0 * 3, 3).subscribe(res => {
       if(res) {
         if(res.length < 1){return;}
 
         for(let i=0; i < res.length; i++){
-          if(!this.requestedLeaveList.includes(res[i])){
+          if(!this.requestedLeaveList.some((item) => item.guid === res[i].guid)){
             this.requestedLeaveList.push(res[i]);
           }
         }
@@ -608,11 +608,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
     // });
   }
 
-  leaveApprovel(leaveId: string, approvel: boolean){
+  leaveApprovel(event: LeaveAction){
     this.loader.present('');
     const leaveData = {
-      leaveGuid: leaveId,
-      aproveLeave: approvel
+      leaveGuid: event.leaveId,
+      aproveLeave: event.action === "Accept"
     }
     this.adminServ.leaveApprove(leaveData).subscribe(res => {
       if(res){
@@ -622,7 +622,11 @@ export class Tab1Page implements OnInit, AfterViewInit {
           this.shareServ.presentToast('Responded', 'top', 'success');
         }
         this.loader.dismiss();
-        this.getRequests();
+        const requestIndex = this.requestedLeaveList.findIndex((item) => item.guid === event.leaveId);
+        this.requestedLeaveList.splice(requestIndex, 1);
+        if(this.requestedLeaveList.length > 1){
+          this.getRequests();
+        }
       }
     }, (error) => {
       this.shareServ.presentToast(error.error.message, 'top', 'danger');
