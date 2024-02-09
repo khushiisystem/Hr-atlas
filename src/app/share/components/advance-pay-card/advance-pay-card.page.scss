@@ -9,9 +9,8 @@
         padding-inline: 20px;
         padding-top: 20px;
         padding-bottom: 16px;
-        // background-color: var(--ion-color-tertiary);
 
-        // & ion-card-subtitle{color: var(--ion-color-tertiary-contrast);}
+        & ion-card-subtitle, & ion-card-title{font-weight: 600;}
     }
     & ion-card-content {
         padding-inline: 20px;

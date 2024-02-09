@@ -1,4 +1,4 @@
-<ion-card mode="md" color="tertiary" class="historyCard">
+<ion-card mode="md" class="historyCard">
   <ion-card-header>
     <ion-card-title *ngIf="advancePayDetail">{{advancePayDetail.remainingAmount || 0 | currency:"INR"}}</ion-card-title>
     <ion-card-subtitle *ngIf="advancePayDetail">Total Advance &middot; {{getDate() | date}}</ion-card-subtitle>
@@ -7,29 +7,29 @@
   </ion-card-header>
   <ion-card-content>
     <ion-list mode="ios" [lines]="'none'">
-      <ion-item [detail]="false" color="tertiary">
+      <ion-item [detail]="false">
         <ion-label>Advance Pay</ion-label>
-        <ion-note color="light">{{advancePayDetail.advanceAmount || 0 | currency:'INR'}}</ion-note>
+        <ion-note>{{advancePayDetail.advanceAmount || 0 | currency:'INR'}}</ion-note>
       </ion-item>
-      <ion-item [detail]="false" color="tertiary">
+      <ion-item [detail]="false">
         <ion-label>Bonus</ion-label>
-        <ion-note color="light">{{advancePayDetail.bonus || 0 | currency:'INR'}}</ion-note>
+        <ion-note>{{advancePayDetail.bonus || 0 | currency:'INR'}}</ion-note>
       </ion-item>
-      <ion-item [detail]="false" color="tertiary">
+      <ion-item [detail]="false">
         <ion-label>CompOff</ion-label>
-        <ion-note color="light">{{advancePayDetail.compOff || 0 | currency:'INR'}}</ion-note>
+        <ion-note>{{advancePayDetail.compOff || 0 | currency:'INR'}}</ion-note>
       </ion-item>
-      <ion-item [detail]="false" color="tertiary">
+      <ion-item [detail]="false">
         <ion-label>Advance Pay Deduction</ion-label>
-        <ion-note color="light">{{advancePayDetail.deductionAmount || 0 | currency:'INR'}}</ion-note>
+        <ion-note>{{advancePayDetail.deductionAmount || 0 | currency:'INR'}}</ion-note>
       </ion-item>
-      <ion-item [detail]="false" color="tertiary">
+      <ion-item [detail]="false">
         <ion-label>Other deduction</ion-label>
-        <ion-note color="light">{{advancePayDetail.otherDeduction || 0 | currency:'INR'}}</ion-note>
+        <ion-note>{{advancePayDetail.otherDeduction || 0 | currency:'INR'}}</ion-note>
       </ion-item>
-      <ion-item [detail]="false" color="tertiary" *ngIf="advancePayDetail.description && advancePayDetail.description.trim() !== ''">
+      <ion-item [detail]="false" *ngIf="advancePayDetail.description && advancePayDetail.description.trim() !== ''">
         <ion-label class="ion-text-wrap">
-          <ion-note color="light">{{advancePayDetail.description}}</ion-note>
+          <ion-note>{{advancePayDetail.description}}</ion-note>
         </ion-label>
       </ion-item>
     </ion-list>
