@@ -1,13 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ModalController, Platform } from '@ionic/angular';
-import * as moment from 'moment';
-import { IPayrollSetupRequest } from 'src/app/interfaces/request/IPayrollSetup';
-import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
-import { AdminService } from 'src/app/services/admin.service';
-import { LoaderService } from 'src/app/services/loader.service';
-import { ShareService } from 'src/app/services/share.service';
+import { Platform } from '@ionic/angular';
 import { IEmpSelect } from 'src/app/share/employees/employees.page';
 
 @Component({
@@ -20,9 +12,6 @@ export class PayrollSetupPage implements OnInit {
   employee!: IEmpSelect;
 
   constructor(
-    private adminServ: AdminService,
-    private loader: LoaderService,
-    private shareServ: ShareService,
     private platform: Platform,
   ) { 
     this.backButtonEvent();

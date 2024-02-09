@@ -1,0 +1,38 @@
+.historyCard {
+    margin-inline: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border-radius: 16px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 0px 4px -1px;
+
+    & ion-card-header {
+        padding-inline: 20px;
+        padding-top: 20px;
+        padding-bottom: 16px;
+        // background-color: var(--ion-color-tertiary);
+
+        // & ion-card-subtitle{color: var(--ion-color-tertiary-contrast);}
+    }
+    & ion-card-content {
+        padding-inline: 20px;
+        padding-bottom: 20px;
+        -webkit-padding-start: 20px;
+        -webkit-padding-end: 20px;
+    }
+
+    & ion-list {
+        & ion-list-header{
+            padding-left: var(--ion-safe-area-left, 0px);
+        }
+        & ion-item{
+            --padding-start: 0;
+            --inner-padding-end: 0;
+            --min-height: 35px;
+
+            & ion-label {
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+        }
+    }
+}

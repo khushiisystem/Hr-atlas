@@ -42,6 +42,8 @@ import { CustomCallendarPageModule } from "../share/components/custom-callendar/
 import { AttendaceUpdatePage } from "../admin/employee-attendance/attendace-update/attendace-update.page";
 import { SideNavPage } from "./components/side-nav/side-nav.page";
 import { ReadMorePageModule } from "../share/components/read-more/read-more.module";
+import { AdvancePayCardPageModule } from "../share/components/advance-pay-card/advance-pay-card.module";
+import { ProgressBarPageModule } from "../share/components/progress-bar/progress-bar.module";
 
 @NgModule({
   declarations: [
@@ -86,6 +88,8 @@ import { ReadMorePageModule } from "../share/components/read-more/read-more.modu
     LeavesPageModule,
     HttpClientModule,
     CustomCallendarPageModule,
+    AdvancePayCardPageModule,
+    ProgressBarPageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, RoleGuard, FileOpener],
