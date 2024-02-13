@@ -109,7 +109,7 @@ export class AdminLeavesPage implements OnInit {
     this.loader.present('');
     const leaveData = {
       leaveGuid: event.leaveId,
-      aproveLeave: approvel
+      approveLeave: approvel
     }
     this.adminServ.leaveApprove(leaveData).subscribe(res => {
       if(res){

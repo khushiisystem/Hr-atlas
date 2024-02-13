@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { DatetimeChangeEventDetail, IonInfiniteScroll, ModalController } from '@ionic/angular';
+import { DatetimeChangeEventDetail } from '@ionic/angular';
 import * as moment from 'moment';
 import { IHighlightedDate } from 'src/app/employee/attendance/attendance.page';
 import { AttendaceStatus } from 'src/app/interfaces/enums/leaveCreditPeriod';
@@ -12,7 +11,6 @@ import { AdminService } from 'src/app/services/admin.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 import { IEmpSelect } from 'src/app/share/employees/employees.page';
-import { AttendaceUpdatePage } from './attendace-update/attendace-update.page';
 import { Subscription } from 'rxjs';
 
 interface DatetimeCustomEvent extends CustomEvent {
@@ -36,7 +34,6 @@ export interface AttListItem {
   styleUrls: ['./employee-attendance.page.scss'],
 })
 export class EmployeeAttendancePage implements OnInit, OnDestroy {
-  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   employeeId: string = '';
   employee!: IEmpSelect;
   attendanceLoaded: boolean = false;
@@ -46,24 +43,19 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
   moreAttendance: boolean = true;
   pageIndex: number = 0;
   attendanceList: IClockInResponce[] = [];
-  attendanceDateList: IClockInResponce[] = [];
   eventsList: IHollydayResponse[] = [];
   highlightedDates: Array<IHighlightedDate> = [];
   fullLeaves: Array<IHighlightedDate> = [];
   halfLeaves: Array<IHighlightedDate> = [];
   leaveLogs: Array<ILeaveLogsResponse> = [];
   expandedCards: number[] = [0];
-  updatedAttendance!: IClockInResponce;
-  openUpdatForm: boolean[] = [false];
   dateModal: boolean = false;
-  showCalendar: boolean = false;
   attendanceDate: any;
   today: Date = new Date();
   workWeekDetail!: IEmplpoyeeWorWeek;
   dateList: AttListItem[] = [];
   presents: number = 0;
   absent: number = 0;
-  isFirst: boolean = false;
   minDate: Date = new Date();
   dates: (moment.Moment | string | null)[][] = [];
   leavesCount: number = 0;
@@ -74,12 +66,8 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
     private shareServ: ShareService,
     private loader: LoaderService,
     private adminServ: AdminService,
-    private fb: FormBuilder,
     private activeRoute: ActivatedRoute,
-    private modalCtrl: ModalController,
   ) { 
-    const abc = localStorage.getItem('isFirst') || false;
-    this.isFirst = abc === 'true' ? true : false;
     this.minDate.setFullYear(2000, 1, 1);
   }
 
@@ -176,11 +164,14 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
       if(res.length < 1){
         this.moreAttendance = false;
         this.attendanceLoaded = true;
-        this.infiniteScroll.complete();
         this.loader.dismiss();
         return;
       } else {
         this.moreAttendance = res.length > 39;
+        if(this.moreAttendance){
+          this.pageIndex++;
+          this.getMonthLyAttendance();
+        }
         
         res.forEach((e: IClockInResponce) => {
           this.attendanceList.push(e);
@@ -207,16 +198,13 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
             item.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
           });
         });
-        this.openUpdatForm.length = this.attendanceList.length;
-        this.openUpdatForm.fill(false);
         this.loader.dismiss();
-        this.infiniteScroll.complete();
         this.attendanceLoaded = true;
       }
     }, (error) => {
       this.attendanceLoaded = true;
+      this.moreAttendance = false;
       this.loader.dismiss();
-      this.infiniteScroll.complete();
     });
   }
 
@@ -351,6 +339,7 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
     this.apiSubscription = this.shareServ.getMonthLeaves(this.employeeId, moment(this.attendanceDate).utc().format()).subscribe(res => {
       this.leaveLogs = res;
       for (let a = 0; a < res.length; a++) {
+        console.log(this.highlightedDates);
         if(res[a].status !== 'Cancel'){
           res[a].fullDayDates.forEach((dates) => {
             if (moment(this.attendanceDate).isSame(dates, 'year') && moment(this.attendanceDate).isSame(dates, 'month')) {
@@ -388,22 +377,16 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
       backgroundColor: status === 'Pending' ? '#ef7373' : isFullDay ? 'red' : 'pink',
       textColor: '#333',
     }
-    const fullDayIndex = this.fullLeaves.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(inputDate));
-    const halfDayIndex = this.halfLeaves.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(inputDate));
-    if(isFullDay){
-      if(fullDayIndex != -1){
-        this.fullLeaves[fullDayIndex] = selectDate;
-      } else {
-        this.fullLeaves.push(selectDate);
-      }
+    const leavesArray = isFullDay ? this.fullLeaves : this.halfLeaves;
+    const index = leavesArray.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(inputDate));
+    if(index != -1){
+      leavesArray[index] = selectDate;
     } else {
-      if(halfDayIndex != -1){
-        this.halfLeaves[halfDayIndex] = selectDate;
-      } else {
-        this.halfLeaves.push(selectDate);
-      }
+      leavesArray.push(selectDate);
     }
+    console.log(this.fullLeaves, this.halfLeaves);    
     this.highlightedDates = [...this.highlightedDates, ...this.fullLeaves, ...this.halfLeaves];
+    
   }
 
   getDayType(inputDate?: string | Date, leaveId?: string) {
@@ -423,11 +406,19 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
     let halfDays: any[] = [];
     this.leaveLogs.forEach((item) => {
       if(item.leaveType === leaveType){
-        fullDays = [...fullDays, ...item.fullDayDates.filter((dates) => moment(dates).isSame(this.attendanceDate, 'year') && moment(dates).isSame(this.attendanceDate, 'month'))];
-        halfDays = [...halfDays, ...item.halfDayDates.filter((dates) => moment(dates).isSame(this.attendanceDate, 'year') && moment(dates).isSame(this.attendanceDate, 'month'))];
+        item.fullDayDates.forEach((item) => {
+          if(moment(item).isSame(this.attendanceDate, 'year') && moment(item).isSame(this.attendanceDate, 'month') && !fullDays.includes(moment(item).format('DD-MM-YYYY'))){
+            fullDays.push(moment(item).format('DD-MM-YYYY'));
+          }
+        });
+        item.halfDayDates.forEach((item) => {
+          if(moment(item).isSame(this.attendanceDate, 'year') && moment(item).isSame(this.attendanceDate, 'month') && !halfDays.includes(moment(item).format('DD-MM-YYYY'))){
+            halfDays.push(moment(item).format('DD-MM-YYYY'));
+          }
+        });
       }
-    });
-    return (fullDays.length + (halfDays.length * 0.5))
+    });    
+    return (fullDays.length + (halfDays.length * 0.5));
   }
 
   returnCustomDate(selectDate: string | Date){
@@ -474,7 +465,7 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
   }
   
 
-  selectDate(event: CustomEvent){
+  selectDate(event: DatetimeCustomEvent){
     if(event.detail.value){
       this.fetchAll(event.detail.value as string);
     }
@@ -485,9 +476,24 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
     const xyz = new Date();
     let monthDate = new Date(dateStr);
     this.attendanceDate = monthDate.toISOString();
-    if(monthDate.getFullYear() < xyz.getFullYear() || monthDate.getMonth() < xyz.getMonth()){
+    if(monthDate.getFullYear() < this.today.getFullYear() || monthDate.getMonth() < this.today.getMonth()){
       monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
     }
+    this.highlightedDates = [];
+    this.eventsList.forEach((event) =>{
+      const selectDate : IHighlightedDate = {
+        date: this.returnCustomDate(event.eventDate),
+        backgroundColor: '#f58f0d',
+        textColor: '#000',
+      }
+      const index = this.highlightedDates.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(event.eventDate))
+      if(index != -1){
+        this.highlightedDates[index] = selectDate;
+      } else {
+        this.highlightedDates.push(selectDate);
+      }
+    });
+
     this.createDateList(monthDate);
     this.getMonthLyAttendance();
     this.getLogs();
@@ -525,25 +531,6 @@ export class EmployeeAttendancePage implements OnInit, OnDestroy {
     if(item.attendanceData != null || item.leaveData != null){
       item.open_form = !item.open_form
     }
-  }
-
-  async updateAttendance(event: Event, attendanceData: any){
-    event.stopPropagation();
-    event.preventDefault();
-    const updateForm = await this.modalCtrl.create({
-      component: AttendaceUpdatePage,
-      backdropDismiss: false,
-      cssClass: 'updateFormAtt',
-      handleBehavior: 'cycle',
-      mode: 'md',
-      componentProps: {attendanceDetail: attendanceData, userId: this.employeeId},
-    });
-
-    (await updateForm).present();
-
-    (await updateForm).onDidDismiss().then(result => {
-      console.log(result, 'result');
-    })
   }
 
   isAllLoaded(): boolean{
