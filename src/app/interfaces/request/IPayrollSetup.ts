@@ -7,6 +7,7 @@ export interface ICreditLogsRequest {
     description: string,
     deductionAmount: number,
     otherDeduction: number,
+    payslipDate: string | Date,
 }
 
 export interface ICreditLogsResponse extends IGeneric, ICreditLogsRequest {

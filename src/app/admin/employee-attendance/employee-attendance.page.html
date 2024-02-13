@@ -1,4 +1,4 @@
-<ion-header [translucent]="true" mode="md" (click)="onMouseMove($event)">
+<ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
@@ -8,11 +8,9 @@
     <ion-title><span *ngIf="employee">{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</span>
       <span *ngIf="!employee">Employee Attendance</span></ion-title>
     <div slot="end" class="ion-margin-end toggleview">
-      <ion-button type="button" [fill]="showCalendar ? 'clear' : 'solid'" shape="round" mode="ios" color="tertiary" size="small" aria-label="List View" (click)="showCalendar = !showCalendar">
-        <ion-icon aria-hidden="true" size="small" slot="icon-only" name="list"></ion-icon>
-      </ion-button>
-      <ion-button type="button" [fill]="!showCalendar ? 'clear' : 'solid'" shape="round" mode="ios" color="tertiary" size="small" aria-label="Calendar View" (click)="showCalendar = !showCalendar">
-        <ion-icon aria-hidden="true" size="small" slot="icon-only" name="calendar"></ion-icon>
+      <ion-button type="button" [fill]="'solid'" shape="round" mode="ios" color="tertiary" size="small" aria-label="Calendar View" (click)="dateModal = true">
+        <ion-icon aria-hidden="true" size="small" slot="start" name="calendar"></ion-icon>
+        {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}
       </ion-button>
     </div>
     <!-- <ion-thumbnail slot="end" class="logo_img ion-margin-end">
@@ -21,7 +19,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" color="light" (click)="onMouseMove($event)">
+<ion-content [fullscreen]="true" color="light">
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -40,102 +38,16 @@
     </ng-template>
   </ion-modal>
 
-  <div *ngIf="showCalendar" class="calendarView">
-    <ion-list inset="true" mode="ios">
-      <ion-item detail="false" class="calendarControls">
-        <ion-buttons slot="start">
-          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementYear()" aria-label="Previous Month">
-            <img src="../../../assets/icon/left_arrows.svg" alt="Previous" width="30" height="30">
-          </ion-button>
-          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementMonth()" aria-label="Next Year">
-            <ion-icon slot="icon-only" name="chevron-back" aria-label="Previous Month"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        <ion-label class="ion-text-center">{{ attendanceDate | date:"MMMM yyyy" }}</ion-label>
-        <ion-buttons slot="end">
-          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementMonth()" aria-label="Next Month" [disabled]="isNextMonth()">
-            <ion-icon slot="icon-only" name="chevron-forward" aria-label="Previous Month"></ion-icon>
-          </ion-button>
-          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementYear()" aria-label="Next year" [disabled]="!isNextYear()">
-            <img src="../../../assets/icon/right_arrows.svg" alt="Next" width="30" height="30">
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
-    </ion-list>
+  <ion-segment mode="ios" [scrollable]="true" color="secondary" class="topSegment" [(ngModel)]="activeTab">
+    <ion-segment-button value="status">Status</ion-segment-button>
+    <ion-segment-button value="listView">List View</ion-segment-button>
+    <ion-segment-button value="calendarView">Calendar View</ion-segment-button>
+    <ion-segment-button value="leaves">Leaves</ion-segment-button>
+  </ion-segment>
 
-    
-    <ion-card class="calendar_card">
-      <ion-card-content>
-        <table>
-          <thead>
-            <tr>
-              <th *ngFor="let day of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']">{{ day }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let week of dates">
-              <td *ngFor="let date of week">
-                <span [ngClass]="getStatusByDate(date ?? '') ? getStatusByDate(date ?? '')?.status : ''">{{ date ? getMomentDate(date) : '' }}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </ion-card-content>
-    </ion-card>
-    <ion-grid>
-      <ion-row>
-        <ion-col size="6" sizeSm="4">
-          <circular-progress-bar [value]="getPresent" [maxValue]="getLastDate" color="var(--ion-color-success)"></circular-progress-bar>
-          <ion-item lines="none" [detail]="false" color="light">
-            <ion-label class="ion-text-center">Present</ion-label>
-          </ion-item>
-        </ion-col>
-        <ion-col size="6" sizeSm="4">
-          <circular-progress-bar [value]="getAbsent + getLeaves" [maxValue]="getLastDate" color="var(--ion-color-danger)"></circular-progress-bar>
-          <ion-item lines="none" [detail]="false" color="light">
-            <ion-label class="ion-text-center">Absent</ion-label>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-
-    <!-- ------------ attendance list ----------------- -->
-    <div class="attendance_list" [hidden]="!employee || showCalendar">
-      <ion-list [inset]="true" mode="ios">
-        <ion-item lines="none" class="item1" [detail]="true" color="primary" type="button" [button]="true" [mode]="'ios'" (click)="dateModal = true" detailIcon="chevron-down">
-          <ion-icon [name]="'calendar'" slot="start"></ion-icon>
-          <ion-label class="ion-text-wrap">
-            <h2>Attendance of the month</h2>
-            <p>{{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}</p>
-          </ion-label>
-        </ion-item>
-      </ion-list>
-      <!-- <ion-grid style="background-color: #fff;">
-        <ion-row>
-          <ion-col size="12">
-          </ion-col>
-          <ion-col class="ion-text-center" size="6">
-            <ion-card mode="ios" [color]="'success'" class="statusCard">
-              <ion-card-header>
-                <ion-text>days</ion-text>
-                <ion-card-title>{{presents}}<small>/{{getLastDate}}</small></ion-card-title>
-                <ion-card-subtitle>Present</ion-card-subtitle>
-              </ion-card-header>
-            </ion-card>
-          </ion-col>
-          <ion-col class="ion-text-center" size="6">
-            <ion-card mode="ios" [color]="'danger'" class="statusCard">
-              <ion-card-header>
-                <ion-text>days</ion-text>
-                <ion-card-title>{{absent}}<small>/{{getLastDate}}</small></ion-card-title>
-                <ion-card-subtitle>Absent</ion-card-subtitle>
-              </ion-card-header>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid> -->
-      <ion-list [inset]="true" mode="ios">
+  <div [ngSwitch]="activeTab" *ngIf="employee">
+    <div *ngSwitchCase="'status'">
+      <!-- <ion-list [inset]="true" mode="ios">
         <ion-item>
           <ion-icon color="success" slot="start" name="list-circle" size="large"></ion-icon>
           <ion-label>Present</ion-label>
@@ -144,10 +56,51 @@
         <ion-item>
           <ion-icon color="danger" slot="start" name="list-circle" size="large"></ion-icon>
           <ion-label>Absent</ion-label>
-          <ion-note slot="end">{{getAbsent}}/{{getLastDate}}</ion-note>
+          <ion-note slot="end">{{getAbsent + getLeaves}}/{{getLastDate}}</ion-note>
         </ion-item>
-      </ion-list>
+        <ion-item>
+          <ion-icon color="danger" slot="start" name="list-circle" size="large"></ion-icon>
+          <ion-label>LOP</ion-label>
+          <ion-note slot="end">{{filterLogs('Loss of Pay')}}</ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-icon color="warning" slot="start" name="list-circle" size="large"></ion-icon>
+          <ion-label>Applied Leaves</ion-label>
+          <ion-note slot="end">{{leaveLogs.length}}</ion-note>
+        </ion-item>
+      </ion-list> -->
 
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" sizeSm="4">
+            <circular-progress-bar [value]="getPresent" [maxValue]="getLastDate" color="var(--ion-color-success)"></circular-progress-bar>
+            <ion-item lines="none" [detail]="false" color="light">
+              <ion-label class="ion-text-center">Present</ion-label>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6" sizeSm="4">
+            <circular-progress-bar [value]="getAbsent + getLeaves" [maxValue]="getLastDate" color="var(--ion-color-danger)"></circular-progress-bar>
+            <ion-item lines="none" [detail]="false" color="light">
+              <ion-label class="ion-text-center">Absent</ion-label>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6" sizeSm="4">
+            <circular-progress-bar [value]="leaveLogs.length" [maxValue]="getLastDate" color="var(--ion-color-warning)"></circular-progress-bar>
+            <ion-item lines="none" [detail]="false" color="light">
+              <ion-label class="ion-text-center">Applied Leaves</ion-label>
+            </ion-item>
+          </ion-col>
+          <ion-col size="6" sizeSm="4">
+            <circular-progress-bar [value]="filterLogs('Loss of Pay')" [maxValue]="getLastDate" color="var(--ion-color-danger)"></circular-progress-bar>
+            <ion-item lines="none" [detail]="false" color="light">
+              <ion-label class="ion-text-center">LOP</ion-label>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div *ngSwitchCase="'listView'">
       <ng-container *ngFor="let item of dateList; index as a;">
         <ion-card mode="md" class="cardItem {{isAllLoaded() ? item.status : ''}}">
           <ion-card-header (click)="toggleCard(item)" *ngIf="isAllLoaded()">
@@ -190,13 +143,21 @@
                 <ion-label>{{item.leaveData.startDate | date}} - {{item.leaveData.endDate | date}}</ion-label>
               </ion-chip> -->
               <div class="ion-margin-top leaveDate">
-                <ion-label color="tertiary" class="ion-text-wrap">
+                <ion-label color="tertiary" class="ion-text-wrap" *ngIf="item.leaveData.startDate">
                   <ion-icon name="calendar" size="small"></ion-icon>
-                  <ion-label>{{item.leaveData.startDate | date}} - {{item.leaveData.endDate | date}}</ion-label>
+                  <ion-text>{{item.leaveData.startDate | date}} - {{item.leaveData.endDate | date}}</ion-text>
+                </ion-label>
+                <ion-label color="tertiary" class="ion-text-wrap" *ngIf="item.leaveData.from">
+                  <ion-icon name="calendar" size="small"></ion-icon>
+                  <ion-text>{{item.leaveData.from.date | date}} &middot; {{getDayType(item.leaveData.from.date, item.leaveData.guid)}}</ion-text>
+                </ion-label>
+                <ion-label color="tertiary" class="ion-text-wrap" *ngIf="item.leaveData.to && item.leaveData.to.date">
+                  <ion-icon name="calendar" size="small"></ion-icon>
+                  <ion-text>{{item.leaveData.to.date | date}} &middot; {{getDayType(item.leaveData.to.date, item.leaveData.guid)}}</ion-text>
                 </ion-label>
               </div>
               <p>
-                <b><ion-text>{{item.leaveData.leaveType}}</ion-text></b> &middot; {{item.leaveData.dayType}}
+                <b><ion-text>{{item.leaveData.leaveType}}</ion-text></b>
               </p>
               <p class="purpose">
                 <read-more-text [textString]="item.leaveData.purpose" [maxLength]="100"></read-more-text>
@@ -211,14 +172,76 @@
           <ion-skeleton-text style="width: 100%; height: 80px;" animated="true" class="inherit_shap ion-no-margin" *ngIf="!isAllLoaded()"></ion-skeleton-text>
         </ion-card>
       </ng-container>
+    </div>
+    <div *ngSwitchCase="'calendarView'">
+      <ion-list inset="true" mode="ios">
+        <ion-item detail="false" class="calendarControls">
+          <ion-buttons slot="start">
+            <!-- <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementYear()" aria-label="Previous Month">
+              <img src="../../../assets/icon/left_arrows.svg" alt="Previous" width="30" height="30">
+            </ion-button> -->
+            <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementMonth()" aria-label="Next Year">
+              <ion-icon slot="icon-only" name="chevron-back" aria-label="Previous Month"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-label class="ion-text-center">{{ attendanceDate | date:"MMMM yyyy" }}</ion-label>
+          <ion-buttons slot="end">
+            <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementMonth()" aria-label="Next Month" [disabled]="isNextMonth()">
+              <ion-icon slot="icon-only" name="chevron-forward" aria-label="Next Month"></ion-icon>
+            </ion-button>
+            <!-- <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementYear()" aria-label="Next year" [disabled]="!isNextYear()">
+              <img src="../../../assets/icon/right_arrows.svg" alt="Next" width="30" height="30">
+            </ion-button> -->
+          </ion-buttons>
+        </ion-item>
+      </ion-list>
+  
+      
+      <ion-card class="calendar_card">
+        <ion-card-content>
+          <table>
+            <thead>
+              <tr>
+                <th *ngFor="let day of ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']">{{ day }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let week of dates">
+                <td *ngFor="let date of week">
+                  <span [ngClass]="getStatusByDate(date ?? '')?.status !== '' ? getStatusByDate(date ?? '')?.status + ' active' : ''">{{ date ? getMomentDate(date) : '' }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ion-card-content>
+      </ion-card>
 
-      <div class="ion-text-center" [hidden]="attendanceLoaded">
-        <ion-spinner [name]="'circular'" color="primary"></ion-spinner>
+      <div class="hints ion-padding">
+        <ion-label>
+          <ion-icon name="square-sharp" size="small" class="hintIcons" color="success"></ion-icon>
+          <ion-note>Present</ion-note>
+        </ion-label>
+        <ion-label>
+          <ion-icon name="square-sharp" color="danger" size="small" class="hintIcons"></ion-icon>
+          <ion-note>Absent</ion-note>
+        </ion-label>
+        <ion-label>
+          <ion-icon name="square-sharp" size="small" class="hintIcons halfDay"></ion-icon>
+          <ion-note>Half Day</ion-note>
+        </ion-label>
+        <ion-label>
+          <ion-icon name="square-sharp" size="small" class="hintIcons weekOff"></ion-icon>
+          <ion-note>Week Off</ion-note>
+        </ion-label>
+        <ion-label>
+          <ion-icon name="square-sharp" size="small" class="hintIcons " color="tertiary"></ion-icon>
+          <ion-note>Holiday</ion-note>
+        </ion-label>
       </div>
     </div>
-    
-    <ion-infinite-scroll #infiniteScroll (ionInfinite)="moreAttendance ? loadData($any($event)) : ''" [position]="'bottom'" *ngIf="employee">
-      <ion-infinite-scroll-content *ngIf="moreAttendance" loadingSpinner="circular" loadingText="Loading more data...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+    <div *ngSwitchCase="'leaves'">
+      <leave-card *ngFor="let leaveItem of leaveLogs" [leaveItem]="leaveItem"></leave-card>
+    </div>
+    <div *ngSwitchDefault>output2</div>
+  </div>
 </ion-content>
