@@ -1,25 +1,34 @@
 ion-header {
     & .toggleview {
-        background-color: var(--ion-color-light, #03296c);
+        background-color: #dfe6f9;
         border-radius: 50px;
         align-self: center;
-        padding: 5px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 0 0 3px #dfe6f9;
+        animation: shade 0.5s linear 0.2s both infinite alternate;
         & ion-button {
             min-height: 30px;
             margin: 0;
-            --padding-start: 13px;
+            --padding-start: 16px;
             --padding-end: 13px;
         }
     }
 }
-.attendance_list {
-    // background-color: #f7f7f7;
-    background-color: var(--ion-color-light);
-    padding-top: 5px;
+.topSegment {
+    & .in-segment-color{
+        font-weight: 500;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        &.segment-button-checked{
+            --color-checked: var(--ion-color-primary);
+            color: var(--color-checked);
+        }
+    }
 }
+circular-progress-bar {display: block;}
+
 .attendance_Card{
     margin-inline: 5px;
 
@@ -220,28 +229,35 @@ form {
                 color: var(--color-blue-gray);
                 font-weight: 600;
                 
-                &.Present {
-                    color: #fff;
-                    background-color: green;
-                }
-                &.Absent, &.Leave {
-                    color: #fff;
-                    background-color: var(--ion-color-danger-shade);
-                }
-                &.Holiday {
-                    color: #fff;
-                    background-color: var(--ion-color-tertiary-shade);
-                }
-                &.Off{
-                    color: #fff;
-                    background-color: #ff9211;
-                }
+                &.active{color: #fff;}
+                &.Present {background-color: green;}
+                &.Absent, &.Leave {background-color: var(--ion-color-danger-shade);}
+                &.Holiday {background-color: var(--ion-color-tertiary-shade);}
+                &.Off{background-color: #ff9211;}
+                &.Half{background-color: #695600;}
             }
         }
+    }
+}
+.hints {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    & ion-label {
+        display: inline-flex;
+        gap: 5px;
+        flex-basis: 29%;
+
+        & .hintIcons.weekOff{color: #ff9211;}
+        & .hintIcons.halfDay{color: #695600;}
     }
 }
 .calendarView ion-grid{
     margin: 10px; 
     & ion-col {display: grid;}
     & ion-item {--padding-start: 0; --inner-padding-end: 0px}
+}
+
+@keyframes shade {
+    to{box-shadow: 0 0 0 #dfe6f9;}
 }

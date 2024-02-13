@@ -113,6 +113,9 @@ export class ShareService {
   getLeaveStatus(): Observable<ILeaveStatus> {
     return this.http.get<ILeaveStatus>(environment.Api + `api/leaveStatus/getLeaveStatus`);
   }
+  getMonthLeaves(empId: string, monthDate: string): Observable<ILeaveLogsResponse[]> {
+    return this.http.get<ILeaveLogsResponse[]>(environment.Api + `api/applyLeave/monthLeaves?Date=${monthDate}&employeeId=${empId}`);
+  }
   employeeAttendance(employeeId: string, pageIndex: number, pageSize: number): Observable<any> {
     return this.http.get<any>(environment.Api + `api/attendence/employeeId/${employeeId}?skip=${pageIndex}&limit=${pageSize}`);
   }

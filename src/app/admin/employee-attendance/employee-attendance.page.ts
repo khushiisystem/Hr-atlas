@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DatetimeChangeEventDetail, IonInfiniteScroll, ModalController } from '@ionic/angular';
@@ -13,6 +13,7 @@ import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
 import { IEmpSelect } from 'src/app/share/employees/employees.page';
 import { AttendaceUpdatePage } from './attendace-update/attendace-update.page';
+import { Subscription } from 'rxjs';
 
 interface DatetimeCustomEvent extends CustomEvent {
   detail: DatetimeChangeEventDetail;
@@ -26,7 +27,7 @@ export interface AttListItem {
   created_user: string,
   open_form: boolean,
   attendanceData: any,
-  leaveData: any,
+  leaveData: ILeaveLogsResponse | null,
 }
 
 @Component({
@@ -34,7 +35,7 @@ export interface AttListItem {
   templateUrl: './employee-attendance.page.html',
   styleUrls: ['./employee-attendance.page.scss'],
 })
-export class EmployeeAttendancePage implements OnInit {
+export class EmployeeAttendancePage implements OnInit, OnDestroy {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   employeeId: string = '';
   employee!: IEmpSelect;
@@ -48,9 +49,11 @@ export class EmployeeAttendancePage implements OnInit {
   attendanceDateList: IClockInResponce[] = [];
   eventsList: IHollydayResponse[] = [];
   highlightedDates: Array<IHighlightedDate> = [];
+  fullLeaves: Array<IHighlightedDate> = [];
+  halfLeaves: Array<IHighlightedDate> = [];
+  leaveLogs: Array<ILeaveLogsResponse> = [];
   expandedCards: number[] = [0];
   updatedAttendance!: IClockInResponce;
-  attendanceForm!: FormGroup;
   openUpdatForm: boolean[] = [false];
   dateModal: boolean = false;
   showCalendar: boolean = false;
@@ -63,6 +66,9 @@ export class EmployeeAttendancePage implements OnInit {
   isFirst: boolean = false;
   minDate: Date = new Date();
   dates: (moment.Moment | string | null)[][] = [];
+  leavesCount: number = 0;
+  activeTab: string = "listView";
+  apiSubscription!: Subscription;
 
   constructor(
     private shareServ: ShareService,
@@ -88,15 +94,6 @@ export class EmployeeAttendancePage implements OnInit {
         this.createDateList(this.attendanceDate);
       }
     });
-    this.attendanceForm = this.fb.group({
-      status: ['Present', Validators.required],
-      clockIn: ['', Validators.required],
-      clockOut: ['', Validators.required],
-      employeeId: ['', Validators.required],
-      guid: ['', Validators.required]
-    });
-
-    this.manageForm();
   }
 
   get getPresent(): number {
@@ -118,22 +115,6 @@ export class EmployeeAttendancePage implements OnInit {
     return new Date(moment(this.attendanceDate).endOf('month').format()).getDate();
   }
 
-  manageForm(){
-    const status = this.attendanceForm.controls['status'].value;
-    if(status && status === 'Present') {
-      this.attendanceForm.addControl('clockIn', new FormControl( '', Validators.required));
-      this.attendanceForm.addControl('clockOut', new FormControl( '', Validators.required));
-    } else {
-      this.attendanceForm.removeControl('clockIn');
-      this.attendanceForm.removeControl('clockOut');
-    }
-  }
-
-  getFormDate(ctrlName: string) {
-    const value = this.attendanceForm.controls[ctrlName].value;
-    return value ? new Date(moment(value).format()) : '';
-  }
-
   selectEmploye(event: IEmpSelect) {
     this.employee = event;
     this.employeeId = event.guid;
@@ -151,7 +132,7 @@ export class EmployeeAttendancePage implements OnInit {
 
   getWorkWeek(){
     this.workWeekLoaded =false;
-    this.shareServ.employeeAssignedWorkWeek(this.employee.guid).subscribe(res => {
+    this.apiSubscription = this.shareServ.employeeAssignedWorkWeek(this.employee.guid).subscribe(res => {
       if(res) {
         this.presents = 0;
         this.absent = 0;
@@ -180,12 +161,10 @@ export class EmployeeAttendancePage implements OnInit {
           }
           item.status === AttendaceStatus.LEAVE || item.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
           this.workWeekLoaded = true;
-          this.isAllLoaded();
         });
       }
     }, (error) => {
       this.workWeekLoaded =true;
-      this.isAllLoaded();
     });
   }
 
@@ -193,7 +172,7 @@ export class EmployeeAttendancePage implements OnInit {
     this.attendanceLoaded = false;
     this.loader.present('');
     if(this.pageIndex === 0){this.attendanceList = [];}
-    this.shareServ.monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 40, 40).subscribe(res => {
+    this.apiSubscription = this.shareServ.monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 40, 40).subscribe(res => {
       if(res.length < 1){
         this.moreAttendance = false;
         this.attendanceLoaded = true;
@@ -233,26 +212,18 @@ export class EmployeeAttendancePage implements OnInit {
         this.loader.dismiss();
         this.infiniteScroll.complete();
         this.attendanceLoaded = true;
-        this.isAllLoaded();
       }
     }, (error) => {
       this.attendanceLoaded = true;
-      this.isAllLoaded();
       this.loader.dismiss();
       this.infiniteScroll.complete();
     });
   }
 
-
-  getWeek(dateString: string | Date){
-    const weekName = moment.weekdays().filter((e:string, index) => index === new Date(dateString).getDay());
-    return `${new Date(dateString).getDate()} ${weekName}`;
-  }
-
   isWeekOff(dateTime: string | Date){
     if(this.workWeekDetail){
       const weekOff = this.workWeekDetail.workweekDetails.weekOff;
-      return weekOff.includes(moment.weekdays()[new Date(dateTime).getDay()]);      
+      return weekOff.includes(moment(dateTime).format("dddd"));
     } else{
       return  (new Date(dateTime).getDay() === 0);
     }
@@ -279,53 +250,16 @@ export class EmployeeAttendancePage implements OnInit {
     }
     return data;
   }
-  getStatus(status: string){
-    let color = '';
-    switch (status) {
-      case 'Present':
-        color = 'success'
-        break;
-
-      case 'Leave':
-        color = 'warning'
-        break;
-
-      case 'Hollyday':
-        color = 'warning'
-        break;
-
-      case 'Holiday':
-        color = 'warning'
-        break;
-
-      case 'Absent':
-        color = 'danger'
-        break;
-    
-      default:
-        color = 'danger'
-        break;
-    }
-    return color;
-  }
-
-  selectStatus(event: any){
-    if(event.detail.value){
-      this.manageForm();
-    }
-  }
 
   async createDateList(selectedDate: string | Date) {
+    let beginDate = new Date(moment(selectedDate).startOf('month').format());
     let lastDate = new Date(selectedDate);
-    let beginDate = new Date(selectedDate);
-    beginDate.setDate(1);
-    beginDate.setHours(0,0,0);
-    lastDate.setHours(23,59,59);
+
     this.dateList = [];
     for(let date = lastDate; date >= beginDate; date.setDate(date.getDate()-1)){
       const data: AttListItem = {
         employeeId: this.employeeId,
-        status: AttendaceStatus.ABSENT,
+        status: this.eventsList.findIndex((item) => this.checkDates(new Date(item.eventDate), date)) != -1 ? AttendaceStatus.HOLiDAY : AttendaceStatus.ABSENT,
         created_date: new Date(date),
         created_user: this.employeeId,
         open_form: false,
@@ -365,27 +299,15 @@ export class EmployeeAttendancePage implements OnInit {
   }
   
   checkDates(date1: Date, date2: Date): boolean{
-    if(date1.getFullYear() === date2.getFullYear()){
-      if(date1.getMonth() === date2.getMonth()){
-        if(date1.getDate() === date2.getDate()){
-          return true
-        } else {false}
-      } else {
-        return false
-      }
-    } else {
-      return false
-    }
-    return false;
+    return moment(date1).isSame(date2, 'year') && moment(date1).isSame(date2, 'month') && moment(date1).isSame(date2, 'date');
   }
 
   getCalendar(){
     this. calendarLoaded= false;
-    this.shareServ.getEventHollyday(moment.utc(this.attendanceDate).format()).subscribe(res => {
+    this.apiSubscription = this.shareServ.getEventHollyday(moment.utc(this.attendanceDate).format()).subscribe(res => {
       if(res) {
         if(res.length < 1) {
           this. calendarLoaded= true;
-          this.isAllLoaded();
           this.loader.dismiss();
           return;
         } else {
@@ -414,59 +336,98 @@ export class EmployeeAttendancePage implements OnInit {
             }
           }
           this. calendarLoaded= true;
-          this.isAllLoaded();
         }
       }
     }, (error) => {
       this. calendarLoaded= true;
-      this.isAllLoaded();
     })
   }
 
 
   getLogs(){
     this.leaveLoaded = false;
-    this.isAllLoaded();
-    const data = {employeeId: this.employee.guid};
-    this.shareServ.getLeaveList(data, 0 * 200, 200).subscribe(res => {
-      if(res) {
-        for (let a = 0; a < res.length; a++) {
-          if(res[a].status !== 'Cancel'){
-            let startDate = new Date(res[a].startDate);
-            const endDate = new Date(res[a].endDate || new Date);
-            while (startDate <= endDate) {
-              const selectDate : IHighlightedDate = {
-                date: this.returnCustomDate(startDate),
-                backgroundColor: res[a].status === 'Pending' ? '#ef7373' : 'red',
-                textColor: '#333',
-              }
-              const index = this.highlightedDates.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(startDate))
-              if(index != -1){
-                this.highlightedDates[index] = selectDate;
-              } else {
-                this.highlightedDates.push(selectDate);
-              }
-              this.presents = 0;
-              this.absent = 0;
-              this.dateList.forEach((e) => {
-                if(this.checkDates(startDate, new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT){
-                  e.leaveData = res[a];
-                  e.created_date = new Date(startDate).toISOString();
-                  e.status = AttendaceStatus.LEAVE;
-                }
-                e.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
-              });
-              startDate.setDate(startDate.getDate() + 1);
+    this.fullLeaves = [];
+    this.halfLeaves = [];
+    this.apiSubscription = this.shareServ.getMonthLeaves(this.employeeId, moment(this.attendanceDate).utc().format()).subscribe(res => {
+      this.leaveLogs = res;
+      for (let a = 0; a < res.length; a++) {
+        if(res[a].status !== 'Cancel'){
+          res[a].fullDayDates.forEach((dates) => {
+            if (moment(this.attendanceDate).isSame(dates, 'year') && moment(this.attendanceDate).isSame(dates, 'month')) {
+              this.updateHilghtes(dates, res[a].status, true);
             }
-          }          
+          });
+          res[a].halfDayDates.forEach((dates) => {
+            if (moment(this.attendanceDate).isSame(dates, 'year') && moment(this.attendanceDate).isSame(dates, 'month')) {
+              this.updateHilghtes(dates, res[a].status, false);
+            }
+          });
+          [...res[a].fullDayDates, ...res[a].halfDayDates].forEach((item) => {
+            this.presents = 0;
+            this.absent = 0;
+            this.dateList.forEach((e) => {
+              if(this.checkDates(new Date(item), new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT){
+                e.leaveData = res[a];
+                e.created_date = new Date(item).toISOString();
+                e.status = AttendaceStatus.LEAVE;
+              }
+              e.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+            });
+          });
         }
-        this.leaveLoaded = true;
-        this.isAllLoaded()
       }
+      this.leaveLoaded = true;
     }, (error) => {
       this.leaveLoaded = true;
-      this.isAllLoaded();
     });
+  }
+
+  updateHilghtes(inputDate: string | Date, status: 'Pending' | 'Reject' | 'Accept' | 'Cancel', isFullDay: boolean){
+    const selectDate : IHighlightedDate = {
+      date: this.returnCustomDate(inputDate),
+      backgroundColor: status === 'Pending' ? '#ef7373' : isFullDay ? 'red' : 'pink',
+      textColor: '#333',
+    }
+    const fullDayIndex = this.fullLeaves.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(inputDate));
+    const halfDayIndex = this.halfLeaves.findIndex((d: IHighlightedDate) => d.date === this.returnCustomDate(inputDate));
+    if(isFullDay){
+      if(fullDayIndex != -1){
+        this.fullLeaves[fullDayIndex] = selectDate;
+      } else {
+        this.fullLeaves.push(selectDate);
+      }
+    } else {
+      if(halfDayIndex != -1){
+        this.halfLeaves[halfDayIndex] = selectDate;
+      } else {
+        this.halfLeaves.push(selectDate);
+      }
+    }
+    this.highlightedDates = [...this.highlightedDates, ...this.fullLeaves, ...this.halfLeaves];
+  }
+
+  getDayType(inputDate?: string | Date, leaveId?: string) {
+    if (inputDate && this.fullLeaves.some((item) => this.checkDates(new Date(item.date), new Date(inputDate)))) {
+      return "Full Day";
+    } else if (inputDate && this.halfLeaves.some((item) => this.checkDates(new Date(item.date), new Date(inputDate)))) {
+      return "Half Day";
+    } else if(leaveId) {
+      return this.leaveLogs[this.leaveLogs.findIndex((item) => item.guid === leaveId)].dayType;
+    } else {
+      return "";
+    }
+  }
+
+  filterLogs(leaveType: string) {
+    let fullDays: any[] = [];
+    let halfDays: any[] = [];
+    this.leaveLogs.forEach((item) => {
+      if(item.leaveType === leaveType){
+        fullDays = [...fullDays, ...item.fullDayDates.filter((dates) => moment(dates).isSame(this.attendanceDate, 'year') && moment(dates).isSame(this.attendanceDate, 'month'))];
+        halfDays = [...halfDays, ...item.halfDayDates.filter((dates) => moment(dates).isSame(this.attendanceDate, 'year') && moment(dates).isSame(this.attendanceDate, 'month'))];
+      }
+    });
+    return (fullDays.length + (halfDays.length * 0.5))
   }
 
   returnCustomDate(selectDate: string | Date){
@@ -541,51 +502,6 @@ export class EmployeeAttendancePage implements OnInit {
     return customDate;
   }
 
-  openForm(item: IClockInResponce, index: number){
-    this.openUpdatForm.fill(false);
-    this.attendanceForm.patchValue(item);
-    this.updatedAttendance = item;
-    this.openUpdatForm[index] = true;
-  }
-  closeForm(){
-    this.openUpdatForm.fill(false);
-    this.updatedAttendance = {} as any;
-    this.attendanceForm.reset();
-  }
-
-  submitForm(){
-    console.log(this.attendanceForm.value, "form");
-    this.loader.present('');
-    const uuid = this.attendanceForm.controls['guid'].value;
-    this.adminServ.updateEmployeeAttendance(uuid, this.attendanceForm.value).subscribe(res => {
-      if(res) {
-        this.shareServ.presentToast('Attendance updated successfully', 'top', 'success');
-        this.loader.dismiss();
-        this.pageIndex = 0;
-        this.getMonthLyAttendance();
-      }
-    }, (error) => {
-      this.loader.dismiss();
-      this.shareServ.presentToast(error.error.message, 'top', 'danger');
-    });
-  }
-
-  setClockOutTime(event: DatetimeCustomEvent){
-    if(event.detail.value){
-      this.attendanceForm.patchValue({
-        clockOut: moment.utc(new Date(event.detail.value as string)).format()
-      });
-    }
-  }
-
-  setClockInTime(event: DatetimeCustomEvent){
-    if(event.detail.value){
-      this.attendanceForm.patchValue({
-        clockIn: moment.utc(new Date(event.detail.value as string)).format()
-      });
-    }
-  }
-
   collapseCard(index: number) {
     const cardIndex = this.expandedCards.findIndex((e: number) => e === index);
     if(cardIndex != -1){
@@ -595,28 +511,14 @@ export class EmployeeAttendancePage implements OnInit {
     }
   }
 
-  compareStatus(s1: string, s2: string){
-    return s1 && s2 ? s1 === s2 : s1 == s2;
-  }
-
   goBack() {history.back();}
 
-  loadData(event: any){
-    if(this.moreAttendance){
-      this.pageIndex++;
-      this.getMonthLyAttendance();
-    }
-  }
 
   handleRefresh(event: any) {
     setTimeout(() => {
       window.location.reload();
       event.target.complete();
     }, 2000);
-  }
-
-  onMouseMove(event: MouseEvent) {
-    this.skipTips();
   }
 
   toggleCard(item: AttListItem){
@@ -642,15 +544,6 @@ export class EmployeeAttendancePage implements OnInit {
     (await updateForm).onDidDismiss().then(result => {
       console.log(result, 'result');
     })
-  }
-
-  skipTips(){
-    localStorage.setItem('isFirst' , String(false));
-    this.isFirst = false;
-  }
-
-  checkLeaveType(leaveITem: ILeaveLogsResponse){
-    return leaveITem.status;
   }
 
   isAllLoaded(): boolean{
@@ -712,7 +605,17 @@ export class EmployeeAttendancePage implements OnInit {
   getStatusByDate(date1: string | moment.Moment){
     if(date1 == ''){return null;}
     const index = this.dateList.findIndex((event: AttListItem) => moment(date1).format('yyyy/MM/DD') === moment(event.created_date).format('yyyy/MM/DD'));
-    return this.dateList[index];
+    const fullLeaveIndex = this.fullLeaves.findIndex((item) => moment(item.date).isSame(date1));
+    const halfLeaveIndex = this.halfLeaves.findIndex((item) => moment(item.date).isSame(date1));
+    if(index != -1){
+      return this.dateList[index];
+    } else {
+      if(halfLeaveIndex != -1 || fullLeaveIndex != -1){
+        return {status: fullLeaveIndex != -1 ? AttendaceStatus.LEAVE : AttendaceStatus.HALF_DAY}
+      } else {
+        return {status: ""}
+      }
+    }
   }
 
   isNextMonth(){
@@ -720,5 +623,8 @@ export class EmployeeAttendancePage implements OnInit {
   }
   isNextYear(){
     return moment(this.today).year() - moment(this.attendanceDate).year() >= 1;
+  }
+  ngOnDestroy(): void {
+    this.apiSubscription.unsubscribe();
   }
 }

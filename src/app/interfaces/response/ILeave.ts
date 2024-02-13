@@ -5,11 +5,11 @@ import { IGeneric } from "./IGeneric";
 export interface ILeaveSetupResponse extends IGeneric, ILeaveSetupRequest {}
 
 export interface ILeaveLogsResponse extends IGeneric, ILeaveRequest {
-  status: string;
+  status: 'Pending' | 'Accept' | 'Cancel' | 'Reject';
   employeeDetails: IEmployee;
   adminId: string;
-  fullDayDates: { [date: string]: Date | string };
-  halfDayDates: { [date: string]: Date | string };
+  fullDayDates: [ date: Date | string ];
+  halfDayDates: [ date: Date | string ];
 }
 
 export interface ILeaveStatus extends IGeneric {
