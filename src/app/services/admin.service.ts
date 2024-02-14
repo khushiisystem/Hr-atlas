@@ -127,7 +127,7 @@ export class AdminService {
         return this.http.get<ISalarySetupResponse>(environment.Api + `api/salary/getSalarybeforeDate?employeeId=${userId}&date=${date}`);
     }
 
-    createPayslip(payslipData: {employeeIds: Array<string>, date: string}): Observable<any> {
+    createPayslip(payslipData: {employeeIds: Array<string>, payslipDate: string}): Observable<any> {
         return this.http.post<any>(environment.Api + `api/paySlip`, payslipData);
     }
     getEmployeePayslip(payslipData: {employeeId: string, date: string}): Observable<IPayslipResponse> {

@@ -30,12 +30,19 @@ export class EmployeePayslipPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.payslipData, "payslip");
+    const userId = this.employee ? this.employee.guid : this.payslipData.employeeId;
+    if(userId.trim() != ""){}
   }
 
   getPayslipDate() {
     const dateStr = this.payslipData.payslipDate;
     return dateStr ? new Date(dateStr) : new Date();
+  }
+  get getStartDate() {
+    return moment(this.payslipData.payslipDate).startOf("date").format();
+  }
+  get getendDate() {
+    return moment(this.payslipData.payslipDate).endOf("date").format();
   }
   getMonth() {
     const monthArry = moment.months();
@@ -48,11 +55,14 @@ export class EmployeePayslipPage implements OnInit {
     const userId = this.employee ? this.employee.guid : this.payslipData.employeeId;
     const fileName = `PaySlip_` + moment.months()[new Date(this.payslipData.payslipDate).getMonth()] + `_` + new Date(this.payslipData.payslipDate).getFullYear();
     if (this.isCordova) {
-      this.shareServ.downloadPayslip(userId, this.payslipData.payslipDate).subscribe((res: any) => {
+      this.shareServ.downloadPayslip(userId, moment(this.payslipData.payslipDate).utc().format()).subscribe((res: any) => {
         this.shareServ.exportFile(res, fileName);
+        this.downloading = false;
+      }, (error) => {
+        this.downloading = false;
       });
     } else {
-      var url = encodeURI(environment.Api + `api/paySlip/generatepdf?employeeId=${userId}&date=${this.payslipData.payslipDate}`);
+      var url = encodeURI(environment.Api + `api/paySlip/generatepdf?employeeId=${userId}&payslipDate=${this.payslipData.payslipDate}`);
 
       const downloadoption = {
         path: `HrAtlas/${fileName}.pdf`,
@@ -74,6 +84,7 @@ export class EmployeePayslipPage implements OnInit {
           })
           .catch((e) => {
             console.log("Error opening file", e);
+            this.downloading = true;
           });
       })
         .catch((error) => {
@@ -87,6 +98,7 @@ export class EmployeePayslipPage implements OnInit {
             this.downloadReceipt();
           })
           console.log(error, "Error");
+          this.downloading = true;
         });
     }
   }

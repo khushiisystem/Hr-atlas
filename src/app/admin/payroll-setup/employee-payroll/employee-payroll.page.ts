@@ -173,6 +173,7 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
         this.salaryStructureLoaded = true;
       }
     }, (error) => {
+      this.salaryStructure = null as any;
       this.shareServ.presentToast(error.error.message, 'top', 'danger');
       this.salaryStructureLoaded = true;
       this.loaderServ.dismiss();
@@ -228,6 +229,7 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
         otherDeduction: this.getFormValue("otherDeduction"),
         compOff: this.getFormValue("compOff"),
         description: this.extraIncomeForm.controls["description"].value,
+        payslipDate: moment(this.payrollDate).utc().format(),
       }
       console.log(reqData);
       

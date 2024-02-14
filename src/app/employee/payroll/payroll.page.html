@@ -12,8 +12,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-segment [(ngModel)]="activeTab" mode="md" class="payrollSegment" aria-hidden="true">
+<ion-content [fullscreen]="true" color="light">
+  <ion-segment [(ngModel)]="activeTab" mode="md" aria-hidden="true">
     <ion-segment-button value="payslip">
       <ion-label>Payslips</ion-label>
     </ion-segment-button>
@@ -44,19 +44,23 @@
 
       <app-employee-payslip *ngIf="payslipData" [payslipData]="payslipData"></app-employee-payslip>
 
-      <ion-card mode="ios" *ngIf="!payslipLoaded || !payslipData" class="ion-text-center">
-        <ion-card-header>
-          <ion-label>Paylip is not generated yet.</ion-label>
-        </ion-card-header>
-      </ion-card>
+      <ion-list mode="ios" [inset]="true" [lines]="'none'" *ngIf="!payslipLoaded || !payslipData">
+        <ion-item>
+          <ion-label class="ion-text-wrap ion-text-center">
+            Paylip is not generated yet.
+          </ion-label>
+        </ion-item>
+      </ion-list>
     </div>
 
     <div *ngSwitchCase="'salary_structure'">
-      <ion-card mode="ios" *ngIf="!structureLoaded || !salaryStructure" class="ion-text-center">
-        <ion-card-header>
-          <ion-label>Salary structure is not generated yet.</ion-label>
-        </ion-card-header>
-      </ion-card>
+      <ion-list mode="ios" [inset]="true" [lines]="'none'" *ngIf="!structureLoaded || !salaryStructure">
+        <ion-item>
+          <ion-label class="ion-text-wrap ion-text-center">
+            Salary structure is not generated yet.
+          </ion-label>
+        </ion-item>
+      </ion-list>
 
       <ion-row *ngIf="salaryStructure">
         <ion-col size="6">
@@ -81,55 +85,31 @@
         <tbody>
             <tr>
                 <td><ion-text>CTC</ion-text></td>
-                <td><ion-text>{{salaryStructure.current_ctc / 12}}</ion-text></td>
-                <td><ion-text>{{salaryStructure.current_ctc}}</ion-text></td>
+                <td class="ion-text-center"><ion-text>{{salaryStructure.current_ctc / 12 |currency:"INR"}}</ion-text></td>
+                <td class="ion-text-center"><ion-text>{{salaryStructure.current_ctc |currency:"INR"}}</ion-text></td>
             </tr>
             <tr>
                 <td><ion-text>Basic</ion-text></td>
-                <td><ion-text>{{salaryStructure.current_ctc / 12}}</ion-text></td>
-                <td><ion-text>{{salaryStructure.current_ctc}}</ion-text></td>
+                <td class="ion-text-center"><ion-text>{{salaryStructure.current_ctc / 12 |currency:"INR"}}</ion-text></td>
+                <td class="ion-text-center"><ion-text>{{salaryStructure.current_ctc |currency:"INR"}}</ion-text></td>
             </tr>
             <tr>
                 <td><ion-text>HRA</ion-text></td>
-                <td><ion-text>0</ion-text></td>
-                <td><ion-text>0</ion-text></td>
+                <td class="ion-text-center"><ion-text>0</ion-text></td>
+                <td class="ion-text-center"><ion-text>0</ion-text></td>
             </tr>
             <tr>
                 <td><ion-text>PF</ion-text></td>
-                <td><ion-text>0</ion-text></td>
-                <td><ion-text>0</ion-text></td>
+                <td class="ion-text-center"><ion-text>0</ion-text></td>
+                <td class="ion-text-center"><ion-text>0</ion-text></td>
             </tr>
             <tr>
                 <td><ion-text>Special Allowance</ion-text></td>
-                <td><ion-text>0</ion-text></td>
-                <td><ion-text>0</ion-text></td>
+                <td class="ion-text-center"><ion-text>0</ion-text></td>
+                <td class="ion-text-center"><ion-text>0</ion-text></td>
             </tr>
         </tbody>
       </table>
     </div>
   </div>
-
-  <!-- <ion-list style="background-color: aliceblue">
-        <ion-item>
-          <ion-label>Select Year and Month</ion-label>
-          <ion-select [(ngModel)]="selectedYear" (ionChange)="calculateSalary()">
-            <ion-select-option value="2023">2023</ion-select-option>
-            <ion-select-option value="2024">2024</ion-select-option>
-          </ion-select>
-          <ion-select [(ngModel)]="selectedMonth" (ionChange)="calculateSalary()">
-            <ion-select-option value="1">January</ion-select-option>
-            <ion-select-option value="2">February</ion-select-option>
-            <ion-select-option value="3">March</ion-select-option>
-            <ion-select-option value="4">April</ion-select-option>
-            <ion-select-option value="5">May</ion-select-option>
-            <ion-select-option value="6">June</ion-select-option>
-            <ion-select-option value="7">July</ion-select-option>
-            <ion-select-option value="8">August</ion-select-option>
-            <ion-select-option value="9">September</ion-select-option>
-            <ion-select-option value="10">October</ion-select-option>
-            <ion-select-option value="11">November</ion-select-option>
-            <ion-select-option value="12">December</ion-select-option>
-          </ion-select>
-        </ion-item>
-  </ion-list> -->
 </ion-content>

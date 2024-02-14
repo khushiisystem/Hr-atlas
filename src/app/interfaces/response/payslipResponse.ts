@@ -13,4 +13,10 @@ export interface IPayslipResponse extends IGeneric {
   advanceSalary: number;
   deductionAmount: number;
   payslipDate: Date | string;
+  designation: string;
+  otherDeduction: number;
+  totalDeduction: number;
+  incomeTax: number;
+  compOff: number;
+  netPayInWords: string;
 }
