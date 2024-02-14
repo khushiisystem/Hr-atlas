@@ -92,8 +92,8 @@ export class AdminService {
     getLeaveSetup(): Observable<ILeaveSetupResponse> {
         return this.http.get<ILeaveSetupResponse>(environment.Api + `api/leaveSetup/getLeaveSetup`);
     }
-    leaveApprove(leaveData: {leaveGuid: string, aproveLeave: boolean}): Observable<any> {
-        return this.http.put<any>(environment.Api + `api/applyLeave/aproveLeave`, leaveData);
+    leaveApprove(leaveData: {leaveGuid: string, approveLeave: boolean}): Observable<any> {
+        return this.http.put<any>(environment.Api + `api/applyLeave/approveLeave`, leaveData);
     }
 
     createEventHollyday(eventData: IHollydayRequest): Observable<IHollydayRequest> {
@@ -127,7 +127,7 @@ export class AdminService {
         return this.http.get<ISalarySetupResponse>(environment.Api + `api/salary/getSalarybeforeDate?employeeId=${userId}&date=${date}`);
     }
 
-    createPayslip(payslipData: {employeeIds: Array<string>, date: string}): Observable<any> {
+    createPayslip(payslipData: {employeeIds: Array<string>, payslipDate: string}): Observable<any> {
         return this.http.post<any>(environment.Api + `api/paySlip`, payslipData);
     }
     getEmployeePayslip(payslipData: {employeeId: string, date: string}): Observable<IPayslipResponse> {

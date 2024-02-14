@@ -49,7 +49,6 @@ export class PayrollPage implements OnInit {
     if (this.payslipDate) {
       const selectedYear = new Date(this.payslipDate).getFullYear();
       const selectedMonth = new Date(this.payslipDate).getMonth();
-      console.log(typeof this.payslipDate, "type", this.payslipDate);
       this.calculateSalary(selectedYear, selectedMonth);
     }
   }
@@ -57,7 +56,7 @@ export class PayrollPage implements OnInit {
   getPaySlip() {
     this.payslipLoaded = false;
     this.loader.present('');
-    this.adminServ.getEmployeePayslip({employeeId: this.employeeId, date: moment.utc(this.payslipDate).format()}).subscribe(res => {
+    this.adminServ.getEmployeePayslip({employeeId: this.employeeId, date: moment(this.payslipDate).utc().format()}).subscribe(res => {
       if(res != null){
         this.payslipData = res;
       } else {
@@ -75,7 +74,7 @@ export class PayrollPage implements OnInit {
 
   getSalaryStructure() {
     this.structureLoaded = false;
-    this.adminServ.getEmloyeePayStructure(this.employeeId, moment.utc(this.payslipDate).format()).subscribe(res => {
+    this.adminServ.getEmloyeePayStructure(this.employeeId, moment(this.payslipDate).utc().format()).subscribe(res => {
       if(res != null) {
         this.salaryStructure = res;
       }
@@ -123,7 +122,6 @@ export class PayrollPage implements OnInit {
     if (event.detail.value) {
       const selectedYear = new Date(this.payslipDate).getFullYear();
       const selectedMonth = new Date(this.payslipDate).getMonth();
-      console.log(typeof this.payslipDate, "type", this.payslipDate);
       this.calculateSalary(selectedYear, selectedMonth);
       this.getPaySlip();
       this.getSalaryStructure();

@@ -1,20 +1,26 @@
+.payslipData {
+    font-size: 7px;
+    color: #333;
+    & .table {
+        width: 100%;
+        border: 1px solid #333;
 
-
-.payslipCard {
-    border-radius: 8px;
-    transition: transform 500ms cubic-bezier(0.12, 0.72, 0.29, 1) 0s, -webkit-transform 500ms cubic-bezier(0.12, 0.72, 0.29, 1) 0s;
-    font-size: 14px;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px;
-
-    & .card_item_last {
-        --padding-start: 5px;
-        --inner-padding-end: 5px;
-        & .subSalary{
-            font-size: 1.1rem;
-            & span {font-weight: 600;}
+        &.salaryTable {
+            & th {background-color: rgba(var(--ion-color-medium-rgb), 0.2);}
+            & p, & span {
+                overflow: hidden;
+                display: -webkit-box;
+                text-overflow: ellipsis;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+            }
+            & tbody td span {min-width: 70px;}
         }
+        
+        & th, td {padding: 0.25rem; border: 1px solid #c6c4c4;}
+        & h4, & h5 {font-size: 10px;}
     }
-}
-.downloadBtn{
-    margin-inline: 16px;
+
+    & h4, & h5 {font-size: 1rem;}
+    & p, & address {font-size: 10px; line-height: 1.3;}
 }

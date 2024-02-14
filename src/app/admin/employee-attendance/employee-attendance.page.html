@@ -23,27 +23,14 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-
-  <ion-modal [isOpen]="dateModal" [initialBreakpoint]="0.5" mode="md" [showBackdrop]="true" (didDismiss)="dateModal = false" #dateSelectModal>
-    <ng-template>
-      <ion-content>
-        <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [value]="attendanceDate" [max]="today.toISOString()" [min]="minDate.toISOString()" (ionChange)="selectDate($any($event));">
-          <ion-label slot="title">Select Year and Month</ion-label>
-          <ion-buttons slot="buttons">
-            <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateSelectModal.dismiss();">Cancel</ion-button>
-            <ion-button mode="md" color="primary" (click)="yearMonth.confirm(); dateSelectModal.dismiss();">Done</ion-button>
-          </ion-buttons>
-        </ion-datetime>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
-
-  <ion-segment mode="ios" [scrollable]="true" color="secondary" class="topSegment" [(ngModel)]="activeTab">
-    <ion-segment-button value="status">Status</ion-segment-button>
-    <ion-segment-button value="listView">List View</ion-segment-button>
-    <ion-segment-button value="calendarView">Calendar View</ion-segment-button>
-    <ion-segment-button value="leaves">Leaves</ion-segment-button>
-  </ion-segment>
+  <div class="stickyTab">
+    <ion-segment mode="ios" [scrollable]="true" color="secondary" class="topSegment" [(ngModel)]="activeTab">
+      <ion-segment-button value="status">Status</ion-segment-button>
+      <ion-segment-button value="listView">List View</ion-segment-button>
+      <ion-segment-button value="calendarView">Calendar View</ion-segment-button>
+      <ion-segment-button value="leaves">Leaves</ion-segment-button>
+    </ion-segment>
+  </div>
 
   <div [ngSwitch]="activeTab" *ngIf="employee">
     <div *ngSwitchCase="'status'">
@@ -241,7 +228,26 @@
     </div>
     <div *ngSwitchCase="'leaves'">
       <leave-card *ngFor="let leaveItem of leaveLogs" [leaveItem]="leaveItem"></leave-card>
+      <div class="emptyDiv ion-padding" *ngIf="leaveLoaded && leaveLogs.length < 1">
+        <img src="assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
+        <ion-label class="ion-text-wrap">No leaves in this month.</ion-label>
+      </div>
     </div>
     <div *ngSwitchDefault>output2</div>
   </div>
+
+  <ion-modal [isOpen]="dateModal" [initialBreakpoint]="0.5" mode="md" [showBackdrop]="true" (didDismiss)="dateModal = false" #dateSelectModal>
+    <ng-template>
+      <ion-content>
+        <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [value]="attendanceDate" [max]="today.toISOString()" [min]="minDate.toISOString()" (ionChange)="selectDate($any($event));">
+          <ion-label slot="title">Select Year and Month</ion-label>
+          <ion-buttons slot="buttons">
+            <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateSelectModal.dismiss();">Cancel</ion-button>
+            <ion-button mode="md" color="primary" (click)="yearMonth.confirm(); dateSelectModal.dismiss();">Done</ion-button>
+          </ion-buttons>
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
 </ion-content>

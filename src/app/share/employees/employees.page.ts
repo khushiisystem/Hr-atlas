@@ -208,10 +208,8 @@ export class EmployeesPage implements OnInit, OnDestroy {
   generatePaySlip(event: Event){
     event.preventDefault();
     event.stopPropagation();
-    console.log(this.selectedEmployee);
     this.loader.present('');
-    this.adminServ.createPayslip({employeeIds: this.selectedEmployee, date: moment.utc(this.payslipDate).format()}).subscribe(result => {
-      console.log(result);
+    this.adminServ.createPayslip({employeeIds: this.selectedEmployee, payslipDate: moment.utc(this.payslipDate).format()}).subscribe(result => {
       this.shareServ.presentToast('Payslip generated', 'top', 'success');
       this.selectedEmployee = [];
       this.loader.dismiss();

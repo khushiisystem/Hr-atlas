@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, ModalController, PopoverController } from '@ionic/angular';
 import { AddEmployeePage } from '../admin/add-employee/add-employee.page';
@@ -18,6 +18,7 @@ import { AttendaceStatus } from '../interfaces/enums/leaveCreditPeriod';
 import { IClockInResponce } from '../interfaces/response/IAttendanceSetup';
 import { HollydaySetupPage } from '../admin/hollyday-setup/hollyday-setup.page';
 import { LeaveAction } from '../share/components/leave-card/leave-card.page';
+import { Subscription } from 'rxjs';
 
 export interface BirthItem {
   eventDate: Date,
@@ -29,7 +30,7 @@ export interface BirthItem {
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
 })
-export class Tab1Page implements OnInit, AfterViewInit {
+export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   navigateToUser() {
     throw new Error('Method not implemented.');
   }
@@ -61,6 +62,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   eventsLoaded: boolean = false;
   birthdayLoaded: boolean = false;
   today: Date = new Date();
+  apiSubscription!: Subscription;
 
   constructor(
     private router: Router,
@@ -96,6 +98,9 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.swiperReady();
+  }
+  ngOnDestroy(): void {
+    this.apiSubscription.unsubscribe();
   }
   swiperSlideChanged(e: any) {
     // console.log('changed: ', e);
@@ -177,7 +182,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
       this.getTodayAttendance(dateStr, pageIndex);
     };
     this.attendanceLoaded = false;
-    this.adminServ.getDailyAttendance(dateStr, pageIndex * 5, 5).subscribe(res => {
+    this.apiSubscription = this.adminServ.getDailyAttendance(dateStr, pageIndex * 5, 5).subscribe(res => {
       if(res.length < 1){
         this.attendanceLoaded = true;
         return;
@@ -219,7 +224,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     const data = {
       status: 'Pending'
     };
-    this.shareServ.getLeaveList(data, 0 * 3, 3).subscribe(res => {
+    this.apiSubscription = this.shareServ.getLeaveList(data, 0 * 3, 3).subscribe(res => {
       if(res) {
         if(res.length < 1){return;}
 
@@ -234,7 +239,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
 
   getAttendance(){
-    this.shareServ.todayAttendance().subscribe(res => {
+    this.apiSubscription = this.shareServ.todayAttendance().subscribe(res => {
       if(res && !res.message && !res[0].clockOut) {
         if(res[0].clockIn && res[0].clockIn.trim() !== '' && !res[0].clockOut){
           this.isRunning = true;
@@ -286,7 +291,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   
   getCalendar(){
     this.eventsList = [];
-    this.adminServ.getEventHollyday(moment.utc(this.today).format()).subscribe(res => {
+    this.apiSubscription = this.adminServ.getEventHollyday(moment.utc(this.today).format()).subscribe(res => {
       if(res) {
         if(res.length < 1) {
           this.eventsLoaded = true;
@@ -333,7 +338,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
 
   fetchBirthdays(){
     var result: { [formattedDate: string]: BirthItem } = {};
-    this.shareServ.upcomingBirthday().subscribe(res => {
+    this.apiSubscription = this.shareServ.upcomingBirthday().subscribe(res => {
       if(!res || res.length < 1) {
         this.birthdayLoaded = true;
         return;
@@ -526,7 +531,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
   }
   
   getLleaveSetup(){
-    this.adminServ.getLeaveSetup().subscribe(res => {
+    this.apiSubscription = this.adminServ.getLeaveSetup().subscribe(res => {
       if(res) {
         this.leaveDone = true;
         this.getAttendanceSetups();
@@ -538,7 +543,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     });
   }
   getAttendanceSetups(){
-    this.adminServ.getAttendanceSetup().subscribe(async res => {
+    this.apiSubscription = this.adminServ.getAttendanceSetup().subscribe(async res => {
       if(!res) {
         this.tutorialModal('attendance');
       }
@@ -612,7 +617,7 @@ export class Tab1Page implements OnInit, AfterViewInit {
     this.loader.present('');
     const leaveData = {
       leaveGuid: event.leaveId,
-      aproveLeave: event.action === "Accept"
+      approveLeave: event.action === "Accept"
     }
     this.adminServ.leaveApprove(leaveData).subscribe(res => {
       if(res){

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { IEmpSelect } from 'src/app/share/employees/employees.page';
 
@@ -7,7 +7,7 @@ import { IEmpSelect } from 'src/app/share/employees/employees.page';
   templateUrl: './payroll-setup.page.html',
   styleUrls: ['./payroll-setup.page.scss'],
 })
-export class PayrollSetupPage implements OnInit {
+export class PayrollSetupPage implements OnInit, OnDestroy {
   employeeId: string = '';
   employee!: IEmpSelect;
 
@@ -18,6 +18,12 @@ export class PayrollSetupPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+  ngOnDestroy(): void {
+    this.reseteEmployee();
+  }
+  ionViewDidLeave(){
+    this.reseteEmployee();
   }
 
   selectEmploye(event: IEmpSelect) {
