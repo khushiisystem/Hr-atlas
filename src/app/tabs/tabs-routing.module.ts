@@ -20,7 +20,6 @@ import { AddExperiencePage } from '../admin/add-experience/add-experience.page';
 import { SalarySetupPage } from '../admin/salary/salary-setup/salary-setup.page';
 import { SalaryIncrementsPage } from '../admin/salary-increments/salary-increments.page';
 import { ViewCalendarPage } from '../admin/view-calendar/view-calendar.page';
-import { EmployeeAttendancePage } from '../admin/employee-attendance/employee-attendance.page';
 import { LeavesPage } from '../share/leaves/leaves.page';
 import { SalaryPage } from '../admin/salary/salary.page';
 import { EmployeePayrollPage } from '../admin/payroll-setup/employee-payroll/employee-payroll.page';
@@ -44,7 +43,7 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'attendance',
+        path: 'attendance/:id',
         title: "Attendance",
         component: AttendancePage,
         canActivate: [AuthGuard]
@@ -167,13 +166,6 @@ const routes: Routes = [
         component: ViewCalendarPage,
         canActivate:[AuthGuard],
         data: {role: "Admin"}
-      },
-      {
-        path: 'employee-attendance',
-        title: 'Employee Attendance',
-        component: EmployeeAttendancePage,
-        canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"},
       },
       {
         path: 'attendance-status',

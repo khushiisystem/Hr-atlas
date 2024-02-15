@@ -7,7 +7,7 @@ export interface IEmplpoyeeWorWeek extends IGeneric {
   employeeDetails: {
     firstName: string;
     lastName: string;
-    employeeId: number;
+    employeeId: string;
     role: IRoles;
   };
   workweekDetails: {

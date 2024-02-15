@@ -53,6 +53,7 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
 
     if(this.employeeId.trim() !== ''){
       this.getPayStructure();
+      this.getLogHistory();
     }
 
     this.extraIncomeForm = this.fb.group({
@@ -155,15 +156,6 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
     }
   }
 
-  selectPayslipDate(event: any){
-    console.log(event.detail.value, "event");
-    if(this.payrollDate){
-      this.extraIncomeForm.patchValue({
-        payslipDate: moment.utc(this.payrollDate).format()
-      });
-    }
-  }
-
   getPayStructure(){
     this.loaderServ.present('');
     this.salaryStructureLoaded = false;
@@ -171,6 +163,7 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       if(res){
         this.salaryStructure = res;
         this.salaryStructureLoaded = true;
+        this.loaderServ.dismiss();
       }
     }, (error) => {
       this.salaryStructure = null as any;
@@ -179,22 +172,35 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       this.loaderServ.dismiss();
     });
 
-    this.getLogHistory();
   }
 
   getLogHistory(){
     this.historyLoaded = false;
     this.adminServ.getLogHistoryByEmployeeId(this.employeeId).subscribe(res => {
       if(res){
-        this.logHistory = res;
-        this.previousLog = this.logHistory[0];
-        this.loaderServ.dismiss();
+        this.logHistory = res.sort((item1, item2) => moment(item1.payslipDate).diff(moment(item2.payslipDate)));
+        this.fetchAdvance();
         this.historyLoaded = true;
+        this.loaderServ.dismiss();
       }
     }, (error) => {
       this.historyLoaded = true;
       this.loaderServ.dismiss();
     });
+  }
+
+  fetchAdvance(){
+    const matchedIndex = this.logHistory.reverse().findIndex((item) => this.checkDate(item.payslipDate, this.payrollDate));
+    if(matchedIndex > -1){
+      this.previousLog = this.logHistory.reverse()[matchedIndex];
+      this.extraIncomeForm.patchValue(this.previousLog);
+    } else {
+      this.previousLog = this.logHistory.reverse()[0];
+    }
+  }
+
+  checkDate(date1: Date | string, date2: string | Date){
+    return moment(date1).isSame(date2, "year") && moment(date1).isSame(date2, "month");
   }
 
   get basicSalary(): number {
@@ -231,13 +237,11 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
         description: this.extraIncomeForm.controls["description"].value,
         payslipDate: moment(this.payrollDate).utc().format(),
       }
-      console.log(reqData);
       
       this.loaderServ.present('');
       this.adminServ.createPayrollLog(reqData).subscribe(res => {
         if(res){
-          console.log(res);
-          this.logHistory.unshift(res);
+          this.getLogHistory();
           this.activeTab = 'history';
           this.shareServ.presentToast('Logs created successfully.', 'top', 'success');
           this.loaderServ.dismiss();

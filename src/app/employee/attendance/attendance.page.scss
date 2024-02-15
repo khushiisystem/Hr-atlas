@@ -1,23 +1,45 @@
 ion-header {
+    & ion-title {
+        & span {font-size: 1rem;}
+        & p{color: var(--ion-color-medium, #878668); font-size: 0.7em;}
+    }
     & .toggleview {
-        background-color: var(--ion-color-light, #03296c);
+        background-color: #dfe6f9;
         border-radius: 50px;
         align-self: center;
-        padding: 5px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 0 0 3px #dfe6f9;
+        animation: shade 0.5s linear 0.2s both infinite alternate;
         & ion-button {
             min-height: 30px;
             margin: 0;
-            --padding-start: 13px;
+            --padding-start: 16px;
             --padding-end: 13px;
         }
     }
 }
 .container {min-height: calc(100% - var(--offset-bottom));}
-.dateBtn{
-    --detail-icon-opacity: 0.8;
+
+.stickyTab{
+    position: sticky;
+    top: 0;
+    background-color: var(--ion-color-light, #edf2ff);
+    z-index: 1;
+}
+.topSegment {
+    /* box-shadow: 0 4px 10px -5px var(--ion-color-primary); */
+    border-bottom: 2px solid var(--ion-color-shade);
+    & .in-segment-color{
+        font-weight: 500;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        &.segment-button-checked{
+            --color-checked: var(--ion-color-primary);
+            color: var(--color-checked);
+        }
+    }
 }
 ion-datetime {
     --background: var(--ion-color-light);
@@ -29,54 +51,6 @@ ion-datetime {
 // ion-datetime::part(wheel-item) {color: rgb(106 98 255);}
 
 ion-datetime::part(wheel-item active) {color: #fff;}
-
-.attendance_list {
-    background-color: var(--ion-color-light, #f7f7f7);
-}
-
-.header-toolbar {
-    --ion-toolbar-background: rgb(255, 106, 0);
-    --ion-color-base: black;
-}
-.attendance_Card{
-    margin-inline: 5px;
-
-    & ion-card-header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        column-gap: 10px;
-        background-color: var(--ion-color-light-tint);
-    }
-
-    & .sort_desc {
-        & ion-text{color: var(--ion-color-dark-tint); font-size: 0.9rem;}
-        & ion-label{color: var(--color-blue-gray); font-size: 1rem;}
-    }
-}
-
-.stickyCalender {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: #fff;
-}
-.btn_group{
-    display: flex;
-    gap: 5px;
-    justify-content: space-evenly;
-    align-items: center;
-}
-.flex_div_2 {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    min-height: -webkit-fill-available;
-    pointer-events: none;
-}
 
 .cardItem{
     box-shadow: none;
@@ -142,21 +116,13 @@ ion-datetime::part(wheel-item active) {color: #fff;}
     }
     .purpose{white-space: pre-line;}
 }
+.btnChip{min-width: 90px; font-size: 10px;}
 .calendarControls {
     --padding-start: 5px;
     --inner-padding-end: 5px;
     & ion-label {font-weight: 600;}
 }
-.date_avatar {
-    background-color: var(--ion-color-tertiary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    & ion-text{
-        color: var(--ion-color-tertiary-contrast);
-        font-weight: 500;
-    }
-}
+circular-progress-bar {display: block; margin-inline: 0.5rem;}
 .calendar_card {
     border-radius: 10px;
     box-shadow: none;
@@ -185,23 +151,53 @@ ion-datetime::part(wheel-item active) {color: #fff;}
                 color: var(--color-blue-gray);
                 font-weight: 600;
                 
-                &.Present {
-                    background-color: #58c95833;
-                    color: green;
-                }
-                &.Absent, &.Leave {
-                    background-color: #ed576b57;
-                    color: var(--ion-color-danger-shade);
-                }
-                &.Holiday {
-                    background-color: rgb(99 112 255 / 21%);
-                    color: var(--ion-color-tertiary-shade);
-                }
-                &.Off{
-                    background-color: rgb(253 216 140 / 21%);
-                    color: var(--ion-color-dark-tint);
-                }
+                &.active{color: #fff;}
+                &.Present {background-color: green;}
+                &.Absent, &.Leave {background-color: var(--ion-color-danger-shade);}
+                &.Holiday {background-color: var(--ion-color-tertiary-shade);}
+                &.Off{background-color: #ff9211;}
+                &.Half{background-color: #695600;}
+
+
+                // &.Present {
+                //     background-color: #58c95833;
+                //     color: green;
+                // }
+                // &.Absent, &.Leave {
+                //     background-color: #ed576b57;
+                //     color: var(--ion-color-danger-shade);
+                // }
+                // &.Holiday {
+                //     background-color: rgb(99 112 255 / 21%);
+                //     color: var(--ion-color-tertiary-shade);
+                // }
+                // &.Off{
+                //     background-color: rgb(253 216 140 / 21%);
+                //     color: var(--ion-color-dark-tint);
+                // }
             }
         }
     }
+}
+.hints {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    & ion-label {
+        display: inline-flex;
+        gap: 5px;
+        flex-basis: 29%;
+
+        & .hintIcons.weekOff{color: #ff9211;}
+        & .hintIcons.halfDay{color: #695600;}
+    }
+}
+.calendarView ion-grid{
+    margin: 10px; 
+    & ion-col {display: grid;}
+    & ion-item {--padding-start: 0; --inner-padding-end: 0px}
+}
+
+@keyframes shade {
+    to{box-shadow: 0 0 0 #dfe6f9;}
 }

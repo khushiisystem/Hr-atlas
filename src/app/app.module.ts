@@ -7,10 +7,6 @@ import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
-import { WorkpagePage } from "./components/workpage/workpage.page";
-import { WeekpagePage } from "./components/weekpage/weekpage.page";
-import { UserPage } from "./components/user/user.page";
-import { LOGSPage } from "./components/logs/logs.page";
 import { FileSaverModule } from "ngx-filesaver";
 import { CommonModule, DatePipe } from "@angular/common";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
@@ -26,10 +22,6 @@ import { NameImgPageModule } from "./share/components/name-img/name-img.module";
 @NgModule({
   declarations: [
     AppComponent,
-    WorkpagePage,
-    WeekpagePage,
-    UserPage,
-    LOGSPage,
     LeaveSetupPage,
     EmployeeWorkWeekPage,
   ],

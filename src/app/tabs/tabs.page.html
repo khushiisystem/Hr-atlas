@@ -11,7 +11,7 @@
       <ion-label>Directory</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="attendance" *ngIf="userRole === 'Employee'" [disabled]="!userDetail || userRole.trim() === ''">
+    <ion-tab-button tab="attendance/{{userId}}" *ngIf="userRole === 'Employee'" [disabled]="!userDetail || userRole.trim() === ''">
       <ion-icon aria-hidden="true" name="hand-right-outline"></ion-icon>
       <ion-label>Attendance</ion-label>
     </ion-tab-button>

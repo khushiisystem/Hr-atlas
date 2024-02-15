@@ -27,7 +27,6 @@ export interface IEmpSelect {
 })
 export class AttendanceStatusPage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
-  @ViewChild(IonToggle) roleToggle!: IonToggle;
   @Output() employee: EventEmitter<IEmpSelect> = new EventEmitter<IEmpSelect>();
   employeeList: IEmployeeResponse[] = [];
   attendanceList: IClockInResponce[] = [];
@@ -41,6 +40,7 @@ export class AttendanceStatusPage implements OnInit {
   attendanceDate: Date = new Date();
   today: Date = new Date();
   userRole: string = 'Admin';
+  userId: string = "";
 
   constructor(
     private adminServ: AdminService,
@@ -54,7 +54,7 @@ export class AttendanceStatusPage implements OnInit {
   }
 
   ionViewWillEnter(){
-    this.roleToggle.checked = this.userRole === 'Admin' ? true : false;
+    this.userId = localStorage.getItem("userId") ?? "";
   }
 
   getEmployeeList(){
@@ -129,18 +129,7 @@ export class AttendanceStatusPage implements OnInit {
   }
 
   selectEmployee(empData: IEmployeeResponse){
-    const data: IEmpSelect = {
-      employeeId: empData.employeeId,
-      guid: empData.guid,
-      firstName: empData.firstName,
-      lastName: empData.lastName,
-      role: empData.role,
-    }
-    this.employee.emit(empData);
-    let navExtra: NavigationExtras = {
-      queryParams : data
-    }
-    this.router.navigate([`tabs/employee-attendance`], navExtra);
+    this.router.navigate([`tabs/attendance/${empData.guid}`], {state: {tab: "listView"}});
   }
 
   selectAttendanceDate(event: any){

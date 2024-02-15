@@ -1,6 +1,8 @@
 .log_card {
-    box-shadow: rgb(82 96 255 / 14%) 0px 4px 16px;
+    // box-shadow: rgba(82, 96, 255, 0.14) 0px 4px 16px -5px;
+    box-shadow: rgba(82, 96, 255, 0.14) 0px 3px 5px 0px;
     transition: transform 0.5s ease;
+    border-radius: 16px;
     & ion-card-header {
         flex-direction: row;
         gap: 1rem;
