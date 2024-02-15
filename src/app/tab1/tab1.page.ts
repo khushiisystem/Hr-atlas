@@ -657,7 +657,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   }
   attendancePage(){
     if(this.userRole === 'Employee'){
-      this.router.navigate(['/tabs/attendance']);
+      this.router.navigate(['/tabs/attendance/' + this.userId]);
     } else if(this.userRole === 'Admin'){
       this.router.navigate(['/tabs/attendance-status']);
     }

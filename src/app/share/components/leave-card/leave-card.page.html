@@ -1,13 +1,16 @@
 <ion-card class="log_card" mode="ios" *ngIf="leaveItem">
   <ion-card-header>
-    <ion-avatar class="nameAvatar" *ngIf="leaveItem.employeeDetails && !leaveItem.employeeDetails.imageUrl || leaveItem.employeeDetails.imageUrl.trim() === ''">
-      <span *ngIf="leaveItem.employeeDetails.firstName">{{leaveItem.employeeDetails.firstName.substring(0,1)}}</span>
-    </ion-avatar>
-    <ion-avatar *ngIf="leaveItem.employeeDetails && leaveItem.employeeDetails.imageUrl && leaveItem.employeeDetails.imageUrl.trim() !== ''">
-      <img [alt]="leaveItem.employeeDetails.firstName" [src]="leaveItem.employeeDetails.imageUrl" />
+    <ion-avatar [class.nameAvatar]="leaveItem.employeeDetails">
+      <ng-container  *ngIf="leaveItem.employeeDetails && !leaveItem.employeeDetails.imageUrl">
+        <span *ngIf="leaveItem.employeeDetails.firstName">{{leaveItem.employeeDetails.firstName.substring(0,1)}}</span>
+      </ng-container>
+      <ng-container  *ngIf="leaveItem.employeeDetails && leaveItem.employeeDetails.imageUrl && leaveItem.employeeDetails.imageUrl.trim() !== ''">
+        <img [alt]="leaveItem.employeeDetails.firstName" [src]="leaveItem.employeeDetails.imageUrl" />
+      </ng-container>
+      <ion-skeleton-text [animated]="true" *ngIf="!leaveItem.employeeDetails" style="width: 100%; height: 100%;"></ion-skeleton-text>
     </ion-avatar>
     <ion-label class="cardTitle" *ngIf="leaveItem.employeeDetails">{{leaveItem.employeeDetails.firstName | titlecase}} {{leaveItem.employeeDetails.lastName || '' | titlecase}}</ion-label>
-    <ion-skeleton-text *ngIf="!leaveItem.employeeDetails" animated="true" style="width: 90%; height: 20px;"></ion-skeleton-text>
+    <ion-skeleton-text *ngIf="!leaveItem.employeeDetails" animated="true" style="width: 60%; height: 20px;"></ion-skeleton-text>
     <ion-icon name="ellipse" aria-hidden="true" aria-label="status" [color]="getStatus(leaveItem.status).color"></ion-icon>
   </ion-card-header>
   <ion-card-content>

@@ -24,6 +24,7 @@ export class TabsPage {
           adminServ.getEmployeeById(this.userId).subscribe(res => {
             userStateServ.updateState(res);
             roleStateServ.updateState(res.role);
+            localStorage.setItem("userRole", res.role);
             if(res.role === 'Employee'){
               localStorage.setItem('isSwitchable', 'false');
               this.isSwitchable = false;

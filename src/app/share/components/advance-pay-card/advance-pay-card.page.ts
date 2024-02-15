@@ -20,7 +20,7 @@ export class AdvancePayCardPage implements OnInit {
   }
 
   getDate(){
-    return this.advancePayDetail ? new Date(this.advancePayDetail.modified_date ?? this.advancePayDetail.created_date) : new Date()
+    return this.advancePayDetail ? new Date(this.advancePayDetail.payslipDate) : new Date()
   }
 
 }

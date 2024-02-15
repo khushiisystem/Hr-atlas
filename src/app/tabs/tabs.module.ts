@@ -28,7 +28,6 @@ import { SalarySetupPage } from "../admin/salary/salary-setup/salary-setup.page"
 import { SalaryIncrementsPage } from "../admin/salary-increments/salary-increments.page";
 import { HollydaySetupPage } from "../admin/hollyday-setup/hollyday-setup.page";
 import { ViewCalendarPage } from "../admin/view-calendar/view-calendar.page";
-import { EmployeeAttendancePage } from "../admin/employee-attendance/employee-attendance.page";
 import { LeavesPageModule } from "../share/leaves/leaves.module";
 import { SalaryHistoryPage } from "../admin/salary/salary-history/salary-history.page";
 import { SalaryPage } from "../admin/salary/salary.page";
@@ -39,7 +38,6 @@ import { HttpClientModule } from "@angular/common/http";
 import { FileOpener } from "@ionic-native/file-opener/ngx";
 import { AttendanceStatusPage } from "../admin/attendance-status/attendance-status.page";
 import { CustomCallendarPageModule } from "../share/components/custom-callendar/custom-callendar.module";
-import { AttendaceUpdatePage } from "../admin/employee-attendance/attendace-update/attendace-update.page";
 import { SideNavPage } from "./components/side-nav/side-nav.page";
 import { ReadMorePageModule } from "../share/components/read-more/read-more.module";
 import { AdvancePayCardPageModule } from "../share/components/advance-pay-card/advance-pay-card.module";
@@ -64,14 +62,12 @@ import { ProgressBarPageModule } from "../share/components/progress-bar/progress
     SalaryIncrementsPage,
     HollydaySetupPage,
     ViewCalendarPage,
-    EmployeeAttendancePage,
     SalaryHistoryPage,
     SalaryPage,
     AdminTutorialsPage,
     EmployeePayrollPage,
     EmployeePayslipPage,
     AttendanceStatusPage,
-    AttendaceUpdatePage,
     SideNavPage,
   ],
   imports: [

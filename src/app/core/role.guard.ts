@@ -9,10 +9,11 @@ import { IRoles } from '../interfaces/enums/IRoles';
 export class RoleGuard {
   authService = inject(AuthService);
   router = inject(Router);
+  role = localStorage.getItem('userRole') ?? "";
 
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
-    const role = route.data?.['role'];
-    const hasAccess = (role === "Admin") || (role === "Employee");
+    const reqRole = route.data?.['role'];
+    const hasAccess = (reqRole === this.role);
     return hasAccess ? true : this.router.createUrlTree(['/tabs/home']);
   }
 }
