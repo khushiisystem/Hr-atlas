@@ -33,7 +33,6 @@
     "@ionic/angular": "^7.0.0",
     "@types/cordova": "^11.0.2",
     "cordova-plugin-file-opener2": "^4.0.0",
-    "file-saver": "^2.0.5",
     "ionicons": "^7.0.0",
     "mime": "^3.0.0",
     "moment": "^2.29.4",

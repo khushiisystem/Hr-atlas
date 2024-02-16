@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as moment from "moment";
 import { FileSaverService } from "ngx-filesaver";
+import { ICreditLogsResponse } from "src/app/interfaces/request/IPayrollSetup";
 import { ISalarySetupResponse } from "src/app/interfaces/response/ISalaryResponse";
 import { IPayslipResponse } from "src/app/interfaces/response/payslipResponse";
 import { AdminService } from "src/app/services/admin.service";
@@ -19,6 +20,8 @@ export class PayrollPage implements OnInit {
   workingDays!: number;
   salary: number | undefined;
   salaryReceipt: boolean = false;
+  advanceLoaded: boolean = false;
+  advanceLogs: ICreditLogsResponse[] = [];
   dateModal: boolean = false;
   payslipDate: Date = new Date();
   today: Date = new Date();
@@ -45,6 +48,7 @@ export class PayrollPage implements OnInit {
     if (this.employeeId.trim() !== "") {
       this.getPaySlip();
       this.getSalaryStructure();
+      this.getLogHistory();
     }
     if (this.payslipDate) {
       const selectedYear = new Date(this.payslipDate).getFullYear();
@@ -126,6 +130,18 @@ export class PayrollPage implements OnInit {
       this.getPaySlip();
       this.getSalaryStructure();
     }
+  }
+
+  getLogHistory(){
+    this.advanceLoaded = false;
+    this.adminServ.getLogHistoryByEmployeeId(this.employeeId).subscribe(res => {
+      if(res){
+        this.advanceLogs = res.sort((item1, item2) => moment(item1.payslipDate).diff(moment(item2.payslipDate)));
+        this.advanceLoaded = true;
+      }
+    }, (error) => {
+      this.advanceLoaded = true;
+    });
   }
 
   downloadReceipt() {

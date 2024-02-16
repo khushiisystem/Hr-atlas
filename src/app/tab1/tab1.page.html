@@ -297,6 +297,9 @@
     <ion-list mode="ios" inset="true" class="attendanceList" *ngIf="userRole === 'Admin' && (attendanceList.length > 0 || !attendanceLoaded)">
       <ion-list-header>
         <ion-label>Today's Attendance</ion-label>
+        <ion-button aria-label="sync Attendance" size="small" shape="round" mode="md" fill="clear" (click)="getTodayAttendance(today.toISOString(), 0)">
+          <ion-icon name="sync" aria-label="sync" slot="icon-only"></ion-icon>
+        </ion-button>
       </ion-list-header>
       <ion-item lines="inset" [button]="false" [detail]="false" mode="md" class="list-item" *ngFor="let item of attendanceList; index as i;">
         <ion-avatar class="employee_img" slot="start" mode="md">
