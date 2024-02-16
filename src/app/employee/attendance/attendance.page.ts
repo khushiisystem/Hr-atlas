@@ -78,9 +78,7 @@ export class AttendancePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     const backTab = history.state?.tab ?? "listView";
-    console.log(backTab);
-    
-    if(this.tabsList.includes(backTab)){
+    if(this.tabsList.find((item) => item.value === backTab)){
       this.activeTab = backTab;
     }
     this.employeeId = this.activeRoute.snapshot.params?.["id"];

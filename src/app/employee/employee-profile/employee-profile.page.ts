@@ -170,6 +170,9 @@ export class EmployeeProfilePage {
     localStorage.setItem('lastRoute', this.router.url);
     this.router.navigate([`/tabs/edit-profile/${this.employeeId}`], {replaceUrl: true});
   }
+  monthStatus(){
+    this.router.navigate([`/tabs/attendance/${this.employeeId}`], {state: {tab: "status"}});
+  }
 
   ionViewWillLeave(): void {
     this.employeeDetail = undefined as any;

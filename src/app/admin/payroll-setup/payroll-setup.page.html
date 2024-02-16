@@ -5,7 +5,10 @@
         <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>{{employee ? employee.firstName + ' ' + employee.lastName : 'Payroll Setup'}}</ion-title>
+    <ion-title [size]="employee ? 'small' : ''">
+      <span>Payroll Setup</span>
+      <p class="ion-no-margin" *ngIf="employee"><ion-note color="tertiary"><small>{{employee.firstName + ' ' + employee.lastName}}</small></ion-note></p>
+    </ion-title>
     <ion-thumbnail slot="end" class="logo_img ion-margin-end">
       <ion-img src="../../../assets/icon/hr-atlas_48.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>

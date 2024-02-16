@@ -365,6 +365,12 @@
         </ion-chip>
         <ion-label>Edit Profile</ion-label>
       </ion-item>
+      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" class="settingBtns_item" (click)="monthStatus()">
+        <ion-chip slot="start" color="medium">
+          <ion-icon name="list" aria-hidden="true" aria-label="Attendance" size="small"></ion-icon>
+        </ion-chip>
+        <ion-label>View Month Status</ion-label>
+      </ion-item>
       <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" (click)="setupWorkInfo()" class="settingBtns_item">
         <ion-chip slot="start" color="medium">
           <ion-icon name="briefcase" aria-hidden="true" aria-label="Employment Infor" size="small"></ion-icon>

@@ -51,11 +51,6 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
     this.employeeId = this.employee.guid;
     this.payrollDate = this.today.toISOString();
 
-    if(this.employeeId.trim() !== ''){
-      this.getPayStructure();
-      this.getLogHistory();
-    }
-
     this.extraIncomeForm = this.fb.group({
       bonus: 0,
       advanceAmount: 0,
@@ -64,6 +59,11 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       otherDeduction: 0,
       description: '',
     });
+
+    if(this.employeeId.trim() !== ''){
+      this.getPayStructure();
+      this.getLogHistory();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -172,6 +172,7 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       this.loaderServ.dismiss();
     });
 
+    this.fetchAdvance();
   }
 
   getLogHistory(){
@@ -196,6 +197,14 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       this.extraIncomeForm.patchValue(this.previousLog);
     } else {
       this.previousLog = this.logHistory.reverse()[0];
+      this.extraIncomeForm.patchValue({
+        bonus: 0,
+        advanceAmount: 0,
+        compOff: 0,
+        deductionAmount: 0,
+        otherDeduction: 0,
+        description: '',
+      });
     }
   }
 

@@ -39,7 +39,7 @@
           </ion-card>
         </ng-container>
 
-        <ion-list inset="true" mode="ios" class="ion-padding-bottom" *ngFor="let workWeekItem of workWeekList">
+        <ion-list inset="true" mode="ios" class="ion-padding-bottom" [lines]="'none'" *ngFor="let workWeekItem of workWeekList">
           <ion-list-header (click)="expandCard(workWeekItem.title)">
             <ion-label class="ion-text-wrap" color="primary">
               <h2>{{workWeekItem.title}}</h2>
