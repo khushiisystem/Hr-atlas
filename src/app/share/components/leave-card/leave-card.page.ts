@@ -9,7 +9,7 @@ export interface LeaveCardButton {
 }
 
 export interface LeaveAction{
-  action: 'Reject' | 'Accept' | 'Cancel' | string;
+  action: 'Reject' | 'Accept' | 'Cancel';
   leaveId: string;
 }
 
@@ -81,7 +81,7 @@ export class LeaveCardPage implements OnInit, AfterViewInit {
     return {leaveStatus: leaveStatus, color: color};
   }
 
-  leaveAction(action: 'Reject' | 'Accept' | 'Cancel' | string){
+  leaveAction(action: 'Reject' | 'Accept' | 'Cancel'){
     this.actionReturn.emit({action: action, leaveId: this.leaveItem.guid});
   }
 }

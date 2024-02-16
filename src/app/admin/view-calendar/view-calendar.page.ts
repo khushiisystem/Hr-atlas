@@ -98,7 +98,7 @@ export class ViewCalendarPage implements OnInit {
       component: HollydaySetupPage,
       mode: 'ios',
       initialBreakpoint: 0.9,
-      breakpoints: [0.75, 0.85, 1],
+      breakpoints: [0.75, 0.85, 0.9, 1],
       showBackdrop: true,
       backdropDismiss: false,
       componentProps: {action: action, hollyday: events}
