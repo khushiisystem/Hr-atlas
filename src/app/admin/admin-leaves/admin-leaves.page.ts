@@ -120,6 +120,8 @@ export class AdminLeavesPage implements OnInit {
         }
         const requestIndex = this.requestedLeaveList.findIndex((item) => item.guid === event.leaveId);
         this.requestedLeaveList.splice(requestIndex, 1);
+        const logIndex = this.leaveLogs.findIndex((item) => item.guid === event.leaveId);
+        this.leaveLogs[logIndex].status = event.action;
         this.logPageNumber = 0;
         this.pageNumber = 0;
         this.requestedLeaves();

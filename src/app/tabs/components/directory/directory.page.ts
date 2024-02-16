@@ -144,7 +144,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
 
     const isSwitchable = localStorage.getItem("isSwitchable");
     if(this.userId === empId){
-      if(this.userRole === 'Employee' && !isSwitchable){
+      if(this.userRole === 'Employee' && (!isSwitchable || isSwitchable?.toString().trim().toLocaleLowerCase() === "false")){
         this.router.navigateByUrl(`/tabs/profile`);
       } else if(isSwitchable || isSwitchable?.toString().trim().toLocaleLowerCase() === "true"){
         this.router.navigateByUrl(`/tabs/admin-profile`);
