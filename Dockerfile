@@ -31,5 +31,5 @@ RUN apt-get clean
 # COPY . .
 # RUN npm i -g @ionic/cli
 # RUN ionic cap sync android --prod 
-# RUN chmod +x android/gradlew  
-# RUN ./android/gradlew bundleRelease
+# RUN chmod +x android/gradlew   
+# RUN ./android/gradlew bundleRelease assembleDebug
