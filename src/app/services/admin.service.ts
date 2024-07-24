@@ -106,7 +106,7 @@ export class AdminService {
         return this.http.get<IHollydayResponse[]>(environment.Api + `api/hollyday/allHollyday?date=${selectedYear}`);
     }
     deleteEventHollyday(eventId: string): Observable<IHollydayRequest> {
-        return this.http.delete<IHollydayRequest>(environment.Api + `api/hollyday${eventId}`);
+        return this.http.delete<IHollydayRequest>(environment.Api + `api/hollyday/${eventId}`);
     }
 
 
