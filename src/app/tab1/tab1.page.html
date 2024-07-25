@@ -114,6 +114,49 @@
       </ion-row>
     </ion-grid> -->
 
+    <ion-list mode="ios" inset="true" class="eventList ion-padding-bottom" *ngIf="!birthdayLoaded || nextBirthdays.length > 0">
+      <ion-list-header [color]="!birthdayLoaded ? 'light' : ''">
+        <ion-label>
+          <ng-container *ngIf="birthdayLoaded">
+            <ion-img src="../../assets/images/cake.svg" class="eventIcon" alt="Birthday"></ion-img>
+            Upcoming Birthday
+            <h6>{{getTodaysBirthday().length > 0 ? getTodaysBirthday()[0].dateOfBirth : nextBirthdays[0].dateOfBirth | date:'MMMM'}}</h6>
+          </ng-container>
+          <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 80%; height: 10px;"></ion-skeleton-text>
+        <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 50%; height: 10px;"></ion-skeleton-text>
+      </ion-label>
+    </ion-list-header>
+
+      <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngIf="getTodaysBirthday().length > 0">
+        <ion-avatar slot="start" class="dateAvatar bg">
+          <ion-label color="light">{{ getTodaysBirthday()[0].dateOfBirth | date:'dd' }}</ion-label>
+          <ion-text color="light"><small>{{ getTodaysBirthday()[0].dateOfBirth | date:'E' }}</small></ion-text>
+        </ion-avatar>
+        <ion-label>
+          <ion-chip *ngFor="let item of getTodaysBirthday(); index as a;" class="birthChip">{{item.firstName + " " + item.lastName}}</ion-chip>
+        </ion-label>
+      </ion-item>
+
+      <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngFor="let item of nextBirthdays; index as a;">
+        <ion-avatar slot="start" class="dateAvatar bg">
+          <ion-label color="light">{{ item.dateOfBirth | date:'dd' }}</ion-label>
+          <ion-text color="light"><small>{{ item.dateOfBirth | date:'E' }}</small></ion-text>
+        </ion-avatar>
+        <ion-label>{{item.firstName + " " + item.lastName}}</ion-label>
+      </ion-item>
+
+      <ng-container *ngIf="!birthdayLoaded">
+        <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngFor="let e of [0,1]">
+          <ion-avatar slot="start" class="dateAvatar">
+            <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true"></ion-skeleton-text>
+          </ion-avatar>
+          <ion-label>
+            <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 70%; height: 10px;"></ion-skeleton-text>
+          </ion-label>
+        </ion-item>
+      </ng-container>
+    </ion-list>
+
     <ion-list mode="ios" inset="true" class="eventList">
       <ion-list-header [color]="!eventsLoaded ? 'light' : ''">
         <ion-label>
@@ -251,7 +294,7 @@
       </ion-row>
     </ion-grid>
 
-    <ion-list mode="ios" inset="true" class="eventList ion-padding-bottom" *ngIf="!birthdayLoaded || nextBirthdays.length > 0">
+    <!-- <ion-list mode="ios" inset="true" class="eventList ion-padding-bottom" *ngIf="!birthdayLoaded || nextBirthdays.length > 0">
       <ion-list-header [color]="!birthdayLoaded ? 'light' : ''">
         <ion-label>
           <ng-container *ngIf="birthdayLoaded">
@@ -260,9 +303,9 @@
             <h6>{{getTodaysBirthday().length > 0 ? getTodaysBirthday()[0].dateOfBirth : nextBirthdays[0].dateOfBirth | date:'MMMM'}}</h6>
           </ng-container>
           <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 80%; height: 10px;"></ion-skeleton-text>
-          <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 50%; height: 10px;"></ion-skeleton-text>
-        </ion-label>
-      </ion-list-header>
+        <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 50%; height: 10px;"></ion-skeleton-text>
+      </ion-label>
+    </ion-list-header>
 
       <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngIf="getTodaysBirthday().length > 0">
         <ion-avatar slot="start" class="dateAvatar bg">
@@ -292,7 +335,7 @@
           </ion-label>
         </ion-item>
       </ng-container>
-    </ion-list>
+    </ion-list> -->
 
     <ion-list mode="ios" inset="true" class="attendanceList" *ngIf="userRole === 'Admin' && (attendanceList.length > 0 || !attendanceLoaded)">
       <ion-list-header>
