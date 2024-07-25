@@ -8,15 +8,11 @@
   
       <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === 'Admin'" slot="end" (ionChange)="roleToggle($event)" class="ion-margin-end roleToggle" [disabled]="!userDetails" *ngIf="isSwitchable">Admin</ion-toggle>
   
-      <ion-buttons slot="end" class="ion-margin-end" *ngIf="userDetails && userRole === 'Employee'">
+      <ion-buttons slot="end" class="ion-margin-end" *ngIf="userDetails && userRole === 'Employee' && clockInDataLoaded">
         <ion-button mode="md" shape="round" [strong]="true" [color]="'primary'" fill="solid" class="ion-text-wrap clock_in_btn" (click)="toggleStopwatch()">
           <span class="stopwatch-time">{{ buttonLabel }}</span>
           <ion-icon slot="end" icon="time"></ion-icon>
         </ion-button>
-  
-        <!-- <ion-button mode="md" shape="round" [strong]="true" [color]="'danger'" fill="solid" class="ion-text-wrap clock_in_btn" (click)="logout()" *ngIf="userDetails">
-          <ion-icon name="power" slot="icon-only" size="small"></ion-icon>
-        </ion-button> -->
       </ion-buttons>
       <ion-thumbnail slot="start" class="logo_img">
         <ion-img src="../../assets/icon/no_bg_logo.png" alt="HR-Atlas"></ion-img>

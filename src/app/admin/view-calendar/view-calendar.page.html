@@ -15,7 +15,7 @@
 
 <ion-content [fullscreen]="true" color="light">
   <div [ngClass]="userRole === 'Admin' ? 'container' : ''">
-    <ion-segment [(ngModel)]="activView" mode="md" class="tab_segement" color="tertiary">
+    <ion-segment [(ngModel)]="activView" mode="md" class="tab_segement" color="danger">
       <ion-segment-button *ngFor="let tab of tabs" [value]="tab.value" layout="icon-start">
         <ion-icon [name]="tab.icon"></ion-icon>
         <ion-label>{{tab.label}}</ion-label>
@@ -25,29 +25,29 @@
     <ion-list inset="true" mode="ios">
       <ion-item detail="false" class="calendarControls" *ngIf="activView === 'calendarView'">
         <ion-buttons slot="start">
-          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementYear()" aria-label="Previous Month">
-            <img src="../../../assets/icon/left_arrows.svg" alt="Previous" width="30" height="30">
+          <ion-button color="danger" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementYear()" aria-label="Previous Month">
+            <img src="../../../assets/icon/left_arrows_danger.svg" alt="Previous" width="30" height="30">
           </ion-button>
-          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" *ngIf="activView === 'calendarView'" (click)="decrementMonth()" aria-label="Next Year">
+          <ion-button color="danger" shape="round" fill="clear" strong="true" class="ion-no-margin" *ngIf="activView === 'calendarView'" (click)="decrementMonth()" aria-label="Next Year">
             <ion-icon slot="icon-only" name="chevron-back" aria-label="Previous Month"></ion-icon>
           </ion-button>
         </ion-buttons>
         <ion-label class="ion-text-center">{{ currentMonth.format('MMMM YYYY') }}</ion-label>
         <ion-buttons slot="end">
-          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" *ngIf="activView === 'calendarView'" (click)="incrementMonth()" aria-label="Next Month">
+          <ion-button color="danger" shape="round" fill="clear" strong="true" class="ion-no-margin" *ngIf="activView === 'calendarView'" (click)="incrementMonth()" aria-label="Next Month">
             <ion-icon slot="icon-only" name="chevron-forward" aria-label="Previous Month"></ion-icon>
           </ion-button>
-          <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementYear()" aria-label="Next year">
-            <img src="../../../assets/icon/right_arrows.svg" alt="Next" width="30" height="30">
+          <ion-button color="danger" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementYear()" aria-label="Next year">
+            <img src="../../../assets/icon/right_arrows_danger.svg" alt="Next" width="30" height="30">
           </ion-button>
         </ion-buttons>
       </ion-item>
       <ion-item detail="false" class="calendarControls" *ngIf="activView === 'listView'">
-        <ion-button slot="start" color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementYear()" aria-label="Previous Month">
+        <ion-button slot="start" color="danger" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="decrementYear()" aria-label="Previous Month">
           <ion-icon slot="icon-only" name="chevron-back" aria-label="Previous Month"></ion-icon>
         </ion-button>
         <ion-label class="ion-text-center">{{ currentMonth.format('YYYY') }}</ion-label>
-        <ion-button slot="end" color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementYear()" aria-label="Previous Month">
+        <ion-button slot="end" color="danger" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementYear()" aria-label="Previous Month">
           <ion-icon slot="icon-only" name="chevron-forward" aria-label="Previous Month"></ion-icon>
         </ion-button>
       </ion-item>
@@ -135,7 +135,7 @@
   </ion-popover>
 
   <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="isDataLoaded && userRole === 'Admin'">
-    <ion-fab-button (click)="createHollyday({}, 'add')" aria-label="Add Event" mode="ios">
+    <ion-fab-button color="danger" (click)="createHollyday({}, 'add')" aria-label="Add Event" mode="ios">
       <ion-icon name="add" aria-hidden="true" aria-label="Add Event"></ion-icon>
     </ion-fab-button>
   </ion-fab>

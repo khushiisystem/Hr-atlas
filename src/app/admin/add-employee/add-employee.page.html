@@ -54,6 +54,153 @@
         </ion-select>
       </ion-item>
     </ion-list>
+    
+    <ion-card mode="md" class="personal_card">
+      <ion-card-header class="card_header">
+        <ion-card-title>Employment Information</ion-card-title>
+        <ion-card-subtitle color="medium">Employment information will be show in employee profile.</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row class="row_one">
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-input labelPlacement="floating" fill="solid" formControlName="employeeId" placeholder="First Name" type="text" [readonly]="true" color="light">
+                <div slot="label">Employee Id <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+            </div>
+          </ion-col>
+          
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-input labelPlacement="floating" fill="solid" formControlName="designation" placeholder="Designation" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="designation" [required]="true">
+                <div slot="label">Designation <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['designation'].touched && employeeForm.controls['designation'].errors">
+                Designation is required.
+              </ion-text>
+            </div>
+          </ion-col>
+          
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-input labelPlacement="floating" fill="solid" formControlName="jobTitle" placeholder="Job Title" type="text" [required]="true" inputmode="text" [enterkeyhint]="'next'" autocomplete="jobTitle">
+                <div slot="label">Job Title <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['jobTitle'].touched && employeeForm.controls['jobTitle'].errors">
+                Title is required.
+              </ion-text>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-select labelPlacement="floating" fill="solid" formControlName="employeeType" placeholder="Select" interface="action-sheet" [required]="true" expandedIcon="caret-up">
+                <div slot="label">Employee Type <ion-text color="danger">*</ion-text></div>
+                <ion-select-option value="Full Time">Full Time</ion-select-option>
+                <ion-select-option value="Intern">Intern</ion-select-option>
+              </ion-select>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['employeeType'].touched && employeeForm.controls['employeeType'].errors">
+                Employee type is required.
+              </ion-text>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-select labelPlacement="floating" fill="solid" formControlName="department" placeholder="Select" interface="action-sheet" expandedIcon="caret-up">
+                <div slot="label">Department <ion-text color="danger">*</ion-text></div>
+                <ion-select-option [value]="depart.name" *ngFor="let depart of deparmentList">{{depart.name}}</ion-select-option>
+              </ion-select>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['department'].touched && employeeForm.controls['department'].errors">
+                Department is required.
+              </ion-text>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-select labelPlacement="floating" fill="solid" formControlName="subDepartment" placeholder="Select" interface="action-sheet" [required]="true" expandedIcon="caret-up">
+                <div slot="label">Sub Department <ion-text color="danger">*</ion-text></div>
+                <ion-select-option [value]="subDepart" *ngFor="let subDepart of getSubDeparments()">{{subDepart}}</ion-select-option>
+              </ion-select>
+              <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['subDepartment'].touched && employeeForm.controls['subDepartment'].errors">
+                Sub department is required.
+              </ion-text>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-select labelPlacement="floating" fill="solid" formControlName="status" placeholder="Select" interface="action-sheet" [required]="true" (ionChange)="statusChange($event)" expandedIcon="caret-up">
+                <div slot="label">Status <ion-text color="danger">*</ion-text></div>
+                <ion-select-option value="Active">Active</ion-select-option>
+                <ion-select-option value="InActive">In Active</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input" (click)="toggleCtrl('joiningDate')">
+              <ion-input labelPlacement="floating" fill="solid" readonly="true" [value]="getCtrlDate('joiningDate') | date:'yyyy-MM-dd'" required="true" type="date">
+                <div slot="label">Joinig Date <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <div class="toggleBtn">
+                <ion-button mode="ios" color="medium" fill="clear" size="small">
+                  <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="touchedCtrls.includes('joiningDate') && employeeForm.controls['joiningDate'].errors">
+                Joining date is required.
+              </ion-text>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" sizeSm="6" *ngIf="employeeForm.controls['status'].value === 'InActive'">
+            <div class="form-input" (click)="toggleCtrl('resignationDate')">
+              <ion-input labelPlacement="floating" fill="solid" [readonly]="true" [value]="getCtrlDate('resignationDate') | date:'yyyy-MM-dd'" required="true" type="date">
+                <div slot="label">Resignation Date <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <div class="toggleBtn">
+                <ion-button mode="ios" color="medium" fill="clear" size="small">
+                  <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+              <ion-text color="danger" class="error_txt" *ngIf="touchedCtrls.includes('resignationDate') && employeeForm.controls['resignationDate'].errors">
+                Resignation date is required.
+              </ion-text>
+            </div>
+          </ion-col>
+
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input flexInput">
+              <ion-input labelPlacement="floating" fill="solid" formControlName="probationPeriod" class="flex_input" placeholder="In Days" required="true" type="number" [required]="true" inputmode="numeric" [enterkeyhint]="'next'" autocomplete="probationPeriod" min="0" step="1" max="300" [errorText]="'Probation period is required.'">
+                <div slot="label">Probation Period <ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <div class="toggleBtn">
+                <ion-note color="medium">Day(s)</ion-note>
+              </div>
+            </div>
+          </ion-col>
+          
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-input labelPlacement="floating" fill="solid" formControlName="work_experience" placeholder="Experience" type="number" inputmode="numeric" [enterkeyhint]="'next'" autocomplete="work_experience" min="0" step="0.5" max="60">
+                <div slot="label">Work Experience </div>
+              </ion-input>
+            </div>
+          </ion-col>
+          
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input">
+              <ion-select labelPlacement="floating" fill="solid" formControlName="workLocation" placeholder="Select" interface="action-sheet" expandedIcon="caret-up">
+                <div slot="label">Work Location</div>
+                <ion-select-option [value]="work" *ngFor="let work of workType">{{work}}</ion-select-option>
+              </ion-select>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
 
     <ion-list mode="ios" class="ion-padding-bottom" inset="true">
       <ion-list-header>

@@ -118,15 +118,11 @@ export class AdminLeavesPage implements OnInit {
         } else {
           this.shareServ.presentToast('Responded', 'top', 'success');
         }
-        const requestIndex = this.requestedLeaveList.findIndex((item) => item.guid === event.leaveId);
-        this.requestedLeaveList.splice(requestIndex, 1);
-        const logIndex = this.leaveLogs.findIndex((item) => item.guid === event.leaveId);
-        this.leaveLogs[logIndex].status = event.action;
         this.logPageNumber = 0;
         this.pageNumber = 0;
+        this.loader.dismiss();
         this.requestedLeaves();
         this.getLogs();
-        this.loader.dismiss();
       }
     }, (error) => {
       this.shareServ.presentToast(error.error.message, 'top', 'danger');
@@ -143,8 +139,13 @@ export class AdminLeavesPage implements OnInit {
         
         if(this.logPageNumber < 1){this.leaveLogs = [];}
         for(let i=0; i < res.length; i++){
-          if(!this.leaveLogs.some((item: ILeaveLogsResponse) => item.guid === res[i].guid)){
+          if(!this.leaveLogs.some((item: ILeaveLogsResponse) => item.guid === res[i].guid) && res[i].status !== "Pending"){
             this.leaveLogs.push(res[i]);
+          }
+          if (res[i].status == "Pending" && !this.requestedLeaveList.some((item) => item.guid === res[i].guid)) {
+            this.requestedLeaveList.push(res[i]);
+            this.requestLoaded = true;
+            this.requestedLeaveList.sort((a, b) => new Date(a.created_date).getTime() - new Date(b.created_date).getTime());
           }
         }
         this.moreLogs = res.length > 19;
