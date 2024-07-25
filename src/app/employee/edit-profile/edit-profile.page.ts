@@ -48,10 +48,10 @@ export class EditProfilePage implements OnInit {
       email: ['', Validators.compose([Validators.email])],
       officialEmail: [''],
       mobileNumber: [''],
-      alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10)])],
+      alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10), Validators.required])],
       dateOfBirth: '',
       gender: ['Male', Validators.required],
-      maritalStatus: [''],
+      maritalStatus: ['', Validators.required],
       imageUrl: [''],
       guid: [''],
       currentAddress: this.fb.group({

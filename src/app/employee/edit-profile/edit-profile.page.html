@@ -66,7 +66,7 @@
             <ion-item detail="false">
               <ion-icon name="heart" aria-hidden="true" slot="start" color="medium"></ion-icon>
               <ion-select labelPlacement="floating" formControlName="maritalStatus" placeholder="Select" interface="action-sheet" expandedIcon="caret-up">
-                <div slot="label">Marital Status</div>
+                <div slot="label">Marital Status <ion-text color="danger">*</ion-text></div>
                 <ion-select-option value="Married">Married</ion-select-option>
                 <ion-select-option value="Unmarried">Unmarried</ion-select-option>
               </ion-select>
@@ -90,7 +90,7 @@
             <ion-item detail="false">
               <ion-icon name="call" aria-hidden="true" slot="start" color="medium"></ion-icon>
               <ion-input labelPlacement="floating" formControlName="alternateMobileNumber" placeholder="Alternate Mobile Number" type="tel" inputmode="tel" [enterkeyhint]="'next'" autocomplete="alternateMobileNumber" >
-                <div slot="label">Alternate Mobile Number </div>
+                <div slot="label">Emergency Mobile Number <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="employeeForm.controls['alternateMobileNumber'].touched && employeeForm.controls['alternateMobileNumber'].errors"></ion-icon>
             </ion-item>
