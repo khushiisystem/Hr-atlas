@@ -26,7 +26,7 @@ export interface AttListItem {
   created_date: string | Date,
   created_user: string,
   open_form: boolean,
-  attendanceData: any,
+  attendanceData: Array<any>,
   leaveData: any,
 }
 
@@ -158,7 +158,8 @@ export class AttendancePage implements OnInit, OnDestroy {
     this.attendanceLoaded = false;
     this.loader.present('');
     if(this.pageIndex === 0){this.attendanceList = [];}
-    this.apiSubscription = this.shareServ.monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 40, 40).subscribe(res => {
+    this.setStartDate(this.attendanceDate);
+    this.apiSubscription = this.shareServ.monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 100, 100).subscribe(res => {
       if(res.length < 1){
         this.moreAttendance = false;
         this.attendanceLoaded = true;
@@ -189,7 +190,7 @@ export class AttendancePage implements OnInit, OnDestroy {
           this.absent = 0;
           this.dateList.forEach((item) => {
             if(this.checkDates(new Date(e.clockIn), new Date(item.created_date))){
-              item.attendanceData = e;
+              item.attendanceData = [...item.attendanceData, e];
               item.status = e.status;
               item.created_date = new Date(e.clockIn).toISOString();
             }
@@ -274,7 +275,7 @@ export class AttendancePage implements OnInit, OnDestroy {
         created_date: new Date(date),
         created_user: this.employeeId,
         open_form: false,
-        attendanceData: null,
+        attendanceData: [],
         leaveData: null,
       }
       this.dateList.push(data);
@@ -362,7 +363,6 @@ export class AttendancePage implements OnInit, OnDestroy {
     this.apiSubscription = this.shareServ.getMonthLeaves(this.employeeId, moment(this.attendanceDate).utc().format()).subscribe(res => {
       this.leaveLogs = res;
       for (let a = 0; a < res.length; a++) {
-        console.log(this.highlightedDates);
         const fullDayLeaves = res[a].fullDayDates || [];
         const halfDayLeaves = res[a].halfDayDates || [];
         if(res[a].status !== 'Cancel'){
@@ -409,7 +409,6 @@ export class AttendancePage implements OnInit, OnDestroy {
     } else {
       leavesArray.push(selectDate);
     }
-    console.log(this.fullLeaves, this.halfLeaves);    
     this.highlightedDates = [...this.highlightedDates, ...this.fullLeaves, ...this.halfLeaves];
     
   }
@@ -454,36 +453,37 @@ export class AttendancePage implements OnInit, OnDestroy {
     const day = String(dateObject.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
-  markPresent(event: Event, itemData: AttListItem) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.loader.present('');
-    this.adminServ.markAttendEmp(this.employeeId, {id: ''}, new Date(itemData.created_date)).subscribe(res => {
-      if(res && res.status === 'Present'){
-        itemData.attendanceData = res,
-        itemData.status = res.status;
-        itemData.created_date = new Date(res.clockIn).toISOString();
-        itemData.created_user = res.created_user;
-        const calindex = this.highlightedDates.findIndex((item) => this.checkDates(new Date(item.date), new Date(itemData.created_date)));
-        if(calindex != -1){
-          this.highlightedDates[calindex].backgroundColor = '#2dd36f';
-          this.highlightedDates[calindex].textColor = '#000';
+
+  attAcrdAction(event: {role: "attendance" | "leave", approve: boolean}, itemData: AttListItem){
+    if(event.role == "attendance" && event.approve == true){
+      this.loader.present('');
+      this.adminServ.markAttendEmp(this.employeeId, {id: ''}, new Date(itemData.created_date)).subscribe(res => {
+        if(res && res.status === 'Present'){
+          itemData.attendanceData = [itemData.attendanceData, res],
+          itemData.status = res.status;
+          itemData.created_date = new Date(res.clockIn).toISOString();
+          itemData.created_user = res.created_user;
+          const calindex = this.highlightedDates.findIndex((item) => this.checkDates(new Date(item.date), new Date(itemData.created_date)));
+          if(calindex != -1){
+            this.highlightedDates[calindex].backgroundColor = '#2dd36f';
+            this.highlightedDates[calindex].textColor = '#000';
+          } else {
+            this.highlightedDates.push({
+              date: this.returnCustomDate(res.clockIn),
+              backgroundColor: '#2dd36f',
+              textColor: '#000',
+            });
+          }
+          this.shareServ.presentToast('Marked present', 'top', 'success');
+          this.loader.dismiss();
         } else {
-          this.highlightedDates.push({
-            date: this.returnCustomDate(res.clockIn),
-            backgroundColor: '#2dd36f',
-            textColor: '#000',
-          });
+          this.loader.dismiss();
         }
-        this.shareServ.presentToast('Marked present', 'top', 'success');
+      }, (error) => {
+        this.shareServ.presentToast(error.errorMessage, 'top', 'danger');
         this.loader.dismiss();
-      } else {
-        this.loader.dismiss();
-      }
-    }, (error) => {
-      this.shareServ.presentToast(error.errorMessage, 'top', 'danger');
-      this.loader.dismiss();
-    });
+      });
+    }
   }
   
   selectDate(event: DatetimeCustomEvent){
@@ -495,10 +495,13 @@ export class AttendancePage implements OnInit, OnDestroy {
   fetchAll(dateStr: string){
     this.pageIndex = 0;
     let monthDate = new Date(dateStr);
-    this.attendanceDate = monthDate.toISOString();
     if(monthDate.getFullYear() < this.today.getFullYear() || monthDate.getMonth() < this.today.getMonth()){
       monthDate.setFullYear(monthDate.getFullYear(), monthDate.getMonth()+1, 0);
     }
+    if(monthDate.getFullYear() >= this.today.getFullYear() && monthDate.getMonth() >= this.today.getMonth() && monthDate.getDate() >= this.today.getDate()){
+      monthDate.setFullYear(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
+    }
+    this.attendanceDate = monthDate.toISOString();
     this.highlightedDates = [];
     this.eventsList.forEach((event) =>{
       const selectDate : IHighlightedDate = {
@@ -639,6 +642,13 @@ export class AttendancePage implements OnInit, OnDestroy {
 
   get isJoinedDate(): boolean {
     return this.employeeDetail && moment(this.attendanceDate).subtract(1, "month").isBefore(this.employeeDetail.created_date);
+  }
+  setStartDate(dateStr: string | Date){
+    let customDate = new Date(dateStr);
+    customDate.setFullYear(customDate.getFullYear(), customDate.getMonth() + 1, -1);
+    customDate.setDate(1);
+    customDate.setHours(0,0,0);
+    return customDate.toISOString();
   }
 
 }

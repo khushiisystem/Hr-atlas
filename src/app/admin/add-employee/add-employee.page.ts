@@ -12,6 +12,10 @@ interface DatetimeCustomEvent extends CustomEvent {
   target: HTMLIonDatetimeElement;
 }
 
+interface Department {
+  name: string,
+  subDepartment: string[]
+}
 
 @Component({
   selector: 'app-add-employee',
@@ -29,7 +33,27 @@ export class AddEmployeePage implements OnInit {
   isSameAddress: boolean = false;
   isDataLoaded: boolean = false;
   isInProgress: boolean = false;
-  expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card']
+  expandedCard: string[] = ['personal_card', 'contact_card', 'address_card', 'social_card'];
+  touchedCtrls: string[] = [];
+  workType: string[] = ['Work From Home', 'Work From Office'];
+  deparmentList: Department[] = [
+    {
+      name: 'HR Department',
+      subDepartment: ['Human Resources']
+    }, {
+      name: 'Administration Department',
+      subDepartment: ['Project Management']
+    }, {
+      name: 'Development Department',
+      subDepartment: ['Frontend Development', 'Backend Development', 'UI / UX', 'DevOps']
+    }, {
+      name: 'Sales Department',
+      subDepartment: ['Bussiness Development']
+    }
+  ];
+  activeControl: string = '';
+  formIndex: number = 0;
+
 
   constructor(
     private fb: FormBuilder,
@@ -77,7 +101,19 @@ export class AddEmployeePage implements OnInit {
       }),
       linkedinUrl: [''],
       facebookUrl: [''],
-      twitterUrl: ['']
+      twitterUrl: [''],
+      employeeId: '',
+      designation: '',
+      jobTitle: '',
+      employeeType: '',
+      department: '',
+      subDepartment: '',
+      status: 'Active',
+      joiningDate: '',
+      resignationDate: null,
+      probationPeriod: null,
+      work_experience: 0,
+      workLocation: '',
     });
 
     this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
@@ -204,5 +240,34 @@ export class AddEmployeePage implements OnInit {
 
   getChildCtrl(groupName: string): FormGroup{
     return (this.employeeForm.get(groupName) as FormGroup);
+  }
+
+  getSubDeparments() {
+    const department = this.employeeForm.controls['department'].value;
+    if(department) {
+      const index = this.deparmentList.find((e: Department, index) => e.name === department);
+      return index ? index.subDepartment : [];
+    } else {return [];}
+  }
+
+  statusChange(event: any){
+    if(this.employeeForm.controls["status"].value === 'InActive'){
+      this.employeeForm.addControl('resignationDate', new FormControl('', Validators.compose([Validators.required])));
+    } else {
+      this.employeeForm.removeControl("resignationDate");
+    }
+  }
+  toggleCtrl(ctrlName: string, frmIndex?: number){
+    this.activeControl = ctrlName;
+    this.openCalendar = true;
+    this.formIndex = frmIndex ?? -1;
+    if(!this.touchedCtrls.includes(`${ctrlName}${frmIndex??''}`)){
+      this.touchedCtrls.push(`${ctrlName}${frmIndex??''}`);
+    }
+  }
+
+  getCtrlDate(ctrlName: string){
+    const formDate = this.employeeForm.controls[ctrlName].value;
+    return formDate ? new Date(moment(formDate).format()) : '';
   }
 }
