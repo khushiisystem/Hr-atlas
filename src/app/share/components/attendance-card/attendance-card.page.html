@@ -6,13 +6,13 @@
       <ion-note *ngIf="workDurationString.trim() !== '0h 0m 0s' && attendanceData.status !== 'Absent'"><ion-icon name="time-outline" size="small" style="vertical-align: middle; margin-right: 5px;"></ion-icon>{{workDurationString}}</ion-note>
     </div>
     
-    <ion-button [shape]="'round'" [mode]="'ios'" [size]="'small'" [fill]="'clear'" [color]="'medium'" *ngIf="attendanceData.attendanceData.length > 0 || attendanceData.leaveData != null" class="expandBtn">
+    <!-- <ion-button [shape]="'round'" [mode]="'ios'" [size]="'small'" [fill]="'clear'" [color]="'medium'" *ngIf="attendanceData.attendanceData.length > 0 || attendanceData.leaveData != null" class="expandBtn">
       <ion-icon [name]="openCard ? 'chevron-up-outline' : 'chevron-down-outline'" slot="icon-only" [size]="'small'"></ion-icon>
-    </ion-button>
+    </ion-button> -->
 
     <ion-chip color="tertiary" *ngIf="userRole === 'Admin' && !isWeekOff && attendanceData.status === 'Absent'" (click)="markPresent($event)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip>
   </ion-card-header>
-  <ion-card-content *ngIf="openCard && isAllGood">
+  <ion-card-content [class.show]="openCard && isAllGood && !isWeekOff">
     <table *ngIf="attendanceData.attendanceData.length > 0" class="ion-margin-top">
       <thead>
         <tr>
@@ -65,5 +65,11 @@
       </div>
     </div>
   </ion-card-content>
+  <div class="ion-text-end ion-padding-vertical" *ngIf="!isWeekOff">
+    <ion-button fill="clear" size="small" (click)="openCard = !openCard">
+      <span>{{openCard ? 'Hide Details' : 'Show Details'}}</span>
+      <ion-icon [name]="openCard ? 'chevron-up-outline' : 'chevron-down-outline'" slot="end" [size]="'small'"></ion-icon>
+    </ion-button>
+  </div>
   <ion-skeleton-text style="width: 100%; height: 80px;" animated="true" class="inherit_shap ion-no-margin" *ngIf="!isAllGood"></ion-skeleton-text>
 </ion-card>
