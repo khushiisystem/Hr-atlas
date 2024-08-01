@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DatetimeCustomEvent, IonContent } from '@ionic/angular';
 import * as moment from 'moment';
@@ -35,7 +35,7 @@ export interface AttListItem {
   templateUrl: './attendance.page.html',
   styleUrls: ['./attendance.page.scss'],
 })
-export class AttendancePage implements OnInit, OnDestroy {
+export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   employeeId: string = '';
   employee!: IEmpSelect;
   attendanceLoaded: boolean = false;
@@ -72,8 +72,13 @@ export class AttendancePage implements OnInit, OnDestroy {
     private adminServ: AdminService,
     private activeRoute: ActivatedRoute,
     private rolseStateServ: RoleStateService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.minDate.setFullYear(2000, 1, 1);
+  }
+
+  ngAfterContentChecked(): void {
+    this.cdr.detectChanges();
   }
 
   ngOnInit() {
@@ -191,10 +196,11 @@ export class AttendancePage implements OnInit, OnDestroy {
           this.dateList.forEach((item) => {
             if(this.checkDates(new Date(e.clockIn), new Date(item.created_date))){
               item.attendanceData = [...item.attendanceData, e];
-              item.status = e.status;
+              item.status = this.updateStatus(item.attendanceData, e.status);
               item.created_date = new Date(e.clockIn).toISOString();
             }
             item.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+            this.cdr.detectChanges();
           });
         });
         this.loader.dismiss();
@@ -205,6 +211,27 @@ export class AttendancePage implements OnInit, OnDestroy {
       this.moreAttendance = false;
       this.loader.dismiss();
     });
+  }
+
+  updateStatus(attendanceData: Array<any>, currentStatus = AttendaceStatus.ABSENT): AttendaceStatus{
+    const firstDataDate = new Date(attendanceData[0].clockIn);
+    const updatedDate = new Date(this.today);
+    updatedDate.setHours(0,0,1);
+    if(firstDataDate < updatedDate){
+      let totalDurationMs = 0;
+      attendanceData.forEach((item: {clockIn: string, clockOut: string | null}) => {
+        const durationMs = this.calculateDuration(item.clockIn, item.clockOut);
+        totalDurationMs += durationMs;
+      });
+      return totalDurationMs < (28800000/2) ? AttendaceStatus.ABSENT : totalDurationMs >= (28800000/2) && totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : currentStatus;
+    } else return currentStatus;
+  }
+  calculateDuration(clockIn: string, clockOut: string | null) {
+    if (!clockOut) return 0;
+    const startTime: Date = new Date(clockIn);
+    const endTime: Date = new Date(clockOut);
+    const durationMs: any = endTime.getTime() - startTime.getTime();
+    return durationMs;
   }
 
   isWeekOff(dateTime: string | Date){
@@ -368,12 +395,12 @@ export class AttendancePage implements OnInit, OnDestroy {
         if(res[a].status !== 'Cancel'){
           fullDayLeaves.forEach((dates) => {
             if (moment(this.attendanceDate).isSame(dates, 'year') && moment(this.attendanceDate).isSame(dates, 'month')) {
-              this.updateHilghtes(dates, res[a].status, true);
+              this.updateHighlights(dates, res[a].status, true);
             }
           });
           halfDayLeaves.forEach((dates) => {
             if (moment(this.attendanceDate).isSame(dates, 'year') && moment(this.attendanceDate).isSame(dates, 'month')) {
-              this.updateHilghtes(dates, res[a].status, false);
+              this.updateHighlights(dates, res[a].status, false);
             }
           });
           [...fullDayLeaves, ...halfDayLeaves].forEach((item) => {
@@ -396,7 +423,7 @@ export class AttendancePage implements OnInit, OnDestroy {
     });
   }
 
-  updateHilghtes(inputDate: string | Date, status: 'Pending' | 'Reject' | 'Accept' | 'Cancel', isFullDay: boolean){
+  updateHighlights(inputDate: string | Date, status: 'Pending' | 'Reject' | 'Accept' | 'Cancel', isFullDay: boolean){
     const selectDate : IHighlightedDate = {
       date: this.returnCustomDate(inputDate),
       backgroundColor: status === 'Pending' ? '#ef7373' : isFullDay ? 'red' : 'pink',
@@ -459,7 +486,7 @@ export class AttendancePage implements OnInit, OnDestroy {
       this.loader.present('');
       this.adminServ.markAttendEmp(this.employeeId, {id: ''}, new Date(itemData.created_date)).subscribe(res => {
         if(res && res.status === 'Present'){
-          itemData.attendanceData = [itemData.attendanceData, res],
+          itemData.attendanceData = [...itemData.attendanceData, res],
           itemData.status = res.status;
           itemData.created_date = new Date(res.clockIn).toISOString();
           itemData.created_user = res.created_user;

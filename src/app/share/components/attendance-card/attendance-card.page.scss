@@ -50,6 +50,13 @@
             margin-top: 0;
         }
     }
+    &.Half ion-card-header{
+        background-color: #6956004d;
+        --background: #6956004d;
+        --color: #430101;
+        ion-card-title, & ion-card-subtitle{--color: #430101;margin-top: 0;}
+        ion-note{color: #5f5f5f;}
+    }
 
     .expandBtn {
         --padding-top: 5px;
@@ -58,10 +65,13 @@
         --padding-bottom: 5px;
     }
     .leaveDate {
-        margin-bottom: 10px;
+        margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px;
         & ion-icon{margin-right: 5px; vertical-align: middle;}
     }
     .purpose{white-space: pre-line;}
+    ion-card-content{opacity: 0; visibility: hidden; display: none; transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;
+    &.show{opacity: 1; visibility: visible; display: block; transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;}}
+    will-change: contents height;
 }
 
 table{
