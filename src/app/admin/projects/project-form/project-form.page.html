@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-button mode="md" slot="start" (click)="closeModel()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+      <ion-icon name="close" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-title>{{action === 'add' ? 'Add' : 'Update'}}</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/no_bg_logo.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="projectsForm" class="ion-padding">
+    <ion-item [detail]="false"> 
+        <ion-input class="ion-margin-bottom" fill="solid" labelPlacement="floating" formControlName="projectName" placeholder="Enter Project Name" type="text" maxlength="120" minlength="2" inputmode="text" [enterkeyhint]="'next'" autocomplete="name" autofocus="true">
+          <div slot="label">Project Name <ion-text color="danger">*</ion-text></div>
+        </ion-input>
+        <ion-icon slot="end" aria-label="Title is required." title="Title is required." name="alert-circle" color="danger" aria-hidden="true" *ngIf="projectsForm.controls['projectName'].touched && projectsForm.controls['projectName'].errors"></ion-icon>
+    </ion-item>
+        <!-- <ion-select fill="solid" labelPlacement="stacked" label="Assign Employee" aria-label="Assign Employee" interface="popover" placeholder="Select all employee that apply" [multiple]="true" formControlName="employeeIds">
+          <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{ emp.lastName }}</ion-select-option>          
+        </ion-select> -->
+  </form>
+  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="projectsForm.invalid || isInProgress" color="primary" (click)="submit()" expand="full" shape="round">
+    {{action === 'add' ? 'Add' : 'update' | titlecase}} Project
+  </ion-button>
+</ion-content>

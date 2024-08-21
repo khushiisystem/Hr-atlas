@@ -71,6 +71,11 @@ export class SettingsPage implements OnInit {
     this.router.navigate([`/tabs/add-employee/add/${null}`])
   }
 
+  addProjects(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/projects`])
+  }
+
   accordionChange(event: CustomEvent){
     if(event.detail.value){
       this.activeTab = event.detail.value;

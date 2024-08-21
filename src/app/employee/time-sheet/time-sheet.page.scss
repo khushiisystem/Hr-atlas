@@ -1,0 +1,50 @@
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;  
+    align-items: center;
+    justify-content: space-between;
+    width: 85vw;  
+    margin: 0 auto;
+    color: black;
+  }
+
+  .date {
+    p {
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+    span {
+      margin: auto 10px 0 0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+  
+  .rounded-rectangle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h4 {
+        font-size: 30px;
+        font-weight: 500;
+        margin: auto 0 10px 0;
+    }
+    ion-button {
+      height: 33px;
+      font-size: 15px;
+    }
+  }
+  .para p {
+    margin-top: auto;
+  }
+
+  .cal_col {
+    display: flex; justify-content: start; flex-wrap: wrap; gap: 10px;
+    .p1 {
+      width: 15px; height: 15px; background-color: #ffc0cb;
+    }
+    .p2 {
+      width: 15px; height: 15px; background-color: var(--ion-color-secondary);
+    }
+  }

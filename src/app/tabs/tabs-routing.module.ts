@@ -24,6 +24,13 @@ import { LeavesPage } from '../share/leaves/leaves.page';
 import { SalaryPage } from '../admin/salary/salary.page';
 import { EmployeePayrollPage } from '../admin/payroll-setup/employee-payroll/employee-payroll.page';
 import { AttendanceStatusPage } from '../admin/attendance-status/attendance-status.page';
+import { ProjectsPage } from '../admin/projects/projects.page';
+import { AssignProjectPage } from '../admin/projects/assign-project/assign-project.page';
+import { ProTimelinePage } from '../employee/pro-timeline/pro-timeline.page';
+import { TimeSheetPage } from '../employee/time-sheet/time-sheet.page';
+import { ProjectDetailsPage } from '../admin/projects/project-details/project-details.page';
+import { TimesheetCategoryPage } from '../admin/timesheet-category/timesheet-category.page';
+import { TimesheetSubCategoryPage } from '../admin/timesheet-sub-category/timesheet-sub-category.page';
 
 const routes: Routes = [
   {
@@ -40,6 +47,48 @@ const routes: Routes = [
         path: 'directory',
         title: "Directory",
         component: DirectoryPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'projects',
+        title: "Projects",
+        component: ProjectsPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'project-timeline',
+        title: "Projects Timeline",
+        component: ProTimelinePage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'assign-project',
+        title: "Assign Project",
+        component: AssignProjectPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'time-sheet',
+        title: "Time Sheet",
+        component: TimeSheetPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'category',
+        title: 'TimeSheet Category',
+        component: TimesheetCategoryPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'sub-category',
+        title: 'TimeSheet Sub-Category',
+        component: TimesheetSubCategoryPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'project-details',
+        title: "Project Details",
+        component: ProjectDetailsPage,
         canActivate: [AuthGuard]
       },
       {

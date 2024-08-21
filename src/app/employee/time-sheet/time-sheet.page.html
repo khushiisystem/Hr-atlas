@@ -1,0 +1,221 @@
+<ion-header [translucent]="true" mode="md">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+        <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Project Time Sheet</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+    <!-- <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar> -->    
+    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>         
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true" mode="md">
+  <!-- <ion-datetime presentation="date" mode="md"> -->
+  <!-- </ion-datetime> -->
+  <form [formGroup]="timeSheetForm" class="ion-padding">    
+    <ion-row>
+      <!-- calander start  -->
+        <div class="ion-padding" mode="ios">
+          <ion-datetime presentation="date" [highlightedDates]="highlightedDates">    
+          </ion-datetime>
+
+          <div class="cal_col">
+            <p class="p1"></p><p>not filled</p>
+            <p class="p2"></p><p>filled</p>
+
+          </div>
+        </div>
+      <!-- calander end  -->
+
+      <ion-col size="12">
+        <ion-select formControlName="projectName" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
+          <ion-select-option value="imentorly">iMentorly</ion-select-option>
+          <ion-select-option value="hratlas">hrAtlas</ion-select-option>
+          <ion-select-option value="wokari">Wokrai</ion-select-option>
+        </ion-select>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-select label="Category" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
+          <ion-select-option value="a">c1</ion-select-option>
+          <ion-select-option value="b">c2</ion-select-option>
+          <ion-select-option value="c">c3</ion-select-option>
+          <ion-select-option value="d">c4</ion-select-option>
+          <ion-select-option value="e">c5</ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col size="12">
+        <ion-select label="Sub-Category" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
+          <ion-select-option value="a">c1</ion-select-option>
+          <ion-select-option value="b">c2</ion-select-option>
+          <ion-select-option value="c">c3</ion-select-option>
+          <ion-select-option value="d">c4</ion-select-option>
+          <ion-select-option value="e">c5</ion-select-option>
+        </ion-select>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item detail="false" id="start-date">
+          <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
+          <ion-input labelPlacement="floating" [value]="getStartDate() |date:'yyyy-MM-dd'" placeholder="End Date" type="date" readonly="true">
+            <div slot="label">Start Date<ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['startDate'].touched && timeSheetForm.controls['startDate'].errors"></ion-icon>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="12">
+        <ion-item detail="false" id="hours">
+          <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
+          <ion-input labelPlacement="floating" [value]="getHours() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
+            <div slot="label">Hours<ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['hours'].touched && timeSheetForm.controls['hours'].errors"></ion-icon>
+        </ion-item>
+      </ion-col>
+
+      <!-- <ion-col size="12">
+        <ion-input type="text" mode="md" placeholder="Tag" fill="solid">
+          <div slot="label">Tag</div>
+        </ion-input>
+      </ion-col> -->
+      <ion-col size="12" id="startdate">
+        <ion-input formControlName="title" labelPlacement="floating" color="primary" fill="solid" [value]="" class="dateInput">
+          <div slot="label">Tag/Title</div>
+        </ion-input>      
+      </ion-col>      
+
+      <!-- <ion-col size="6">
+        <ion-item detail="false" id="end-date">
+          <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
+          <ion-input labelPlacement="floating" [value]="getEndDate() |date:'yyyy-MM-dd'" placeholder="End Date" type="date" readonly="true">
+            <div slot="label">End Date<ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['endDate'].touched && timeSheetForm.controls['endDate'].errors"></ion-icon>
+        </ion-item>
+      </ion-col> -->
+    </ion-row>
+
+    <ion-row>
+      <ion-textarea formControlName="description" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
+        <div slot="label">Descirption</div>
+      </ion-textarea>
+      <!-- <ion-item [lines]="'none'" [detail]="false" class="spaceItem"></ion-item> -->
+      <ol style="background-color: rgba(244, 250, 136, 0.405); padding: 5px 0 10px 35px;">
+        <li>Please fill timesheet in between 0 to 3 hours for each entry.</li>
+        <li>Minium 3 entries are required to complete 8 hours timesheet for each day.</li>
+      </ol>
+    </ion-row>
+
+    <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round">Clear</ion-button>
+    <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round">Add</ion-button>        
+  </form>
+
+  <ion-grid>
+    <ion-row class="ion-justify-content-end ion-padding-start ion-padding-end">
+      <ion-col size="6">
+        <div>
+          <p>Time Filled for Day: </p>
+          <span>03h:00m</span>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div>
+          <p>Time Filled for Month: </p>
+          <span>118h:00m</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+
+  
+
+  <ion-modal trigger="hours" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+    <ng-template>
+      <ion-content>
+        <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setHours($any($event))" [max]="today.toISOString()">
+          <span slot="title">Hours</span>
+          <ion-buttons slot="buttons">
+            <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss()">Cancel</ion-button>
+            <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss()">Done</ion-button>
+          </ion-buttons>
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal trigger="start-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+    <ng-template>
+      <ion-content>
+        <ion-datetime presentation="date" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartDate($any($event))" [max]="today.toISOString()">
+          <span slot="title">Start Date</span>
+          <ion-buttons slot="buttons">
+            <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss()">Cancel</ion-button>
+            <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss()">Done</ion-button>
+          </ion-buttons>
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- <ion-modal trigger="end-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+    <ng-template>
+      <ion-content>
+        <ion-datetime presentation="date" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setEndDate($any($event))" [max]="today.toISOString()">
+          <span slot="title">End Date</span>
+          <ion-buttons slot="buttons">
+            <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss()">Cancel</ion-button>
+            <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss()">Done</ion-button>
+          </ion-buttons>
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal> -->
+
+  <ion-card class="ion-margin">
+    <div class="wrapper">
+      <div class="ion-activatable rounded-rectangle">
+        <h4>iMentorly</h4>
+        <ion-button size="small"><ion-icon name="create-outline"></ion-icon></ion-button>
+     </div>     
+      <div class="ion-activatable circle">
+      </div>
+      <div class="date">
+        <p><span>Activity :</span> <span>time-sheet</span></p>
+        <p><span>Time :</span> <span>03:00</span></p>
+        <p><span>Tag :</span> <span></span></p>
+        <p><span>OnSite :</span> <span></span></p>                
+      </div>
+      <div class="ion-activatable para">
+         <p><b>Description: </b>Here's a small text description for the card content. Nothing more, nothing less.</p>
+      </div>       
+    </div>
+  </ion-card>
+
+  <ion-card class="ion-margin">
+    <div class="wrapper">
+      <div class="ion-activatable rounded-rectangle">
+        <h4>iMentorly</h4>
+        <ion-button size="small"><ion-icon name="checkbox-outline"></ion-icon></ion-button>
+     </div>     
+      <div class="ion-activatable circle">
+
+      </div>
+      <div class="date">
+        <p><span>Activity :</span> <span>time-sheet</span></p>
+        <p><span>Time :</span> <span>03:00</span></p>
+        <p><span>Tag :</span> <span></span></p>
+        <p><span>OnSite :</span> <span></span></p>                
+      </div>
+      <div class="ion-activatable para">
+         <p><b>Description: </b>Here's a small text description for the card content. Nothing more, nothing less.</p>
+      </div>      
+    </div>
+  </ion-card>
+  
+</ion-content>

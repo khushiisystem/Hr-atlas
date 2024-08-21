@@ -42,6 +42,14 @@ import { SideNavPage } from "./components/side-nav/side-nav.page";
 import { ReadMorePageModule } from "../share/components/read-more/read-more.module";
 import { AdvancePayCardPageModule } from "../share/components/advance-pay-card/advance-pay-card.module";
 import { ProgressBarPageModule } from "../share/components/progress-bar/progress-bar.module";
+import { ProjectFormPage } from "../admin/projects/project-form/project-form.page";
+import { ProjectsPage } from "../admin/projects/projects.page";
+import { AssignProjectPage } from "../admin/projects/assign-project/assign-project.page";
+import { ProTimelinePage } from "../employee/pro-timeline/pro-timeline.page";
+import { TimeSheetPage } from "../employee/time-sheet/time-sheet.page";
+import { ProjectDetailsPage } from "../admin/projects/project-details/project-details.page";
+import { TimesheetCategoryPage } from "../admin/timesheet-category/timesheet-category.page";
+import { TimesheetSubCategoryPage } from "../admin/timesheet-sub-category/timesheet-sub-category.page";
 
 @NgModule({
   declarations: [
@@ -69,6 +77,14 @@ import { ProgressBarPageModule } from "../share/components/progress-bar/progress
     EmployeePayslipPage,
     AttendanceStatusPage,
     SideNavPage,
+    ProjectFormPage,
+    ProjectsPage,
+    AssignProjectPage,
+    ProTimelinePage,
+    TimeSheetPage,
+    ProjectDetailsPage,
+    TimesheetCategoryPage,
+    TimesheetSubCategoryPage,
   ],
   imports: [
     ReadMorePageModule,

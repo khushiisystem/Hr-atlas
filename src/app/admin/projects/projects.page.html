@@ -1,0 +1,77 @@
+<ion-header [translucent]="true" mode="md">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/settings']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+        <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Add Projects</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>         
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+    <!-- serach  -->
+    <div class="stickyTop ion-padding-vertical">
+      <div class="optbar">
+        <ion-item detail="false" lines="none" mode="md">
+          <ion-icon name="search" aria-hidden="true" size="small" slot="start" class="startIcon"></ion-icon>
+          <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+        </ion-item>
+        <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="filterPop" *ngIf="userRole === 'Admin'" class="ion-margin-start ion-no-padding">
+          <ion-icon name="funnel" aria-hidden="true" aria-label="Option"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+    <!-- project-list  -->
+    <ion-list>
+      <div *ngIf="AllProject == null">
+        <ion-item lines="none" [button]="false">
+          <ion-label class="ion-text-center">No any projects.</ion-label>
+        </ion-item>
+      </div>
+  
+      <ion-item-sliding #editSlide>
+        <!-- <ion-item-options side="start">
+          <ion-item-option color="primary" aria-label="Edit" type="button" [expandable]="true">
+            <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
+          </ion-item-option>
+        </ion-item-options> -->
+        <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let project of AllProject; index as i">
+          <div class="employee_data">
+            <ion-label>{{ project.title }}</ion-label>
+          </div>
+          <!-- update -->
+            <ion-button size="small" color="danger" color="primary" (click)="projectMoal(project, 'update')"><ion-icon name="create-outline"></ion-icon></ion-button>            
+          <!-- delete -->
+            <ion-button id="click-trigger"  size="small" color="danger"><ion-icon name="trash-outline"></ion-icon></ion-button>                
+        </ion-item>      
+      </ion-item-sliding>
+    </ion-list>
+
+    <!-- popover -->
+    <ion-popover trigger="click-trigger" [backdropDismiss]="true" [dismissOnSelect]="true" triggerAction="click">
+      <ng-template>
+        <ion-content class="ion-padding">Are your sure you want to delete</ion-content>
+        <span>
+          <ion-button class="ion-padding-horizontal" size="small">Cancel</ion-button>
+          <ion-button size="small" color="danger">Delete</ion-button>
+        </span>
+      </ng-template>
+    </ion-popover> 
+
+    <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadData($any($event))" [position]="'bottom'">
+      <ion-infinite-scroll-content *ngIf="isMoreData" loadingSpinner="bubbles" loadingText="Loading more data...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'">
+    <ion-fab-button (click)="projectMoal(null, 'add')" aria-label="Add Employee" mode="ios">
+      <!-- <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon> -->
+      <ion-icon name="add-outline" aria-hidden="true" aria-label="Add Employee"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
