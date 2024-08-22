@@ -139,7 +139,7 @@
             </div>
           </ion-col>
 
-          <ion-col size="12" sizeSm="6">
+          <!-- <ion-col size="12" sizeSm="6">
             <div class="form-input" (click)="toggleCtrl('joiningDate')">
               <ion-input labelPlacement="floating" fill="solid" readonly="true" [value]="getCtrlDate('joiningDate') | date:'yyyy-MM-dd'" required="true" type="date">
                 <div slot="label">Joinig Date <ion-text color="danger">*</ion-text></div>
@@ -152,6 +152,20 @@
               <ion-text color="danger" class="error_txt" *ngIf="touchedCtrls.includes('joiningDate') && employeeForm.controls['joiningDate'].errors">
                 Joining date is required.
               </ion-text>
+            </div>
+          </ion-col> -->
+
+          <ion-col size="12" sizeSm="6">
+            <div class="form-input" detail="false" id="join-date">
+              <ion-input labelPlacement="floating" fill="solid" required="true" [value]="getJoinDate() |date:'yyyy-MM-dd'" type="date" readonly="true">
+                <div slot="label">Joining Date</div>
+              </ion-input>
+              <div class="toggleBtn">
+                <ion-button mode="ios" color="medium" fill="clear" size="small">
+                  <ion-icon name="calendar-number-outline" aria-hidden="true" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
+              <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="employeeForm.controls['joiningDate'].touched && employeeForm.controls['joiningDate'].errors"></ion-icon>
             </div>
           </ion-col>
 
@@ -270,6 +284,20 @@
         </ion-content>
       </ng-template>
     </ion-modal> -->
+
+    <ion-modal trigger="join-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+      <ng-template>
+        <ion-content>
+          <ion-datetime presentation="date" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setJoneDate($any($event))" [max]="today.toISOString()">
+            <span slot="title">Date of Birth</span>
+            <ion-buttons slot="buttons">
+              <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss()">Cancel</ion-button>
+              <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss()">Done</ion-button>
+            </ion-buttons>
+          </ion-datetime>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
   </form>
 </ion-content>
 <ion-footer *ngIf="isDataLoaded">
