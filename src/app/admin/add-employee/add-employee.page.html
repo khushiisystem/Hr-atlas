@@ -62,7 +62,7 @@
       </ion-card-header>
       <ion-card-content>
         <ion-row class="row_one">
-          <ion-col size="12" sizeSm="6">
+          <ion-col size="12" sizeSm="6" *ngIf="action === 'edit'">
             <div class="form-input">
               <ion-input labelPlacement="floating" fill="solid" formControlName="employeeId" placeholder="First Name" type="text" [readonly]="true" color="light">
                 <div slot="label">Employee Id <ion-text color="danger">*</ion-text></div>
