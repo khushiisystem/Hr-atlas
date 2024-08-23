@@ -12,6 +12,7 @@ export class TimeSheetService {
     private _http: HttpClient,    
   ) { }
   
+  // project
   getAllProjects(pageIndex: number, pageSize: number): Observable<any> {
     return this._http.get(environment.Api + `api/projects?skip=${pageIndex}&limit=${pageSize}`);
   }
@@ -21,8 +22,15 @@ export class TimeSheetService {
   }
 
 
+  // category
   getAllCategories(pageIndex: number, pageSize: number): Observable<any> {
     return this._http.get(environment.Api + `api/timesheet-category?skip=${pageIndex}&limit=${pageSize}`);
+  }
+
+
+  // sub-category
+  getAllSubCategories(pageIndex: number, pagesize: number): Observable<any> {
+    return this._http.get(environment.Api + `api/timesheet-sub-category?skip=${pageIndex}&limit=${pagesize}`);    
   }
 
 }

@@ -19,7 +19,8 @@ export class TimesheetSubCategoryPage implements OnInit {
   searchString: string = "";
   userRole: string = "";
   subCategoryForm!: FormGroup;
-  AllProject : any[] = [];
+  // AllProject : any[] = [];
+  AllSubCategories : any[] = [];
   isMoreData: boolean = true;
   pageIndex: number = 0;
 
@@ -34,18 +35,65 @@ export class TimesheetSubCategoryPage implements OnInit {
   ngOnInit() {
     this.subCategoryForm = this._fb.group({
       subCategory: ['']
-    })
+    });
+    this.getAllSubCategories();
   }
 
   onSearch() {
   }
 
+  getAllSubCategories() {
+    this.timeSheetSer.getAllSubCategories(this.pageIndex * 10, 10).subscribe(res => {
+      if(res) {
+        const data: any[] = res;
+        console.log("data: ", data)
+
+        this.isDataLoaded = true;
+        for(let i = 0; i < data.length; i++) {
+          if(!this.AllSubCategories.includes(data[i])) {
+            this.AllSubCategories.push([res[i]]);
+          }
+        }
+        this.isMoreData = data.length > 9;
+        this.infiniteScroll.complete();
+        this.isDataLoaded = true;
+      }
+    }, (error) => {
+      this.isMoreData = false;
+      this.isDataLoaded = true;
+      this.infiniteScroll.complete();
+    });
+  }
+
   loadData(event: any) {
     if(this.isMoreData) {
       this.pageIndex ++;
-      // this.getAllProjects();
+      this.getAllSubCategories();
     }
   }
+
+  // getAllProjects() {
+  //   this.timeSheetSer.getAllProjects(this.pageIndex * 10, 10).subscribe(res => {
+  //     if(res) {
+  //       const data: any[] = res;
+  //       console.log("data : ", data)
+
+  //       this.isDataLoaded = true;
+  //       for(let i = 0; i < data.length; i++) {
+  //         if(!this.AllProject.includes(data[i])) {
+  //           this.AllProject.push(res[i]);
+  //         }
+  //       }
+  //       this.isMoreData = data.length > 9;
+  //       this.infiniteScroll.complete();
+  //       this.isDataLoaded = true;
+  //     }
+  //   }, (error) => {
+  //     this.isMoreData = false;
+  //     this.isDataLoaded = true;
+  //     this.infiniteScroll.complete();
+  //   });
+  // }
   
   // async projectMoal(event: ISubCategory | null, action: "add" | "update"){
   //   const projectModel = this.modelCtrl.create({

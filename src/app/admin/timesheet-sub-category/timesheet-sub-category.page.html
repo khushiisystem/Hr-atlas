@@ -28,7 +28,7 @@
     </div>
     <!-- project-list  -->
     <ion-list>
-      <div *ngIf="AllProject == null">
+      <div *ngIf="AllSubCategories == null">
         <ion-item lines="none" [button]="false">
           <ion-label class="ion-text-center">No any sub-category.</ion-label>
         </ion-item>
@@ -40,9 +40,9 @@
             <ion-icon name="create-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
           </ion-item-option>
         </ion-item-options> -->
-        <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let project of AllProject; index as i">
+        <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let project of AllSubCategories; index as i">
           <div class="employee_data">
-            <ion-label>{{ project.title }}</ion-label>
+            <ion-label>{{ project.subCategory }}</ion-label>
           </div>
           <!-- update -->
             <!-- <ion-button size="small" color="danger" color="primary" (click)="projectMoal(project, 'update')"><ion-icon name="create-outline"></ion-icon></ion-button>             -->

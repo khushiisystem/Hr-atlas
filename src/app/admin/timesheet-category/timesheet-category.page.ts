@@ -66,29 +66,6 @@ export class TimesheetCategoryPage implements OnInit {
     });
   }
 
-  // getAllProjects() {
-  //   this.timeSheetSer.getAllProjects(this.pageIndex * 10, 10).subscribe(res => {
-  //     if(res) {
-  //       const data: any[] = res;
-  //       console.log("data : ", data)
-
-  //       this.isDataLoaded = true;
-  //       for(let i = 0; i < data.length; i++) {
-  //         if(!this.AllProject.includes(data[i])) {
-  //           this.AllProject.push(res[i]);
-  //         }
-  //       }
-  //       this.isMoreData = data.length > 9;
-  //       this.infiniteScroll.complete();
-  //       this.isDataLoaded = true;
-  //     }
-  //   }, (error) => {
-  //     this.isMoreData = false;
-  //     this.isDataLoaded = true;
-  //     this.infiniteScroll.complete();
-  //   });
-  // }
-
   loadData(event: any) {
     if(this.isMoreData) {
       this.pageIndex ++;
