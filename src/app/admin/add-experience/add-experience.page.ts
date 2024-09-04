@@ -144,12 +144,17 @@ export class AddExperiencePage implements OnInit {
   getWorkDetail(){
     this.adminServ.getWorkByEmployeeId(this.userId).subscribe(res => {
       if(res){
-        this.workInfoForm.patchValue(res[0]);
-        res[0].workHistory.forEach((history, index) => {
+        if(res.status === 'InActive'){
+          this.workInfoForm.addControl('resignationDate', new FormControl('', Validators.compose([Validators.required])));
+        } else {
+          this.workInfoForm.removeControl("resignationDate");
+        }
+        res.workHistory.forEach((history, index) => {
           this.addWorkHistory();
           ((this.workInfoForm.controls['workHistory'] as FormArray).controls[index] as FormGroup).patchValue(history);
         });
-        this.employeeWorkId = res[0].guid;
+        this.workInfoForm.patchValue(res);
+        this.employeeWorkId = res.guid;
         this.isDataLoaded = true;
       }
     }, (error) => {

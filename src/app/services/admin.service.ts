@@ -44,8 +44,8 @@ export class AdminService {
     updateEmployeeWork(employeeWorkId: string, employeeWorkData: IEmployeeRequest): Observable<IEmployeeWrokResponse>{
         return this.http.put<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/${employeeWorkId}`, employeeWorkData);
     }
-    getWorkByEmployeeId(employeeId: string): Observable<IEmployeeWrokResponse[]>{
-        return this.http.post<IEmployeeWrokResponse[]>(environment.Api + `api/employeeWork/userId`, {userId: employeeId});
+    getWorkByEmployeeId(employeeId: string): Observable<IEmployeeWrokResponse>{
+        return this.http.post<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/userId`, {userId: employeeId});
     }
     deleteEmployeeWork(employeeId: string): Observable<IEmployeeWrokResponse>{
         return this.http.delete<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/${employeeId}`);

@@ -45,8 +45,8 @@ export class ShareService {
   searchEmployee(empData: any): Observable<any>{
     return this.http.post<any>(environment.Api + `api/user/search`, empData);
   }
-  getWorkByEmployeeId(employeeId: string): Observable<IEmployeeWrokResponse[]>{
-    return this.http.post<IEmployeeWrokResponse[]>(environment.Api + `api/employeeWork/userId`, {userId: employeeId});
+  getWorkByEmployeeId(employeeId: string): Observable<IEmployeeWrokResponse>{
+    return this.http.post<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/userId`, {userId: employeeId});
   }
 
   // payroll APIs

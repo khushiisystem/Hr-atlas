@@ -63,7 +63,7 @@ export class ProfilePage implements OnInit {
   getWorkDetails(){
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
       if(res) {
-        this.workDetail = res[0];
+        this.workDetail = res;
         this.workLoaded = true;
       }
     });

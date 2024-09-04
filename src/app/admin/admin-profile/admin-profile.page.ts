@@ -67,7 +67,7 @@ export class AdminProfilePage implements OnInit {
     this.workLoaded = false;
     this.shareServ.getWorkByEmployeeId(this.userId).subscribe(res => {
       if(res) {
-        this.workDetail = res[0];
+        this.workDetail = res;
         this.workLoaded = true;
       }
     }, (error) => {
