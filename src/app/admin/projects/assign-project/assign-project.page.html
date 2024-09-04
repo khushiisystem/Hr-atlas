@@ -16,19 +16,17 @@
 
 <ion-content [fullscreen]="true">
   <form [formGroup]="assignProjectForm" class="ion-padding">
-    <ion-select formControlName="projectName" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
-      <ion-select-option value="apple">Apple</ion-select-option>
-      <ion-select-option value="banana">Banana</ion-select-option>
-      <ion-select-option value="orange">Orange</ion-select-option>
+    <ion-select formControlName="title" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
+      <div *ngFor="let project of projects; index as i">
+        <ion-select-option value="{{project.guid}}">{{project.title}}</ion-select-option>
+      </div>
     </ion-select>    
-    
     <br />
-
     <ion-select formControlName="allEmp" label="Employees List" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
       <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{ emp.lastName }}</ion-select-option>
     </ion-select>
 
-    <ion-row>
+    <!-- <ion-row>
       <ion-col size="6">
         <ion-item detail="false" id="start-date">
           <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
@@ -47,10 +45,10 @@
           <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors"></ion-icon>
         </ion-item>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
   </form>
 
-  <ion-modal trigger="start-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+  <!-- <ion-modal trigger="start-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
     <ng-template>
       <ion-content>
         <ion-datetime presentation="date-time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartDate($any($event))" [max]="today.toISOString()">
@@ -76,7 +74,7 @@
         </ion-datetime>
       </ion-content>
     </ng-template>
-  </ion-modal>
+  </ion-modal> -->
   
   <ion-button mode="md" type="submit" class="submitBtn" [disabled]="assignProjectForm.invalid || isInProgress" (click)="submit()"  color="primary" expand="full" shape="round">Submit</ion-button>
 </ion-content>

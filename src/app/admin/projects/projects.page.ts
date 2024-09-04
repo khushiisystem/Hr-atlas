@@ -8,8 +8,10 @@ import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { ProjectFormPage } from './project-form/project-form.page';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
 import { RoleStateService } from 'src/app/services/roleState.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { ShareService } from 'src/app/services/share.service';
 
-export interface IProject {projectName: string}
+export interface IProject {title: string, guid: string}
 
 @Component({
   selector: 'app-projects',
@@ -25,9 +27,8 @@ export class ProjectsPage implements OnInit {
   AllProject : any[] = [];
   isMoreData: boolean = true;
   pageIndex: number = 0;
-  // isHold: boolean = false;
-
-  // projects: IProject[] = [{projectName:'iMentorly'}, {projectName:'Wokari'}, {projectName:'EdFlik'}, {projectName:'HrAtlas'}];
+  selectedProjectId!: string;
+  selectedIndex!: number;
 
   constructor(
     public router: Router,
@@ -35,12 +36,13 @@ export class ProjectsPage implements OnInit {
     private timeSheetSer: TimeSheetService,
     private roleStateServ: RoleStateService,
     public _fb: FormBuilder,
+    private loader: LoaderService,
+    private shareServ: ShareService,
   ) {}
 
   ngOnInit() {
     this.projectForm = this._fb.group({
-      projectName: [''],
-      // employeeId: [''],
+      title: [''],
     });
     this.getAllProjects();
   }
@@ -83,7 +85,7 @@ export class ProjectsPage implements OnInit {
       component: ProjectFormPage,
       componentProps: {
         action: action,
-        project: event,
+        title: event,
       },
       mode: 'md',
       initialBreakpoint: 0.9
@@ -92,8 +94,42 @@ export class ProjectsPage implements OnInit {
     (await projectModel).onDidDismiss().then(result => {
       console.log("result: ",result)
       if(result.data) {
-        this.AllProject.push(result.data);  
+        // this.AllCategory.push(result.data);  
+        this.pageIndex = 0;
+        this.AllProject = [];
+        this.getAllProjects();
       }
     });
+  }
+  openDeletePopover(projectId: string, index: number) {
+    this.selectedProjectId = projectId;
+    this.selectedIndex = index;
+    // console.log("index: ", index);
+    // console.log("projecrId: ", projectId);
+  }
+  deleteCat() {
+    if (this.selectedProjectId) {
+      this.loader.present('');
+      this.timeSheetSer.deleteProject(this.selectedProjectId).subscribe(
+        (res) => {
+          if(res) {
+            this.AllProject = this.AllProject.filter(project => project._id !== this.selectedProjectId);
+            this.shareServ.presentToast('Project Deleted Successfully', 'top', 'success') 
+            this.loader.dismiss(); 
+            this.AllProject = [];
+            this.pageIndex = 0;
+            this.getAllProjects();   
+          }
+          else{
+            this.shareServ.presentToast("Something weng wrong", 'top', 'danger');
+            this.loader.dismiss();
+          }
+        },
+        (error) => {
+          console.error('Error deleting project:', error);
+          this.loader.dismiss();
+        }
+      );
+    }
   }
 }

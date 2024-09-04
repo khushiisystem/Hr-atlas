@@ -22,69 +22,95 @@
         <div class="ion-padding" mode="ios">
           <ion-datetime presentation="date" [highlightedDates]="highlightedDates">    
           </ion-datetime>
-
           <div class="cal_col">
             <p class="p1"></p><p>not filled</p>
             <p class="p2"></p><p>filled</p>
-
           </div>
         </div>
       <!-- calander end  -->
 
+      <!-- project  -->
       <ion-col size="12">
-        <ion-select formControlName="projectName" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
-          <ion-select-option value="imentorly">iMentorly</ion-select-option>
-          <ion-select-option value="hratlas">hrAtlas</ion-select-option>
-          <ion-select-option value="wokari">Wokrai</ion-select-option>
+        <ion-select formControlName="projectId" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
+          <div *ngFor="let project of projects; index as i">
+            <ion-select-option value="{{project.guid}}">{{project.title}}</ion-select-option>
+          </div>
         </ion-select>
       </ion-col>
-
+      <!-- categories  -->
       <ion-col size="12">
-        <ion-select label="Category" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
-          <ion-select-option value="a">c1</ion-select-option>
-          <ion-select-option value="b">c2</ion-select-option>
-          <ion-select-option value="c">c3</ion-select-option>
-          <ion-select-option value="d">c4</ion-select-option>
-          <ion-select-option value="e">c5</ion-select-option>
+        <ion-select label="Category" formControlName="categoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
+          <div *ngFor="let category of categories; index as i">
+            <ion-select-option value="{{category.guid}}">{{category.category}}</ion-select-option>
+          </div>
         </ion-select>
       </ion-col>
+      <!-- sub-categories  -->
       <ion-col size="12">
-        <ion-select label="Sub-Category" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
-          <ion-select-option value="a">c1</ion-select-option>
-          <ion-select-option value="b">c2</ion-select-option>
-          <ion-select-option value="c">c3</ion-select-option>
-          <ion-select-option value="d">c4</ion-select-option>
-          <ion-select-option value="e">c5</ion-select-option>
+        <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
+          <div *ngFor="let subCategory of subCategories; index as i">
+            <ion-select-option value="{{subCategory.guid}}">{{subCategory.subCategory}}</ion-select-option>            
+          </div>
         </ion-select>
-      </ion-col>
-
-      <ion-col size="12">
-        <ion-item detail="false" id="start-date">
-          <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
-          <ion-input labelPlacement="floating" [value]="getStartDate() |date:'yyyy-MM-dd'" placeholder="End Date" type="date" readonly="true">
-            <div slot="label">Start Date<ion-text color="danger">*</ion-text></div>
-          </ion-input>
-          <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['startDate'].touched && timeSheetForm.controls['startDate'].errors"></ion-icon>
-        </ion-item>
-      </ion-col>
-
-      <ion-col size="12">
-        <ion-item detail="false" id="hours">
-          <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
-          <ion-input labelPlacement="floating" [value]="getHours() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
-            <div slot="label">Hours<ion-text color="danger">*</ion-text></div>
-          </ion-input>
-          <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['hours'].touched && timeSheetForm.controls['hours'].errors"></ion-icon>
-        </ion-item>
       </ion-col>
 
       <!-- <ion-col size="12">
-        <ion-input type="text" mode="md" placeholder="Tag" fill="solid">
-          <div slot="label">Tag</div>
-        </ion-input>
+        <ion-item detail="false" id="start-date">
+          <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
+          <ion-input labelPlacement="floating" [value]="getStartDate() |date:'yyyy-MM-dd'" placeholder="End Date" type="date" readonly="true">
+            <div slot="label">Date<ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['startDate'].touched && timeSheetForm.controls['startDate'].errors"></ion-icon>
+        </ion-item>
       </ion-col> -->
+
+      <ion-col size="6">
+        <ion-item detail="false" id="startTime">
+          <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
+          <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
+            <div slot="label">Start Time<ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <!-- <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['startTime'].touched && timeSheetForm.controls['startTime'].errors"></ion-icon> -->
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="6">
+        <ion-item detail="false" id="endTime">
+          <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
+          <ion-input labelPlacement="floating" [value]="getEndTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
+            <div slot="label">End Time<ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <!-- <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['endTime'].touched && timeSheetForm.controls['endTime'].errors"></ion-icon> -->
+        </ion-item>
+      </ion-col>
+
+        <ion-col size="12" id="startdate">
+          <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date') | date" [errorText]="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors ? 'Start date is required' : ''" [required]="true" class="dateInput">
+            <div slot="label">Data <ion-text color="danger">*</ion-text></div>
+          </ion-input>
+        </ion-col>
+        <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
+          <ng-template>
+            <ion-header>
+              <ion-toolbar>
+                <ion-title>Select Date</ion-title>
+              </ion-toolbar>
+            </ion-header>
+            <ion-content>
+              <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
+                <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
+                <ion-buttons slot="buttons">
+                  <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
+                  <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
+                </ion-buttons>
+              </ion-datetime>
+            </ion-content>
+          </ng-template>
+        </ion-modal>
+
+      <!-- tag  -->
       <ion-col size="12" id="startdate">
-        <ion-input formControlName="title" labelPlacement="floating" color="primary" fill="solid" [value]="" class="dateInput">
+        <ion-input formControlName="tag" labelPlacement="floating" color="primary" fill="solid" [value]="" class="dateInput">
           <div slot="label">Tag/Title</div>
         </ion-input>      
       </ion-col>      
@@ -100,6 +126,7 @@
       </ion-col> -->
     </ion-row>
 
+    <!-- description  -->
     <ion-row>
       <ion-textarea formControlName="description" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
         <div slot="label">Descirption</div>
@@ -112,7 +139,7 @@
     </ion-row>
 
     <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round">Clear</ion-button>
-    <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round">Add</ion-button>        
+    <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round" (click)="submit()">Add</ion-button>        
   </form>
 
   <ion-grid>
@@ -131,15 +158,14 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  
 
   
 
-  <ion-modal trigger="hours" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+  <ion-modal trigger="startTime" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
     <ng-template>
       <ion-content>
-        <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setHours($any($event))" [max]="today.toISOString()">
-          <span slot="title">Hours</span>
+        <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartTime($any($event))" [max]="today.toISOString()">
+          <span slot="title">Start Time</span>
           <ion-buttons slot="buttons">
             <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss()">Cancel</ion-button>
             <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss()">Done</ion-button>
@@ -149,7 +175,20 @@
     </ng-template>
   </ion-modal>
 
-  <ion-modal trigger="start-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+  <ion-modal trigger="endTime" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+    <ng-template>
+      <ion-content>
+        <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setEndTime($any($event))" [max]="today.toISOString()">
+          <span slot="title">End Time</span>
+          <ion-buttons slot="buttons">
+            <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss()">Cancel</ion-button>
+            <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss()">Done</ion-button>
+          </ion-buttons>
+        </ion-datetime>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+  <!-- <ion-modal trigger="start-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
     <ng-template>
       <ion-content>
         <ion-datetime presentation="date" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartDate($any($event))" [max]="today.toISOString()">
@@ -161,7 +200,7 @@
         </ion-datetime>
       </ion-content>
     </ng-template>
-  </ion-modal>
+  </ion-modal> -->
 
   <!-- <ion-modal trigger="end-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
     <ng-template>
@@ -177,30 +216,36 @@
     </ng-template>
   </ion-modal> -->
 
-  <ion-card class="ion-margin">
+
+  <!-- update  -->
+  <ion-card class="ion-margin" *ngFor="let timesheet of timesheetList; index of i">
     <div class="wrapper">
       <div class="ion-activatable rounded-rectangle">
-        <h4>iMentorly</h4>
-        <ion-button size="small"><ion-icon name="create-outline"></ion-icon></ion-button>
+        <h4>{{timesheet.project.title}}</h4>
+        <ion-button size="small" (click)="updateTimesheet(timesheet.guid)"><ion-icon name="create-outline"></ion-icon></ion-button>
      </div>     
       <div class="ion-activatable circle">
       </div>
       <div class="date">
-        <p><span>Activity :</span> <span>time-sheet</span></p>
+        <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
+        <p><span>SubCategory :</span> <span>{{timesheet.timesheetSubCategory.subCategory}}</span></p>
+        <!-- <p><span>Activity :</span> <span>time-sheet</span></p> -->
+        <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MM-yyyy'}}</span></p>
         <p><span>Time :</span> <span>03:00</span></p>
-        <p><span>Tag :</span> <span></span></p>
-        <p><span>OnSite :</span> <span></span></p>                
+        <!-- <p><span>OnSite :</span> <span></span></p> -->
+        <p><span>Tag/ Title : {{timesheet.tag}}</span> <span></span></p>
       </div>
       <div class="ion-activatable para">
-         <p><b>Description: </b>Here's a small text description for the card content. Nothing more, nothing less.</p>
+        <p><b>Description: </b>{{timesheet.description}}</p>
       </div>       
     </div>
   </ion-card>
 
+  <!-- approved  -->
   <ion-card class="ion-margin">
     <div class="wrapper">
       <div class="ion-activatable rounded-rectangle">
-        <h4>iMentorly</h4>
+        <h4>Wokari Demo</h4>
         <ion-button size="small"><ion-icon name="checkbox-outline"></ion-icon></ion-button>
      </div>     
       <div class="ion-activatable circle">

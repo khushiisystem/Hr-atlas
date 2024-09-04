@@ -1,28 +1,32 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonInfiniteScroll, ModalController } from '@ionic/angular';
 import { RoleStateService } from 'src/app/services/roleState.service';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
+import { SubCategoryFormPage } from './sub-category-form/sub-category-form.page';
+import { LoaderService } from 'src/app/services/loader.service';
+import { ShareService } from 'src/app/services/share.service';
 
-export interface ISubCategory {subCategory: string}
+export interface ISubCategory {subCategory: string, guid: string}
 
 @Component({
   selector: 'app-timesheet-sub-category',
   templateUrl: './timesheet-sub-category.page.html',
   styleUrls: ['./timesheet-sub-category.page.scss'],
 })
-export class TimesheetSubCategoryPage implements OnInit {
+export class TimesheetSubCategoryPage {
 
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   isDataLoaded: boolean = false;
   searchString: string = "";
   userRole: string = "";
   subCategoryForm!: FormGroup;
-  // AllProject : any[] = [];
-  AllSubCategories : any[] = [];
+  AllSubCategory : any[] = [];
   isMoreData: boolean = true;
   pageIndex: number = 0;
+  selectedSubCatId!: string;
+  selectedIndex!: number;
 
   constructor(
     public router: Router,
@@ -30,12 +34,15 @@ export class TimesheetSubCategoryPage implements OnInit {
     private timeSheetSer: TimeSheetService,
     private roleStateServ: RoleStateService,
     public _fb: FormBuilder,
+    private loader: LoaderService,
+    private shareServ: ShareService,
   ) { }
 
   ngOnInit() {
     this.subCategoryForm = this._fb.group({
-      subCategory: ['']
+      subCategory:['']
     });
+
     this.getAllSubCategories();
   }
 
@@ -46,17 +53,17 @@ export class TimesheetSubCategoryPage implements OnInit {
     this.timeSheetSer.getAllSubCategories(this.pageIndex * 10, 10).subscribe(res => {
       if(res) {
         const data: any[] = res;
-        console.log("data: ", data)
-
+        console.log("sub-categories : ", data);
+        
         this.isDataLoaded = true;
         for(let i = 0; i < data.length; i++) {
-          if(!this.AllSubCategories.includes(data[i])) {
-            this.AllSubCategories.push([res[i]]);
+          if(!this.AllSubCategory.includes(data[i])) {
+            this.AllSubCategory.push(res[i]);
           }
         }
         this.isMoreData = data.length > 9;
         this.infiniteScroll.complete();
-        this.isDataLoaded = true;
+        this.isDataLoaded  = true;
       }
     }, (error) => {
       this.isMoreData = false;
@@ -64,7 +71,6 @@ export class TimesheetSubCategoryPage implements OnInit {
       this.infiniteScroll.complete();
     });
   }
-
   loadData(event: any) {
     if(this.isMoreData) {
       this.pageIndex ++;
@@ -72,46 +78,62 @@ export class TimesheetSubCategoryPage implements OnInit {
     }
   }
 
-  // getAllProjects() {
-  //   this.timeSheetSer.getAllProjects(this.pageIndex * 10, 10).subscribe(res => {
-  //     if(res) {
-  //       const data: any[] = res;
-  //       console.log("data : ", data)
 
-  //       this.isDataLoaded = true;
-  //       for(let i = 0; i < data.length; i++) {
-  //         if(!this.AllProject.includes(data[i])) {
-  //           this.AllProject.push(res[i]);
-  //         }
-  //       }
-  //       this.isMoreData = data.length > 9;
-  //       this.infiniteScroll.complete();
-  //       this.isDataLoaded = true;
-  //     }
-  //   }, (error) => {
-  //     this.isMoreData = false;
-  //     this.isDataLoaded = true;
-  //     this.infiniteScroll.complete();
-  //   });
-  // }
-  
-  // async projectMoal(event: ISubCategory | null, action: "add" | "update"){
-  //   const projectModel = this.modelCtrl.create({
-  //     component: ProjectFormPage,
-  //     componentProps: {
-  //       action: action,
-  //       project: event,
-  //     },
-  //     mode: 'md',
-  //     initialBreakpoint: 0.9
-  //   });
-  //   (await projectModel).present();
-  //   (await projectModel).onDidDismiss().then(result => {
-  //     console.log("result: ",result)
-  //     if(result.data) {
-  //       this.AllProject.push(result.data);  
-  //     }
-  //   });
-  // }
+  async subCategoryMoal(event: ISubCategory | null, action: "add" | "update"){
+    const projectModel = this.modelCtrl.create({
+      component: SubCategoryFormPage,
+      componentProps: {
+        action: action,
+        subCategory: event,
+      },
+      mode: 'md',
+      initialBreakpoint: 0.9
+    });
+    (await projectModel).present();
+    (await projectModel).onDidDismiss().then(result => {
+      console.log("result: ",result)
+      if(result.data) {
+        // this.AllSubCategory.push(result.data);  
+        this.pageIndex = 0;
+        this.AllSubCategory = [];
+        this.getAllSubCategories();
+      }
+    });
+  }
+
+
+
+  openDeletePopover(projectId: string, index: number) {
+    this.selectedSubCatId = projectId;
+    this.selectedIndex = index;
+    // console.log("index: ", index);
+    // console.log("projecrId: ", projectId);
+  }
+
+  deleteCat() {
+    if (this.selectedSubCatId) {
+      this.loader.present('');
+      this.timeSheetSer.deleteSubCategory(this.selectedSubCatId).subscribe(
+        (res) => {
+          if(res) {
+            this.AllSubCategory = this.AllSubCategory.filter(project => project._id !== this.selectedSubCatId);
+            this.shareServ.presentToast('Sub Category Deleted Successfully', 'top', 'success');            
+            this.loader.dismiss(); 
+            this.AllSubCategory = [];
+            this.pageIndex = 0;
+            this.getAllSubCategories();   
+          }
+          else{
+            this.shareServ.presentToast("Something weng wrong", 'top', 'danger');
+            this.loader.dismiss();
+          }
+        },
+        (error) => {
+          console.error('Error deleting project:', error);
+          this.loader.dismiss();
+        }
+      );
+    }
+  }
 
 }

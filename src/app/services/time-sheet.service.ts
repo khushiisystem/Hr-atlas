@@ -14,23 +14,79 @@ export class TimeSheetService {
   
   // project
   getAllProjects(pageIndex: number, pageSize: number): Observable<any> {
-    return this._http.get(environment.Api + `api/projects?skip=${pageIndex}&limit=${pageSize}`);
+    return this._http.get<any[]>(environment.Api + `api/projects?skip=${pageIndex}&limit=${pageSize}`);
   }
 
-  createProject(eventDate: any): Observable<any> {
-    return this._http.post<any>(environment.Api + `api/projects`, eventDate);
+  getProjectById(id: string): Observable<any> {
+    return this._http.get<any>(environment.Api + `api/projects/${id}`);
   }
 
+  addProject(data: any): Observable<any> {
+    return this._http.post<any>(environment.Api + 'api/projects', data);
+  }
 
+  updateProject(id: string, data:any): Observable<any> {
+    return this._http.put<any>(environment.Api + `api/projects/${id}`, data);
+  }
+
+  deleteProject(id: string): Observable<any> {
+    return this._http.delete<any>(environment.Api + `api/projects/${id}`);
+  }
+ 
   // category
   getAllCategories(pageIndex: number, pageSize: number): Observable<any> {
-    return this._http.get(environment.Api + `api/timesheet-category?skip=${pageIndex}&limit=${pageSize}`);
+    return this._http.get<any>(environment.Api + `api/timesheet-category?skip=${pageIndex}&limit=${pageSize}`);
+  }
+  getCategoryById(id: string): Observable<any> {
+    return this._http.get<any>(environment.Api + `api/timesheet-category/${id}`);
+  }
+  addCategory(data: any): Observable<any> {
+    return this._http.post<any>(environment.Api + `api/timesheet-category`, data);
   }
 
+  updateCategory(id: string, data: any): Observable<any> {
+    return this._http.put<any>(environment.Api + `api/timesheet-category/${id}`, data);
+  }
+
+  deleteCategory(id: string): Observable<any> {
+    return this._http.delete<any>(environment.Api + `api/timesheet-category/${id}`);
+  }
 
   // sub-category
   getAllSubCategories(pageIndex: number, pagesize: number): Observable<any> {
-    return this._http.get(environment.Api + `api/timesheet-sub-category?skip=${pageIndex}&limit=${pagesize}`);    
+    return this._http.get<any>(environment.Api + `api/timesheet-sub-category?skip=${pageIndex}&limit=${pagesize}`);    
   }
 
+  getSubCategoryById(id: string): Observable<any> {
+    return this._http.get<any> (environment.Api + `api/timesheet-sub-category/${id}`);
+  }
+
+  addSubCateory(data: any): Observable<any> {
+    return this._http.post<any>(environment.Api + `api/timesheet-sub-category`, data);
+  }
+
+  updateSubCategory(id: string, data: any): Observable<any> {
+    return this._http.put<any>(environment.Api + `api/timesheet-sub-category/${id}`, data);
+  }
+
+  deleteSubCategory(id: string): Observable<any> {
+    return this._http.delete<any>(environment.Api + `api/timesheet-sub-category/${id}`);
+  }
+
+  // timesheet 
+  addTimesheet(data: any): Observable<any> {
+    return this._http.post<any>(environment.Api + `api/timesheet`, data);
+  }
+
+  getTimesheetList(pageIndex: number, pagesize: number): Observable<any> {
+    return this._http.get<any>(environment.Api + `api/timesheet?skip=${pageIndex}&limit=${pagesize}`);
+  }
+
+  updateTimesheet(id: string, data: any): Observable<any> {
+    return this._http.put<any>(environment.Api + `api/timesheet/${id}`, data);
+  }
+
+  deleteTimesheet(id: string): Observable<any> {
+    return this._http.delete<any>(environment.Api + `api/timesheet/${id}`);
+  }
 }

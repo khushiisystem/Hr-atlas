@@ -7,6 +7,7 @@ import { ModalController } from '@ionic/angular';
 import { AdminService } from 'src/app/services/admin.service';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
 import { ShareService } from 'src/app/services/share.service';
+import { LoaderService } from 'src/app/services/loader.service';
 
 @Component({
   selector: 'app-project-form',
@@ -21,7 +22,8 @@ export class ProjectFormPage implements OnInit {
   projectsForm!: FormGroup;
   pageIndex:number = 0;
   allEmployeeList: IEmployeeResponse[] = [];
-  project!: IProject | any;
+  title!: IProject | any;
+  projectId!: string;
 
   constructor(
     private _fb: FormBuilder,
@@ -30,15 +32,20 @@ export class ProjectFormPage implements OnInit {
     private adminServ: AdminService,
     private timeSheetSer: TimeSheetService,
     private shareServ: ShareService,
+    private loader: LoaderService,
   ) { }
 
   ngOnInit() {
     this.projectsForm = this._fb.group({
-      projectName: ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(50)])],
+      title: [''],
     });
     
-    if(this.project) {
-      this.projectsForm.patchValue(this.project);
+    if(this.action === 'update' && this.title) {
+      const data = this.title as IProject;
+      this.projectsForm.patchValue(data);
+      this.projectId = data.guid;
+
+      console.log("projectId", this.projectId);
     }
     this.getEmployeeList();
   }
@@ -63,37 +70,49 @@ export class ProjectFormPage implements OnInit {
   }
 
   createProject() {
-    console.log("res");
-    this.timeSheetSer.createProject(this.projectsForm.value).subscribe(res => {
+    this.timeSheetSer.addProject(this.projectsForm.value).subscribe(res => {
       if(res) {
-        console.log("res: ", res);
         this.shareServ.presentToast("Project Created Successfully", 'top', 'success');
-        this.modelCtrl.dismiss(res, 'confirm');
+        this.loader.dismiss();
+        this.modelCtrl.dismiss(res);
       }
     }, (error) => {
-      this.shareServ.presentToast(error.error.message, 'top', 'danger');      
-    });
+      this.shareServ.presentToast("Something went wrong", 'top', 'danger');
+      this.isInProgress = false;
+      this.loader.dismiss();
+    })
   }
   
-  updateProject() {}
+  updateProject() {
+    this.timeSheetSer.updateProject(this.projectId, this.projectsForm.value).subscribe(res => {
+      if(res) {
+        this.shareServ.presentToast("Project Updated Successfully", 'top', 'success');
+        this.loader.dismiss();
+        this.modelCtrl.dismiss(res);
+      }
+    }, (error) => {
+      this.shareServ.presentToast("Something went wrong", 'top', 'danger');
+      this.isInProgress = false;
+      this.loader.dismiss();
+    })
+  }
 
   submit() {
     console.log("first : ", this.projectsForm.value);
-    this.modelCtrl.dismiss(this.projectsForm.value);
+    // this.modelCtrl.dismiss(this.projectsForm.value);
 
     if(this.projectsForm.invalid) {
       return;
     }
     else {
       this.isInProgress = true;
-      console.log("second", this.projectsForm.value);
       if(this.action === 'add') {
         this.createProject();
+        console.log("second", this.projectsForm.value);
       }
       else {
         this.updateProject();
       }
     }
   }
-
 }

@@ -31,6 +31,7 @@ import { TimeSheetPage } from '../employee/time-sheet/time-sheet.page';
 import { ProjectDetailsPage } from '../admin/projects/project-details/project-details.page';
 import { TimesheetCategoryPage } from '../admin/timesheet-category/timesheet-category.page';
 import { TimesheetSubCategoryPage } from '../admin/timesheet-sub-category/timesheet-sub-category.page';
+import { TimesheetFormPage } from '../employee/time-sheet/timesheet-form/timesheet-form.page';
 
 const routes: Routes = [
   {
@@ -71,6 +72,12 @@ const routes: Routes = [
         path: 'time-sheet',
         title: "Time Sheet",
         component: TimeSheetPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'timesheet-form',
+        title: "Timesheet Form",
+        component: TimesheetFormPage,
         canActivate: [AuthGuard]
       },
       {
