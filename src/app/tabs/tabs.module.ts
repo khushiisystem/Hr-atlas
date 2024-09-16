@@ -43,6 +43,18 @@ import { ReadMorePageModule } from "../share/components/read-more/read-more.modu
 import { AdvancePayCardPageModule } from "../share/components/advance-pay-card/advance-pay-card.module";
 import { ProgressBarPageModule } from "../share/components/progress-bar/progress-bar.module";
 import { AttendanceCardPage } from "../share/components/attendance-card/attendance-card.page";
+import { ProjectFormPage } from "../admin/projects/project-form/project-form.page";
+import { ProjectsPage } from "../admin/projects/projects.page";
+import { AssignProjectPage } from "../admin/projects/assign-project/assign-project.page";
+import { ProTimelinePage } from "../employee/pro-timeline/pro-timeline.page";
+import { TimeSheetPage } from "../employee/time-sheet/time-sheet.page";
+import { ProjectDetailsPage } from "../admin/projects/project-details/project-details.page";
+import { TimesheetCategoryPage } from "../admin/timesheet-category/timesheet-category.page";
+import { TimesheetSubCategoryPage } from "../admin/timesheet-sub-category/timesheet-sub-category.page";
+import { SubCategoryFormPage } from "../admin/timesheet-sub-category/sub-category-form/sub-category-form.page";
+import { CategoryFormPage } from "../admin/timesheet-category/category-form/category-form.page";
+import { TimesheetFormPage } from "../employee/time-sheet/timesheet-form/timesheet-form.page";
+import { AdminTimesheetsPage } from "../admin/admin-timesheets/admin-timesheets.page";
 
 @NgModule({
   declarations: [
@@ -70,6 +82,18 @@ import { AttendanceCardPage } from "../share/components/attendance-card/attendan
     EmployeePayslipPage,
     AttendanceStatusPage,
     SideNavPage,
+    ProjectFormPage,
+    ProjectsPage,
+    AssignProjectPage,
+    ProTimelinePage,
+    TimeSheetPage,
+    ProjectDetailsPage,
+    TimesheetCategoryPage,
+    TimesheetSubCategoryPage,
+    SubCategoryFormPage,
+    CategoryFormPage,
+    TimesheetFormPage,
+    AdminTimesheetsPage,
   ],
   imports: [
     ReadMorePageModule,

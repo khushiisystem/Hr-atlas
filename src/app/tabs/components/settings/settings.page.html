@@ -28,6 +28,18 @@
             <ion-icon size="small" name="calendar" aria-hidden="true" slot="start" aria-label="Work week"></ion-icon>
             <ion-label>Assign Work Week</ion-label>
           </ion-item>
+          <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="addProjects()">
+            <ion-icon size="small" name="folder-open" aria-hidden="true" slot="start" aria-label="Work week"></ion-icon>
+            <ion-label>Projects</ion-label>
+          </ion-item>
+          <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="addCategory()">
+            <ion-icon size="small" name="folder-open" aria-hidden="true" slot="start" aria-label="Work week"></ion-icon>
+            <ion-label>Category</ion-label>
+          </ion-item>
+          <ion-item [detail]="true" type="button" [button]="true" color="primary" (click)="addSubCategory()">
+            <ion-icon size="small" name="folder-open" aria-hidden="true" slot="start" aria-label="Work week"></ion-icon>
+            <ion-label>SubCategory</ion-label>
+          </ion-item>
         </ion-item-group>
         <ion-item-group>
           <ion-item-divider>

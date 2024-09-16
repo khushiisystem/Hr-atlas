@@ -263,7 +263,52 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
-  
+
+        <!-- <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" (click)="viewTimeline()">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="wallet-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Project Timeline</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col> -->
+        <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" (click)="viewTimeSheet()">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="wallet-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Time Sheet</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <!-- <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" (click)="viewProjectDetails()">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="wallet-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Project Details</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col> -->
+        <ion-col size="4" sizeSm="3">
+          <ion-card mode="md" type="button" class="ion-activatable" (click)="viewAssignProject()">
+            <ion-ripple-effect class="customRipple"></ion-ripple-effect>
+            <ion-card-content>
+              <div class="icon_card">
+                <ion-icon name="wallet-sharp" aria-hidden="true"></ion-icon>
+              </div>
+              <ion-text>Assign-Project</ion-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
         <ion-col size="4" sizeSm="3" *ngIf="userRole === 'Admin'">
           <ion-card mode="md" type="button" class="ion-activatable" [routerLink]="['/tabs/settings']">
             <ion-ripple-effect class="customRipple"></ion-ripple-effect>

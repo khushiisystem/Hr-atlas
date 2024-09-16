@@ -1,0 +1,58 @@
+<ion-header [translucent]="true" mode="md">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+        <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Project Details</ion-title>
+    <ion-thumbnail slot="end" class="logo_img ion-margin-end">
+      <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
+    </ion-thumbnail>
+    <!-- <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar> -->    
+    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>         
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" mode="md">
+  <form class="ion-padding">
+
+    <ion-select label="Select Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
+      <ion-select-option value="imentorly">iMentorly</ion-select-option>
+      <ion-select-option value="hratlas">hrAtlas</ion-select-option>
+      <ion-select-option value="wokari">Wokrai</ion-select-option>
+    </ion-select>       
+    <ion-select label="Select Employee" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="true">
+      <ion-select-option value="c1">C1</ion-select-option>
+      <ion-select-option value="c2">C2</ion-select-option>
+      <ion-select-option value="c3">C3</ion-select-option>
+      <ion-select-option value="c4">C4</ion-select-option>
+      <ion-select-option value="c5">C5</ion-select-option>
+    </ion-select>
+
+
+
+    
+
+    <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round">cancel</ion-button>
+    <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round">Save</ion-button>    
+  </form>
+
+  <ion-card class="ion-margin">
+    <div class="wrapper">
+      <div class="ion-activatable rounded-rectangle">
+         <h4>Abhi</h4>
+         <h4>Task Title</h4>
+         <p><span>02/07/2024 </span> | <span> 2 Hour's</span></p>
+         <p>
+          <b>Description : </b>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat numquam consequuntur sapiente itaque omnis eos quod odio accusamus deserunt iure?
+         </p>
+      </div>    
+      <div class="ion-activatable">
+         <!-- <p><b>Description: </b>Here's a small text description for the card content. Nothing more, nothing less.</p> -->
+      </div>
+    </div>
+  </ion-card>
+
+</ion-content>

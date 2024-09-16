@@ -43,6 +43,7 @@ export class HollydaySetupPage implements OnInit {
       const data = this.hollyday as IHollydayResponse
       this.holdayForm.patchValue(data);
       this.eventId = data.guid;
+      console.log("event Id",this.eventId)
     }
   }
 
@@ -81,7 +82,7 @@ export class HollydaySetupPage implements OnInit {
         this.modalCtrl.dismiss(res, 'confirm');
       }
     }, (error) => {
-      this.shareServ.presentToast(error.error.message, 'top', 'danger');
+      this.shareServ.presentToast("Something went wrong", 'top', 'danger');
       this.isInProcess = false;
       this.loader.dismiss();
     });

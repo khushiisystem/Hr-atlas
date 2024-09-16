@@ -24,6 +24,15 @@ import { LeavesPage } from '../share/leaves/leaves.page';
 import { SalaryPage } from '../admin/salary/salary.page';
 import { EmployeePayrollPage } from '../admin/payroll-setup/employee-payroll/employee-payroll.page';
 import { AttendanceStatusPage } from '../admin/attendance-status/attendance-status.page';
+import { ProjectsPage } from '../admin/projects/projects.page';
+import { AssignProjectPage } from '../admin/projects/assign-project/assign-project.page';
+import { ProTimelinePage } from '../employee/pro-timeline/pro-timeline.page';
+import { TimeSheetPage } from '../employee/time-sheet/time-sheet.page';
+import { ProjectDetailsPage } from '../admin/projects/project-details/project-details.page';
+import { TimesheetCategoryPage } from '../admin/timesheet-category/timesheet-category.page';
+import { TimesheetSubCategoryPage } from '../admin/timesheet-sub-category/timesheet-sub-category.page';
+import { TimesheetFormPage } from '../employee/time-sheet/timesheet-form/timesheet-form.page';
+import { AdminTimesheetsPage } from '../admin/admin-timesheets/admin-timesheets.page';
 
 const routes: Routes = [
   {
@@ -42,6 +51,69 @@ const routes: Routes = [
         component: DirectoryPage,
         canActivate: [AuthGuard]
       },
+      {
+        path: 'projects',
+        title: "Projects",
+        component: ProjectsPage,
+        canActivate: [AuthGuard]
+      },
+      // {
+      //   path: 'project-timeline',
+      //   title: "Projects Timeline",
+      //   component: ProTimelinePage,
+      //   canActivate: [AuthGuard]
+      // },
+      {
+        path: 'assign-project',
+        title: "Assign Project",
+        component: AssignProjectPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'time-sheet/:id',
+        title: "Time Sheet",
+        component: TimeSheetPage,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'time-sheet',
+        title: "Time Sheet",
+        component: TimeSheetPage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"}
+      },
+      {
+        path: 'admin-timesheet',
+        title: "Admin Timesheet",
+        component: AdminTimesheetsPage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"}
+      },
+
+      {
+        path: 'timesheet-form',
+        title: "Timesheet Form",
+        component: TimesheetFormPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'category',
+        title: 'TimeSheet Category',
+        component: TimesheetCategoryPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'sub-category',
+        title: 'TimeSheet Sub-Category',
+        component: TimesheetSubCategoryPage,
+        canActivate: [AuthGuard]
+      },
+      // {
+      //   path: 'project-details',
+      //   title: "Project Details",
+      //   component: ProjectDetailsPage,
+      //   canActivate: [AuthGuard]
+      // },
       {
         path: 'attendance/:id',
         title: "Attendance",
