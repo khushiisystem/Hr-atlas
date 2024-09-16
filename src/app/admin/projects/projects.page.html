@@ -19,7 +19,7 @@
       <div class="optbar">
         <ion-item detail="false" lines="none" mode="md">
           <ion-icon name="search" aria-hidden="true" size="small" slot="start" class="startIcon"></ion-icon>
-          <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+          <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [formControl]="searchTitle"></ion-input>
         </ion-item>
         <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="filterPop" *ngIf="userRole === 'Admin'" class="ion-margin-start ion-no-padding">
           <ion-icon name="funnel" aria-hidden="true" aria-label="Option"></ion-icon>
@@ -35,16 +35,16 @@
       </div>
   
       <ion-item-sliding #editSlide>
-        <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let category of AllProject; index as i">
+        <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let project of AllProject; index as i">
           <div class="employee_data">
-            <ion-label>{{ category.title }}</ion-label>
+            <ion-label>{{ project.title }}</ion-label>
           </div>
           <!-- update -->
             <!-- <ion-button size="small" color="danger" color="primary" (click)="projectMoal(project, 'update')"><ion-icon name="create-outline"></ion-icon></ion-button>             -->
-            <ion-button size="small" color="danger" color="primary" (click)="projectMoal(category, 'update')"><ion-icon name="create-outline"></ion-icon></ion-button>            
+            <ion-button size="small" color="danger" color="primary" (click)="projectMoal(project, 'update')"><ion-icon name="create-outline"></ion-icon></ion-button>            
 
           <!-- delete -->
-            <ion-button id="click-trigger-{{i}}" size="small" color="danger" (click)="openDeletePopover(category.guid, i)">
+            <ion-button id="click-trigger-{{i}}" size="small" color="danger" (click)="openDeletePopover(project.guid, i)">
               <ion-icon name="trash-outline"></ion-icon>
             </ion-button>  
             <ion-popover trigger="click-trigger-{{i}}" [backdropDismiss]="true" [dismissOnSelect]="true" triggerAction="click">

@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/projects']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
         <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -16,65 +16,85 @@
 
 <ion-content [fullscreen]="true">
   <form [formGroup]="assignProjectForm" class="ion-padding">
-    <ion-select formControlName="title" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
-      <div *ngFor="let project of projects; index as i">
-        <ion-select-option value="{{project.guid}}">{{project.title}}</ion-select-option>
-      </div>
-    </ion-select>    
-    <br />
-    <ion-select formControlName="allEmp" label="Employees List" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
-      <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{ emp.lastName }}</ion-select-option>
-    </ion-select>
+    
+    
+    <ion-row>
+      <ion-col size="12">
+        <ion-select formControlName="projectId" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
+          <div *ngFor="let project of projects; index as i">
+            <ion-select-option value="{{project.guid}}">{{project.title}}</ion-select-option>
+          </div>
+        </ion-select>          
+      </ion-col>
+      <ion-col size="12">
+        <ion-select formControlName="userId" label="Employees List" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
+          <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{ emp.lastName }}</ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col size="6" id="startdate">
+        <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('startDate') | date" [errorText]="assignProjectForm.controls['startDate'].touched && assignProjectForm.controls['startDate'].errors ? 'Start date is required' : ''" [required]="true" class="dateInput">
+          <div slot="label">Start Data <ion-text color="danger">*</ion-text></div>
+        </ion-input>
+      </ion-col>
+      <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Select Date</ion-title>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content>
+            <ion-datetime presentation="date" formControlName="startDate" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
+              <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
+              <ion-buttons slot="buttons">
+                <ion-button mode="ios" color="danger" (click)="datetime.cancel(); startDateModal.dismiss();">Cancel</ion-button>
+                <ion-button mode="ios" color="primary" (click)="datetime.confirm(); startDateModal.dismiss()">Done</ion-button>
+              </ion-buttons>
+            </ion-datetime>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
 
-    <!-- <ion-row>
-      <ion-col size="6">
-        <ion-item detail="false" id="start-date">
-          <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
-          <ion-input labelPlacement="floating" [value]="getStartDate() |date:'yyyy-MM-dd'" placeholder="End Date" type="date" readonly="true">
-            <div slot="label">Start Date</div>
-          </ion-input>
-          <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="assignProjectForm.controls['startDate'].touched && assignProjectForm.controls['startDate'].errors"></ion-icon>
-        </ion-item>
+      <ion-col size="6" id="endDate">
+        <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getEndDate('endDate') | date" [errorText]="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors ? 'End date is required' : ''" [required]="true" class="dateInput">
+          <div slot="label">End Data <ion-text color="danger">*</ion-text></div>
+        </ion-input>
       </ion-col>
-      <ion-col size="6">
-        <ion-item detail="false" id="end-date">
-          <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
-          <ion-input labelPlacement="floating" [value]="getEndDate() |date:'yyyy-MM-dd'" placeholder="End Date" type="date" readonly="true">
-            <div slot="label">End Date</div>
-          </ion-input>
-          <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors"></ion-icon>
-        </ion-item>
-      </ion-col>
-    </ion-row> -->
+      <ion-modal trigger="endDate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #endDateModal>
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Select Date</ion-title>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content>
+            <ion-datetime presentation="date" formControlName="endDate" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectEndDate($any($event))">
+              <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
+              <ion-buttons slot="buttons">
+                <ion-button mode="ios" color="danger" (click)="datetime.cancel();endDateModal.dismiss();">Cancel</ion-button>
+                <ion-button mode="ios" color="primary" (click)="datetime.confirm();endDateModal.dismiss()">Done</ion-button>
+              </ion-buttons>
+            </ion-datetime>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </ion-row>
   </form>
 
-  <!-- <ion-modal trigger="start-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
-    <ng-template>
-      <ion-content>
-        <ion-datetime presentation="date-time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartDate($any($event))" [max]="today.toISOString()">
-          <span slot="title">Date of Birth</span>
-          <ion-buttons slot="buttons">
-            <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss()">Cancel</ion-button>
-            <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss()">Done</ion-button>
-          </ion-buttons>
-        </ion-datetime>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
+  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="assignProjectForm.invalid || isInProgress" (click)="submit()"  color="primary" expand="full" shape="round">{{updateForm ? 'Update' : 'Submit'}}</ion-button>
 
-  <ion-modal trigger="end-date" #dobModal [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
-    <ng-template>
-      <ion-content>
-        <ion-datetime presentation="date-time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setEndDate($any($event))" [max]="today.toISOString()">
-          <span slot="title">Date of Birth</span>
-          <ion-buttons slot="buttons">
-            <ion-button mode="md" color="danger" (click)="datetime.cancel(); dobModal.dismiss()">Cancel</ion-button>
-            <ion-button mode="md" color="primary" (click)="datetime.confirm(); dobModal.dismiss()">Done</ion-button>
-          </ion-buttons>
-        </ion-datetime>
-      </ion-content>
-    </ng-template>
-  </ion-modal> -->
-  
-  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="assignProjectForm.invalid || isInProgress" (click)="submit()"  color="primary" expand="full" shape="round">Submit</ion-button>
+  <ion-card class="ion-margin" *ngFor="let assProject of assProjects; index as i">
+    <div class="wrapper">
+      <div class="ion-activatable rounded-rectangle">
+        <h5>{{assProject.project.title}}</h5>
+        <!-- update  -->
+        <ion-button size="small" (click)="update(assProject)"><ion-icon name="create-outline"></ion-icon></ion-button>
+     </div> 
+      <div class="date">
+        <p><span>Employeee : {{assProject.user.firstName}} {{assProject.user.lastName}}</span> <span></span></p>
+        <p><span>Start Date :</span> <span>{{assProject.startDate | date: 'dd-MMMM-yyyy'}}</span></p>
+         <p><span>End Date :</span> <span>{{assProject.endDate| date: 'dd-MMMM-yyyy'}}</span></p>
+      </div>       
+    </div>
+  </ion-card>
 </ion-content>

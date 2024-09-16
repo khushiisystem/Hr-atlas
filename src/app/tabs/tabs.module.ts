@@ -53,6 +53,7 @@ import { TimesheetSubCategoryPage } from "../admin/timesheet-sub-category/timesh
 import { SubCategoryFormPage } from "../admin/timesheet-sub-category/sub-category-form/sub-category-form.page";
 import { CategoryFormPage } from "../admin/timesheet-category/category-form/category-form.page";
 import { TimesheetFormPage } from "../employee/time-sheet/timesheet-form/timesheet-form.page";
+import { AdminTimesheetsPage } from "../admin/admin-timesheets/admin-timesheets.page";
 
 @NgModule({
   declarations: [
@@ -90,7 +91,8 @@ import { TimesheetFormPage } from "../employee/time-sheet/timesheet-form/timeshe
     TimesheetSubCategoryPage,
     SubCategoryFormPage,
     CategoryFormPage,
-    TimesheetFormPage
+    TimesheetFormPage,
+    AdminTimesheetsPage,
   ],
   imports: [
     ReadMorePageModule,

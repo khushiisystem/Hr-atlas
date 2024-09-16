@@ -32,6 +32,7 @@ import { ProjectDetailsPage } from '../admin/projects/project-details/project-de
 import { TimesheetCategoryPage } from '../admin/timesheet-category/timesheet-category.page';
 import { TimesheetSubCategoryPage } from '../admin/timesheet-sub-category/timesheet-sub-category.page';
 import { TimesheetFormPage } from '../employee/time-sheet/timesheet-form/timesheet-form.page';
+import { AdminTimesheetsPage } from '../admin/admin-timesheets/admin-timesheets.page';
 
 const routes: Routes = [
   {
@@ -56,12 +57,12 @@ const routes: Routes = [
         component: ProjectsPage,
         canActivate: [AuthGuard]
       },
-      {
-        path: 'project-timeline',
-        title: "Projects Timeline",
-        component: ProTimelinePage,
-        canActivate: [AuthGuard]
-      },
+      // {
+      //   path: 'project-timeline',
+      //   title: "Projects Timeline",
+      //   component: ProTimelinePage,
+      //   canActivate: [AuthGuard]
+      // },
       {
         path: 'assign-project',
         title: "Assign Project",
@@ -69,11 +70,26 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'time-sheet/:id',
+        title: "Time Sheet",
+        component: TimeSheetPage,
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'time-sheet',
         title: "Time Sheet",
         component: TimeSheetPage,
-        canActivate: [AuthGuard]
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"}
       },
+      {
+        path: 'admin-timesheet',
+        title: "Admin Timesheet",
+        component: AdminTimesheetsPage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: "Admin"}
+      },
+
       {
         path: 'timesheet-form',
         title: "Timesheet Form",
@@ -92,12 +108,12 @@ const routes: Routes = [
         component: TimesheetSubCategoryPage,
         canActivate: [AuthGuard]
       },
-      {
-        path: 'project-details',
-        title: "Project Details",
-        component: ProjectDetailsPage,
-        canActivate: [AuthGuard]
-      },
+      // {
+      //   path: 'project-details',
+      //   title: "Project Details",
+      //   component: ProjectDetailsPage,
+      //   canActivate: [AuthGuard]
+      // },
       {
         path: 'attendance/:id',
         title: "Attendance",

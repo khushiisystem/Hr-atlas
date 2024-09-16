@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonInfiniteScroll, ModalController } from '@ionic/angular';
 import { RoleStateService } from 'src/app/services/roleState.service';
@@ -7,6 +7,7 @@ import { TimeSheetService } from 'src/app/services/time-sheet.service';
 import { CategoryFormPage } from './category-form/category-form.page';
 import { ShareService } from 'src/app/services/share.service';
 import { LoaderService } from 'src/app/services/loader.service';
+import { debounceTime } from 'rxjs';
 
 export interface ICategory {category: string, guid: string}
 
@@ -29,6 +30,7 @@ export class TimesheetCategoryPage implements OnInit {
   selectedIndex!: number;
   action: string = 'add';
   categoryId!: string;
+  searchCategory: FormControl = new FormControl('');
   
   constructor(
     public router: Router,
@@ -41,28 +43,49 @@ export class TimesheetCategoryPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.categoryForm = this._fb.group({
-      category: ['']
-    });
     this.getAllCategories();
+
+    this.searchCategory.valueChanges.pipe(debounceTime(1000)).subscribe(res => {
+      this.isDataLoaded = false;
+      this.AllCategory = [];
+      if (res && res.trim().length > 2) {
+        this.onSearch(res);
+      } else {
+        this.getAllCategories();
+      }
+    })
   }
 
-  onSearch() {
+  onSearch(value: string) {
+    this.isMoreData = false;
+    this.timeSheetSer.searchCategory(value).subscribe(res => {
+      if(res && res.data) {
+        console.log("res: ", res.data);
+        res.data.forEach((category: any) => {
+          if (!this.AllCategory.includes(category)) {
+            this.AllCategory.push(category);
+          }
+        });
+        this.isDataLoaded = true;
+        this.AllCategory = [];
+      }
+    }, (error) => {
+      this.isMoreData = false;
+      this.isDataLoaded = true;
+      this.AllCategory = [];
+    });
   }
 
+  
   getAllCategories() {
     this.timeSheetSer.getAllCategories(this.pageIndex * 10, 10).subscribe(res => {
       if(res) {
-        const data: any[] = res;
-        console.log("data: ", data);
-
-        this.isDataLoaded = true;
-        for(let i = 0; i < data.length; i++) {
-          if(!this.AllCategory.includes(data[i])) {
+        for(let i = 0; i < res.length; i++) {
+          if(!this.AllCategory.includes(res[i])) {
             this.AllCategory.push(res[i]);
           }
         }
-        this.isMoreData = data.length> 9;
+        this.isMoreData = res.length> 9;
         this.infiniteScroll.complete();
         this.isDataLoaded = true
       }

@@ -669,27 +669,28 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
       this.router.navigate(['/tabs/payroll-setup']);
     }
   }
-  viewTimeline(){
-    if(this.userRole === 'Employee'){
-      this.router.navigate(['/tabs/project-timeline/'+this.userId]);
-    } else if(this.userRole === 'Admin'){
-      this.router.navigate(['/tabs/project-timeline']);
-    }
-  }
+  // viewTimeline(){
+  //   if(this.userRole === 'Employee'){
+  //     this.router.navigate(['/tabs/project-timeline/'+this.userId]);
+  //   } else if(this.userRole === 'Admin'){
+  //     this.router.navigate(['/tabs/project-timeline']);
+  //   }
+  // }
   viewTimeSheet(){
     if(this.userRole === 'Employee'){
-      this.router.navigate(['/tabs/time-sheet/'+this.userId]);
+      this.router.navigate(['/tabs/time-sheet/' + this.userId]);
     } else if(this.userRole === 'Admin'){
       this.router.navigate(['/tabs/time-sheet']);
     }
   }
-  viewProjectDetails(){
-    if(this.userRole === 'Employee'){
-      this.router.navigate(['/tabs/project-details/'+this.userId]);
-    } else if(this.userRole === 'Admin'){
-      this.router.navigate(['/tabs/project-details']);
-    }
-  }
+  
+  // viewProjectDetails(){
+  //   if(this.userRole === 'Employee'){
+  //     this.router.navigate(['/tabs/project-details/'+this.userId]);
+  //   } else if(this.userRole === 'Admin'){
+  //     this.router.navigate(['/tabs/project-details']);
+  //   }
+  // }
   viewAssignProject(){
     if(this.userRole === 'Employee'){
       this.router.navigate(['/tabs/assign-project/'+this.userId]);

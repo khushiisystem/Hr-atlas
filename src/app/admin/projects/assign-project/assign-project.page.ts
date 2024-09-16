@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatetimeCustomEvent } from '@ionic/angular';
 import * as moment from 'moment';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
@@ -7,6 +7,20 @@ import { AdminService } from 'src/app/services/admin.service';
 import { IProject } from '../projects.page';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
 
+export interface IAssignPro {
+  projectId: string,
+  userId: string,
+  startDate: string, 
+  endDate: string,
+  guid: string,
+  project: {
+    title: string;
+  },
+  user: {
+    firstName: string;
+    lastName: string;
+  }
+}
 @Component({
   selector: 'app-assign-project',
   templateUrl: './assign-project.page.html',
@@ -22,6 +36,9 @@ export class AssignProjectPage implements OnInit {
   openCalendar: boolean = false;
   today: Date = new Date();
   projects: IProject[] = [];
+  assProjects: IAssignPro[] = [];
+  assProjectId: string = '';
+  updateForm: boolean = false;
 
 
   constructor(
@@ -32,13 +49,32 @@ export class AssignProjectPage implements OnInit {
 
   ngOnInit() {
     this.assignProjectForm = this._fb.group({
-      title: [''],
-      allEmp:[],
-      // startDate: [''],
-      // endDate: [''],
+      projectId: ['', Validators.required],
+      userId: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
     });
     this.getEmployeeList();
     this.getProjects();
+    this.getAssignProjects();
+  }
+
+  getDate(ctrlName: string){
+    const formDate = this.assignProjectForm.controls[ctrlName].value;
+    return formDate != '' ? new Date(formDate) : new Date();
+  }
+
+  selectDate(event: DatetimeCustomEvent){
+    this.assignProjectForm.controls['startDate'].patchValue(moment(event.detail.value).utc().format());
+  }
+
+  getEndDate(ctrlName: string){
+    const formDate = this.assignProjectForm.controls[ctrlName].value;
+    return formDate != '' ? new Date(formDate) : new Date();
+  }
+
+  selectEndDate(event: DatetimeCustomEvent){
+    this.assignProjectForm.controls['endDate'].patchValue(moment(event.detail.value).utc().format());
   }
 
   getEmployeeList(){
@@ -48,6 +84,8 @@ export class AssignProjectPage implements OnInit {
     }
     this.adminServ.getEmployees('Active', this.pageIndex * 100, 100).subscribe(res => {
       if(res){
+
+        console.log("getEmployeeList res: ",res);
         const data: IEmployeeResponse[] = res;
         this.allEmployeeList = data;
         this.isDataLoaded = true;
@@ -72,28 +110,42 @@ export class AssignProjectPage implements OnInit {
     })
   }
 
-
-  // getStartDate(){
-  //   const formValue = this.assignProjectForm.controls['startDate'].value;
-  //   return formValue ? new Date(moment(formValue).format()) : '';
-  // }
-  // setStartDate(event: DatetimeCustomEvent){
-  //   this.assignProjectForm.patchValue({
-  //     startDate: moment.utc(event.detail.value).format()
-  //   });
-  // }
-
-  // getEndDate(){
-  //   const formValue = this.assignProjectForm.controls['endDate'].value;
-  //   return formValue ? new Date(moment(formValue).format()) : '';
-  // }
-  // setEndDate(event: DatetimeCustomEvent){
-  //   this.assignProjectForm.patchValue({
-  //     endDate: moment.utc(event.detail.value).format()
-  //   });
-  // }
-
+  getAssignProjects() {
+    this.timesheetSer.getAllAssignProjects(this.pageIndex * 100, 100).subscribe(res => {
+      if(res) {
+        const data: IAssignPro[] = res;
+        this.assProjects = data;
+        console.log("get assProj res: ", this.assProjects);
+      }
+    })
+  }
+  
   submit() {
-    console.log(this.assignProjectForm.value);
+    if(this.updateForm) {
+      if(this.assProjectId.trim() == '') { return }
+      this.timesheetSer.updateAssignProject(this.assProjectId, this.assignProjectForm.value).subscribe(res => {
+        if(res) {
+          console.log("update: ", res);
+          this.assignProjectForm.reset();
+          this.updateForm = false;
+          this.assProjectId = '';
+        }
+      });
+    }
+    else {
+      console.log("add")
+      this.timesheetSer.addAssignProject(this.assignProjectForm.value).subscribe(res => {
+        if(res) {
+          console.log("add : ", res);
+          this.assignProjectForm.reset();
+        }
+      });
+    }
+  }
+
+  update(assProject: IAssignPro) {
+    this.assignProjectForm.patchValue(assProject);
+    this.assProjectId = assProject.guid;
+    this.updateForm = true;
   }
 }

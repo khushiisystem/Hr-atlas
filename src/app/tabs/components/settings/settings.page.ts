@@ -75,6 +75,14 @@ export class SettingsPage implements OnInit {
     localStorage.setItem('lastRoute', this.router.url);
     this.router.navigate([`/tabs/projects`])
   }
+  addCategory(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/category`])
+  }
+  addSubCategory(){
+    localStorage.setItem('lastRoute', this.router.url);
+    this.router.navigate([`/tabs/sub-category`])
+  }
 
   accordionChange(event: CustomEvent){
     if(event.detail.value){
