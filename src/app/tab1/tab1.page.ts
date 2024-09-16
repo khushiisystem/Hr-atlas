@@ -61,6 +61,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   attendanceLoaded: boolean = false;
   eventsLoaded: boolean = false;
   birthdayLoaded: boolean = false;
+  clockInDataLoaded: boolean = false;
   today: Date = new Date();
   apiSubscription!: Subscription;
 
@@ -126,7 +127,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
         if(res.role === 'Employee'){
           localStorage.setItem('isSwitchable', 'false');
           this.isSwitchable = false;
-          if(this.userDetails.currentAddress.addressLine1 == null || this.userDetails.currentAddress.addressLine1.trim() == ''){
+          if(this.userDetails.currentAddress.addressLine1 == null || this.userDetails.currentAddress.addressLine1.trim() == '' || !this.userDetails.dateOfBirth){
             this.openUpdationPopup();
           }
         } else if(res.role === 'Admin') {
@@ -134,6 +135,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           this.checkAdminSetups();
           this.requestedLeaveList = [];
           this.getRequests();
+          this.today.setHours(0, 0, 0);
           this.getTodayAttendance(this.today.toISOString(), 0);
           this.isSwitchable = true;
         }
@@ -247,14 +249,17 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           this.clockInTime = res[0].clockIn;
           this.clockInId = res[0].guid;
           this.startWatch(this.clockInTime);
+          this.clockInDataLoaded = true;
         }
       } if(res.message){
         this.isRunning = false;
+        this.clockInDataLoaded = true;
         this.shareServ.presentToast(res.message, 'top', 'primary');
       }
     }, (error) => {
       this.isRunning = false;
-      console.log(error, 'err');
+      this.clockInDataLoaded = true;
+      console.log(error.error.Message, 'err');
     });
   }
 
@@ -386,7 +391,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
   clockIn() {
     this.loader.present('');
-    
     this.shareServ.clockIn().subscribe(res => {
       if(res){
         this.isRunning = true;
@@ -394,7 +398,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
         const currentTime = new Date(moment(res.clockIn).format()).toISOString();
         this.clockInTime = moment(res.clockIn).format();
         this.clockInId = res.guid;
-        
         this.startWatch(res.clockIn);
         this.loader.dismiss();
       }
@@ -460,6 +463,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   }
 
   startWatch(clockIn: string | Date){
+    clearInterval(this.stopwatchInterval);
     this.stopwatchInterval = setInterval(() => {
       this.stopwatchTime = this.calculateDurationAndAddSeconds(clockIn,1);
     }, 1000);

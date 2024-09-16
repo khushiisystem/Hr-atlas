@@ -44,8 +44,6 @@ export class LoginPage implements OnInit {
       this.isInProgress = true;
       this.authServ.emailLogin(this.loginForm.value).subscribe(async res => {
         if(res){
-          this.shareServ.presentToast('Login successful.', 'top', 'success');
-          this.isInProgress = false;
           const userId = localStorage.getItem('userId') || "";
           this.shareServ.getEmployeeById(userId).subscribe(async res => {
             this.userStateServ.updateState(res);
@@ -58,11 +56,13 @@ export class LoginPage implements OnInit {
             localStorage.setItem('isFirst' , String(true))
           });
           this.router.navigate(['/tabs/home'], {replaceUrl: true});
+          this.shareServ.presentToast('Login successful.', 'top', 'success');
+          this.isInProgress = false;
           this.loader.dismiss();
-          this.loginForm.reset();
+          // this.loginForm.reset();
         }
       }, (error) => {
-        this.shareServ.presentToast(error.error.Message, 'top', 'danger');
+        this.shareServ.presentToast(error.error.Message || "Something went wrong.", 'top', 'danger');
         this.loader.dismiss();
         this.isInProgress = false;
       });
