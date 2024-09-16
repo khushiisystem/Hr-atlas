@@ -1,0 +1,81 @@
+
+.cardItem{
+    box-shadow: none;
+    border-radius: 14px;
+    & ion-card-header{
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        column-gap: 10px;
+        background-color: #40a30f38;
+    }
+    &.Present ion-card-header {
+        background-color: #58c95833;
+        color: green;
+        --background: #58c95833;
+        --color: green;
+        
+        & ion-card-title, & ion-card-subtitle{
+            --color: green;
+            margin-top: 0;
+        }
+    }
+    &.Absent ion-card-header, &.Leave ion-card-header {
+        background-color: #ed576b57;
+        color: var(--ion-color-danger-shade);
+        --background: #ed576b57;
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-danger-shade);
+            margin-top: 0;
+        }
+    }
+    &.Holiday ion-card-header{
+        background-color: rgb(99 112 255 / 21%);
+        color: var(--ion-color-tertiary-shade);
+        --background: rgb(99 112 255 / 21%);
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-tertiary-shade);
+            margin-top: 0;
+        }
+    }
+    &.Off ion-card-header{
+        background-color: rgb(201 14 14 / 29%);
+        color: var(--ion-color-tertiary-shade);
+        --background: rgb(201 14 14 / 29%);
+        --color: var(--ion-color-danger-shade);
+        & ion-card-title, & ion-card-subtitle{
+            --color: var(--ion-color-danger-shade);
+            margin-top: 0;
+        }
+    }
+    &.Half ion-card-header{
+        background-color: #6956004d;
+        --background: #6956004d;
+        --color: #430101;
+        ion-card-title, & ion-card-subtitle{--color: #430101;margin-top: 0;}
+        ion-note{color: #5f5f5f;}
+    }
+
+    .expandBtn {
+        --padding-top: 5px;
+        --padding-start: 5px;
+        --padding-end: 5px;
+        --padding-bottom: 5px;
+    }
+    .leaveDate {
+        margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px;
+        & ion-icon{margin-right: 5px; vertical-align: middle;}
+    }
+    .purpose{white-space: pre-line;}
+    ion-card-content{opacity: 0; visibility: hidden; display: none; transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;
+    &.show{opacity: 1; visibility: visible; display: block; transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;}}
+    will-change: contents height;
+}
+
+table{
+    width: 100%;
+    th, td{ text-align: start; width: 33%; padding: 5px;}
+    th, tfoot td{vertical-align: text-top; background-color: #f5f5f5;}
+}

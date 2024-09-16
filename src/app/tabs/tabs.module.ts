@@ -42,6 +42,7 @@ import { SideNavPage } from "./components/side-nav/side-nav.page";
 import { ReadMorePageModule } from "../share/components/read-more/read-more.module";
 import { AdvancePayCardPageModule } from "../share/components/advance-pay-card/advance-pay-card.module";
 import { ProgressBarPageModule } from "../share/components/progress-bar/progress-bar.module";
+import { AttendanceCardPage } from "../share/components/attendance-card/attendance-card.page";
 import { ProjectFormPage } from "../admin/projects/project-form/project-form.page";
 import { ProjectsPage } from "../admin/projects/projects.page";
 import { AssignProjectPage } from "../admin/projects/assign-project/assign-project.page";
@@ -110,6 +111,7 @@ import { AdminTimesheetsPage } from "../admin/admin-timesheets/admin-timesheets.
     CustomCallendarPageModule,
     AdvancePayCardPageModule,
     ProgressBarPageModule,
+    AttendanceCardPage,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthGuard, RoleGuard, FileOpener],

@@ -1,0 +1,75 @@
+<ion-card mode="md" class="cardItem {{cardClass}}">
+  <ion-card-header *ngIf="isAllGood" (click)="openCard = !openCard">
+    <div>
+      <ion-card-title>{{attendanceData.created_date | date:'EEE, dd MMM'}}</ion-card-title>
+      <ion-card-subtitle *ngIf="workDurationString.trim() === '0h 0m 0s'">{{attendanceData.status}}</ion-card-subtitle>
+      <ion-note *ngIf="workDurationString.trim() !== '0h 0m 0s' && attendanceData.status !== 'Absent'"><ion-icon name="time-outline" size="small" style="vertical-align: middle; margin-right: 5px;"></ion-icon>{{workDurationString}}</ion-note>
+    </div>
+    
+    <!-- <ion-button [shape]="'round'" [mode]="'ios'" [size]="'small'" [fill]="'clear'" [color]="'medium'" *ngIf="attendanceData.attendanceData.length > 0 || attendanceData.leaveData != null" class="expandBtn">
+      <ion-icon [name]="openCard ? 'chevron-up-outline' : 'chevron-down-outline'" slot="icon-only" [size]="'small'"></ion-icon>
+    </ion-button> -->
+
+    <ion-chip color="tertiary" *ngIf="userRole === 'Admin' && !isWeekOff && attendanceData.status === 'Absent'" (click)="markPresent($event)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip>
+  </ion-card-header>
+  <ion-card-content [class.show]="openCard && isAllGood && !isWeekOff">
+    <table *ngIf="attendanceData.attendanceData.length > 0" class="ion-margin-top">
+      <thead>
+        <tr>
+          <th><ion-text>In Time</ion-text></th>
+          <th><ion-text>Out Time</ion-text></th>
+          <th><ion-text>Work Duration</ion-text></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let clockData of attendanceData.attendanceData">
+          <td>
+            <ion-label>{{localDate(clockData.clockIn) | date:'shortTime'}}</ion-label>
+          </td>
+          <td>
+            <ion-label *ngIf="!clockData.clockOut">--</ion-label>
+            <ion-label *ngIf="clockData.clockOut">{{localDate(clockData.clockOut) | date:'shortTime'}}</ion-label>
+          </td>
+          <td>
+            <ion-label *ngIf="!clockData.clockOut">--</ion-label>
+            <ion-label *ngIf="clockData.clockOut">{{formatDuration(calculateDuration(clockData.clockIn, clockData.clockOut))}}</ion-label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="attendanceData.leaveData != null">
+      <div class="ion-margin-top leaveDate">
+        <ion-label color="tertiary" class="ion-text-wrap" *ngIf="attendanceData.leaveData.startDate">
+          <ion-icon name="calendar" size="small"></ion-icon>
+          <ion-text>{{attendanceData.leaveData.startDate | date}} - {{attendanceData.leaveData.endDate | date}}</ion-text>
+        </ion-label>
+        <ion-label color="tertiary" class="ion-text-wrap" *ngIf="attendanceData.leaveData.from">
+          <ion-icon name="calendar" size="small"></ion-icon>
+          <ion-text>{{attendanceData.leaveData.from.date | date}} &middot; {{leaveStartDay}}</ion-text>
+        </ion-label>
+        <ion-label color="tertiary" class="ion-text-wrap" *ngIf="attendanceData.leaveData.to && attendanceData.leaveData.to.date">
+          <ion-icon name="calendar" size="small"></ion-icon>
+          <ion-text>{{attendanceData.leaveData.to.date | date}} &middot; {{leaveEndDay}}</ion-text>
+        </ion-label>
+      </div>
+      <p>
+        <b><ion-text>{{attendanceData.leaveData.leaveType}}</ion-text></b>
+      </p>
+      <p class="purpose">
+        <read-more-text [textString]="attendanceData.leaveData.purpose" [maxLength]="100"></read-more-text>
+      </p>
+      <div class="ion-text-end">
+        <ion-chip [color]="attendanceData.leaveData.status === 'Accept' ? 'success' : attendanceData.leaveData.status === 'Pending' ? 'warning' : 'danger' ">
+          {{attendanceData.leaveData.status === 'Accept' ? 'Accepted' : attendanceData.leaveData.status === 'Pending' ? 'Pending' : attendanceData.leaveData.status === 'Reject' ? 'Rejected' : attendanceData.leaveData.status}}
+        </ion-chip>
+      </div>
+    </div>
+  </ion-card-content>
+  <div class="ion-text-end ion-padding-vertical" *ngIf="!isWeekOff">
+    <ion-button fill="clear" size="small" (click)="openCard = !openCard">
+      <span>{{openCard ? 'Hide Details' : 'Show Details'}}</span>
+      <ion-icon [name]="openCard ? 'chevron-up-outline' : 'chevron-down-outline'" slot="end" [size]="'small'"></ion-icon>
+    </ion-button>
+  </div>
+  <ion-skeleton-text style="width: 100%; height: 80px;" animated="true" class="inherit_shap ion-no-margin" *ngIf="!isAllGood"></ion-skeleton-text>
+</ion-card>
