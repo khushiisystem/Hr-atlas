@@ -98,23 +98,7 @@ export class AddEmployeePage implements OnInit {
         state: [''],
         country: [''],
         zipCode: ['', Validators.compose([Validators.minLength(4), Validators.maxLength(6)])]
-      }),
-      linkedinUrl: [''],
-      facebookUrl: [''],
-      twitterUrl: [''],
-      employeeId: null,
-      designation: '',
-      jobTitle: '',
-      employeeType: '',
-      department: '',
-      subDepartment: '',
-      status: 'Active',
-      joiningDate: '',
-      // startDate: '',
-      resignationDate: null,
-      probationPeriod: null,
-      work_experience: 0,
-      workLocation: '',
+      }),      
     });
 
     this.birthDate = this.employeeForm.controls['dateOfBirth'].value;
@@ -127,7 +111,6 @@ export class AddEmployeePage implements OnInit {
   getProfile(){
     this.adminServ.getEmployeeById(this.employeeId).subscribe(res => {
       if(res){
-        console.log("res: ", res);
         this.employeeForm.patchValue(res);
         this.isDataLoaded = true;
       }
@@ -137,27 +120,16 @@ export class AddEmployeePage implements OnInit {
     });
   }
 
-  // selectDate(event: DatetimeCustomEvent){
-  //   this.employeeForm.patchValue({
-  //     dateOfBirth: moment.utc(event.detail.value).format()
-  //   });
-  //   this.getDate();
-  // }
-
-  // getDate(){
-  //   const formDate = this.employeeForm.controls['dateOfBirth'].value;
-  //   return new Date(formDate != '' ? formDate : this.maxDate);
-  // }
-
-  getJoinDate(){
-    const formValue = this.employeeForm.controls['joiningDate'].value;
-    return formValue ? new Date(moment(formValue).format()) : '';
+  selectDate(event: DatetimeCustomEvent){
+    this.employeeForm.patchValue({
+      dateOfBirth: moment(event.detail.value).utc().format()
+    });
+    this.getDate();
   }
 
-  setJoneDate(event: DatetimeCustomEvent){
-    this.employeeForm.patchValue({
-      joiningDate: moment.utc(event.detail.value).format()
-    });
+  getDate(){
+    const formDate = this.employeeForm.controls['dateOfBirth'].value;
+    return new Date(formDate != '' ? formDate : this.maxDate);
   }
 
   expandCard(cardName: string) {
@@ -202,8 +174,6 @@ export class AddEmployeePage implements OnInit {
   addEmployee(){
     this.adminServ.addEmployees(this.employeeForm.value).subscribe(res => {
       if(res){
-        console.log("res: ", res);
-        
         this.shareServ.presentToast('Employee added successfully.', 'top', 'success');
         // this.modalCtrl.dismiss(res, 'confirm');
         const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
