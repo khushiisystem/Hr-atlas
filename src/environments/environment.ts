@@ -5,9 +5,8 @@
 export const environment = {
   production: false,
 
-  Api: 'http://192.168.1.20:5274/' // prod
-
-  // Api: 'http://localhost:5274/'        // dev
+  Api: 'http://192.168.1.20:5274/'
+  // Api: 'http://localhost:5274/'
 };
 
 /*
