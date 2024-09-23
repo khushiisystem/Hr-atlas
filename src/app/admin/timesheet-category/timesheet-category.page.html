@@ -28,19 +28,12 @@
     </div>
     <!-- project-list  -->
     <ion-list>
-      <div *ngIf="AllCategory == null">
+      <div *ngIf="isDataLoaded && AllCategory?.length === 0">
         <ion-item lines="none" [button]="false">
           <ion-label class="ion-text-center">No any category.</ion-label>
         </ion-item>
       </div>
-
-      <div *ngIf="isDataLoaded && AllCategory?.length === 0">
-        <ion-item lines="none" [button]="false">
-          <ion-label class="ion-text-center">Category not found</ion-label>
-        </ion-item>
-      </div>
     
-  
       <ion-item-sliding #editSlide>
         <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let category of AllCategory; index as i">
           <div class="employee_data">

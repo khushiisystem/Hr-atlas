@@ -13,23 +13,19 @@
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" mode="md">
-  <!-- <ion-datetime presentation="date" mode="md"> -->
-  <!-- </ion-datetime> -->
+  <!-- </ calander -->
+  <div class="ion-padding" mode="ios">
+    <ion-datetime presentation="date" [value]="timesheetDate" (ionChange)="onDateChange($event)" [highlightedDates]="highlightedDates">    
+    </ion-datetime>
+    <div class="cal_col">
+      <p class="p1"></p><p>pending</p>
+      <p class="p3"></p><p>approved</p>
+      <p class="p2"></p><p>reject</p>
+    </div>
+  </div>
    <div *ngIf="userRole.trim() !== 'Admin'">
      <form [formGroup]="timeSheetForm" class="ion-padding">    
        <ion-row>
-         <!-- calander start  -->
-           <div class="ion-padding" mode="ios">
-             <ion-datetime presentation="date" [value]="timesheetDate" (ionChange)="onDateChange($event)" [highlightedDates]="highlightedDates">    
-             </ion-datetime>
-             <div class="cal_col">
-               <p class="p1"></p><p>pending</p>
-               <p class="p3"></p><p>approved</p>
-               <p class="p2"></p><p>reject</p>
-             </div>
-           </div>
-         <!-- calander end  -->
-   
          <!-- project  -->
          <ion-col size="12">
            <ion-select formControlName="projectId" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
@@ -37,6 +33,7 @@
                <ion-select-option value="{{project.guid}}">{{project.title}}</ion-select-option>
              </div>
            </ion-select>
+           <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['projectId'].touched && timeSheetForm.controls['projectId'].errors"></ion-icon>
          </ion-col>
          <!-- categories  -->
          <ion-col size="12">
@@ -45,6 +42,7 @@
                <ion-select-option value="{{category.guid}}">{{category.category}}</ion-select-option>
              </div>
            </ion-select>
+           <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['categoryId'].touched && timeSheetForm.controls['categoryId'].errors"></ion-icon>
          </ion-col>
          <!-- sub-categories  -->
          <ion-col size="12">
@@ -53,6 +51,7 @@
                <ion-select-option value="{{subCategory.guid}}">{{subCategory.subCategory}}</ion-select-option>            
              </div>
            </ion-select>
+           <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors"></ion-icon>
          </ion-col>
    
          <ion-col size="6">
@@ -79,6 +78,7 @@
              <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date') | date" [errorText]="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors ? 'Start date is required' : ''" [required]="true" class="dateInput">
                <div slot="label">Date <ion-text color="danger">*</ion-text></div>
              </ion-input>
+             <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors"></ion-icon>
            </ion-col>
            <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
              <ng-template>
@@ -103,7 +103,8 @@
          <ion-col size="12" id="startdate">
            <ion-input formControlName="tag" labelPlacement="floating" color="primary" fill="solid" [value]="" class="dateInput">
              <div slot="label">Tag/Title <ion-text color="danger">*</ion-text></div>
-           </ion-input>      
+           </ion-input>    
+           <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors"></ion-icon>  
          </ion-col>      
        </ion-row>
    
@@ -112,6 +113,7 @@
          <ion-textarea formControlName="description" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
            <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
          </ion-textarea>
+         <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors"></ion-icon>
          <!-- <ion-item [lines]="'none'" [detail]="false" class="spaceItem"></ion-item> -->
          <ol style="background-color: rgba(244, 250, 136, 0.405); padding: 5px 0 10px 35px;">
            <li>Please fill timesheet in between 0 to 3 hours for each entry.</li>
@@ -182,6 +184,7 @@
           </div>
           <!-- *ngIf="userRole.trim() === 'Employee'" -->
           <div class="date">
+            <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
             <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
             <p><span>SubCategory :</span> <span>{{timesheet.timesheetSubCategory.subCategory}}</span></p>
             <p><span>Status :</span> <span>{{timesheet.status}}</span></p>
@@ -212,6 +215,7 @@
           </div>
           <!-- *ngIf="userRole.trim() === 'Employee'" -->
           <div class="date">
+            <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
             <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
             <p><span>SubCategory :</span> <span>{{timesheet.timesheetSubCategory.subCategory}}</span></p>
             <p><span>Status :</span> <span>{{timesheet.status}}</span></p>
