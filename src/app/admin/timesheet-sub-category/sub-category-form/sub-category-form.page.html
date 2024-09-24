@@ -12,12 +12,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form [formGroup]="subCategoryForm" class="ion-padding">
+  <form [formGroup]="subCategoryForm" class="">
     <ion-item [detail]="false"> 
+      <ion-col>
         <ion-input class="ion-margin-bottom" fill="solid" labelPlacement="floating" formControlName="subCategory" placeholder="Enter subCategory Name" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
-          <div slot="label">subCategory Name <ion-text color="danger">*</ion-text></div>
+          <div class="ionPadding" slot="label">subCategory Name <ion-text color="danger">*</ion-text></div>
         </ion-input>
-        <ion-icon slot="end" aria-label="Title is required." title="Title is required." name="alert-circle" color="danger" aria-hidden="true" *ngIf="subCategoryForm.controls['subCategory'].touched && subCategoryForm.controls['subCategory'].errors"></ion-icon>
+        <ion-text color="danger" class="error_txt" *ngIf="subCategoryForm.controls['subCategory'].touched && subCategoryForm.controls['subCategory'].errors">
+          project name is required
+        </ion-text>
+      </ion-col>
     </ion-item>
   </form>
   <ion-button mode="ios" type="submit" class="submitBtn" [disabled]="subCategoryForm.invalid || isInProgress" color="primary"  (click)="submit()" expand="full" shape="round">

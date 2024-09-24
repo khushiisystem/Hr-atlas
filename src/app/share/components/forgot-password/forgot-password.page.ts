@@ -52,6 +52,7 @@ export class ForgotPasswordPage implements OnInit {
     if(this.otpCtrl.valid){
       let otpTimeOut = setTimeout(() => {
         this.verifyOtp();
+        this.loader.dismiss();
         clearTimeout(otpTimeOut);
       }, 2000);
     }
@@ -125,7 +126,7 @@ export class ForgotPasswordPage implements OnInit {
           this.loader.dismiss();
         }
       }, (error) => {
-        this.shareServ.presentToast('Something is wrong.', 'top', 'danger');
+        this.shareServ.presentToast('Something is wrong or Enter new Password.', 'top', 'danger');
         this.loader.dismiss();
         this.isInProgress = false;
       });

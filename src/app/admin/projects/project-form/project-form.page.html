@@ -12,12 +12,16 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form [formGroup]="projectsForm" class="ion-padding">
+  <form [formGroup]="projectsForm" class="">
     <ion-item [detail]="false"> 
+      <ion-col>
         <ion-input class="ion-margin-bottom" fill="solid" labelPlacement="floating" formControlName="title" placeholder="Enter Project Name" type="text" maxlength="120" minlength="2" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
           <div slot="label">Project Name <ion-text color="danger">*</ion-text></div>
         </ion-input>
-        <ion-icon slot="end" aria-label="Title is required." title="Title is required." name="alert-circle" color="danger" aria-hidden="true" *ngIf="projectsForm.controls['title'].touched && projectsForm.controls['title'].errors"></ion-icon>
+        <ion-text color="danger" class="error_txt" *ngIf="projectsForm.controls['title'].touched && projectsForm.controls['title'].errors">
+          project name is required
+        </ion-text>
+      </ion-col>
     </ion-item>
         <!-- <ion-select fill="solid" labelPlacement="stacked" label="Assign Employee" aria-label="Assign Employee" interface="popover" placeholder="Select all employee that apply" [multiple]="true" formControlName="employeeIds">
           <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{ emp.lastName }}</ion-select-option>          
