@@ -22,19 +22,34 @@
         <ion-label>Personal Information</ion-label>
       </ion-list-header>
       <ion-item detail="false">
-        <ion-input labelPlacement="floating" formControlName="firstName" placeholder="First Name" type="text" maxlength="120" minlength="2" inputmode="text" [enterkeyhint]="'next'" autocomplete="name" autofocus="true">
-          <div slot="label">First Name <ion-text color="danger">*</ion-text></div>
-        </ion-input>
+        <ion-col>
+          <ion-input labelPlacement="floating" formControlName="firstName" placeholder="First Name" type="text" maxlength="120" minlength="2" inputmode="text" [enterkeyhint]="'next'" autocomplete="name" autofocus="true">
+            <div slot="label">First Name <ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
+            First Name is required
+          </ion-text>          
+        </ion-col>
       </ion-item>
       <ion-item detail="false">
-        <ion-input labelPlacement="floating" formControlName="lastName" placeholder="Last Name" type="text" inputmode="text" [enterkeyhint]="'next'">
-          <div slot="label">Last Name</div>
-        </ion-input>
+        <ion-col>
+          <ion-input labelPlacement="floating" formControlName="lastName" placeholder="Last Name" type="text" inputmode="text" [enterkeyhint]="'next'">
+            <div slot="label">Last Name</div>
+          </ion-input>
+          <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['lastName'].errors">
+            Last Name is required
+          </ion-text>
+        </ion-col>
       </ion-item>
       <ion-item detail="false">
-        <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Mobile Number" maxlength="10" minlength="10" inputmode="tel" [enterkeyhint]="'next'" type="tel" autocomplete="mobileNumber">
-          <div slot="label">Mobile Number <ion-text color="danger">*</ion-text></div>
-        </ion-input>
+        <ion-col>
+          <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Mobile Number" maxlength="10" minlength="10" inputmode="tel" [enterkeyhint]="'next'" type="tel" autocomplete="mobileNumber">
+            <div slot="label">Mobile Number <ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['mobileNumber'].touched && employeeForm.controls['mobileNumber'].errors">
+            Mobile Number is required
+          </ion-text>
+        </ion-col>
       </ion-item>
       <ion-item detail="false">
         <ion-input labelPlacement="floating" formControlName="email" placeholder="Personal Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="email">
@@ -42,16 +57,21 @@
         </ion-input>
       </ion-item>
       <ion-item detail="false">
-        <ion-input labelPlacement="floating" formControlName="officialEmail" placeholder="Official Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="officialEmail">
-          <div slot="label">Official Email <ion-text color="danger">*</ion-text></div>
-        </ion-input>
+        <ion-col>
+          <ion-input labelPlacement="floating" formControlName="officialEmail" placeholder="Official Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="officialEmail">
+            <div slot="label">Official Email <ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-text color="danger" class="error_txt" *ngIf="employeeForm.controls['officialEmail'].touched && employeeForm.controls['officialEmail'].errors">
+            Official Email is required
+          </ion-text>
+        </ion-col>
       </ion-item>
       <ion-item detail="false">
         <ion-select labelPlacement="floating" formControlName="role" placeholder="Role" interface="action-sheet">
           <div slot="label">Role <ion-text color="danger">*</ion-text></div>
           <ion-select-option value="Admin">Admin</ion-select-option>
           <ion-select-option value="Employee">Employee</ion-select-option>
-        </ion-select>
+        </ion-select>        
       </ion-item>
     </ion-list>
     

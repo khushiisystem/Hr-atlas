@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ISubCategory } from '../timesheet-sub-category.page';
 import { ShareService } from 'src/app/services/share.service';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
@@ -30,7 +30,7 @@ export class SubCategoryFormPage implements OnInit {
 
   ngOnInit() {
     this.subCategoryForm = this._fb.group({
-      subCategory: [''],
+      subCategory: ['', [Validators.required, Validators.minLength(3)]],
     });
 
     if(this.action === 'update' && this.subCategory) {

@@ -114,9 +114,9 @@ export class TimeSheetPage implements OnInit {
       subCategoryId: ['', Validators.required],
       // userId: '',
       description: ['', Validators.required],
-      startTime: [, Validators.required],
-      endTime: [, Validators.required],
-      tag: '',
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
+      tag: ['', Validators.required],
       date: ['', Validators.required],
     });
     this.getTimesheetList();
@@ -146,10 +146,12 @@ export class TimeSheetPage implements OnInit {
     return formValue ? new Date(moment(formValue).format()) : '';
   }
   setStartTime(event: DatetimeCustomEvent) {
-    console.log("value1:", moment(event.detail.value).utc().format());
     this.timeSheetForm.patchValue({
       startTime: moment(event.detail.value).utc().format()
     });
+  }
+  markTouched(ctrlName: string) {
+    this.timeSheetForm.controls[ctrlName].markAsTouched();
   }
 
   getEndTime(){
@@ -157,7 +159,6 @@ export class TimeSheetPage implements OnInit {
     return formValue ? new Date(moment(formValue).format()) : '';
   }
   setEndTime(event: DatetimeCustomEvent) {
-    console.log("value1:", moment(event.detail.value).utc().format());
     this.timeSheetForm.patchValue({
       endTime: moment(event.detail.value).utc().format()
     });

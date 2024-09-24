@@ -12,12 +12,17 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form [formGroup]="catForm" class="ion-padding">
+  <form [formGroup]="catForm" class="">
     <ion-item [detail]="false"> 
+      <ion-col>
         <ion-input class="ion-margin-bottom" fill="solid" labelPlacement="floating" formControlName="category" placeholder="Enter Category Name" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
           <div slot="label">Category Name <ion-text color="danger">*</ion-text></div>
         </ion-input>
-        <ion-icon slot="end" aria-label="Title is required." title="Title is required." name="alert-circle" color="danger" aria-hidden="true" *ngIf="catForm.controls['category'].touched && catForm.controls['category'].errors"></ion-icon>
+        <!-- <ion-icon slot="end" aria-label="Title is required." title="Title is required." name="alert-circle" color="danger" aria-hidden="true" *ngIf="catForm.controls['category'].touched && catForm.controls['category'].errors"></ion-icon> -->
+        <ion-text color="danger" class="error_txt" *ngIf="catForm.controls['category'].touched && catForm.controls['category'].errors">
+          category name is required
+        </ion-text>
+      </ion-col>
     </ion-item>
   </form>
   <ion-button mode="ios" type="submit" class="submitBtn" [disabled]="catForm.invalid || isInProgress" color="primary"  (click)="submit()" expand="full" shape="round">
