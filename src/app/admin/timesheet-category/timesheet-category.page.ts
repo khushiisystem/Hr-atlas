@@ -67,12 +67,10 @@ export class TimesheetCategoryPage implements OnInit {
           }
         });
         this.isDataLoaded = true;
-        this.AllCategory = [];
       }
     }, (error) => {
       this.isMoreData = false;
       this.isDataLoaded = true;
-      this.AllCategory = [];
     });
   }
 

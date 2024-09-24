@@ -35,6 +35,10 @@ export interface ITimesheet {
   };
   timesheetSubCategory: {
     subCategory: string;
+  };
+  user: {
+    firstName: string;
+    lastName: string;
   }
 }
 @Component({
@@ -77,6 +81,7 @@ export class TimeSheetPage implements OnInit {
   // isAdmin: boolean = false;
   userRole: string = '';
   isLoggedIn: boolean = false;
+  allEmployeeList: IEmployeeResponse[] = [];
   
   constructor(
     private _fb: FormBuilder,
@@ -104,10 +109,11 @@ export class TimeSheetPage implements OnInit {
     const currentTime = moment().format();
     
     this.timeSheetForm = this._fb.group({
-      projectId: '',
-      categoryId: '',
-      subCategoryId: '',
-      description: '',
+      projectId: ['', Validators.required],
+      categoryId: ['', Validators.required],
+      subCategoryId: ['', Validators.required],
+      // userId: '',
+      description: ['', Validators.required],
       startTime: [, Validators.required],
       endTime: [, Validators.required],
       tag: '',
@@ -343,7 +349,7 @@ export class TimeSheetPage implements OnInit {
     const userId = localStorage.getItem('userId') || "";
     this.timesheetSer.getUserTimesheet(this.pageIndex * 100, 100, userId).subscribe(res => {
       if(res) {
-        this.userTimesheet = res;
+        this.userTimesheet = res; 
         console.log("getUserTimesheet: ", this.userTimesheet);
       }
     })

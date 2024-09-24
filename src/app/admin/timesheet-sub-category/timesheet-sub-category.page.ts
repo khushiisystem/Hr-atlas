@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonInfiniteScroll, ModalController } from '@ionic/angular';
 import { RoleStateService } from 'src/app/services/roleState.service';
@@ -7,6 +7,7 @@ import { TimeSheetService } from 'src/app/services/time-sheet.service';
 import { SubCategoryFormPage } from './sub-category-form/sub-category-form.page';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
+import { debounceTime } from 'rxjs';
 
 export interface ISubCategory {subCategory: string, guid: string}
 
@@ -27,6 +28,7 @@ export class TimesheetSubCategoryPage {
   pageIndex: number = 0;
   selectedSubCatId!: string;
   selectedIndex!: number;
+  searchSubCategory: FormControl = new FormControl('');
 
   constructor(
     public router: Router,
@@ -39,14 +41,38 @@ export class TimesheetSubCategoryPage {
   ) { }
 
   ngOnInit() {
-    this.subCategoryForm = this._fb.group({
-      subCategory:['']
-    });
+    // this.subCategoryForm = this._fb.group({
+    //   subCategory:['']
+    // });
 
     this.getAllSubCategories();
+    this.searchSubCategory.valueChanges.pipe(debounceTime(1000)).subscribe(res => {
+      this.isDataLoaded = false;
+      this.AllSubCategory = [];
+      if(res && res.trim().length > 2) {
+        this.onSearch(res);
+      }else {
+        this.getAllSubCategories();
+      }
+    })
   }
 
-  onSearch() {
+  onSearch(value: string) {
+    this.isMoreData = false;
+    this.timeSheetSer.searchSubCategory(value).subscribe(res => {
+      if(res && res.data) {
+        console.log("res.data: ", res.data);
+        res.data.forEach((subCategory: any) => {
+          if(!this.AllSubCategory.includes(subCategory)) {
+            this.AllSubCategory.push(subCategory);
+          }
+        });
+        this.isDataLoaded = true;
+      }
+    }, (error) => {
+      this.isMoreData = false;
+      this.isDataLoaded = false;
+    })
   }
 
   getAllSubCategories() {

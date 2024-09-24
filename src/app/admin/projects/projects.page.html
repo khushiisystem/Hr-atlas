@@ -28,7 +28,7 @@
     </div>
     <!-- project-list  -->
     <ion-list>
-      <div *ngIf="AllProject == null">
+      <div *ngIf="isDataLoaded && AllProject?.length === 0">
         <ion-item lines="none" [button]="false">
           <ion-label class="ion-text-center">No any projects.</ion-label>
         </ion-item>
