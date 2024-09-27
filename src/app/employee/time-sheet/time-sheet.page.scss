@@ -16,7 +16,7 @@
   .para p { margin-top: auto; display: block; justify-content: center; }
 
   .cal_col {
-    display: flex; justify-content: start; flex-wrap: wrap; gap: 10px;
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 10px;
     .p1 { width: 15px; height: 15px; background-color: #e77307; }
     .p2 { width: 15px; height: 15px; background-color: var(--ion-color-danger); }
     .p3 { width: 15px; height: 15px; background-color: var(--ion-color-success); }
@@ -27,4 +27,10 @@
     justify-content: end;
     .reject-button { color: var(--ion-color-danger); }
     .approve-button { color: var(--ion-color-success); }
+  }
+
+  ion-datetime {
+    padding: 0;
+    margin: auto;
+    width: 100%;
   }

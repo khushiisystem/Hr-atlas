@@ -14,7 +14,7 @@
 </ion-header>
 <ion-content [fullscreen]="true" mode="md">
   <!-- </ calander -->
-  <div class="ion-padding" mode="ios">
+  <div class="ionPadding" mode="ios">
     <ion-datetime presentation="date" [value]="timesheetDate" (ionChange)="onDateChange($event)" [highlightedDates]="highlightedDates">    
     </ion-datetime>
     <div class="cal_col">
@@ -122,22 +122,21 @@
            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors">
             Tag / Title is required
           </ion-text>
-         </ion-col>      
-       </ion-row>
-   
-       <!-- description  -->
-       <ion-row>
-         <ion-textarea formControlName="description" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
-           <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
-         </ion-textarea>
-         <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors">
-          Description is required
-        </ion-text>
-         <!-- <ion-item [lines]="'none'" [detail]="false" class="spaceItem"></ion-item> -->
-         <ol style="background-color: rgba(244, 250, 136, 0.405); padding: 5px 0 10px 35px;">
-           <li>Please fill timesheet in between 0 to 3 hours for each entry.</li>
-           <li>Minium 3 entries are required to complete 8 hours timesheet for each day.</li>
-         </ol>
+         </ion-col>  
+         
+         <ion-col>
+          <ion-textarea formControlName="description" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
+            <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
+          </ion-textarea>
+          <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors">
+           Description is required
+         </ion-text>
+          <!-- <ion-item [lines]="'none'" [detail]="false" class="spaceItem"></ion-item> -->
+          <ol style="background-color: rgba(244, 250, 136, 0.405); padding: 5px 0 10px 35px;">
+            <li>Please fill timesheet in between 0 to 3 hours for each entry.</li>
+            <li>Minium 3 entries are required to complete 8 hours timesheet for each day.</li>
+          </ol>
+         </ion-col> 
        </ion-row>
    
        <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round" (click)="clear()">Clear</ion-button>

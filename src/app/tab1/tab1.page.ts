@@ -695,13 +695,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   //     this.router.navigate(['/tabs/project-details']);
   //   }
   // }
-  viewAssignProject(){
-    if(this.userRole === 'Employee'){
-      this.router.navigate(['/tabs/assign-project/'+this.userId]);
-    } else if(this.userRole === 'Admin'){
-      this.router.navigate(['/tabs/assign-project']);
-    }
-  }
   showprofile() {
     if(this.userRole === 'Employee'){
       this.router.navigate(['/tabs/profile']);

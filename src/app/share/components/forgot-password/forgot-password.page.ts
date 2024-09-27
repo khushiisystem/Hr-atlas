@@ -118,6 +118,7 @@ export class ForgotPasswordPage implements OnInit {
     } else {
       this.loader.present('');
       this.shareServ.resetPassword(this.passwordForm.value).subscribe(res => {
+        console.log("res: ", res);
         if(res) {
           this.shareServ.presentToast('Password successfully changed.', 'top', 'success');
           this.activeEvent = 'sendOTP';
@@ -126,7 +127,9 @@ export class ForgotPasswordPage implements OnInit {
           this.loader.dismiss();
         }
       }, (error) => {
-        this.shareServ.presentToast('Something is wrong or Enter new Password.', 'top', 'danger');
+        if (error.status === 400) {
+          this.shareServ.presentToast(error.error.message, 'top', 'danger');
+        }
         this.loader.dismiss();
         this.isInProgress = false;
       });
