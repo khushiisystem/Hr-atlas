@@ -643,42 +643,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  // old code start 
-
-  // roleToggle(event: any) {
-  //   if(event.detail.checked){
-  //     this.roleStateServ.updateState('Admin');
-  //     localStorage.setItem('userRole', 'Admin');
-  //   } else {
-  //     this.roleStateServ.updateState('Employee');
-  //     localStorage.setItem('userRole', 'Employee');
-  //   }
-  // }
-
-  // old code end
-
-
-  // roleToggle(event: any) {
-  //   if(event.detail.checked){
-  //     if(localStorage.getItem('userRole') === 'HR') {
-  //       this.roleStateServ.updateState('HR');
-  //       localStorage.setItem('userRole', 'HR');
-  //     } else {
-  //       this.roleStateServ.updateState('Admin');
-  //       localStorage.setItem('userRole', 'Admin');
-  //     }
-  //   } else {
-  //     if(localStorage.getItem('userRole') === 'HR') {
-  //       this.roleStateServ.updateState('HR');
-  //       localStorage.setItem('userRole', 'HR');
-  //     } else {
-  //     this.roleStateServ.updateState('Employee');
-  //     localStorage.setItem('userRole', 'Employee');
-  //     }
-  //   }
-  // }
-
-
    roleToggle(event: any, actulRole: string) {
     if(event.detail.checked){
       this.roleStateServ.updateState(actulRole);
