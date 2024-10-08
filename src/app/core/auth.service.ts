@@ -9,6 +9,7 @@ import { UserStateService } from '../services/userState.service';
 
 export const ROLES = {
   ADMIN: 'Admin',
+  HR: 'HR',
   EMPLOYEE: 'Employee'
 }
 
@@ -21,7 +22,7 @@ export class AuthService {
   currentUser!: Observable<string>;
   private currentUserSubject!: BehaviorSubject<string>;
   private currentUserPayload!: BehaviorSubject<IJWTPayload>;
-  userRole: string = ROLES.EMPLOYEE || ROLES.ADMIN;
+  userRole: string = ROLES.EMPLOYEE || ROLES.ADMIN || ROLES.HR;
 
   constructor(private http: HttpClient, public router: Router, private roleStatServ: RoleStateService, private userSateSer: UserStateService) {
     this.currentUserSubject = new BehaviorSubject<string>(

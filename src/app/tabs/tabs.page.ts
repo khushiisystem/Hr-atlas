@@ -28,10 +28,13 @@ export class TabsPage {
             if(res.role === 'Employee'){
               localStorage.setItem('isSwitchable', 'false');
               this.isSwitchable = false;
+            } else if(res.role === 'HR') {
+              localStorage.setItem('isSwitchable', 'true');
+              this.isSwitchable = true;              
             } else if(res.role === 'Admin') {
               localStorage.setItem('isSwitchable', 'true');
               this.isSwitchable = true;
-            }
+            } 
           },(error)=>{
             if (error.status == 401 && error.statusText == 'Unauthorized'){
               this.authService.signOut();

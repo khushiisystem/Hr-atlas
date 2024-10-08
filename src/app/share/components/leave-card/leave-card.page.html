@@ -39,7 +39,7 @@
     <ng-container *ngIf="userRole === 'Employee'">
       <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" *ngIf="leaveItem.status === 'Pending'" (click)="leaveAction('Cancel')">Cancel Leave</ion-button>
     </ng-container>
-    <ng-container *ngIf="userRole === 'Admin'">
+    <ng-container *ngIf="userRole === 'Admin' || userRole === 'HR'">
       <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small" *ngIf="leaveItem.status === 'Pending'" (click)="leaveAction('Reject')">Cancel</ion-button>
       <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small" *ngIf="leaveItem.status === 'Pending'" (click)="leaveAction('Accept')">Approve</ion-button>
     </ng-container>

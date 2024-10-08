@@ -91,7 +91,7 @@
       </ion-list>
     </ion-card-content>
   </ion-card> -->
-  <ion-card mode="md" color="tertiary">
+  <ion-card mode="md" color="tertiary" *ngIf="userRole === 'Admin'">
     <ion-card-header>
       <ion-card-title>Finance Management</ion-card-title>
     </ion-card-header>

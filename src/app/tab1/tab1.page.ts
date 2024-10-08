@@ -130,7 +130,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           if(this.userDetails.currentAddress.addressLine1 == null || this.userDetails.currentAddress.addressLine1.trim() == '' || !this.userDetails.dateOfBirth){
             this.openUpdationPopup();
           }
-        } else if(res.role === 'Admin') {
+        } else if(res.role === 'Admin' || res.role === 'HR') {
           localStorage.setItem('isSwitchable', 'true');
           this.checkAdminSetups();
           this.requestedLeaveList = [];
@@ -643,10 +643,10 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     })
   }
 
-  roleToggle(event: any) {
+   roleToggle(event: any, actulRole: string) {
     if(event.detail.checked){
-      this.roleStateServ.updateState('Admin');
-      localStorage.setItem('userRole', 'Admin');
+      this.roleStateServ.updateState(actulRole);
+      localStorage.setItem('userRole', actulRole);
     } else {
       this.roleStateServ.updateState('Employee');
       localStorage.setItem('userRole', 'Employee');
@@ -669,6 +669,8 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   viewPayroll(){
     if(this.userRole === 'Employee'){
       this.router.navigate(['/tabs/payroll/'+this.userId]);
+    } else if(this.userRole === 'HR'){
+      this.router.navigate(['/tabs/payroll/'+this.userId]);
     } else if(this.userRole === 'Admin'){
       this.router.navigate(['/tabs/payroll-setup']);
     }
@@ -682,6 +684,8 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   // }
   viewTimeSheet(){
     if(this.userRole === 'Employee'){
+      this.router.navigate(['/tabs/time-sheet/' + this.userId]);
+    } else if(this.userRole === 'HR'){
       this.router.navigate(['/tabs/time-sheet/' + this.userId]);
     } else if(this.userRole === 'Admin'){
       this.router.navigate(['/tabs/time-sheet']);

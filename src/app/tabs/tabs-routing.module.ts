@@ -80,14 +80,14 @@ const routes: Routes = [
         title: "Time Sheet",
         component: TimeSheetPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'admin-timesheet',
         title: "Admin Timesheet",
         component: AdminTimesheetsPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
 
       {
@@ -125,34 +125,34 @@ const routes: Routes = [
         title: "Additional Setup",
         component: AdditionalSetupPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'profile',
         loadChildren: () => import('../employee/profile/profile.module').then(m => m.ProfilePageModule),
         canActivate: [AuthGuard, RoleGuard],
-        data: {role: "Employee"}
+        data: {role: ["Employee"]}
       },
       {
         path: 'admin-profile',
         title: 'Admin Profile',
         component: AdminProfilePage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'add-employee/:action/:employeeId',
         title: "Add Employee",
         component: AddEmployeePage,
         canActivate: [AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'settings',
         title: "Settings",
         component: SettingsPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin", "HR"]}
       },
       {
         path: 'edit-profile/:employeeId',
@@ -171,20 +171,20 @@ const routes: Routes = [
         title: "Employee Workinfo",
         component: AddExperiencePage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'payroll-setup',
         title: "Payroll Setup",
         component: PayrollSetupPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'employee-payroll',
         component: EmployeePayrollPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'payroll/:id',
@@ -203,7 +203,7 @@ const routes: Routes = [
         title: "Admin Leaves",
         component: AdminLeavesPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'directory',
@@ -216,35 +216,35 @@ const routes: Routes = [
         title: 'Salary Setup',
         component: SalarySetupPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'salary',
         title: 'Salary',
         component: SalaryPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'view-salary-increments',
         title: 'View Salary Increments',
         component: SalaryIncrementsPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'view-calendar',
         title: 'View Calendar',
         component: ViewCalendarPage,
         canActivate:[AuthGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin"]}
       },
       {
         path: 'attendance-status',
         title: 'Today\'s Attendance',
         component: AttendanceStatusPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"},
+        data: {role: ["Admin"]},
       },
       {
         path: '',

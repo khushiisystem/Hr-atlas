@@ -333,7 +333,7 @@ export class TimeSheetPage implements OnInit {
     this.timesheetId = timesheet.guid;
     console.log("id", this.timesheetId);
     this.update = true;
-    if(this.content){
+    if(this.content){   
       this.content.scrollToTop(100);
     }
   }
