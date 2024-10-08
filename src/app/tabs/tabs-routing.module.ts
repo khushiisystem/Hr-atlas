@@ -152,7 +152,7 @@ const routes: Routes = [
         title: "Settings",
         component: SettingsPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: "Admin"}
+        data: {role: ["Admin", "HR"]}
       },
       {
         path: 'edit-profile/:employeeId',

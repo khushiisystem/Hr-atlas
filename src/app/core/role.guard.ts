@@ -12,8 +12,8 @@ export class RoleGuard {
   role = localStorage.getItem('userRole') ?? "";
 
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
-    const reqRole = route.data?.['role'];
-    const hasAccess = (reqRole === this.role);
+    const reqRole: Array<string> = route.data?.['role'] || [];
+    const hasAccess = (reqRole.includes(this.role));
     return hasAccess ? true : this.router.createUrlTree(['/tabs/home']);
   }
 }

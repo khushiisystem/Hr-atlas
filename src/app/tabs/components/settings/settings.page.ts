@@ -11,6 +11,7 @@ import { LeaveSetupPage } from 'src/app/admin/leave-setup/leave-setup.page';
   styleUrls: ['./settings.page.scss'],
 })
 export class SettingsPage implements OnInit {
+  userRole: string = "";
   activeTab: string = '';
   constructor(
     private router: Router,
@@ -19,6 +20,7 @@ export class SettingsPage implements OnInit {
  
 
   ngOnInit() {
+    this.userRole = localStorage.getItem("userRole") || "";
   }
   
   goBack() {

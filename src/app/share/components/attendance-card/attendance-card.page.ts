@@ -32,7 +32,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log(changes, "changes");
     if(changes['attendanceData'] || changes['cardClass'] || changes['isAllGood']){
       this.workDurationString = this.calculateTotalWork();
       this.updateStatus();
@@ -56,7 +55,12 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     if(this.attendanceData.attendanceData.length > 0 && this.attendanceData.attendanceData[0].clockIn){
       const firstDataDate = new Date(this.attendanceData.attendanceData[0].clockIn);
       if(firstDataDate < today){
-        this.attendanceData.status = this.totalDurationMs < (28800000/2) ? AttendaceStatus.ABSENT : this.totalDurationMs >= (28800000/2) && this.totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : this.attendanceData.status;
+        const isSaturday = firstDataDate.getDay() === 6;
+        if (isSaturday && this.totalDurationMs >= 14400000) {
+          this.attendanceData.status = AttendaceStatus.PRESENT;
+        } else {
+          this.attendanceData.status = this.totalDurationMs < (28800000/2) ? AttendaceStatus.ABSENT : this.totalDurationMs >= (28800000/2) && this.totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : this.attendanceData.status;
+        }
       }
     }
     this.cdr.detectChanges();
