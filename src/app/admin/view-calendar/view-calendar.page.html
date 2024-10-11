@@ -14,7 +14,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" color="light">
-  <div [ngClass]="userRole === 'Admin' ? 'container' : ''">
+  <div [ngClass]="userRole === 'Admin' || userRole === 'HR' ? 'container' : ''">
     <ion-segment [(ngModel)]="activView" mode="md" class="tab_segement" color="danger">
       <ion-segment-button *ngFor="let tab of tabs" [value]="tab.value" layout="icon-start">
         <ion-icon [name]="tab.icon"></ion-icon>
@@ -78,7 +78,7 @@
           <ion-text>{{event.eventDate | date:'dd'}}</ion-text>
         </ion-avatar>
         <ion-label class="ion-text-wrap">{{event.eventTitle}}</ion-label>
-        <ion-button slot="end" fill="clear" mode="ios" color="dark" aria-label="Option" id="moreOption" (click)="presentPopover($event, event)" *ngIf="userRole === 'Admin'">
+        <ion-button slot="end" fill="clear" mode="ios" color="dark" aria-label="Option" id="moreOption" (click)="presentPopover($event, event)" *ngIf="userRole === 'Admin' || userRole === 'HR'">
           <ion-icon name="ellipsis-vertical" aria-label="Option"></ion-icon>
         </ion-button>
       </ion-item>
@@ -94,7 +94,7 @@
             <ion-text>{{event.eventDate | date:'dd'}}</ion-text>
           </ion-avatar>
           <ion-label class="ion-text-wrap">{{event.eventTitle}}</ion-label>
-          <ion-button slot="end" fill="clear" mode="ios" color="dark" aria-label="Option" id="moreOption" (click)="presentPopover($event, event)" *ngIf="userRole === 'Admin'">
+          <ion-button slot="end" fill="clear" mode="ios" color="dark" aria-label="Option" id="moreOption" (click)="presentPopover($event, event)" *ngIf="userRole === 'Admin' || userRole === 'HR'">
             <ion-icon name="ellipsis-vertical" aria-label="Option"></ion-icon>
           </ion-button>
         </ion-item>
@@ -134,7 +134,7 @@
     </ng-template>
   </ion-popover>
 
-  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="isDataLoaded && userRole === 'Admin'">
+  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="isDataLoaded && userRole === 'Admin' || userRole === 'HR'">
     <ion-fab-button color="danger" (click)="createHollyday({}, 'add')" aria-label="Add Event" mode="ios">
       <ion-icon name="add" aria-hidden="true" aria-label="Add Event"></ion-icon>
     </ion-fab-button>

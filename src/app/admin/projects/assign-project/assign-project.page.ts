@@ -85,7 +85,7 @@ export class AssignProjectPage implements OnInit {
     this.adminServ.getEmployees('Active', this.pageIndex * 100, 100).subscribe(res => {
       if(res){
 
-        console.log("getEmployeeList res: ",res);
+        // console.log("getEmployeeList res: ",res);
         const data: IEmployeeResponse[] = res;
         this.allEmployeeList = data;
         this.isDataLoaded = true;
@@ -105,7 +105,7 @@ export class AssignProjectPage implements OnInit {
         const data: IProject[] = res;
         this.projects = data;
         this.isDataLoaded = true; 
-        console.log("projects: ", this.projects);       
+        // console.log("projects: ", this.projects);       
       }
     })
   }
