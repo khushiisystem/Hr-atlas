@@ -35,13 +35,13 @@
           <ion-icon name="search" aria-hidden="true" size="small" slot="start" class="startIcon"></ion-icon>
           <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
         </ion-item>
-        <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="filterPop" *ngIf="userRole === 'Admin'" class="ion-margin-start ion-no-padding">
+        <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="filterPop" *ngIf="userRole === 'Admin' || userRole === 'HR'" class="ion-margin-start ion-no-padding">
           <ion-icon name="funnel" aria-hidden="true" aria-label="Option"></ion-icon>
         </ion-button>
       </div>
     </div>
 
-    <ng-container *ngIf="userRole === 'Admin'">
+    <ng-container *ngIf="userRole === 'Admin' || userRole === 'HR'">
       <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" size="auto" side="bottom" alignment="end" class="filter">
         <ng-template>
           <ion-content>
@@ -53,7 +53,7 @@
       </ion-popover>
     </ng-container>
 
-    <ion-list *ngIf="userRole === 'Admin'" mode="ios" inset="false">
+    <ion-list *ngIf="userRole === 'Admin' || userRole === 'HR'" mode="ios" inset="false">
       <ion-item lines="none" [button]="false" *ngIf="isDataLoaded && employeeList.length === 0">
         <ion-label class="ion-text-center">No any employee.</ion-label>
       </ion-item>

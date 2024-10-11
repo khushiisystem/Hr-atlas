@@ -203,7 +203,7 @@ const routes: Routes = [
         title: "Admin Leaves",
         component: AdminLeavesPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: ["Admin"]}
+        data: {role: ["Admin", "HR"]}
       },
       {
         path: 'directory',
@@ -244,7 +244,7 @@ const routes: Routes = [
         title: 'Today\'s Attendance',
         component: AttendanceStatusPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: ["Admin"]},
+        data: {role: ["Admin", "HR"]},
       },
       {
         path: '',

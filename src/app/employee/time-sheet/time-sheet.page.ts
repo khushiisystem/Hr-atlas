@@ -93,10 +93,8 @@ export class TimeSheetPage implements OnInit {
     this.roleStateServ.getState().subscribe(res => {
       if(res){
         this.userRole = res;
-        console.log("userRole1: ", this.userRole);
       } else {
         this.userRole = localStorage.getItem('userRole') || "";
-        console.log("userRole2: ", this.userRole);
       }
     });
     // this.isLoggedIn = localStorage.getItem('token') != null && localStorage.getItem('token')?.toString().trim() != "";
@@ -190,7 +188,7 @@ export class TimeSheetPage implements OnInit {
         const data : IProject[] = res;
         this.projects = data;
         this.isDataLoaded = true;
-        console.log("projects: ", this.projects)
+        // console.log("projects: ", this.projects)
       }
     }, (error) => {
       this.isDataLoaded = true;
@@ -253,7 +251,6 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getTimesheetList(this.pageIndex * 100, 100).subscribe(res => {
       if(res) {
         this.timesheetList = res;
-        console.log("timesheet: ", this.timesheetList);
         // this.isAdmin = true;
       }
     });
@@ -264,7 +261,7 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getTimesheetDay(this.timesheetDate).subscribe(res => {
       if(res && res instanceof Array) {
         this.timesheetOfTheDay = res;
-        console.log("getTimsheetDay; ", res);
+        // console.log("getTimsheetDay; ", res);
       }
     })
   }
@@ -300,7 +297,6 @@ export class TimeSheetPage implements OnInit {
         }
         this.hours = Math.floor(this.totalMontTime / 60);
         this.minutes = this.totalMontTime % 60;
-        console.log("getTimesheetMonth: ", this.totalMontTime);
       }
     })
   }
@@ -351,7 +347,7 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getUserTimesheet(this.pageIndex * 100, 100, userId).subscribe(res => {
       if(res) {
         this.userTimesheet = res; 
-        console.log("getUserTimesheet: ", this.userTimesheet);
+        // console.log("getUserTimesheet: ", this.userTimesheet);
       }
     })
   }
