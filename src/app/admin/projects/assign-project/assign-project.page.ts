@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DatetimeCustomEvent } from '@ionic/angular';
+import { DatetimeCustomEvent, IonContent } from '@ionic/angular';
 import * as moment from 'moment';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
 import { IProject } from '../projects.page';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
+import { ShareService } from 'src/app/services/share.service';
 
 export interface IAssignPro {
+  map(arg0: (item: any) => any): unknown;
   projectId: string,
   userId: string,
   startDate: string, 
@@ -15,6 +17,7 @@ export interface IAssignPro {
   guid: string,
   project: {
     title: string;
+    guid: string;
   },
   user: {
     firstName: string;
@@ -39,12 +42,14 @@ export class AssignProjectPage implements OnInit {
   assProjects: IAssignPro[] = [];
   assProjectId: string = '';
   updateForm: boolean = false;
+  @ViewChild(IonContent) content!: IonContent;
 
 
   constructor(
     private _fb: FormBuilder,
     private adminServ: AdminService,
     private timesheetSer: TimeSheetService,
+    private shareServ: ShareService,
   ) { }
 
   ngOnInit() {
@@ -125,7 +130,8 @@ export class AssignProjectPage implements OnInit {
       if(this.assProjectId.trim() == '') { return }
       this.timesheetSer.updateAssignProject(this.assProjectId, this.assignProjectForm.value).subscribe(res => {
         if(res) {
-          console.log("update: ", res);
+          this.shareServ.presentToast('Assign Project Updated successfully.', 'top', 'success');
+          // console.log("update: ", res);
           this.assignProjectForm.reset();
           this.updateForm = false;
           this.assProjectId = '';
@@ -136,8 +142,11 @@ export class AssignProjectPage implements OnInit {
       console.log("add")
       this.timesheetSer.addAssignProject(this.assignProjectForm.value).subscribe(res => {
         if(res) {
-          console.log("add : ", res);
+          this.shareServ.presentToast('Assign Project successfully.', 'top', 'success');
+          // console.log("add : ", res);
           this.assignProjectForm.reset();
+          this.getAssignProjects();
+          
         }
       });
     }
@@ -147,5 +156,8 @@ export class AssignProjectPage implements OnInit {
     this.assignProjectForm.patchValue(assProject);
     this.assProjectId = assProject.guid;
     this.updateForm = true;
+    if(this.content) {
+      this.content.scrollToTop(100);
+    }
   }
 }

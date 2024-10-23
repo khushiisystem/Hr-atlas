@@ -29,8 +29,8 @@
          <!-- project  -->
          <ion-col size="12">
            <ion-select formControlName="projectId" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
-             <div *ngFor="let project of projects; index as i">
-               <ion-select-option value="{{project.guid}}">{{project.title}}</ion-select-option>
+             <div *ngFor="let assProject of assProjects; index as i">
+               <ion-select-option value="{{assProject.project.guid}}">{{assProject.project.title}}</ion-select-option>
              </div>
            </ion-select>
            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['projectId'].touched && timeSheetForm.controls['projectId'].errors">
@@ -140,7 +140,9 @@
        </ion-row>
    
        <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round" (click)="clear()">Clear</ion-button>
-       <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round" [disabled]="timeSheetForm.invalid" (click)="submit()">Add</ion-button>        
+       <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round" [disabled]="timeSheetForm.invalid" (click)="submit()">
+        {{ update ? 'Update' : 'Add' }} 
+       </ion-button>        
        
        <ion-modal trigger="startTime" #startTime [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
          <ng-template>

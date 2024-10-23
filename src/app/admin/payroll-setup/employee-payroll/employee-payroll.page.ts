@@ -229,7 +229,11 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
   }
 
   checkFormValidation(){
-    return this.getFormValue("bonus") === 0 && this.getFormValue("advanceAmount") === 0 && this.getFormValue("otherDeduction") === 0 && this.getFormValue("deductionAmount") === 0 && this.getFormValue("compOff") === 0;
+    return this.getFormValue("bonus") === 0 
+      && this.getFormValue("advanceAmount") === 0 
+      && this.getFormValue("otherDeduction") === 0 
+      && this.getFormValue("deductionAmount") === 0 
+      && this.getFormValue("compOff") === 0;
   }
 
   submit(){    

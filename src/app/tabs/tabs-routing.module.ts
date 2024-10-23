@@ -125,7 +125,7 @@ const routes: Routes = [
         title: "Additional Setup",
         component: AdditionalSetupPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: ["Admin"]}
+        data: {role: ["Admin", "HR"]}
       },
       {
         path: 'profile',
@@ -138,14 +138,14 @@ const routes: Routes = [
         title: 'Admin Profile',
         component: AdminProfilePage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: ["Admin"]}
+        data: {role: ["Admin", "HR"]}
       },
       {
         path: 'add-employee/:action/:employeeId',
         title: "Add Employee",
         component: AddEmployeePage,
         canActivate: [AuthGuard, RoleGuard],
-        data: {role: ["Admin"]}
+        data: {role: ["Admin", "HR"]}
       },
       {
         path: 'settings',

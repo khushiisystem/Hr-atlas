@@ -3,7 +3,7 @@
     <div>
       <ion-card-title>{{attendanceData.created_date | date:'EEE, dd MMM'}}</ion-card-title>
       <ion-card-subtitle *ngIf="workDurationString.trim() === '0h 0m 0s'">{{attendanceData.status}}</ion-card-subtitle>
-      <ion-note *ngIf="workDurationString.trim() !== '0h 0m 0s' && attendanceData.status !== 'Absent'"><ion-icon name="time-outline" size="small" style="vertical-align: middle; margin-right: 5px;"></ion-icon>{{workDurationString}}</ion-note>
+      <ion-note *ngIf="workDurationString.trim() !== '0h 0m 0s' && attendanceData.status !== 'Absent'"><ion-icon name="time-outline" size="small" style="vertical-align: middle; margin-right: 5px;"></ion-icon>{{workDurationString}}</ion-note>      
     </div>
     
     <!-- <ion-button [shape]="'round'" [mode]="'ios'" [size]="'small'" [fill]="'clear'" [color]="'medium'" *ngIf="attendanceData.attendanceData.length > 0 || attendanceData.leaveData != null" class="expandBtn">
@@ -11,8 +11,16 @@
     </ion-button> -->
 
     <ion-chip color="tertiary" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" (click)="markPresent($event)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip>
+    <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
+
   </ion-card-header>
   <ion-card-content [class.show]="openCard && isAllGood && !isWeekOff">
+    <div class="regBtn">
+      <ion-chip color="tertiary" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip">Regularization</ion-chip>
+      <ion-chip color="success" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip">Approve</ion-chip>
+      <ion-chip color="danger" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip">Reject</ion-chip>
+    </div>
+
     <table *ngIf="attendanceData.attendanceData.length > 0" class="ion-margin-top">
       <thead>
         <tr>
@@ -71,5 +79,149 @@
       <ion-icon [name]="openCard ? 'chevron-up-outline' : 'chevron-down-outline'" slot="end" [size]="'small'"></ion-icon>
     </ion-button>
   </div>
+
+
+  <form> 
+    <ion-modal #modal class="ion-padding">
+      <ng-template>
+        <ion-content>
+          <ion-toolbar>
+            <ion-title>Regularization</ion-title>
+            <ion-buttons slot="end">
+              <ion-button color="light" (click)="closeModal()">Close</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+          <ion-list>
+            <ion-item>
+              <ion-avatar slot="start">
+                <ion-img src="https://i.pravatar.cc/300?u=b"></ion-img>
+              </ion-avatar>
+              <ion-label>
+                <h2>Connor Smith</h2>
+                <p>Sales Rep</p>
+              </ion-label>
+            </ion-item>
+            
+            <!-- date  -->
+            <ion-col size="12">
+              <ion-item  id="attandanceDate" (click)="markTouched('attandanceDate')">
+                <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('attandanceDate') | date" [errorText]="regularization.controls['attandanceDate'].touched && regularization.controls['attandanceDate'].errors ? 'Attandance Date is required' : ''" [required]="true" class="dateInput">
+                  <div slot="label">Attandance Date <ion-text color="danger">*</ion-text></div>
+                </ion-input>
+                <!-- <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors"></ion-icon> -->
+              </ion-item>
+              <ion-text color="danger" class="error_txt" *ngIf="regularization.controls['attandanceDate'].touched && regularization.controls['attandanceDate'].errors">
+                Attandance Date is required
+             </ion-text>
+            </ion-col>
+            <ion-modal trigger="attandanceDate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar>
+                    <ion-title>Select Date</ion-title>
+                  </ion-toolbar>
+                </ion-header>
+                <ion-content>
+                  <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
+                    <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
+                    <ion-buttons slot="buttons">
+                      <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
+                      <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
+                    </ion-buttons>
+                  </ion-datetime>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
+             <!-- date  -->
+  
+             <!-- clock-in time start -->
+             <ion-col size="6">
+              <ion-item detail="false" id="clockIn" (click)="markTouched('clockIn')">
+                <!-- <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon> -->
+                <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
+                  <div slot="label">Clock in Time<ion-text color="danger">*</ion-text></div>
+                </ion-input>
+               </ion-item>
+               <ion-text color="danger" class="error_txt" *ngIf="regularization.controls['clockIn'].touched && regularization.controls['clockIn'].errors">
+                Clock in Time is required.
+              </ion-text>
+            </ion-col>
+            <ion-modal trigger="clockIn" #clockIn [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+              <ng-template>
+                <ion-content>
+                  <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartTime($any($event))" [max]="today.toISOString()">
+                    <span slot="title">Clock In Time</span>
+                    <ion-buttons slot="buttons">
+                      <ion-button mode="md" color="danger" (click)="datetime.cancel(); clockIn.dismiss()">Cancel</ion-button>
+                      <ion-button mode="md" color="primary" (click)="datetime.confirm(); clockIn.dismiss()">Done</ion-button>
+                    </ion-buttons>
+                  </ion-datetime>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
+            <!-- clock-in time start -->
+  
+            <!-- clock-out time start  -->
+            <ion-col size="6">
+              <ion-item detail="false" id="clockOut" (click)="markTouched('clockOut')">
+                <!-- <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon> -->
+                <ion-input labelPlacement="floating" [value]="getEndTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
+                  <div slot="label">Clock Out Time<ion-text color="danger">*</ion-text></div>
+                </ion-input>
+               </ion-item>
+               <ion-text color="danger" class="error_txt" *ngIf="regularization.controls['clockOut'].touched && regularization.controls['clockOut'].errors">
+                Clock Out Time is required
+              </ion-text>
+            </ion-col>
+  
+            <ion-modal trigger="clockOut" #clockOut [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+              <ng-template>
+                <ion-content>
+                  <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setEndTime($any($event))" [max]="today.toISOString()">
+                    <span slot="title">Clock Out Tiem</span>
+                    <ion-buttons slot="buttons">
+                      <ion-button mode="md" color="danger" (click)="datetime.cancel(); clockOut.dismiss()">Cancel</ion-button>
+                      <ion-button mode="md" color="primary" (click)="datetime.confirm(); clockOut.dismiss()">Done</ion-button>
+                    </ion-buttons>
+                  </ion-datetime>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
+             <!-- clock-out time end  -->
+            
+            <!-- total hours  -->
+             <ion-item>
+              <p>Total Hours 10: 20</p>
+             </ion-item>
+  
+            <!-- select reason  -->
+            <ion-item>
+              <ion-select aria-label="select-reason" interface="action-sheet" placeholder="Select Reason">
+                <ion-select-option value="missed-clock-in">Missed ClockIn</ion-select-option>
+                <ion-select-option value="missed-clock-out">Missed ClockOut</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <!-- description  -->
+             <ion-col>
+               <ion-item>
+                <ion-textarea labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Descirption" rows="3">
+                  <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
+                </ion-textarea>
+                <ion-text color="danger" class="error_txt" *ngIf="regularization.controls['description'].touched && regularization.controls['description'].errors">
+                 Description is required
+                </ion-text>
+               </ion-item>
+             </ion-col>
+  
+             <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round" (click)="submit()">
+              <!-- {{ update ? 'Update' : 'Add' }}  -->
+                Submit
+             </ion-button> 
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  </form>
+  
   <ion-skeleton-text style="width: 100%; height: 80px;" animated="true" class="inherit_shap ion-no-margin" *ngIf="!isAllGood"></ion-skeleton-text>
 </ion-card>

@@ -96,9 +96,9 @@
           <ion-textarea rows="3" labelPlacement="floating" label="Description" formControlName="description" aria-label="description"></ion-textarea>
         </ion-item>
       </ion-list>
-
+      <!-- [disabled]="checkFormValidation()" -->
       <div class="ion-text-end btn-group ion-padding">
-        <ion-button color="primary" type="button" mode="ios" [strong]="true" shape="round" [disabled]="checkFormValidation()" (click)="submit()">Submit</ion-button>
+        <ion-button color="primary" type="button" mode="ios" [strong]="true" shape="round" (click)="submit()">Submit</ion-button>
       </div>
     </form>
   </div>

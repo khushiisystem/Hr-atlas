@@ -1,7 +1,7 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" fill="clear" [routerDirection]="'back'" (click)="goBack()" class="noBg noRipple">
+      <ion-button mode="md" fill="clear" [routerDirection]="'back'" [routerLink]="['/tabs/directory']" routerLinkActive="router-link-active" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -33,7 +33,7 @@
           <ion-skeleton-text animated="true" style="width: 95%; height: 15px" *ngIf="!employeeDetail"></ion-skeleton-text>
           <ion-skeleton-text animated="true" style="width: 40%; height: 10px" *ngIf="!employeeDetail"></ion-skeleton-text>
         </ion-label>
-        <ion-button mode="ios" shape="round" size="small" fill="clear" color="tertiary" aria-label="Edit Profile" class="editSmallBtn" *ngIf="userRole === 'Admin' && employeeDetail" (click)="editProfile()">
+        <ion-button mode="ios" shape="round" size="small" fill="clear" color="tertiary" aria-label="Edit Profile" class="editSmallBtn" *ngIf="userRole === 'Admin' || userRole === 'HR' && employeeDetail" (click)="editProfile()">
           <ion-icon name="pencil" slot="icon-only" aria-label="Edit"></ion-icon>
         </ion-button>
       </ion-list-header>
@@ -146,7 +146,7 @@
     </ng-container>
   </ion-list>
 
-  <div *ngIf="userRole === 'Admin' && (!workLoaded || workDetail)">
+  <div *ngIf="userRole === 'Admin' || userRole === 'HR' && (!workLoaded || workDetail)">
     <ng-container *ngIf="workDetail && workDetail.workHistory">
       <ion-list mode="md" lines="none" class="ion-margin-bottom" *ngFor="let history of workDetail.workHistory; index as a;">
         <ion-list-header mode="ios">
@@ -248,7 +248,7 @@
     </ion-list>
   </div>
 
-  <ion-list mode="ios" class=" ion-margin-bottom" *ngIf="userRole === 'Admin'">
+  <ion-list mode="ios" class=" ion-margin-bottom" *ngIf="userRole === 'Admin' || userRole === 'HR'">
     <ion-list-header mode="ios">
       <ion-label class="ion-text-wrap">
         <h2>Assigned Work week</h2>
@@ -357,7 +357,7 @@
     </ng-container>
   </ion-list>
 
-  <ion-list mode="ios" class="ion-padding-vertical" *ngIf="userRole === 'Admin' || !employeeDetail">
+  <ion-list mode="ios" class="ion-padding-vertical" *ngIf="userRole === 'Admin' || userRole === 'HR' || !employeeDetail">
     <ng-container *ngIf="employeeDetail">
       <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" class="settingBtns_item" (click)="editProfile()">
         <ion-chip slot="start" color="medium">

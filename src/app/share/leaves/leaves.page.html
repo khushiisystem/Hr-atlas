@@ -7,7 +7,7 @@
       </ion-buttons>
       <ion-title>Leaves</ion-title>
 
-      <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === userDetails.role" slot="end" (ionChange)="roleToggle($event, userDetails.role)" class="ion-margin-end" *ngIf="isSwitchable">{{userDetails.role}}</ion-toggle>
+      <ion-toggle aria-label="Change Role" labelPlacement="end" color="primary" [checked]="userRole === userDetails.role" slot="end" (ionChange)="roleToggle($event, userDetails.role)" class="ion-margin-end" *ngIf="isSwitchable && userDetails">{{userDetails.role}}</ion-toggle>
       <ion-thumbnail slot="end" class="logo_img ion-margin-end">
         <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
       </ion-thumbnail>
@@ -21,7 +21,7 @@
 
   <app-employee-leaves *ngIf="userRole === 'Employee'"></app-employee-leaves>
 
-  <!-- <app-admin-leaves *ngIf="userRole === 'Admin'" [leaveType]="leaveType ? leaveType : ''"></app-admin-leaves> -->
-  <app-admin-leaves *ngIf="userRole === userDetails.role" [leaveType]="leaveType ? leaveType : ''"></app-admin-leaves>
+  <app-admin-leaves *ngIf="userRole === 'Admin' || userRole === 'HR'" [leaveType]="leaveType ? leaveType : ''"></app-admin-leaves>
+  <!-- <app-admin-leaves *ngIf="userRole === userDetails.role" [leaveType]="leaveType ? leaveType : ''"></app-admin-leaves> -->
 
 </ion-content>

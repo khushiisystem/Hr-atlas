@@ -113,7 +113,7 @@
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
-  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="userRole === 'Admin'">
+  <ion-fab [vertical]="'bottom'" [horizontal]="'end'" [slot]="'fixed'" *ngIf="userRole === 'Admin' || userRole === 'HR'">
     <ion-fab-button (click)="employeeMoal(null, 'add')" aria-label="Add Employee">
       <ion-icon name="person-add-outline" aria-hidden="true"></ion-icon>
     </ion-fab-button>

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatetimeCustomEvent, IonContent, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
+import { IAssignPro } from 'src/app/admin/projects/assign-project/assign-project.page';
 import { IProject } from 'src/app/admin/projects/projects.page';
 import { ICategory } from 'src/app/admin/timesheet-category/timesheet-category.page';
 import { ISubCategory } from 'src/app/admin/timesheet-sub-category/timesheet-sub-category.page';
@@ -82,6 +83,7 @@ export class TimeSheetPage implements OnInit {
   userRole: string = '';
   isLoggedIn: boolean = false;
   allEmployeeList: IEmployeeResponse[] = [];
+  assProjects: IAssignPro[] = [];
   
   constructor(
     private _fb: FormBuilder,
@@ -124,6 +126,7 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetDay();
     this.getTimesheetMonth();
     this.getUserTimesheet();
+    this.getAssignProjects();
   }
 
   getFormGroup(ctrlName: string): FormGroup{
@@ -195,11 +198,23 @@ export class TimeSheetPage implements OnInit {
     });
   }
 
+    // get assign project 
+  getAssignProjects() {
+    this.timesheetSer.getAllAssignProjects(this.pageIndex * 100, 100).subscribe(res => {
+      if(res) {
+        const data: IAssignPro[] = res;
+        this.assProjects = data;
+        // console.log("get assProj res: ", this.assProjects);
+      }
+    })
+  }
+
   getCategories() {
     this.timesheetSer.getAllCategories(this.pageIndex * 100, 100).subscribe(res => {
       if(res) {
         const data: ICategory[] = res;
         this.categories = data;
+        // console.log("categories: ", this.categories);
         this.isDataLoaded = true;
         // console.log("categories: ", this.categories);
       }
@@ -215,6 +230,7 @@ export class TimeSheetPage implements OnInit {
       if(res) {
         const data: ISubCategory[] = res;
         this.subCategories = data;
+        // console.log("subCategory: ", this.subCategories)
         this.isDataLoaded = true;
         // console.log("subCategories: ", this.subCategories);
       }
@@ -226,14 +242,15 @@ export class TimeSheetPage implements OnInit {
   }
   
   submit() {
-    console.log("form value : ", this.timeSheetForm.value);
+    // console.log("form value : ", this.timeSheetForm.value);
     if(this.update) {
       if(this.timesheetId.trim() == '') { return }
       this.timesheetSer.updateTimesheet(this.timesheetId, this.timeSheetForm.value).subscribe(res => {
         if(res) {
-          console.log("updated timesheet: ", res);
+          // console.log("updated timesheet: ", res);
           this.timeSheetForm.reset();          
           this.update = false;
+          this.getUserTimesheet();
         }
       });
     }
@@ -241,7 +258,10 @@ export class TimeSheetPage implements OnInit {
       this.timesheetSer.addTimesheet(this.timeSheetForm.value).subscribe(res => {
         if(res) {
           // this.isAdmin = false;
-          console.log("res: ", res);
+          // console.log("res: ", res);
+          this.getTimesheetList();
+          this.getUserTimesheet();
+          this.timeSheetForm.reset();
         }
       }); 
     }       
@@ -251,6 +271,7 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getTimesheetList(this.pageIndex * 100, 100).subscribe(res => {
       if(res) {
         this.timesheetList = res;
+        // console.log("admin Timesheet: ", this.timesheetList);
         // this.isAdmin = true;
       }
     });
@@ -319,7 +340,9 @@ export class TimeSheetPage implements OnInit {
     }  
     this.timesheetSer.approveReject(data).subscribe(res => {
       if(res) {
-        console.log("res: ", res);
+        // console.log("res: ", res);
+        this.getUserTimesheet();
+        this.getTimesheetList();
       }
     });
   }
@@ -347,7 +370,7 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getUserTimesheet(this.pageIndex * 100, 100, userId).subscribe(res => {
       if(res) {
         this.userTimesheet = res; 
-        // console.log("getUserTimesheet: ", this.userTimesheet);
+        // console.log("getUserTimesheet: ", this.userTimesheet); 
       }
     })
   }

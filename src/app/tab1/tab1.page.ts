@@ -19,6 +19,9 @@ import { IClockInResponce } from '../interfaces/response/IAttendanceSetup';
 import { HollydaySetupPage } from '../admin/hollyday-setup/hollyday-setup.page';
 import { LeaveAction } from '../share/components/leave-card/leave-card.page';
 import { Subscription } from 'rxjs';
+import { h } from 'ionicons/dist/types/stencil-public-runtime';
+import { TimeSheetService } from '../services/time-sheet.service';
+import { ITimesheet } from '../employee/time-sheet/time-sheet.page';
 
 export interface BirthItem {
   eventDate: Date,
@@ -64,6 +67,12 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   clockInDataLoaded: boolean = false;
   today: Date = new Date();
   apiSubscription!: Subscription;
+  timesheetDate: string = new Date().toISOString();
+  timesheetOfTheDay: ITimesheet[] = [];
+  totalDayTime: number = 0;
+  hours: number = 0;
+  wHours: number = 0;
+  workHour: number = 0;
 
   constructor(
     private router: Router,
@@ -76,6 +85,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     private roleStateServ: RoleStateService,
     private loader: LoaderService,
     private userStateServ: UserStateService,
+    private timesheetSer: TimeSheetService,
   ) {
     this.isSwitchable = false;
   }
@@ -96,6 +106,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
       spaceBetween: 20,
       centeredSlides: true,
     })
+    // this.getTimesheetTimeOfDay();
   }
   ngAfterViewInit(): void {
     this.swiperReady();
@@ -132,7 +143,9 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           }
         } else if(res.role === 'Admin' || res.role === 'HR') {
           localStorage.setItem('isSwitchable', 'true');
-          this.checkAdminSetups();
+          if(res.role === 'Admin'){
+            this.checkAdminSetups();
+          }
           this.requestedLeaveList = [];
           this.getRequests();
           this.today.setHours(0, 0, 0);
@@ -242,6 +255,20 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
   getAttendance(){
     this.apiSubscription = this.shareServ.todayAttendance().subscribe(res => {
+      // console.log("res Attendance: ", res);
+      // if(res) {
+      //   let hours = 0;
+      //   let minutes = 0;
+      //   for (const workTime of res) {
+      //     if (workTime.workingTime) {
+      //       console.log("a: ", workTime.workingTime);
+      //       hours += parseInt(workTime.workingTime.split(':')[0]);
+      //       minutes += parseInt(workTime.workingTime.split(':')[1]);
+      //       this.wHours += hours+Math.floor(minutes/60);
+      //       console.log(minutes, hours, this.wHours);
+      //     }
+      //   }
+      // }
       if(res && !res.message && !res[0].clockOut) {
         if(res[0].clockIn && res[0].clockIn.trim() !== '' && !res[0].clockOut){
           this.isRunning = true;
@@ -260,7 +287,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
       this.isRunning = false;
       this.clockInDataLoaded = true;
       console.log(error.error.Message, 'err');
-    });
+    }); 
   }
 
   toggleStopwatch() {
@@ -382,7 +409,8 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     const getTime = (timeStr: string | Date) =>{
       moment(timeStr).date() == moment(this.today).date();
     }
-    return this.birthdayList.filter((item) => getTime(item.dateOfBirth));
+    const todaysBirthdays = this.birthdayList.filter((item) => getTime(item.dateOfBirth));
+    return [...new Set(todaysBirthdays)]; 
   }
 
   mathcDate(dateStr: string | Date, dateStr2: string | Date){
@@ -711,4 +739,16 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   }
 
   logout() {this.authServ.signOut();}
+
+  // getTimesheetTimeOfDay() {
+  //   this.timesheetSer.getTimesheetDay(this.timesheetDate).subscribe(res => {
+  //     if(res && res instanceof Array) {
+  //       this.timesheetOfTheDay = res;
+  //       for (let day of this.timesheetOfTheDay) {
+  //         this.totalDayTime += day.totalTime;
+  //       }
+  //       this.hours = Math.floor(this.totalDayTime / 60);
+  //     }
+  //   })
+  // }
 }
