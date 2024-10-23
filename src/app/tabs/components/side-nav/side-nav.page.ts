@@ -41,7 +41,7 @@ export class SideNavPage implements OnInit {
   goNext(route: string[],){
     if(this.userRole === 'Employee'){
       this.router.navigate([route[0]]);
-    } else if(this.userRole === 'Admin'){
+    } else if(this.userRole === 'Admin' || this.userRole === 'HR'){
       this.router.navigate([route[1]]);
     }
     this.sideNav.toggle();
