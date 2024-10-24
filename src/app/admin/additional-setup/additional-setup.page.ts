@@ -231,7 +231,7 @@ export class AdditionalSetupPage implements OnInit {
       }
     }, (error) => {
       console.log(error, "error");
-      this.shareServ.presentToast('womething is wrong', 'top', 'danger');
+      this.shareServ.presentToast('Something is wrong', 'top', 'danger');
       this.loader.dismiss();
     });
   }

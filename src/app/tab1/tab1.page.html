@@ -149,7 +149,7 @@
       </ion-label>
     </ion-list-header>
 
-      <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngIf="getTodaysBirthday().length > 0">
+      <!-- <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngIf="getTodaysBirthday().length > 0">
         <ion-avatar slot="start" class="dateAvatar bg">
           <ion-label color="light">{{ getTodaysBirthday()[0].dateOfBirth | date:'dd' }}</ion-label>
           <ion-text color="light"><small>{{ getTodaysBirthday()[0].dateOfBirth | date:'E' }}</small></ion-text>
@@ -157,7 +157,7 @@
         <ion-label>
           <ion-chip *ngFor="let item of getTodaysBirthday(); index as a;" class="birthChip">{{item.firstName + " " + item.lastName}}</ion-chip>
         </ion-label>
-      </ion-item>
+      </ion-item> -->
 
       <ion-item lines="none" detail="false" class="ion-margin-top list-item" *ngFor="let item of nextBirthdays; index as a;">
         <ion-avatar slot="start" class="dateAvatar bg">

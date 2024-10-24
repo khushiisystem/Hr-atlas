@@ -135,6 +135,7 @@ export class AssignProjectPage implements OnInit {
           this.assignProjectForm.reset();
           this.updateForm = false;
           this.assProjectId = '';
+          this.getAssignProjects();
         }
       });
     }
