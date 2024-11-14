@@ -25,6 +25,7 @@ export class ForgotPasswordPage implements OnInit {
   showPassword: boolean = false;
   showConfigPassword: boolean = false;
   isInProgress: boolean = false;
+  otpRequested = false;
 
   constructor(
     private shareServ: ShareService,
@@ -48,6 +49,7 @@ export class ForgotPasswordPage implements OnInit {
 
   onOtpChange(event: any){
     this.otpCtrl.setValue(event);
+    this.otpRequested = false;
     const val = this.otpCtrl.value;
     if(this.otpCtrl.valid){
       let otpTimeOut = setTimeout(() => {
@@ -79,6 +81,8 @@ export class ForgotPasswordPage implements OnInit {
   }
 
   verifyOtp(){
+    if(this.otpRequested) return;
+    this.otpRequested = true;
     // console.log(this.otpCtrl.value, "value");
     // console.log(this.getOTPForm.value, "email form");
     this.loader.present('');
@@ -96,11 +100,12 @@ export class ForgotPasswordPage implements OnInit {
         this.isInProgress = false;
       }
     }, (error) => {
-      this.shareServ.presentToast('Something is wrong.', 'top', 'danger');
+      console.log(error.error)
+      this.shareServ.presentToast(error.message || error.error.message || error.error.HttpResponse ||'Something is wrong.', 'top', 'danger');
       this.loader.dismiss();
       this.isInProgress = false;
     });
-    this.activeEvent = 'setPassword';
+    // this.activeEvent = 'setPassword';
   }
 
   isSamePassword(){

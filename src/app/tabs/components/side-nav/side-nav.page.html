@@ -24,14 +24,27 @@
   <ion-content>
     <div class="side-content">
       <ion-list mode="md" *ngIf="userDetails">
-        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/profile', '/tabs/admin-profile'])">
+        <!-- <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/profile', '/tabs/admin-profile'])">
+          <ion-icon name="person-circle-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>My Profile</ion-label>
+        </ion-item> -->
+
+        <!-- dynamic code start   -->
+        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext([isSwitchable ? '/tabs/admin-profile' : '/tabs/profile', '/tabs/admin-profile'])">
           <ion-icon name="person-circle-outline" slot="start" aria-hidden="true"></ion-icon>
           <ion-label>My Profile</ion-label>
         </ion-item>
-        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/attendance', '/tabs/attendance-status'])">
+        <!-- <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/attendance/{{userId}}', '/tabs/attendance-status'])">
           <ion-icon name="calendar-outline" slot="start" aria-hidden="true"></ion-icon>
           <ion-label>{{userRole === 'Employee' ? 'My ' : ''}}Attendance</ion-label>
-        </ion-item>
+        </ion-item> -->
+
+        <ion-item lines="none" detail="false" type="button" button="true" (click)="goNextAttendance(['/tabs/attendance', '/tabs/attendance-status'])">
+          <ion-icon name="calendar-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-label>{{userRole === 'Employee' ? 'My ' : ''}}Attendance</ion-label>
+        </ion-item> 
+        <!-- dynamic code end -->
+
         <ion-item lines="none" detail="false" type="button" button="true" (click)="goNext(['/tabs/leaves', '/tabs/leaves'])">
           <ion-icon name="fast-food-outline" slot="start" aria-hidden="true"></ion-icon>
           <ion-label>{{userRole === 'Employee' ? 'My ' : ''}}Leaves</ion-label>

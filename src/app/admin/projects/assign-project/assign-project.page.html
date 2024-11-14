@@ -24,17 +24,26 @@
           <div *ngFor="let project of projects; index as i">
             <ion-select-option value="{{project.guid}}">{{project.title}}</ion-select-option>
           </div>
-        </ion-select>          
+        </ion-select>   
+        <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['projectId'].touched && assignProjectForm.controls['projectId'].errors">
+          Project is required
+        </ion-text>       
       </ion-col>
       <ion-col size="12">
         <ion-select formControlName="userId" label="Employees List" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
           <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{ emp.lastName }}</ion-select-option>
         </ion-select>
+        <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['userId'].touched && assignProjectForm.controls['userId'].errors">
+          Employee is required
+        </ion-text>
       </ion-col>
-      <ion-col size="6" id="startdate">
-        <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('startDate') | date" [errorText]="assignProjectForm.controls['startDate'].touched && assignProjectForm.controls['startDate'].errors ? 'Start date is required' : ''" [required]="true" class="dateInput">
+      <ion-col size="6" id="startdate" class="ino-padding" (click)="markTouched('startDate')">
+        <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('startDate') | date" [required]="true" class="dateInput">
           <div slot="label">Start Data <ion-text color="danger">*</ion-text></div>
         </ion-input>
+        <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['startDate'].touched && assignProjectForm.controls['startDate'].errors">
+          Start Date is required
+        </ion-text>
       </ion-col>
       <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
         <ng-template>
@@ -44,7 +53,7 @@
             </ion-toolbar>
           </ion-header>
           <ion-content>
-            <ion-datetime presentation="date" formControlName="startDate" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
+            <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
               <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
               <ion-buttons slot="buttons">
                 <ion-button mode="ios" color="danger" (click)="datetime.cancel(); startDateModal.dismiss();">Cancel</ion-button>
@@ -55,10 +64,13 @@
         </ng-template>
       </ion-modal>
 
-      <ion-col size="6" id="endDate">
+      <ion-col size="6" id="endDate" (click)="markTouched('endDate')">
         <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getEndDate('endDate') | date" [errorText]="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors ? 'End date is required' : ''" [required]="true" class="dateInput">
           <div slot="label">End Data <ion-text color="danger">*</ion-text></div>
         </ion-input>
+        <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors">
+          End Date is required
+        </ion-text>
       </ion-col>
       <ion-modal trigger="endDate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #endDateModal>
         <ng-template>
@@ -68,7 +80,7 @@
             </ion-toolbar>
           </ion-header>
           <ion-content>
-            <ion-datetime presentation="date" formControlName="endDate" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectEndDate($any($event))">
+            <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectEndDate($any($event))">
               <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
               <ion-buttons slot="buttons">
                 <ion-button mode="ios" color="danger" (click)="datetime.cancel();endDateModal.dismiss();">Cancel</ion-button>

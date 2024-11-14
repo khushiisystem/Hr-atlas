@@ -66,7 +66,7 @@ export class AssignProjectPage implements OnInit {
 
   getDate(ctrlName: string){
     const formDate = this.assignProjectForm.controls[ctrlName].value;
-    return formDate != '' ? new Date(formDate) : new Date();
+    return formDate != '' ? new Date(formDate) : "";
   }
 
   selectDate(event: DatetimeCustomEvent){
@@ -75,7 +75,11 @@ export class AssignProjectPage implements OnInit {
 
   getEndDate(ctrlName: string){
     const formDate = this.assignProjectForm.controls[ctrlName].value;
-    return formDate != '' ? new Date(formDate) : new Date();
+    return formDate != '' ? new Date(formDate) : "";
+  }
+
+  markTouched(ctrlName: string) {
+    this.assignProjectForm.controls[ctrlName].markAsTouched();
   }
 
   selectEndDate(event: DatetimeCustomEvent){

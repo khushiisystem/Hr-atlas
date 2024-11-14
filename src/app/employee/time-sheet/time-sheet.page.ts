@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatetimeCustomEvent, IonContent, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
@@ -19,15 +19,15 @@ export enum ETimesheet {
 }
 
 export interface ITimesheet {
-  date?: string;
+  date: string;
   startTime: string;
   endTime: string;
   tag?: string;
-  description?: string;
+  description: string;
   guid: string;
   status: ETimesheet;
   totalTime: number;
-  adminId?: string;
+  adminId: string;
   project: {
     title: string;
   };
@@ -59,7 +59,7 @@ export class TimeSheetPage implements OnInit {
   currentYear: number = moment().year();
   projects: IProject[] = [];
   categories: ICategory[] = [];
-  subCategories: ISubCategory[] = [];;
+  subCategories: ISubCategory[] = []; 
   pageIndex: number = 0;
   minDate: Date = new Date();
   maxDate: Date = new Date();
@@ -84,6 +84,11 @@ export class TimeSheetPage implements OnInit {
   isLoggedIn: boolean = false;
   allEmployeeList: IEmployeeResponse[] = [];
   assProjects: IAssignPro[] = [];
+  highlightedDates: Array<{
+    date: string,
+    textColor: string,
+    backgroundColor: string,
+  }> = [];
   
   constructor(
     private _fb: FormBuilder,
@@ -91,6 +96,7 @@ export class TimeSheetPage implements OnInit {
     private timesheetSer: TimeSheetService,
     private modelCtrl: ModalController,
     private roleStateServ: RoleStateService,
+    private cdr: ChangeDetectorRef
   ) {
     this.roleStateServ.getState().subscribe(res => {
       if(res){
@@ -165,25 +171,7 @@ export class TimeSheetPage implements OnInit {
     });
   }
 
-  highlightedDates = (isoString: string | number | Date) => {
-    const date = new Date(isoString);
-    const utcDay = date.getUTCDate();
-
-    if (utcDay % 5 === 0) {
-      return {
-        textColor: '#800080',
-        backgroundColor: '#ffc0cb',
-      };
-    }
-
-    if (utcDay % 3 === 0) {
-      return {
-        textColor: 'var(--ion-color-secondary-contrast)',
-        backgroundColor: 'var(--ion-color-secondary)',
-      };
-    }
-    return undefined;
-  };
+  
 
   getProjects() {
     this.timesheetSer.getAllProjects(this.pageIndex * 100, 100).subscribe(res => {
@@ -204,7 +192,7 @@ export class TimeSheetPage implements OnInit {
       if(res) {
         const data: IAssignPro[] = res;
         this.assProjects = data;
-        // console.log("get assProj res: ", this.assProjects);
+        console.log("get assProj res: ", this.assProjects);
       }
     })
   }
@@ -371,9 +359,42 @@ export class TimeSheetPage implements OnInit {
       if(res) {
         this.userTimesheet = res; 
         // console.log("getUserTimesheet: ", this.userTimesheet); 
+        this.highlightedDates = this.getHighlightedDatesFunction();
+        // console.log(this.highlightedDates)
       }
     })
   }
+
+  getHighlightedDatesFunction(): Array<{date: string, textColor: string, backgroundColor: string}> {
+    let dataArray: Array<{date: string, textColor: string, backgroundColor: string}> = [];
+  
+    this.userTimesheet.forEach(element => {
+      let bgColor: string = 
+        element.status === ETimesheet.PENDING ? "orange" :
+        element.status === ETimesheet.REJECT ? "red" :
+        element.status === ETimesheet.ACCEPT ? "green" : "initial";
+  
+      const eleDate = new Date(element.date);
+      
+      // Format the date as YYYY-MM-DD (pad month and day with leading zeros)
+      const formattedDate = `${eleDate.getFullYear()}-${(eleDate.getMonth() + 1).toString().padStart(2, '0')}-${eleDate.getDate().toString().padStart(2, '0')}`;
+      
+      const data: {date: string, textColor: string, backgroundColor: string} = {
+        date: formattedDate,
+        textColor: "white",
+        backgroundColor: bgColor
+      };
+  
+      // Check if the date already exists in the array by comparing 'date'
+      if (!dataArray.some(d => d.date === data.date)) {
+        dataArray.push(data);
+      }
+    });
+  
+    return dataArray;
+  }
+  
+  
 
   onDateChange(event: any) {
     this.timesheetDate = event.detail.value; // Update the selected date

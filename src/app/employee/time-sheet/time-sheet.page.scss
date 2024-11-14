@@ -34,3 +34,13 @@
     margin: auto;
     width: 100%;
   }
+
+  ion-datetime {
+    --background: #f3fbfe;
+    // --background-rgb: 255, 241, 242;
+  
+    margin-top: 5px;
+    border-radius: 16px;
+    box-shadow: rgba(var(--ion-color-rose-rgb), 0.3) 0px 10px 15px -3px;
+  }
+  

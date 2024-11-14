@@ -15,6 +15,8 @@ export class SideNavPage implements OnInit {
   @ViewChild(IonMenu) sideNav!: IonMenu;
   userRole: string = '';
   userDetails!: IEmployeeResponse;
+  userId: string = "";
+  isSwitchable: boolean = false;
 
   constructor(
     private authServ: AuthService,
@@ -28,9 +30,12 @@ export class SideNavPage implements OnInit {
       }
     });
     this.roleStateServ.getState().subscribe(res => {this.userRole = res;});
+
+    this.isSwitchable = localStorage.getItem("isSwitchable") !== null && (localStorage.getItem("isSwitchable") === 'true');
   }
 
   ngOnInit() {
+    this.userId = localStorage.getItem('userId') || "";
   }
 
   logout() {
@@ -47,4 +52,13 @@ export class SideNavPage implements OnInit {
     this.sideNav.toggle();
   }
 
+  goNextAttendance(route: string[],){
+    console.log(this.userRole, " userrole")
+    if(this.userRole === 'Employee'){
+      this.router.navigate(['/tabs/attendance/' + this.userId]);
+    } else if(this.userRole === 'Admin' || this.userRole === 'HR'){
+      this.router.navigate(['/tabs/attendance-status']);
+    }
+    this.sideNav.toggle();
+  }
 }
