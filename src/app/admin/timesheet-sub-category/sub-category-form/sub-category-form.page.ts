@@ -66,7 +66,7 @@ export class SubCategoryFormPage implements OnInit {
       if(res) {
         this.shareServ.presentToast("SubCategory Updated", 'top', 'success');
         this.loader.dismiss();
-        this.modalCtrl.dismiss();
+        this.modalCtrl.dismiss(res);
       }
     }, (error) => {
       this.shareServ.presentToast('Something went wrong', 'top', 'danger');

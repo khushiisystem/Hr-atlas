@@ -136,4 +136,21 @@ export class ShareService {
   upcomingBirthday(): Observable<IEmployeeResponse[]> {
     return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user/upcomingBirthday`);
   }
+
+  // regularization
+  addRegularization() {
+    
+  }
+  getAllRegularization(): Observable<any> {
+    return this.http.get<any[]>(environment.Api + `api/regularization`);
+  }
+  getByIdRegularization() {
+    
+  }
+  updateRegularization() {
+    
+  }
+  deleteRegularization() {
+    
+  }
 }

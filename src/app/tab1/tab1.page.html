@@ -404,7 +404,7 @@
       </ng-container>
     </ion-list> -->
 
-    <ion-list mode="ios" inset="true" class="attendanceList" *ngIf="userRole === 'Admin' && (attendanceList.length > 0 || !attendanceLoaded)">
+    <ion-list mode="ios" inset="true" class="attendanceList" *ngIf="userRole === 'Admin' || userRole === 'HR' && (attendanceList.length > 0 || !attendanceLoaded)">
       <ion-list-header>
         <ion-label>Today's Attendance</ion-label>
         <ion-button aria-label="sync Attendance" size="small" shape="round" mode="md" fill="clear" (click)="getTodayAttendance(today.toISOString(), 0)">
@@ -428,7 +428,7 @@
       </ion-item>
     </ion-list>
   
-    <ion-list mode="ios" class="ion-margin-vertical" *ngIf="userRole === 'Admin' && requestedLeaveList.length > 0">
+    <ion-list mode="ios" class="ion-margin-vertical" *ngIf="userRole === 'Admin' || userRole === 'HR' && requestedLeaveList.length > 0">
       <ion-list-header>
         <ion-label>Leave Requests</ion-label>
         <ion-button fill="clear" color="primary" mode="ios" strong="true" *ngIf="requestedLeaveList.length > 0" (click)="showAllLeaves()">

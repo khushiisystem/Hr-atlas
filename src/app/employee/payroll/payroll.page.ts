@@ -146,7 +146,7 @@ export class PayrollPage implements OnInit {
 
   downloadReceipt() {
     // Generate the receipt content
-    const receiptContent = `Spundan Consultancy & IT Solutions Pvt Ltd\n3rd Floor, 315.Sai, Ram Plaza, 63 Mangal Nagar Road, Vishru Pari Colony Indor, Madhya Pradesh-152001\nMonth: ${
+    const receiptContent = `Spundan Consultancy & IT Solutions Pvt Ltd\n3rd Floor, 315.Sai, Ram Plaza, 63 Mangal Nagar Road, Vishnu Puri Colony Indor, Madhya Pradesh-152001\nMonth: ${
       this.selectedMonthName
     } ${this.payslipDate.getFullYear()}\nWorking Days: ${
       this.workingDays
