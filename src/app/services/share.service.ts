@@ -10,6 +10,8 @@ import { ILeaveRequest } from "../interfaces/request/ILeaveApply";
 import { IClockInResponce } from "../interfaces/response/IAttendanceSetup";
 import { IHollydayResponse, ILeaveLogsResponse, ILeaveSetupResponse, ILeaveStatus } from "../interfaces/response/ILeave";
 import { IEmplpoyeeWorWeek } from "../interfaces/response/IEmplpoyeeWorWeek";
+import { IRegularization } from "../employee/attendance/attendance.page";
+import { IApproveRegularizationReq } from "../interfaces/request/IApproveRegularization";
 
 @Injectable({
   providedIn: "root",
@@ -138,19 +140,24 @@ export class ShareService {
   }
 
   // regularization
-  addRegularization() {
-    
+  addRegularization(regularization: IRegularization): Observable<any> {
+    return this.http.post<any[]>(environment.Api + `api/regularization`, regularization);
   }
   getAllRegularization(): Observable<any> {
     return this.http.get<any[]>(environment.Api + `api/regularization`);
   }
-  getByIdRegularization() {
-    
+  getByIdRegularization(id: string): Observable<any> {
+    return this.http.get<any[]>(environment.Api + `api/regularization/${id}`);
   }
-  updateRegularization() {
-    
+  updateRegularization(id: string, updatedRegularization:IRegularization): Observable<any> {
+    return this.http.put<any[]>(environment.Api + `api/regularization/${id}`, updatedRegularization);
   }
-  deleteRegularization() {
-    
+  deleteRegularization(id: string): Observable<any> {
+    return this.http.delete<any>(environment.Api + `api/regularization/${id}`);
+  }
+
+  // APPROVE REJECT REGULARIZATION
+  approveRegularization(data: IApproveRegularizationReq): Observable<any> {
+    return this.http.put<any>(environment.Api + `api/regularization/approveRegu`,data);
   }
 }
