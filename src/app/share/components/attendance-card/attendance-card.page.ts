@@ -1,13 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DatetimeCustomEvent, IonicModule } from '@ionic/angular';
-import { AttListItem } from 'src/app/employee/attendance/attendance.page';
+import { DatetimeCustomEvent, IonContent, IonicModule } from '@ionic/angular';
+import { AttListItem, ERegularization, IRegularization } from 'src/app/employee/attendance/attendance.page';
 import { ReadMorePageModule } from '../read-more/read-more.module';
 import { RoleStateService } from 'src/app/services/roleState.service';
 import { AttendaceStatus } from 'src/app/interfaces/enums/leaveCreditPeriod';
 import { IonModal } from '@ionic/angular/common';
 import * as moment from 'moment';
+import { ShareService } from 'src/app/services/share.service';
+import { LoaderService } from 'src/app/services/loader.service';
+import { IApproveRegularizationReq } from 'src/app/interfaces/request/IApproveRegularization';
 
 @Component({
   selector: 'attendance-card',
@@ -17,44 +20,74 @@ import * as moment from 'moment';
   styleUrls: ['./attendance-card.page.scss'],
 })
 export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
+  @ViewChild(IonContent) content!: IonContent;
   @Input({required: true}) attendanceData!: AttListItem;
   @Input({required: true}) cardClass: string = "";
   @Input() leaveStartDay: string = "";
   @Input() leaveEndDay: string = "";
   @Input({required: true}) isWeekOff: boolean = false;
   @Input({required: true}) isAllGood: boolean = false;
+  @Input() regularization: IRegularization | null = null;
   openCard: boolean = true;
+  regCard: boolean = true;
   @Output() attendanceCardAction: EventEmitter<{approve: boolean, role: "attendance" | "leave"}> = new EventEmitter();
   workDurationString: string = "";
   totalDurationMs: number = 0;
   @ViewChild('modal', { static: true }) modal!: IonModal;
   isModalOpen = false;
-  regularization! : FormGroup;
+  regularizationForm! : FormGroup;
   openCalendar: boolean = false;
   today: Date = new Date(new Date().toDateString() + ' ' + '5:00 AM');
+  totalTimeString: string = ""; 
+  regularizationId: string = "";
+  update: boolean = false;
+
 
   constructor(
     private rolseStateServ: RoleStateService, 
     private cdr: ChangeDetectorRef,
     private _fb: FormBuilder,
+    private _shareServ: ShareService,
+    private _loader: LoaderService,
   ) { }
 
   ngOnInit() {
-    this.regularization = this._fb.group({
+    this.regularizationForm = this._fb.group({
       attandanceDate: ['', Validators.required],
       clockIn: ['', Validators.required],
       clockOut: ['', Validators.required],
-      totalHours: [''],
+      totalTime: null,
       reason: [''],      
       description: ['', Validators.required],
-      // status: ['']
     });
+
+    this.regularizationForm.get('clockIn')?.valueChanges.subscribe(() => this.calculateTotalTime());
+    this.regularizationForm.get('clockOut')?.valueChanges.subscribe(() => this.calculateTotalTime());
+  }
+  
+
+  calculateTotalTime() {
+    const clockIn = this.regularizationForm.controls['clockIn'].value;
+    const clockOut = this.regularizationForm.controls['clockOut'].value;
+    
+    if (clockIn && clockOut) {
+      const durationMs = this.calculateDuration(clockIn, clockOut);
+      this.totalTimeString = this.formatDurationReg(durationMs); // Update total time string for display
+      this.regularizationForm.patchValue({ totalTime: this.totalTimeString });
+    } else {
+      this.totalTimeString = ""; // Clear if either clockIn or clockOut is missing
+      this.regularizationForm.patchValue({ totalTime: "" })
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['attendanceData'] || changes['cardClass'] || changes['isAllGood']){
       this.workDurationString = this.calculateTotalWork();
       this.updateStatus();
+    }
+    if (this.regularization) {
+      console.log(new Date(this.regularization.attandanceDate));
+      
     }
   }
   
@@ -105,6 +138,11 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   formatDuration(ms: number): string {
     return `${Math.floor((ms / (1000 * 60 * 60)) % 24)}h ${Math.floor((ms / (1000 * 60)) % 60)}m ${Math.floor((ms / 1000) % 60)}s`;
   }
+
+  formatDurationReg(ms: number): string {
+    return `${Math.floor((ms / (1000 * 60 * 60)) % 24)}h ${Math.floor((ms / (1000 * 60)) % 60)}m`;
+  }
+
   localDate(dateStr: string | Date): Date{
     return new Date(dateStr);
   }
@@ -124,47 +162,150 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     }
   }
 
+  // openModal() {
+  //   console.log('Attempting to open modal');
+  //   if (!this.isModalOpen) {
+  //     console.log('Opening modal...');
+  //     this.modal.present().then(() => {
+  //       console.log('Modal opened');
+  //     }).catch((err) => {
+  //       console.error('Error opening modal:', err);
+  //     });
+  //     this.isModalOpen = true;
+  //   } else {
+  //     console.warn('Modal already open or reference not found');
+  //   }
+  // }
+  
+
   closeModal() {
     this.modal.dismiss();
     this.isModalOpen = false;
   }
 
   markTouched(ctrlName: string) {
-    this.regularization.controls[ctrlName].markAsTouched();
+    this.regularizationForm.controls[ctrlName].markAsTouched();
   }
 
   getStartTime(){
-    const formValue = this.regularization.controls['clockIn'].value;
+    const formValue = this.regularizationForm.controls['clockIn'].value;
     return formValue ? new Date(moment(formValue).format()) : '';
   }
   setStartTime(event: DatetimeCustomEvent) {
-    this.regularization.patchValue({
+    this.regularizationForm.patchValue({
       clockIn: moment(event.detail.value).utc().format()
     });
   }
 
   getEndTime(){
-    const formValue = this.regularization.controls['clockOut'].value;
+    const formValue = this.regularizationForm.controls['clockOut'].value;
     return formValue ? new Date(moment(formValue).format()) : '';
   }
   setEndTime(event: DatetimeCustomEvent) {
-    this.regularization.patchValue({
+    this.regularizationForm.patchValue({
       clockOut: moment(event.detail.value).utc().format()
     });
   }
 
   getDate(ctrlName: string){
-    const formDate = this.regularization.controls[ctrlName].value;
+    const formDate = this.regularizationForm.controls[ctrlName].value;
     return formDate != '' ? new Date(formDate) : "";
   }
   selectDate(event: DatetimeCustomEvent){
-    this.regularization.controls['attandanceDate'].patchValue(moment(event.detail.value).utc().format());
+    this.regularizationForm.controls['attandanceDate'].patchValue(moment(event.detail.value).utc().format());
+  }
+
+  // addRegularization() {
+  //   this._loader.present('');
+  //   this._shareServ.addRegularization(this.regularizationForm.value).subscribe(
+  //     (res) => {
+  //       if(res) {
+  //         console.log("res_mes: ", res.message);
+  //         this._shareServ.presentToast(res.message , 'top', 'success')
+  //         this._loader.dismiss();
+  //         this.regularizationForm.reset();
+  //         this.closeModal();
+  //       } else {
+  //         this._loader.dismiss();
+  //       }
+  //   }, (error) => {
+  //     this._shareServ.presentToast(error.error.message , 'top', 'danger');
+  //     this._loader.dismiss();
+  //   })
+  // }
+
+  approveReject(status: string , guid: string) {
+    const data: IApproveRegularizationReq = {
+      status: status === 'accept' ? ERegularization.ACCEPT : ERegularization.REJECT,
+      regulariztinGuid : guid
+    } 
+    this._shareServ.approveRegularization(data).subscribe(res => {
+      if(res) {
+        console.log("res_accept: ", res);
+        this.regularization
+      }
+    })
   }
 
   submit() {
-    if(this.regularization) {
-      // console.log("regularization: ",this.regularization.value);
+    if(this.update) {
+      if(this.regularizationId.trim() == '') { return }
+      this._shareServ.updateRegularization(this.regularizationId, this.regularizationForm.value).subscribe(res => {
+        if(res) {
+          console.log("res: ", res);
+          this.regularizationForm.reset();
+          this.update = false;
+          this.closeModal();
+          this.regularization
+        }
+      })
+    }
+    else {
+      this._loader.present('');
+      this._shareServ.addRegularization(this.regularizationForm.value).subscribe(
+        (res) => {
+          if(res) {
+            console.log("res_mes: ", res.message);
+            this._shareServ.presentToast(res.message , 'top', 'success')
+            this._loader.dismiss();
+            this.regularizationForm.reset();
+            this.closeModal();
+          } else {
+            this._loader.dismiss();
+          }
+      }, (error) => {
+        this._shareServ.presentToast(error.error.message , 'top', 'danger');
+        this._loader.dismiss();
+      })
     }
   }
 
+  updateRegularization(regul: IRegularization) {
+    this.regularizationForm.patchValue(regul);
+    this.regularizationId = this.regularization!.guid;
+    console.log("id: ", this.regularizationId);
+
+    this.update = true;
+    if(this.content){   
+      this.content.scrollToTop(100);
+    }
+  }
+
+  handleModalAction(regul: IRegularization) {
+    console.log('Button clicked with regularization:', regul);
+    console.log(this.isModalOpen, "isModelOpen");
+    this.openModal();
+  
+    if (regul) {
+      console.log('Patching form with data:', regul);
+      this.updateRegularization(regul);
+    }
+  }
+  
+  getStatusClass(status: string): string {
+    return status  === 'Pending' ? 'status-pending' : 
+        status === 'Accept' ? 'status-accept' : 
+        status === 'Reject' ? 'status-reject' : '';
+  }
+  
 }

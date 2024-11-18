@@ -14,6 +14,13 @@ import { RoleStateService } from 'src/app/services/roleState.service';
 import { ShareService } from 'src/app/services/share.service';
 import { IEmpSelect } from 'src/app/share/employees/employees.page';
 
+
+export enum ERegularization {
+  PENDING = "Pending",
+  REJECT = "Reject",
+  ACCEPT = "Accept"
+}
+
 export interface IHighlightedDate {
   date: Date | string,
   textColor?: string,
@@ -28,6 +35,22 @@ export interface AttListItem {
   open_form: boolean,
   attendanceData: Array<any>,
   leaveData: any,
+}
+
+export interface IRegularization {
+  attandanceDate: string,
+  clockIn: string,
+  clockOut: string,
+  totalTime: string,
+  reason: string,
+  description: string,
+  status: string,
+  adminId: string,
+  guid: string;
+  user: {
+    firstName: string;
+    lastName: string;
+  }
 }
 
 @Component({
@@ -65,6 +88,8 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   apiSubscription!: Subscription;
   tabsList = [{value: "status", label: "Status"}, {value: "listview", label: "List View"},{value: "calendarView", label: "Calendar View"}, {value: "leaves", label: "Leaves"}];
   employeeDetail!: IEmployeeResponse;
+  getReg:IRegularization[] = [];
+  regCard: boolean = true;
 
   constructor(
     private shareServ: ShareService,
@@ -96,6 +121,8 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       this.getLogs();
       this.getWorkWeek();
     }
+
+    this.getAllRegularization();
   }
 
   ionViewWillEnter(){
@@ -676,6 +703,19 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     customDate.setDate(1);
     customDate.setHours(0,0,0);
     return customDate.toISOString();
+  }
+
+  getAllRegularization() {
+    this.shareServ.getAllRegularization().subscribe(res => {
+      if(res) {
+        // console.log("reg_res: ", res);
+        this.getReg = res;
+      }
+    })
+  }
+
+  getRegularization(date: string | Date): IRegularization | null {
+    return this.getReg.find((item: IRegularization) => moment(date).isSame(item.attandanceDate,'year') && moment(date).isSame(item.attandanceDate,'month') && moment(date).isSame(item.attandanceDate,'day')) || null;
   }
 
 }

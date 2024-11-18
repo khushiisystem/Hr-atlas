@@ -72,17 +72,17 @@
     ion-card-content{opacity: 0; visibility: hidden; display: none; transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;
     &.show{opacity: 1; visibility: visible; display: block; transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;}}
     will-change: contents height;
+
+    .regBtn {
+        display: flex;
+        justify-content: end;
+    }
 }
 
 table{
     width: 100%;
     th, td{ text-align: start; width: 33%; padding: 5px;}
     th, tfoot td{vertical-align: text-top; background-color: #f5f5f5;}
-}
-.regBtn {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 1vh;
 }
 
 ion-modal {
@@ -97,6 +97,25 @@ ion-modal {
   }
   
   ion-modal ion-toolbar {
-    --background: rgb(14 116 144);
+    --background: rgb(34, 102, 247);
     --color: white;
   }
+  .rounded-rectangle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    h2 { font-size: 16px; font-weight: 600; margin: auto 0 10px 0; }
+    ion-button { height: 33px; font-size: 15px; }
+  }
+
+  .status-pending {
+    color: orange;
+  }
+  .status-accept {
+    color: green;
+  }
+  .status-reject {
+    color: red;
+  }
+  
