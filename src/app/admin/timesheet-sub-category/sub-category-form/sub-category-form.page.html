@@ -12,19 +12,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form [formGroup]="subCategoryForm" class="">
-    <ion-item [detail]="false"> 
-      <ion-col>
-        <ion-input class="ion-margin-bottom" fill="solid" labelPlacement="floating" formControlName="subCategory" placeholder="Enter subCategory Name" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
-          <div class="ionPadding" slot="label">subCategory Name <ion-text color="danger">*</ion-text></div>
-        </ion-input>
-        <ion-text color="danger" class="error_txt" *ngIf="subCategoryForm.controls['subCategory'].touched && subCategoryForm.controls['subCategory'].errors">
-          project name is required
-        </ion-text>
-      </ion-col>
+  <form [formGroup]="subCategoryForm">
+    <ion-item [detail]="false" fill="solid" class="ion-padding"> 
+      <ion-input labelPlacement="floating" formControlName="subCategory" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
+        <div slot="label">sub-category name <ion-text color="danger">*</ion-text></div>
+      </ion-input>
     </ion-item>
+    <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="subCategoryForm.controls['subCategory'].touched && subCategoryForm.controls['subCategory'].errors">sub-category name is required</ion-text>
   </form>
-  <ion-button mode="ios" type="submit" class="submitBtn" [disabled]="subCategoryForm.invalid || isInProgress" color="primary"  (click)="submit()" expand="full" shape="round">
+  <ion-button mode="ios" type="submit" class="ion-padding" expand="block" [disabled]="subCategoryForm.invalid || isInProgress" color="primary"  (click)="submit()" expand="full" shape="round">
     {{action | titlecase}} SubCategory
   </ion-button>
 </ion-content>

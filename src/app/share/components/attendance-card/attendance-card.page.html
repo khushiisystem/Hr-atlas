@@ -104,7 +104,7 @@
   </div>
 
 
-  <ion-modal #modal class="ion-padding">
+  <ion-modal #modal>
     <ng-template>
       <ion-header>
           <ion-toolbar>
@@ -114,132 +114,107 @@
             </ion-buttons>
           </ion-toolbar>          
         </ion-header>
-        <ion-content>
+        
+        <ion-content class="ion-padding">
           <form [formGroup]="regularizationForm"> 
-          <ion-list>            
-            
-            <!-- date  -->
-            <ion-col size="12">
-              <ion-item  id="attandanceDate" (click)="markTouched('attandanceDate')">
-                <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('attandanceDate') | date" [errorText]="regularizationForm.controls['attandanceDate'].touched && regularizationForm.controls['attandanceDate'].errors ? 'Attandance Date is required' : ''" [required]="true" class="dateInput">
+            <ion-list>                          
+              <!-- date  -->
+              <ion-item fill="solid" class="ion-padding-bottom" id="attandanceDate" (click)="markTouched('attandanceDate')">
+                <ion-input labelPlacement="floating" [value]="getDate('attandanceDate') | date" [required]="true" class="dateInput">
                   <div slot="label">Attandance Date <ion-text color="danger">*</ion-text></div>
                 </ion-input>
-                <!-- <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors"></ion-icon> -->
               </ion-item>
-              <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['attandanceDate'].touched && regularizationForm.controls['attandanceDate'].errors">
-                Attandance Date is required
-             </ion-text>
-            </ion-col>
-            <ion-modal trigger="attandanceDate" [initialBreakpoint]="0.85" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.85, 1]" #startDateModal>
-              <ng-template>
-                <ion-header>
-                  <ion-toolbar>
-                    <ion-title>Select Date</ion-title>
-                  </ion-toolbar>
-                </ion-header>
-                <ion-content>
-                  <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
-                    <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
-                    <ion-buttons slot="buttons">
-                      <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
-                      <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
-                    </ion-buttons>
-                  </ion-datetime>
-                </ion-content>
-              </ng-template>
-            </ion-modal>
-             <!-- date  -->
-  
-             <!-- clock-in time start -->
-             <ion-col size="6">
-              <ion-item detail="false" id="clockIn" (click)="markTouched('clockIn')">
-                <!-- <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon> -->
+              <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['attandanceDate'].touched && regularizationForm.controls['attandanceDate'].errors">Attandance Date is required</ion-text>
+              <ion-modal trigger="attandanceDate" [initialBreakpoint]="0.85" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.85, 1]" #startDateModal>
+                <ng-template>
+                  <ion-header>
+                    <ion-toolbar>
+                      <ion-title>Select Date</ion-title>
+                    </ion-toolbar>
+                  </ion-header>
+                  <ion-content>
+                    <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
+                      <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
+                      <ion-buttons slot="buttons">
+                        <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
+                        <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
+                      </ion-buttons>
+                    </ion-datetime>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
+              <!-- date  -->
+    
+              <ion-item fill="solid" class="ion-padding-bottom" detail="false" id="clockIn" (click)="markTouched('clockIn')">
                 <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
                   <div slot="label">Clock in Time<ion-text color="danger">*</ion-text></div>
                 </ion-input>
-               </ion-item>
-               <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['clockIn'].touched && regularizationForm.controls['clockIn'].errors">
-                Clock in Time is required.
-              </ion-text>
-            </ion-col>
-            <ion-modal trigger="clockIn" #clockIn [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
-              <ng-template>
-                <ion-content>
-                  <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartTime($any($event))" [max]="today.toISOString()">
-                    <span slot="title">Clock In Time</span>
-                    <ion-buttons slot="buttons">
-                      <ion-button mode="md" color="danger" (click)="datetime.cancel(); clockIn.dismiss()">Cancel</ion-button>
-                      <ion-button mode="md" color="primary" (click)="datetime.confirm(); clockIn.dismiss()">Done</ion-button>
-                    </ion-buttons>
-                  </ion-datetime>
-                </ion-content>
-              </ng-template>
-            </ion-modal>
-            <!-- clock-in time start -->
-  
-            <!-- clock-out time start  -->
-            <ion-col size="6">
-              <ion-item detail="false" id="clockOut" (click)="markTouched('clockOut')">
-                <!-- <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon> -->
+              </ion-item>
+              <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['clockIn'].touched && regularizationForm.controls['clockIn'].errors">Clock in Time is required.</ion-text>
+
+              <ion-modal trigger="clockIn" #clockIn [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+                <ng-template>
+                  <ion-content>
+                    <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartTime($any($event))" [max]="today.toISOString()">
+                      <span slot="title">Clock In Time</span>
+                      <ion-buttons slot="buttons">
+                        <ion-button mode="md" color="danger" (click)="datetime.cancel(); clockIn.dismiss()">Cancel</ion-button>
+                        <ion-button mode="md" color="primary" (click)="datetime.confirm(); clockIn.dismiss()">Done</ion-button>
+                      </ion-buttons>
+                    </ion-datetime>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
+              <!-- clock-in time start -->
+    
+              <ion-item fill="solid" class="ion-padding-bottom" detail="false" id="clockOut" (click)="markTouched('clockOut')">
                 <ion-input labelPlacement="floating" [value]="getEndTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
                   <div slot="label">Clock Out Time<ion-text color="danger">*</ion-text></div>
                 </ion-input>
-               </ion-item>
-               <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['clockOut'].touched && regularizationForm.controls['clockOut'].errors">
-                Clock Out Time is required
-              </ion-text>
-            </ion-col>
-  
-            <ion-modal trigger="clockOut" #clockOut [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
-              <ng-template>
-                <ion-content>
-                  <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setEndTime($any($event))" [max]="today.toISOString()">
-                    <span slot="title">Clock Out Tiem</span>
-                    <ion-buttons slot="buttons">
-                      <ion-button mode="md" color="danger" (click)="datetime.cancel(); clockOut.dismiss()">Cancel</ion-button>
-                      <ion-button mode="md" color="primary" (click)="datetime.confirm(); clockOut.dismiss()">Done</ion-button>
-                    </ion-buttons>
-                  </ion-datetime>
-                </ion-content>
-              </ng-template>
-            </ion-modal>
-             <!-- clock-out time end  -->
-            
-            <!-- total hours  -->
-             <ion-item>
-              <p>Total Hour's {{ totalTimeString || '00:00' }}</p>
-             </ion-item>
-  
-            <!-- select reason  -->
-            <ion-item>
-              <ion-select formControlName="reason" aria-label="select-reason" interface="action-sheet" placeholder="Select Reason">
-                <ion-select-option value="missed-clock-in">Missed ClockIn</ion-select-option>
-                <ion-select-option value="missed-clock-out">Missed ClockOut</ion-select-option>
-              </ion-select>
-            </ion-item>
-            <!-- description  -->
-             <ion-col>
-               <ion-item>
-                <ion-textarea formControlName="description" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Descirption" rows="3">
+              </ion-item>
+              <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['clockOut'].touched && regularizationForm.controls['clockOut'].errors">Clock Out Time is required </ion-text>
+    
+              <ion-modal trigger="clockOut" #clockOut [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+                <ng-template>
+                  <ion-content>
+                    <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setEndTime($any($event))" [max]="today.toISOString()">
+                      <span slot="title">Clock Out Tiem</span>
+                      <ion-buttons slot="buttons">
+                        <ion-button mode="md" color="danger" (click)="datetime.cancel(); clockOut.dismiss()">Cancel</ion-button>
+                        <ion-button mode="md" color="primary" (click)="datetime.confirm(); clockOut.dismiss()">Done</ion-button>
+                      </ion-buttons>
+                    </ion-datetime>
+                  </ion-content>
+                </ng-template>
+              </ion-modal>
+              <!-- clock-out time end  -->
+              
+              <!-- total hours  -->
+              <ion-item class="ion-padding-bottom"><b>Total Hour's {{ totalTimeString || '00:00' }}</b></ion-item>
+    
+              <!-- select reason  -->
+              <ion-item fill="solid" class="ion-padding-bottom">
+                <ion-select formControlName="reason" aria-label="select-reason" interface="action-sheet" placeholder="Select Reason">
+                  <ion-select-option value="missed-clock-in">Missed ClockIn</ion-select-option>
+                  <ion-select-option value="missed-clock-out">Missed ClockOut</ion-select-option>
+                </ion-select>
+              </ion-item>
+
+              <!-- description  -->
+              <ion-item fill="solid">
+                <ion-textarea formControlName="description" labelPlacement="floating" placeholder="Descirption" rows="3">
                   <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
                 </ion-textarea>
               </ion-item>
-              <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['description'].touched && regularizationForm.controls['description'].errors">
-                Description is required
-              </ion-text>
-             </ion-col>
-  
+              <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['description'].touched && regularizationForm.controls['description'].errors">Description is required</ion-text>
+    
             </ion-list>
           </form>
-          </ion-content>
+        </ion-content>
         <ion-footer class="ion-padding">
-            <ion-button mode="md" type="submit" class="submitBtn ion-margin-end ion-margin-start" color="primary" expand="full" shape="round" [disabled]="regularizationForm.invalid" (click)="submit()">
-             {{ update ? 'Update' : 'Add' }} 
-               <!-- Submit -->
-            </ion-button> 
+            <ion-button mode="md" type="submit" class="submitBtn ion-margin-end ion-margin-start" color="primary" expand="full" shape="round" [disabled]="regularizationForm.invalid" (click)="submit()">{{ update ? 'Update' : 'Add' }} </ion-button> 
         </ion-footer>
       </ng-template>
     </ion-modal>
-  
   <ion-skeleton-text style="width: 100%; height: 80px;" animated="true" class="inherit_shap ion-no-margin" *ngIf="!isAllGood"></ion-skeleton-text>
 </ion-card>

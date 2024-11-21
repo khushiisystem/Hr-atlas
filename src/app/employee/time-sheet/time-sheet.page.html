@@ -33,11 +33,9 @@
                <ion-select-option value="{{assProject.project.guid}}">{{assProject.project.title}}</ion-select-option>
              </div>
            </ion-select>
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['projectId'].touched && timeSheetForm.controls['projectId'].errors">
-            Project is required
-          </ion-text>
-           <!-- <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['projectId'].touched && timeSheetForm.controls['projectId'].errors"></ion-icon> -->
+           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['projectId'].touched && timeSheetForm.controls['projectId'].errors">Project is required</ion-text>
          </ion-col>
+
          <!-- categories  -->
          <ion-col size="12">
            <ion-select label="Category" formControlName="categoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
@@ -45,10 +43,9 @@
                <ion-select-option value="{{category.guid}}">{{category.category}}</ion-select-option>
              </div>
            </ion-select>
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['categoryId'].touched && timeSheetForm.controls['categoryId'].errors">
-            Category is required
-          </ion-text>
+           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['categoryId'].touched && timeSheetForm.controls['categoryId'].errors">Category is required</ion-text>
          </ion-col>
+
          <!-- sub-categories  -->
          <ion-col size="12">
            <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
@@ -56,82 +53,65 @@
                <ion-select-option value="{{subCategory.guid}}">{{subCategory.subCategory}}</ion-select-option>            
              </div>
            </ion-select>
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">
-            Sub-Category is required
-          </ion-text>
+           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">Sub-Category is required</ion-text>
          </ion-col>
    
          <ion-col size="6">
-           <ion-item detail="false" id="startTime" (click)="markTouched('startTime')">
-             <!-- <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon> -->
+           <ion-item fill="solid" detail="false" id="startTime" (click)="markTouched('startTime')">
              <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
                <div slot="label">Start Time<ion-text color="danger">*</ion-text></div>
              </ion-input>
             </ion-item>
-            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['startTime'].touched && timeSheetForm.controls['startTime'].errors">
-             Start Time is required
-           </ion-text>
+            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['startTime'].touched && timeSheetForm.controls['startTime'].errors">Start Time is required</ion-text>
          </ion-col>
    
          <ion-col size="6">
-           <ion-item detail="false" id="endTime" (click)="markTouched('endTime')">
-             <!-- <ion-icon [name]="'time-outline'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon> -->
+           <ion-item fill="solid" detail="false" id="endTime" (click)="markTouched('endTime')">
              <ion-input labelPlacement="floating" [value]="getEndTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
                <div slot="label">End Time<ion-text color="danger">*</ion-text></div>
              </ion-input>
             </ion-item>
-            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['endTime'].touched && timeSheetForm.controls['endTime'].errors">
-             End Time is required
-           </ion-text>
+            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['endTime'].touched && timeSheetForm.controls['endTime'].errors">End Time is required</ion-text>
          </ion-col>
    
-           <ion-col size="12" id="startdate" (click)="markTouched('date')">
-             <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date') | date" [errorText]="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors ? 'Start date is required' : ''" [required]="true" class="dateInput">
-               <div slot="label">Date <ion-text color="danger">*</ion-text></div>
-             </ion-input>
-             <!-- <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors"></ion-icon> -->
-             <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors">
-              Date is required
-            </ion-text>
-           </ion-col>
-           <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
-             <ng-template>
-               <ion-header>
-                 <ion-toolbar>
-                   <ion-title>Select Date</ion-title>
-                 </ion-toolbar>
-               </ion-header>
-               <ion-content>
-                 <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
-                   <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
-                   <ion-buttons slot="buttons">
-                     <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
-                     <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
-                   </ion-buttons>
-                 </ion-datetime>
-               </ion-content>
-             </ng-template>
-           </ion-modal>
+          <ion-col size="12" id="startdate" (click)="markTouched('date')">
+            <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date') | date" [errorText]="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors ? 'Start date is required' : ''" [required]="true" class="dateInput">
+              <div slot="label">Date <ion-text color="danger">*</ion-text></div>
+            </ion-input>
+            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors">Date is required</ion-text>
+          </ion-col>
+          
+          <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
+            <ng-template>
+              <ion-header>
+                <ion-toolbar>
+                  <ion-title>Select Date</ion-title>
+                </ion-toolbar>
+              </ion-header>
+              <ion-content>
+                <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
+                  <ion-buttons slot="buttons">
+                    <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
+                    <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
+                  </ion-buttons>
+                </ion-datetime>
+              </ion-content>
+            </ng-template>
+          </ion-modal>
    
          <!-- tag  -->
          <ion-col size="12">
            <ion-input formControlName="tag" labelPlacement="floating" type="text" inputmode="text" color="primary" fill="solid" [value]="" class="dateInput">
              <div slot="label">Tag/Title <ion-text color="danger">*</ion-text></div>
            </ion-input>    
-           <!-- <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors"></ion-icon>   -->
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors">
-            Tag / Title is required
-          </ion-text>
+           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors">Tag / Title is required</ion-text>
          </ion-col>  
          
          <ion-col>
           <ion-textarea formControlName="description" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
             <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
           </ion-textarea>
-          <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors">
-           Description is required
-         </ion-text>
-          <!-- <ion-item [lines]="'none'" [detail]="false" class="spaceItem"></ion-item> -->
+          <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors">Description is required</ion-text>
           <ol style="background-color: rgba(244, 250, 136, 0.405); padding: 5px 0 10px 35px;">
             <li>Please fill timesheet in between 0 to 3 hours for each entry.</li>
             <li>Minium 3 entries are required to complete 8 hours timesheet for each day.</li>
