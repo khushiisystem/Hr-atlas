@@ -202,11 +202,11 @@
 
               <!-- description  -->
               <ion-item fill="solid">
-                <ion-textarea formControlName="description" labelPlacement="floating" placeholder="Descirption" rows="3">
+                <ion-textarea formControlName="description" [minlength]="5" maxlength="250" labelPlacement="floating" placeholder="Descirption" rows="3">
                   <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
                 </ion-textarea>
               </ion-item>
-              <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['description'].touched && regularizationForm.controls['description'].errors">Description is required</ion-text>
+              <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['description'].touched && regularizationForm.controls['description'].errors">Description must be at least 5 characters </ion-text>
     
             </ion-list>
           </form>

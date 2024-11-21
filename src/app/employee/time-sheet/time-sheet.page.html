@@ -101,17 +101,17 @@
    
          <!-- tag  -->
          <ion-col size="12">
-           <ion-input formControlName="tag" labelPlacement="floating" type="text" inputmode="text" color="primary" fill="solid" [value]="" class="dateInput">
+           <ion-input formControlName="tag" [minlength]="2" [maxlength]="100" labelPlacement="floating" type="text" inputmode="text" color="primary" fill="solid" [value]="" class="dateInput">
              <div slot="label">Tag/Title <ion-text color="danger">*</ion-text></div>
            </ion-input>    
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors">Tag / Title is required</ion-text>
+           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors">Tag / Title must be at least 2 characters</ion-text>
          </ion-col>  
          
          <ion-col>
-          <ion-textarea formControlName="description" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
+          <ion-textarea formControlName="description" [minlength]="5" [maxlength]="250" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
             <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
           </ion-textarea>
-          <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors">Description is required</ion-text>
+          <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors">Description must be at least 5 characters</ion-text>
           <ol style="background-color: rgba(244, 250, 136, 0.405); padding: 5px 0 10px 35px;">
             <li>Please fill timesheet in between 0 to 3 hours for each entry.</li>
             <li>Minium 3 entries are required to complete 8 hours timesheet for each day.</li>
@@ -119,10 +119,10 @@
          </ion-col> 
        </ion-row>
    
-       <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round" (click)="clear()">Clear</ion-button>
        <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round" [disabled]="timeSheetForm.invalid" (click)="submit()">
         {{ update ? 'Update' : 'Add' }} 
        </ion-button>        
+       <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round" (click)="clear()">Clear</ion-button>
        
        <ion-modal trigger="startTime" #startTime [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
          <ng-template>

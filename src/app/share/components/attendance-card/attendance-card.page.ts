@@ -209,7 +209,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
 
   getDate(ctrlName: string){
     const formDate = this.regularizationForm.controls[ctrlName].value;
-    return formDate != '' ? new Date(formDate) : "";
+    return formDate != '' ? new Date(formDate) : this.attendanceData.created_date;
   }
   selectDate(event: DatetimeCustomEvent){
     this.regularizationForm.controls['attandanceDate'].patchValue(moment(event.detail.value).utc().format());

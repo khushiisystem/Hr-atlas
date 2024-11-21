@@ -141,7 +141,7 @@ export class TimeSheetPage implements OnInit {
 
   getDate(ctrlName: string){
       const formDate = this.timeSheetForm.controls[ctrlName].value;
-      return formDate != '' ? new Date(formDate) : "";
+      return formDate != '' ? new Date(formDate) : new Date();
   }
 
   selectDate(event: DatetimeCustomEvent){
@@ -226,7 +226,7 @@ export class TimeSheetPage implements OnInit {
   }
 
   clear() {
-    // this.timeSheetForm.reset();
+    this.timeSheetForm.reset();
   }
   
   submit() {
