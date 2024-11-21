@@ -12,22 +12,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <form [formGroup]="projectsForm" class="">
-    <ion-item [detail]="false"> 
-      <ion-col>
-        <ion-input class="ion-margin-bottom" fill="solid" labelPlacement="floating" formControlName="title" placeholder="Enter Project Name" type="text" maxlength="120" minlength="2" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
-          <div slot="label">Project Name <ion-text color="danger">*</ion-text></div>
-        </ion-input>
-        <ion-text color="danger" class="error_txt" *ngIf="projectsForm.controls['title'].touched && projectsForm.controls['title'].errors">
-          project name is required
-        </ion-text>
-      </ion-col>
+  <form [formGroup]="projectsForm">
+    <ion-item [detail]="false" fill="solid" class="ion-padding"> 
+      <ion-input labelPlacement="floating" formControlName="title" type="text" maxlength="120" minlength="2" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
+        <div slot="label">project name <ion-text color="danger">*</ion-text></div>
+      </ion-input>
     </ion-item>
-        <!-- <ion-select fill="solid" labelPlacement="stacked" label="Assign Employee" aria-label="Assign Employee" interface="popover" placeholder="Select all employee that apply" [multiple]="true" formControlName="employeeIds">
-          <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{ emp.lastName }}</ion-select-option>          
-        </ion-select> -->
+    <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="projectsForm.controls['title'].touched && projectsForm.controls['title'].errors">project name is required</ion-text>
   </form>
-  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="projectsForm.invalid || isInProgress" color="primary" (click)="submit()" expand="full" shape="round">
+  <ion-button mode="md" type="submit" class="ion-padding" expand="block" color="primary" [disabled]="projectsForm.invalid || isInProgress" (click)="submit()" expand="full" shape="round">
     {{action === 'add' ? 'Add' : 'update' | titlecase}} Project
   </ion-button>
 </ion-content>

@@ -1,6 +1,5 @@
-.submitBtn {
-    height: 45px;
-    font-weight: 600;
-    font-size: 1rem;
-    margin: 20px;
+.ion-padding {
+    --padding-top: var(--ion-padding, 0px); 
+    --padding-bottom: var(--ion-padding, 0px); 
+    padding-bottom: var(--ion-padding, 5px);
 }
