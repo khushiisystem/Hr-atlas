@@ -121,6 +121,8 @@ export class AddEmployeePage implements OnInit {
       this.getProfile();
     } else {this.isDataLoaded = true;}
     console.log("employeeId: ", this.employeeId, ", userId: ", this.userId);
+
+    this.insertWorkInfoToUser();
   }
 
 
@@ -249,6 +251,8 @@ export class AddEmployeePage implements OnInit {
   }
 
   insertWorkInfoToUser(){
+    console.log('Action:', this.action);
+
     this.adminServ.insertWorkInfoToUser(this.employeeId, this.employeeForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('WorkInfo Inserted successfully.', 'top', 'success');
