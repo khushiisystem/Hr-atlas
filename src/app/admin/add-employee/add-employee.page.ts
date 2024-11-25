@@ -29,6 +29,8 @@ export class AddEmployeePage implements OnInit {
   maxDate: Date = new Date();
   birthDate: any;
   employeeId: string = '';
+  employeeId1: string = '';
+  userId: string = '';
   action: string = '';
   isSameAddress: boolean = false;
   isDataLoaded: boolean = false;
@@ -70,6 +72,7 @@ export class AddEmployeePage implements OnInit {
     this.maxDate.setFullYear(this.today.getFullYear() - 10);
     this.action = this.activeroute.snapshot.params?.['action'];
     this.employeeId = this.activeroute.snapshot.params?.['employeeId'];
+    this.userId = this.activeroute.snapshot.params?.['userId'];
 
     this.employeeForm = this.fb.group({
       firstName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
@@ -83,6 +86,18 @@ export class AddEmployeePage implements OnInit {
       maritalStatus: [''],
       imageUrl: [''],
       role: 'Employee',
+      employeeType: ['', Validators.required],
+      status: ['Active', Validators.required],
+      joiningDate: ['', Validators.required],
+      resignationDate: [''],
+      work_experience: 0,
+      workLocation: [''],
+      probationPeriod: ['', Validators.required],
+      designation: ['', Validators.required],
+      jobTitle: ['', Validators.required],
+      department: ['', Validators.required],
+      subDepartment: ['', Validators.required],
+      // workHistory: this.fb.array([]),
       currentAddress: this.fb.group({
         addressLine1: [''],
         addressLine2: [''],
@@ -105,6 +120,7 @@ export class AddEmployeePage implements OnInit {
     if(this.action === 'edit' && this.employeeId.trim() !== '' && this.employeeId !== null){
       this.getProfile();
     } else {this.isDataLoaded = true;}
+    console.log("employeeId: ", this.employeeId, ", userId: ", this.userId);
   }
 
 
@@ -127,9 +143,34 @@ export class AddEmployeePage implements OnInit {
     this.getDate();
   }
 
+  selectDate1(event: DatetimeCustomEvent, ctrlName: string){
+    const nonNesteCtrls : string[] = ['joiningDate', 'resignationDate'];
+    if(nonNesteCtrls.includes(ctrlName)){
+      if(ctrlName === nonNesteCtrls[0]){
+        this.employeeForm.patchValue({
+          joiningDate: moment(event.detail.value).utc().format()
+        });
+      } else if(ctrlName === nonNesteCtrls[1]) {
+        this.employeeForm.patchValue({
+          resignationDate: moment(event.detail.value).utc().format()
+        });
+      }
+    }
+  }
+
+  modalDismiss(){
+    this.activeControl = '';
+    this.openCalendar = false;
+  }
+
   getDate(){
     const formDate = this.employeeForm.controls['dateOfBirth'].value;
     return new Date(formDate != '' ? formDate : this.maxDate);
+  }
+  
+  getDate1(ctrlName: string){
+    const formDate = this.employeeForm.controls[ctrlName].value;
+    return formDate ? new Date(moment(formDate).format()) : '';
   }
 
   expandCard(cardName: string) {
@@ -193,6 +234,24 @@ export class AddEmployeePage implements OnInit {
     this.adminServ.updateEmployee(this.employeeId, this.employeeForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
+        // this.modalCtrl.dismiss(res, 'confirm');
+        const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
+        localStorage.setItem('lastRoute', '/tabs/home');
+        this.router.navigateByUrl(lastRoute, {replaceUrl: true});
+        this.isInProgress = false;
+        this.loader.dismiss();
+      }
+    }, (error) =>{
+      this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
+      this.isInProgress = false;
+      this.loader.dismiss();
+    });
+  }
+
+  insertWorkInfoToUser(){
+    this.adminServ.insertWorkInfoToUser(this.employeeId, this.employeeForm.value).subscribe(res => {
+      if(res){
+        this.shareServ.presentToast('WorkInfo Inserted successfully.', 'top', 'success');
         // this.modalCtrl.dismiss(res, 'confirm');
         const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
         localStorage.setItem('lastRoute', '/tabs/home');

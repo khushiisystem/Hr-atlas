@@ -121,8 +121,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       this.getLogs();
       this.getWorkWeek();
     }
-
-    this.getAllRegularization();
+    this.getByIdRegularization();
   }
 
   ionViewWillEnter(){
@@ -705,11 +704,13 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     return customDate.toISOString();
   }
 
-  getAllRegularization() {
-    this.shareServ.getAllRegularization().subscribe(res => {
+  getByIdRegularization() {
+    this.shareServ.getByIdRegularization(this.employeeId).subscribe(res => {
       if(res) {
         // console.log("reg_res: ", res);
-        this.getReg = res;
+        if (res instanceof Array) {
+          this.getReg = res;
+        }
       }
     })
   }
