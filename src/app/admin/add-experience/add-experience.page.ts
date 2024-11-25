@@ -86,6 +86,7 @@ export class AddExperiencePage implements OnInit {
         } else {this.isDataLoaded = true;}
       }
     });
+    // console.log("empId: ", this.employeeId);
   }
 
   formSetup(){

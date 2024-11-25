@@ -37,6 +37,9 @@ export class AdminService {
     deleteEmployee(employeeId: string): Observable<any>{
         return this.http.delete<any>(environment.Api + `api/user/${employeeId}`);
     }
+    insertWorkInfoToUser(userId: string, employeeData: any): Observable<any> {
+        return this.http.put<any>(environment.Api + `api/user/insert/${userId}`, employeeData);
+    }
 
     addEmployeesWork(workData: IEmployeeWorkRequest): Observable<IEmployeeWorkRequest>{
         return this.http.post<IEmployeeWorkRequest>(environment.Api + `api/employeeWork`, workData);
