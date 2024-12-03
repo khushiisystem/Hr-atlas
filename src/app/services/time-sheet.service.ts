@@ -131,6 +131,14 @@ export class TimeSheetService {
     return this._http.get<any[]>(environment.Api + `api/assign-project?skip=${pageIndex}&limit=${pagesize}`);
   }
 
+  // getAssignProjectById(pageIndex: number, pagesize: number, userId: string): Observable<any> {
+  //   return this._http.get<any[]>(environment.Api + `api/assign-project?skip=${pageIndex}&limit=${pagesize}`);
+  // }
+
+  getAssignProjectById(userId: string): Observable<any> {
+    return this._http.get<any[]>(environment.Api + `api/assign-project/${userId}`);
+  }
+
   updateAssignProject(id: string, data: any): Observable<any> {
     return this._http.put<any>(environment.Api + `api/assign-project/${id}`, data);
   }

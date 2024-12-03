@@ -107,14 +107,14 @@
       <ion-card-content>
         <div class="flex_div">
           <ion-label class="stopwatch-time">{{ stopwatchTime }}</ion-label>
-            <ion-button *ngIf="wHours >= 1 && hours >= 1" 
+            <ion-button *ngIf="timesheetTime === workingTime && timesheetTime >= (workingTime + 30)" 
                       mode="ios" 
                       [shape]="'round'" 
                       [strong]="true" 
                       color="light" 
                       (click)="toggleStopwatch()">Clock Out</ion-button>
     
-            <div *ngIf="wHours < 1 || hours < 1">
+            <div *ngIf="!(timesheetTime === workingTime && timesheetTime >= (workingTime + 30))">
             <ion-label color="danger">Please fill out at least 8 hours in your timesheet before clocking out.</ion-label>
           </div>
         </div>

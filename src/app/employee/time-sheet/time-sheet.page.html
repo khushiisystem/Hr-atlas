@@ -75,7 +75,7 @@
          </ion-col>
    
           <ion-col size="12" id="startdate" (click)="markTouched('date')">
-            <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date') | date" [errorText]="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors ? 'Start date is required' : ''" [required]="true" class="dateInput">
+            <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date')" [required]="true" class="dateInput">
               <div slot="label">Date <ion-text color="danger">*</ion-text></div>
             </ion-input>
             <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors">Date is required</ion-text>
@@ -172,13 +172,13 @@
    </ion-grid>
     <!-- update  -->
     
-    <div *ngIf="userRole.trim() === 'Admin'">
+    <div *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
       <ion-card class="ion-margin" *ngFor="let timesheet of timesheetList; index as i">
         <div class="wrapper">
           <div class="ion-activatable rounded-rectangle">
             <h4>{{timesheet.project.title}}</h4>
             <!-- update btn  -->
-            <ion-button size="small" *ngIf="userRole.trim() !== 'Admin'" (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
+            <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' || userRole.trim() !== 'HR'" (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
          </div>     
           <div class="ion-activatable circle">
           </div>
@@ -195,7 +195,7 @@
           <div class="ion-activatable para">
             <p><b>Description: </b>{{timesheet.description}}</p>
           </div>
-          <div class="btnStyle" *ngIf="userRole.trim() === 'Admin'">
+          <div class="btnStyle" *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
             <ion-button size="small" fill="clear" class="reject-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('reject', timesheet.guid)">Reject</ion-button>
             <ion-button size="small" fill="clear" class="approve-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('accept', timesheet.guid)">Approve</ion-button>
           </div>  
@@ -209,7 +209,7 @@
           <div class="ion-activatable rounded-rectangle">
             <h4>{{timesheet.project.title}}</h4>
             <!-- update btn  -->
-            <ion-button size="small" *ngIf="userRole.trim() !== 'Admin'" (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
+            <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' || userRole.trim() !== 'HR'" (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
          </div>     
           <div class="ion-activatable circle">
           </div>
@@ -226,7 +226,7 @@
           <div class="ion-activatable para">
             <p><b>Description: </b>{{timesheet.description}}</p>
           </div>
-          <div class="btnStyle" *ngIf="userRole.trim() === 'Admin'">
+          <div class="btnStyle" *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
             <ion-button size="small" fill="clear" class="reject-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('reject', timesheet.guid)">Reject</ion-button>
             <ion-button size="small" fill="clear" class="approve-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('accept', timesheet.guid)">Approve</ion-button>
           </div>  

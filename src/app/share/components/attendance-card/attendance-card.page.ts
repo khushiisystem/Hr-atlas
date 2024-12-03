@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DatetimeCustomEvent, IonContent, IonicModule } from '@ionic/angular';
+import { DatetimeCustomEvent, IonContent, IonicModule, ModalController } from '@ionic/angular';
 import { AttListItem, ERegularization, IRegularization } from 'src/app/employee/attendance/attendance.page';
 import { ReadMorePageModule } from '../read-more/read-more.module';
 import { RoleStateService } from 'src/app/services/roleState.service';
@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import { ShareService } from 'src/app/services/share.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { IApproveRegularizationReq } from 'src/app/interfaces/request/IApproveRegularization';
+import { RegularizationPage } from '../regularization/regularization.page';
 
 @Component({
   selector: 'attendance-card',
@@ -34,6 +35,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   workDurationString: string = "";
   totalDurationMs: number = 0;
   @ViewChild('modal', { static: true }) modal!: IonModal;
+  @ViewChild('modal', { static: true }) modal2!: ElementRef;
   isModalOpen = false;
   regularizationForm! : FormGroup;
   openCalendar: boolean = false;
@@ -41,6 +43,8 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   totalTimeString: string = ""; 
   regularizationId: string = "";
   update: boolean = false;
+  @Output() regularizationUpdated: EventEmitter<void> = new EventEmitter<void>();
+
 
 
   constructor(
@@ -49,16 +53,17 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     private _fb: FormBuilder,
     private _shareServ: ShareService,
     private _loader: LoaderService,
+    private modelCtrl: ModalController,
   ) { }
 
   ngOnInit() {
     this.regularizationForm = this._fb.group({
-      attandanceDate: ['', Validators.required],
+      attandanceDate: [this.attendanceData.created_date, Validators.required],
       clockIn: ['', Validators.required],
       clockOut: ['', Validators.required],
       totalTime: null,
       reason: [''],      
-      description: ['', Validators.required],
+      description: ["", Validators.required],
     });
 
     this.regularizationForm.get('clockIn')?.valueChanges.subscribe(() => this.calculateTotalTime());
@@ -84,10 +89,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     if(changes['attendanceData'] || changes['cardClass'] || changes['isAllGood']){
       this.workDurationString = this.calculateTotalWork();
       this.updateStatus();
-    }
-    if (this.regularization) {
-      console.log(new Date(this.regularization.attandanceDate));
-      
     }
   }
   
@@ -158,7 +159,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   openModal() {
     if (!this.isModalOpen) {
       this.modal.present();
-      this.isModalOpen = true;
+      this.isModalOpen = true;      
     }
   }
 
@@ -247,6 +248,21 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     })
   }
 
+  // async triggerModal(regularizationData: IRegularization | null = null) {
+  //   const abcModal = await this.modelCtrl.create({
+  //     component: RegularizationPage,
+  //     mode: 'md',
+  //     componentProps: {
+  //       regularizationData,
+  //       attendance: this.attendanceData
+  //     }
+  //   });
+  //   await abcModal.present();
+  //   await abcModal.onDidDismiss().then((value) => {
+  //     console.log(value);
+  //   })
+  // }
+
   submit() {
     if(this.update) {
       if(this.regularizationId.trim() == '') { return }
@@ -257,19 +273,28 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
           this.update = false;
           this.closeModal();
           this.regularization
+          this.regularizationUpdated.emit();
+          this.modal.dismiss(res);
+          this.regularizationForm.patchValue({ attendanceData: this.attendanceData.created_date })
         }
       })
     }
     else {
       this._loader.present('');
       this._shareServ.addRegularization(this.regularizationForm.value).subscribe(
-        (res) => {
+        async (res) => {
           if(res) {
             console.log("res_mes: ", res.message);
             this._shareServ.presentToast(res.message , 'top', 'success')
             this._loader.dismiss();
             this.regularizationForm.reset();
-            this.closeModal();
+            this.closeModal();  
+            this.regularizationUpdated.emit();          
+            await this.modal.dismiss(res);
+            // await this.modal.onDidDismiss().then(value => {
+            //   console.log(value);
+            // });
+            this.regularizationForm.patchValue({ attendanceData: this.attendanceData.created_date })
           } else {
             this._loader.dismiss();
           }

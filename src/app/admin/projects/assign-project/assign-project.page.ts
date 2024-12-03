@@ -7,6 +7,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { IProject } from '../projects.page';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
 import { ShareService } from 'src/app/services/share.service';
+import { ActivatedRoute } from '@angular/router';
 
 export interface IAssignPro {
   map(arg0: (item: any) => any): unknown;
@@ -43,6 +44,7 @@ export class AssignProjectPage implements OnInit {
   assProjectId: string = '';
   updateForm: boolean = false;
   @ViewChild(IonContent) content!: IonContent;
+  userId: string = '';
 
 
   constructor(
@@ -50,7 +52,8 @@ export class AssignProjectPage implements OnInit {
     private adminServ: AdminService,
     private timesheetSer: TimeSheetService,
     private shareServ: ShareService,
-  ) { }
+    private activeRoute: ActivatedRoute,
+  ) { this.userId = localStorage.getItem('userId') || ''; }
 
   ngOnInit() {
     this.assignProjectForm = this._fb.group({
@@ -128,6 +131,16 @@ export class AssignProjectPage implements OnInit {
       }
     })
   }
+
+  // getAssignProjectById() {
+  //   this.timesheetSer.getAssignProjectById(this.userId).subscribe(res => {
+  //     if(res) {
+  //       const data: IAssignPro[] = res;
+  //       this.assProjects = data;
+  //       console.log("get assProj res: ", this.assProjects);
+  //     }
+  //   })
+  // }
   
   submit() {
     if(this.updateForm) {

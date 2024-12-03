@@ -15,7 +15,7 @@
   <form [formGroup]="subCategoryForm">
     <ion-item [detail]="false" fill="solid" class="ion-padding"> 
       <ion-input labelPlacement="floating" formControlName="subCategory" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
-        <div slot="label">sub-category name <ion-text color="danger">*</ion-text></div>
+        <div slot="label">Sub-Category Name <ion-text color="danger">*</ion-text></div>
       </ion-input>
     </ion-item>
     <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="subCategoryForm.controls['subCategory'].touched && subCategoryForm.controls['subCategory'].errors">sub-category name is required</ion-text>

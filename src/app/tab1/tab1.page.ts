@@ -69,10 +69,11 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   apiSubscription!: Subscription;
   timesheetDate: string = new Date().toISOString();
   timesheetOfTheDay: ITimesheet[] = [];
-  totalDayTime: number = 0;
+  timesheetTime: number = 0;
   hours: number = 0;
   wHours: number = 0;
   workHour: number = 0;
+  workingTime: number = 0;
 
   constructor(
     private router: Router,
@@ -106,7 +107,8 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
       spaceBetween: 20,
       centeredSlides: true,
     })
-    // this.getTimesheetTimeOfDay();
+    this.getTimesheetTimeOfDay();
+    console.log("minutes, hours, this.wHours: ", this.wHours);
   }
   ngAfterViewInit(): void {
     this.swiperReady();
@@ -255,20 +257,30 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
   getAttendance(){
     this.apiSubscription = this.shareServ.todayAttendance().subscribe(res => {
-      // console.log("res Attendance: ", res);
-      // if(res) {
-      //   let hours = 0;
-      //   let minutes = 0;
-      //   for (const workTime of res) {
-      //     if (workTime.workingTime) {
-      //       console.log("a: ", workTime.workingTime);
-      //       hours += parseInt(workTime.workingTime.split(':')[0]);
-      //       minutes += parseInt(workTime.workingTime.split(':')[1]);
-      //       this.wHours += hours+Math.floor(minutes/60);
-      //       console.log(minutes, hours, this.wHours);
-      //     }
-      //   }
-      // }
+      console.log("res Attendance: ", res);
+      if(res) {
+        let hours = 0;
+        let minutes = 0;
+        console.log("minutes: ", minutes)
+        // for (const workTime of res) {
+        //   if (workTime.workingTime) {
+        //     // console.log("a: ", workTime.workingTime);
+        //     hours += parseInt(workTime.workingTime.split(':')[0]);
+        //     minutes += parseInt(workTime.workingTime.split(':')[1]);
+        //     this.wHours += hours+Math.floor(minutes/60);
+        //     console.log("minutes, hours, this.wHours: ", minutes);
+        //   }
+        // }
+
+        for (const workTime of res) {
+          if (workTime.workingTime) {
+            const [hours, minutes] = workTime.workingTime.split(':').map(Number);
+            this.workingTime += hours * 60 + minutes; 
+          }
+        }
+        
+        console.log("Total time in minutes: ", this.workingTime);
+      }
       if(res && !res.message && !res[0].clockOut) {
         if(res[0].clockIn && res[0].clockIn.trim() !== '' && !res[0].clockOut){
           this.isRunning = true;
@@ -740,15 +752,16 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
   logout() {this.authServ.signOut();}
 
-  // getTimesheetTimeOfDay() {
-  //   this.timesheetSer.getTimesheetDay(this.timesheetDate).subscribe(res => {
-  //     if(res && res instanceof Array) {
-  //       this.timesheetOfTheDay = res;
-  //       for (let day of this.timesheetOfTheDay) {
-  //         this.totalDayTime += day.totalTime;
-  //       }
-  //       this.hours = Math.floor(this.totalDayTime / 60);
-  //     }
-  //   })
-  // }
+  getTimesheetTimeOfDay() {
+    this.timesheetSer.getTimesheetDay(this.timesheetDate).subscribe(res => {
+      if(res && res instanceof Array) {
+        this.timesheetOfTheDay = res;
+        for (let day of this.timesheetOfTheDay) {
+          this.timesheetTime += day.totalTime;
+        }
+        this.hours = Math.floor(this.timesheetTime / 60);
+        console.log("hours: ", this.hours , ", totalDaytime: ", this.timesheetTime);
+      }
+    })
+  }
 }
