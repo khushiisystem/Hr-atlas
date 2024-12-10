@@ -60,10 +60,22 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  getWorkDetails(){
+  // getWorkDetails(){
+  //   this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
+  //     console.log("res: " + res);
+  //     if(res) {
+  //       this.workDetail = res;
+  //       this.workLoaded = true;
+  //     }
+  //   });
+  // }
+
+    getWorkDetails(){
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
+      console.log("res: " + res);
       if(res) {
         this.workDetail = res;
+        console.log("workDetail: " + this.workDetail);
         this.workLoaded = true;
       }
     });
