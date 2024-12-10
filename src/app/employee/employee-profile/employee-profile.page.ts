@@ -69,6 +69,17 @@ export class EmployeeProfilePage {
     });
   }
 
+  // getWorkDetails(){
+  //   this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
+  //     if(res) {
+  //       this.workDetail = res;
+  //       this.workLoaded = true;
+  //     }
+  //   }, (error) => {
+  //     this.workLoaded = true;
+  //   });
+  // }
+
   getWorkDetails(){
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
       if(res) {
@@ -79,7 +90,6 @@ export class EmployeeProfilePage {
       this.workLoaded = true;
     });
   }
-
   getWorkWeek(){
     this.workWeekLoaded = false;
     this.offDays = [];
