@@ -244,6 +244,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       if(res) {
         console.log("res_accept: ", res);
         this.regularization
+        this.regularizationUpdated.emit();
       }
     })
   }

@@ -59,8 +59,8 @@ export class AssignProjectPage implements OnInit {
     this.assignProjectForm = this._fb.group({
       projectId: ['', Validators.required],
       userId: ['', Validators.required],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      startDate: [new Date().toISOString() , Validators.required],
+      endDate: [new Date().toISOString() , Validators.required],
     });
     this.getEmployeeList();
     this.getProjects();
@@ -69,7 +69,7 @@ export class AssignProjectPage implements OnInit {
 
   getDate(ctrlName: string){
     const formDate = this.assignProjectForm.controls[ctrlName].value;
-    return formDate != '' ? new Date(formDate) : "";
+    return formDate != '' ? new Date(formDate).toISOString() : "";
   }
 
   selectDate(event: DatetimeCustomEvent){
@@ -78,7 +78,7 @@ export class AssignProjectPage implements OnInit {
 
   getEndDate(ctrlName: string){
     const formDate = this.assignProjectForm.controls[ctrlName].value;
-    return formDate != '' ? new Date(formDate) : "";
+    return formDate != '' ? new Date(formDate).toISOString() : "";
   }
 
   markTouched(ctrlName: string) {
@@ -153,6 +153,10 @@ export class AssignProjectPage implements OnInit {
           this.updateForm = false;
           this.assProjectId = '';
           this.getAssignProjects();
+          this.assignProjectForm.patchValue({
+            startDate: new Date().toISOString(),
+            endDate: new Date().toISOString()
+          })
         }
       });
     }
@@ -164,7 +168,10 @@ export class AssignProjectPage implements OnInit {
           // console.log("add : ", res);
           this.assignProjectForm.reset();
           this.getAssignProjects();
-          
+          this.assignProjectForm.patchValue({
+            startDate: new Date().toISOString(),
+            endDate: new Date().toISOString()
+          })
         }
       });
     }

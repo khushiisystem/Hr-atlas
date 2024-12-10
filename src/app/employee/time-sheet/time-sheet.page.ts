@@ -253,9 +253,13 @@ export class TimeSheetPage implements OnInit {
       this.timesheetSer.updateTimesheet(this.timesheetId, this.timeSheetForm.value).subscribe(res => {
         if(res) {
           // console.log("updated timesheet: ", res);
-          this.timeSheetForm.reset();          
           this.update = false;
+          this.getTimesheetList();
           this.getUserTimesheet();
+          this.getTimesheetDay();
+          this.getTimesheetMonth();
+          this.shareServ.presentToast("Timesheet updated successfully", 'top', 'success')
+          this.timeSheetForm.reset();          
           this.timeSheetForm.patchValue({
             date: new Date().toISOString()
           });
@@ -270,6 +274,8 @@ export class TimeSheetPage implements OnInit {
           // console.log("res: ", res);
           this.getTimesheetList();
           this.getUserTimesheet();
+          this.getTimesheetDay();
+          this.getTimesheetMonth();
           this.shareServ.presentToast("Timesheet added successfully", 'top', 'success')
           this.timeSheetForm.reset();
           this.timeSheetForm.patchValue({

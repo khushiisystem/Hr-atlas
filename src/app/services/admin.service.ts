@@ -31,6 +31,9 @@ export class AdminService {
     updateEmployee(employeeId: string, employeeData: IEmployeeRequest): Observable<IEmployeeResponse>{
         return this.http.put<IEmployeeResponse>(environment.Api + `api/user/${employeeId}`, employeeData);
     }
+    // updateEmployee(employeeId: string, employeeData: any): Observable<any>{
+    //     return this.http.put<any>(environment.Api + `api/user/${employeeId}`, employeeData);
+    // }
     getEmployeeById(employeeId: string): Observable<IEmployeeResponse>{
         return this.http.get<IEmployeeResponse>(environment.Api + `api/user/${employeeId}`);
     }

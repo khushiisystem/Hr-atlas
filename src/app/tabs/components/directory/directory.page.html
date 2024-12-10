@@ -101,7 +101,7 @@
         </div>
         <div class="employee_data">
           <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-          <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle}}</small></ion-text>
+          <ion-text class="role" *ngIf="employee"><small>{{employee.jobTitle}}</small></ion-text>
         </div>
       </ion-item>
     </ion-list>

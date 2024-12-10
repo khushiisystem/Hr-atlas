@@ -12,7 +12,7 @@
         {{userDetails.firstName | titlecase}}
       </ion-title>
       <div class="ion-padding-horizontal" style="margin-left: 5px;" *ngIf="userDetails">
-        <ion-text color="warning" class="role"><small>{{userDetails && userDetails.employeeWorkDetails ? userDetails.employeeWorkDetails.jobTitle : userRole}}</small></ion-text>
+        <ion-text color="warning" class="role"><small>{{userDetails && userDetails ? userDetails.jobTitle : userRole}}</small></ion-text>
       </div>
       
       <p *ngIf="!userDetails" class="ion-padding">

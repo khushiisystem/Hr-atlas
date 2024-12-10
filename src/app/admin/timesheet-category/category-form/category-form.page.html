@@ -21,6 +21,6 @@
     <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="catForm.controls['category'].touched && catForm.controls['category'].errors">category name is required</ion-text>
   </form>
   <ion-button mode="ios" type="submit" expand="block" class="ion-padding" [disabled]="catForm.invalid || isInProgress" color="primary"  (click)="submit()" expand="full" shape="round">
-    {{action | titlecase}} Project
+    {{action | titlecase}} Category
   </ion-button>
 </ion-content>

@@ -39,7 +39,7 @@
       </ion-col>
       <ion-col size="6" id="startdate" class="ino-padding" (click)="markTouched('startDate')">
         <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('startDate') | date" [required]="true" class="dateInput">
-          <div slot="label">Start Data <ion-text color="danger">*</ion-text></div>
+          <div slot="label">Start Date <ion-text color="danger">*</ion-text></div>
         </ion-input>
         <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['startDate'].touched && assignProjectForm.controls['startDate'].errors">
           Start Date is required
@@ -66,7 +66,7 @@
 
       <ion-col size="6" id="endDate" (click)="markTouched('endDate')">
         <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getEndDate('endDate') | date" [errorText]="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors ? 'End date is required' : ''" [required]="true" class="dateInput">
-          <div slot="label">End Data <ion-text color="danger">*</ion-text></div>
+          <div slot="label">End Date <ion-text color="danger">*</ion-text></div>
         </ion-input>
         <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors">
           End Date is required
