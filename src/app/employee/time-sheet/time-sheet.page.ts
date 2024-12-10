@@ -10,6 +10,7 @@ import { ApproveTimesheetReq } from 'src/app/interfaces/request/ITimesheet';
 import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
 import { AdminService } from 'src/app/services/admin.service';
 import { RoleStateService } from 'src/app/services/roleState.service';
+import { ShareService } from 'src/app/services/share.service';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
 
 export enum ETimesheet {
@@ -89,15 +90,20 @@ export class TimeSheetPage implements OnInit {
     textColor: string,
     backgroundColor: string,
   }> = [];
-  
+  date = new Date();
+  formattedDate = this.date.toLocaleDateString("en-US", { month: "short",  day: "numeric",  year: "numeric" });
+  userId: string = "";
+
   constructor(
     private _fb: FormBuilder,
     private adminSer: AdminService,
     private timesheetSer: TimeSheetService,
     private modelCtrl: ModalController,
     private roleStateServ: RoleStateService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private shareServ: ShareService,
   ) {
+    this.userId = localStorage.getItem('userId') || '';
     this.roleStateServ.getState().subscribe(res => {
       if(res){
         this.userRole = res;
@@ -123,7 +129,7 @@ export class TimeSheetPage implements OnInit {
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       tag: ['', Validators.required],
-      date: ['', Validators.required],
+      date: [new Date().toISOString(), Validators.required],
     });
     this.getTimesheetList();
     this.getProjects();
@@ -132,7 +138,9 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetDay();
     this.getTimesheetMonth();
     this.getUserTimesheet();
-    this.getAssignProjects();
+    // this.getAssignProjects();
+    this.getAssignProjectById();
+    console.log(this.timeSheetForm.value)
   }
 
   getFormGroup(ctrlName: string): FormGroup{
@@ -140,8 +148,8 @@ export class TimeSheetPage implements OnInit {
   }
 
   getDate(ctrlName: string){
-      const formDate = this.timeSheetForm.controls[ctrlName].value;
-      return formDate != '' ? new Date(formDate) : new Date();
+    const formDate = this.timeSheetForm.controls[ctrlName].value;
+      return formDate != '' ? new Date(formDate).toDateString() : "";
   }
 
   selectDate(event: DatetimeCustomEvent){
@@ -187,12 +195,22 @@ export class TimeSheetPage implements OnInit {
   }
 
     // get assign project 
-  getAssignProjects() {
-    this.timesheetSer.getAllAssignProjects(this.pageIndex * 100, 100).subscribe(res => {
+  // getAssignProjects() {
+  //   this.timesheetSer.getAllAssignProjects(this.pageIndex * 100, 100).subscribe(res => {
+  //     if(res) {
+  //       const data: IAssignPro[] = res;
+  //       this.assProjects = data;
+  //       console.log("get assProj res: ", this.assProjects);
+  //     }
+  //   })
+  // }
+
+  getAssignProjectById() {
+    this.timesheetSer.getAssignProjectById(this.userId).subscribe(res => {
       if(res) {
         const data: IAssignPro[] = res;
         this.assProjects = data;
-        console.log("get assProj res: ", this.assProjects);
+        // console.log("get assProj res: ", this.assProjects);
       }
     })
   }
@@ -202,9 +220,7 @@ export class TimeSheetPage implements OnInit {
       if(res) {
         const data: ICategory[] = res;
         this.categories = data;
-        // console.log("categories: ", this.categories);
         this.isDataLoaded = true;
-        // console.log("categories: ", this.categories);
       }
     })
   }
@@ -218,15 +234,16 @@ export class TimeSheetPage implements OnInit {
       if(res) {
         const data: ISubCategory[] = res;
         this.subCategories = data;
-        // console.log("subCategory: ", this.subCategories)
         this.isDataLoaded = true;
-        // console.log("subCategories: ", this.subCategories);
       }
     })
   }
 
   clear() {
     this.timeSheetForm.reset();
+    this.timeSheetForm.patchValue({
+      date: new Date().toISOString()
+    });
   }
   
   submit() {
@@ -236,23 +253,41 @@ export class TimeSheetPage implements OnInit {
       this.timesheetSer.updateTimesheet(this.timesheetId, this.timeSheetForm.value).subscribe(res => {
         if(res) {
           // console.log("updated timesheet: ", res);
-          this.timeSheetForm.reset();          
           this.update = false;
+          this.getTimesheetList();
           this.getUserTimesheet();
+          this.getTimesheetDay();
+          this.getTimesheetMonth();
+          this.shareServ.presentToast("Timesheet updated successfully", 'top', 'success')
+          this.timeSheetForm.reset();          
+          this.timeSheetForm.patchValue({
+            date: new Date().toISOString()
+          });
         }
       });
     }
     else {
       this.timesheetSer.addTimesheet(this.timeSheetForm.value).subscribe(res => {
         if(res) {
+          console.log(res);
           // this.isAdmin = false;
           // console.log("res: ", res);
           this.getTimesheetList();
           this.getUserTimesheet();
+          this.getTimesheetDay();
+          this.getTimesheetMonth();
+          this.shareServ.presentToast("Timesheet added successfully", 'top', 'success')
           this.timeSheetForm.reset();
+          this.timeSheetForm.patchValue({
+            date: new Date().toISOString()
+          });
         }
+      }, (error) => {
+        console.log(error.error, "error");
+        this.shareServ.presentToast(error.error , 'top', 'danger');
       }); 
     }       
+
   }
 
   getTimesheetList() {

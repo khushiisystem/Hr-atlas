@@ -122,7 +122,8 @@ export class AddEmployeePage implements OnInit {
     } else {this.isDataLoaded = true;}
     console.log("employeeId: ", this.employeeId, ", userId: ", this.userId);
 
-    this.insertWorkInfoToUser();
+    // this.insertWorkInfoToUser();
+    // this.updateEmployee();
   }
 
 
@@ -233,6 +234,8 @@ export class AddEmployeePage implements OnInit {
   }
   
   updateEmployee(){
+    console.log("res1: ", this.employeeForm.value);
+    console.log('Action:', this.action, "empId: ", this.employeeId);
     this.adminServ.updateEmployee(this.employeeId, this.employeeForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
@@ -244,14 +247,14 @@ export class AddEmployeePage implements OnInit {
         this.loader.dismiss();
       }
     }, (error) =>{
-      this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
+      // this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
       this.isInProgress = false;
       this.loader.dismiss();
     });
   }
 
   insertWorkInfoToUser(){
-    console.log('Action:', this.action);
+    // console.log('Action:', this.action);
 
     this.adminServ.insertWorkInfoToUser(this.employeeId, this.employeeForm.value).subscribe(res => {
       if(res){
@@ -264,7 +267,7 @@ export class AddEmployeePage implements OnInit {
         this.loader.dismiss();
       }
     }, (error) =>{
-      this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
+      // this.shareServ.presentToast(error.error.Message, 'bottom', 'danger');
       this.isInProgress = false;
       this.loader.dismiss();
     });

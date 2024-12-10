@@ -18,6 +18,15 @@ export interface IEmployeeRequest {
   facebookUrl: string;
   twitterUrl: string;
   role: IRoles;
+  jobTitle: string;
+  employeeType: string,
+  status: string,
+  joiningDate: string | Date,
+  resignationDate: string | Date,
+  workLocation: string,
+  designation: string,
+  department: string,
+  subDepartment: string
 }
 
 export interface IAddress {

@@ -12,6 +12,7 @@
 
     <ion-chip color="tertiary" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" (click)="markPresent($event)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip>
     <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
+    <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="triggerModal()">Regularization</ion-chip> -->
 
   </ion-card-header>
   
@@ -80,6 +81,7 @@
       <div class="ion-activatable rounded-rectangle">
         <ion-text><h2>Name: {{regularization.user.firstName}} {{regularization!.user!.lastName}}</h2></ion-text>
         <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && regularization.status ==='Pending'" (click)="handleModalAction(regularization);"><ion-icon name="create-outline" id="open-modal"></ion-icon></ion-button>
+        <!-- <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && regularization.status ==='Pending'" (click)="triggerModal(regularization);"><ion-icon name="create-outline" id="open-modal"></ion-icon></ion-button -->
       </div>
       <div class="ion-padding-bottom">
         <ion-text><h2>Date: {{regularization.attandanceDate | date}}</h2></ion-text>

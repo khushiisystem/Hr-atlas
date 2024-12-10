@@ -15,12 +15,12 @@
   <form [formGroup]="catForm">
     <ion-item [detail]="false" fill="solid" class="ion-padding"> 
       <ion-input labelPlacement="floating" formControlName="category" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
-        <div slot="label">category-name<ion-text color="danger">*</ion-text></div>
+        <div slot="label">Category Name<ion-text color="danger">*</ion-text></div>
       </ion-input>
     </ion-item>
     <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="catForm.controls['category'].touched && catForm.controls['category'].errors">category name is required</ion-text>
   </form>
   <ion-button mode="ios" type="submit" expand="block" class="ion-padding" [disabled]="catForm.invalid || isInProgress" color="primary"  (click)="submit()" expand="full" shape="round">
-    {{action | titlecase}} Project
+    {{action | titlecase}} Category
   </ion-button>
 </ion-content>

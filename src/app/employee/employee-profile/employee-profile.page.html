@@ -29,7 +29,8 @@
       <ion-list-header>
         <ion-label *ngIf="employeeDetail">
           {{employeeDetail ? employeeDetail.firstName + ' ' + employeeDetail.lastName : '' | titlecase}}
-          <p>{{employeeDetail.employeeWorkDetails ? employeeDetail.employeeWorkDetails.jobTitle : employeeDetail.role}}</p>
+          <!-- <p>{{employeeDetail.employeeWorkDetails ? employeeDetail.employeeWorkDetails.jobTitle : employeeDetail.role}}</p> -->
+          <p>{{employeeDetail ? (employeeDetail.jobTitle || employeeDetail.role) : ""}}</p>
           <ion-skeleton-text animated="true" style="width: 95%; height: 15px" *ngIf="!employeeDetail"></ion-skeleton-text>
           <ion-skeleton-text animated="true" style="width: 40%; height: 10px" *ngIf="!employeeDetail"></ion-skeleton-text>
         </ion-label>
@@ -37,10 +38,10 @@
           <ion-icon name="pencil" slot="icon-only" aria-label="Edit"></ion-icon>
         </ion-button>
       </ion-list-header>
-      <ion-item detail="false" *ngIf="employeeDetail && employeeDetail.employeeWorkDetails">
+      <ion-item detail="false" *ngIf="employeeDetail && employeeDetail">
         <ion-label class="ion-text-wrap">
-          <p *ngIf="employeeDetail.employeeWorkDetails">
-            {{employeeDetail.employeeWorkDetails.department}} -
+          <p *ngIf="employeeDetail">
+            {{employeeDetail.department}} -
             {{employeeDetail.employeeId}}
           </p>
         </ion-label>

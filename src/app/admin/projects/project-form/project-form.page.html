@@ -15,7 +15,7 @@
   <form [formGroup]="projectsForm">
     <ion-item [detail]="false" fill="solid" class="ion-padding"> 
       <ion-input labelPlacement="floating" formControlName="title" type="text" maxlength="120" minlength="2" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
-        <div slot="label">project name <ion-text color="danger">*</ion-text></div>
+        <div slot="label">Project Name <ion-text color="danger">*</ion-text></div>
       </ion-input>
     </ion-item>
     <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="projectsForm.controls['title'].touched && projectsForm.controls['title'].errors">project name is required</ion-text>

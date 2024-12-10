@@ -715,6 +715,10 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     })
   }
 
+  refreshRegularizationData() {
+    this.getByIdRegularization();
+  }
+
   getRegularization(date: string | Date): IRegularization | null {
     return this.getReg.find((item: IRegularization) => moment(date).isSame(item.attandanceDate,'year') && moment(date).isSame(item.attandanceDate,'month') && moment(date).isSame(item.attandanceDate,'day')) || null;
   }
