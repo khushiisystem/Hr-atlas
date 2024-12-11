@@ -108,7 +108,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
       centeredSlides: true,
     })
     this.getTimesheetTimeOfDay();
-    console.log("minutes, hours, this.wHours: ", this.wHours);
+    // console.log("minutes, hours, this.wHours: ", this.wHours);
   }
   ngAfterViewInit(): void {
     this.swiperReady();
@@ -760,7 +760,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           this.timesheetTime += day.totalTime;
         }
         this.hours = Math.floor(this.timesheetTime / 60);
-        console.log("hours: ", this.hours , ", totalDaytime: ", this.timesheetTime);
+        // console.log("hours: ", this.hours , ", totalDaytime: ", this.timesheetTime);
       }
     })
   }
