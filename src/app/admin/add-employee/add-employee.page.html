@@ -44,7 +44,7 @@
       <ion-item detail="false">
         <ion-col>
           <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Mobile Number" maxlength="10" minlength="10" inputmode="tel" [enterkeyhint]="'next'" type="tel" autocomplete="mobileNumber">
-            <div slot="label">Mobile Number <ion-text color="danger">*</ion-text></div>
+            <div slot="label">Phone Number <ion-text color="danger">*</ion-text></div>
           </ion-input>
         </ion-col>
       </ion-item>
@@ -169,7 +169,7 @@
       <ion-item>
         <div class="form-input flexInput">
           <ion-input labelPlacement="floating" formControlName="probationPeriod" class="flex_input" placeholder="In Days" required="true" type="number" [required]="true" inputmode="numeric" [enterkeyhint]="'next'" autocomplete="probationPeriod" min="0" step="1" max="300">
-            <div slot="label">Probation Period <ion-text color="danger">*</ion-text></div>
+            <div slot="label">Provisional Period <ion-text color="danger">*</ion-text></div>
           </ion-input>
           <div class="toggleBtn">
             <ion-note color="medium">Day(s)</ion-note>

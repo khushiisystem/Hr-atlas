@@ -75,11 +75,14 @@ export class TimeSheetPage implements OnInit {
   update: boolean = false;
   hours: number = 0;
   minutes: number = 0;
+  dayHours: number = 0;
+  dayMinutes: number = 0;
   getTime: number = 0;
   getMonth: number= 0;
   timesheetDate: string = new Date().toISOString();
   todayTimesheetDuration: number = 0;
   totalMontTime: number = 0;
+  totalDayTime: number = 0;
   // isAdmin: boolean = false;
   userRole: string = '';
   isLoggedIn: boolean = false;
@@ -269,7 +272,6 @@ export class TimeSheetPage implements OnInit {
     else {
       this.timesheetSer.addTimesheet(this.timeSheetForm.value).subscribe(res => {
         if(res) {
-          console.log(res);
           // this.isAdmin = false;
           // console.log("res: ", res);
           this.getTimesheetList();
@@ -305,7 +307,13 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getTimesheetDay(this.timesheetDate).subscribe(res => {
       if(res && res instanceof Array) {
         this.timesheetOfTheDay = res;
-        // console.log("getTimsheetDay; ", res);
+
+        // this.totalDayTime = 0;
+        // for(let day of this.timesheetOfTheDay) {
+        //   this.totalDayTime += day.totalTime;
+        // }
+        // this.dayHours = Math.floor(this.totalDayTime / 60);
+        // this.dayMinutes = this.totalDayTime % 60;
       }
     })
   }
@@ -335,7 +343,7 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getTimesheetMonth(this.timesheetDate).subscribe(res => {
       if(res) {
         this.timesheetOfTheMonth = res;
-        // totalMontTime;
+        this.totalMontTime = 0;
         for(let month of this.timesheetOfTheMonth) {
           this.totalMontTime += month.totalTime;
         }
