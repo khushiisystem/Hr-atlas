@@ -91,8 +91,8 @@ export class TimeSheetService {
     return this._http.post<any>(environment.Api + `api/timesheet`, data);
   }
 
-  getTimesheetList(pageIndex: number, pagesize: number): Observable<any> {
-    return this._http.get<any>(environment.Api + `api/timesheet?skip=${pageIndex}&limit=${pagesize}`);
+  getTimesheetList(pageIndex: number, pagesize: number, date: string): Observable<any> {
+    return this._http.get<any>(environment.Api + `api/timesheet/getAdminTimesheet?skip=${pageIndex}&limit=${pagesize}&date=${date}`);
   }
 
   updateTimesheet(id: string, data: any): Observable<any> {
@@ -112,8 +112,8 @@ export class TimeSheetService {
   }
 
   // get particular user timesheet list
-  getUserTimesheet(pageIndex: number, pagesize: number, id: string): Observable<any> {
-    return this._http.get<any>(environment.Api + `api/timesheet/getUserTimesheet?skip=${pageIndex}&limit=${pagesize}&userId=${id}`)
+  getUserTimesheet(pageIndex: number, pagesize: number, id: string, date: string): Observable<any> {
+    return this._http.get<any>(environment.Api + `api/timesheet/getUsersTimesheet?skip=${pageIndex}&limit=${pagesize}&userId=${id}&date=${date}`)
   }
 
 

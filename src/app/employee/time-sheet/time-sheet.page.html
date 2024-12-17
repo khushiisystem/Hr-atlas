@@ -23,7 +23,8 @@
       <p class="p2"></p><p>reject</p>
     </div>
   </div>
-   <div *ngIf="userRole.trim() !== 'Admin'">
+   <!-- <div *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'"> -->
+   <div *ngIf="userRole.trim() === 'Employee'">
      <form [formGroup]="timeSheetForm" class="ion-padding">    
        <ion-row>
          <!-- project  -->
@@ -154,7 +155,7 @@
      </form>
    </div>
    
-   <ion-grid>
+   <ion-grid *ngIf="userRole.trim() === 'Employee'">
      <ion-row class="ion-justify-content-end ion-padding-start ion-padding-end">
        <ion-col size="6">
          <div>
@@ -173,34 +174,39 @@
     <!-- update  -->
     
     <div *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
-      <ion-card class="ion-margin" *ngFor="let timesheet of timesheetList; index as i">
-        <div class="wrapper">
-          <div class="ion-activatable rounded-rectangle">
-            <h4>{{timesheet.project.title}}</h4>
-            <!-- update btn  -->
-            <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' || userRole.trim() !== 'HR'" (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
-         </div>     
-          <div class="ion-activatable circle">
+      <ng-container *ngIf="timesheetList.length > 0; else noTimesheetMessage">
+        <ion-card class="ion-margin" *ngFor="let timesheet of timesheetList; index as i">
+          <div class="wrapper">
+            <div class="ion-activatable rounded-rectangle">
+              <h4>{{timesheet.project.title}}</h4>
+              <!-- update btn  -->
+              <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'" (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
+           </div>     
+            <div class="ion-activatable circle">
+            </div>
+            <!-- *ngIf="userRole.trim() === 'Employee'" -->
+            <div class="date">
+              <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
+              <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
+              <p><span>SubCategory :</span> <span>{{timesheet.timesheetSubCategory.subCategory}}</span></p>
+              <p><span>Status :</span> <span [ngClass]="getStatusClass(timesheet.status)">{{timesheet.status}}</span></p>
+              <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
+              <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span></p>
+              <p><span>Tag/ Title : {{timesheet.tag}}</span> <span></span></p>
+            </div>
+            <div class="ion-activatable para">
+              <p><b>Description: </b>{{timesheet.description}}</p>
+            </div>
+            <div class="btnStyle" *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
+              <ion-button size="small" fill="clear" class="reject-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('reject', timesheet.guid)">Reject</ion-button>
+              <ion-button size="small" fill="clear" class="approve-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('accept', timesheet.guid)">Approve</ion-button>
+            </div>  
           </div>
-          <!-- *ngIf="userRole.trim() === 'Employee'" -->
-          <div class="date">
-            <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
-            <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
-            <p><span>SubCategory :</span> <span>{{timesheet.timesheetSubCategory.subCategory}}</span></p>
-            <p><span>Status :</span> <span>{{timesheet.status}}</span></p>
-            <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
-            <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span></p>
-            <p><span>Tag/ Title : {{timesheet.tag}}</span> <span></span></p>
-          </div>
-          <div class="ion-activatable para">
-            <p><b>Description: </b>{{timesheet.description}}</p>
-          </div>
-          <div class="btnStyle" *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
-            <ion-button size="small" fill="clear" class="reject-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('reject', timesheet.guid)">Reject</ion-button>
-            <ion-button size="small" fill="clear" class="approve-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('accept', timesheet.guid)">Approve</ion-button>
-          </div>  
-        </div>
-      </ion-card>
+        </ion-card>
+      </ng-container>
+      <ng-template #noTimesheetMessage>
+        <p class="no-timesheets-message">No timesheets available.</p>
+      </ng-template>
     </div>
 
     <div *ngIf="userRole.trim() === 'Employee'">

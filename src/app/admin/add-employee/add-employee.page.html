@@ -43,13 +43,13 @@
       </ion-text>
       <ion-item detail="false">
         <ion-col>
-          <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Mobile Number" maxlength="10" minlength="10" inputmode="tel" [enterkeyhint]="'next'" type="tel" autocomplete="mobileNumber">
+          <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Phone Number" maxlength="10" minlength="10" inputmode="tel" [enterkeyhint]="'next'" type="tel" autocomplete="mobileNumber">
             <div slot="label">Phone Number <ion-text color="danger">*</ion-text></div>
           </ion-input>
         </ion-col>
       </ion-item>
       <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['mobileNumber'].touched && employeeForm.controls['mobileNumber'].errors">
-        Mobile Number is required
+        Phone Number is required
       </ion-text>
       <ion-item detail="false">
         <ion-input labelPlacement="floating" formControlName="email" placeholder="Personal Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="email">
@@ -92,7 +92,7 @@
         </ion-input>
       </ion-item>
       <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['jobTitle'].touched && employeeForm.controls['jobTitle'].errors">
-        Title is required.
+        Job Title is required.
       </ion-text>
 
       <ion-item>
@@ -177,7 +177,7 @@
         </div>
       </ion-item>
       <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['probationPeriod'].touched && employeeForm.controls['probationPeriod'].errors">
-        Probation period is required.
+        Provisional period is required.
       </ion-text>
       
       <ion-item>
