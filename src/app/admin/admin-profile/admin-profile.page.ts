@@ -48,12 +48,14 @@ export class AdminProfilePage implements OnInit {
   ionViewWillEnter(){
     this.getEmployeeWork();
     this.getWorkWeek();
+    this.getAdminProfile();
   }
 
   getAdminProfile(){
     this.dataLoaded = false;
     this.shareServ.getEmployeeById(this.userId).subscribe(res => {
       if(res) {
+        console.log("res: ", res)
         this.adminDetail = res;
         this.dataLoaded = true;
       }
@@ -128,7 +130,7 @@ export class AdminProfilePage implements OnInit {
 
   editProfile(){
     localStorage.setItem('lastRoute', this.router.url);
-    this.router.navigate([`/tabs/edit-profile/${this.userId}`]);
+    this.router.navigate([`/tabs/edit-profile/${this.userId}`], {replaceUrl: false});
   }
 
   goBack() {this.router.navigate([`/tabs/home`]);}

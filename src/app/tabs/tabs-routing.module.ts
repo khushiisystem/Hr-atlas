@@ -80,7 +80,7 @@ const routes: Routes = [
         title: "Time Sheet",
         component: TimeSheetPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: ["Admin"]}
+        data: {role: ["Admin", "HR"]}
       },
       {
         path: 'admin-timesheet',

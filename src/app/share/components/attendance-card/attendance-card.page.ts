@@ -89,6 +89,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     if(changes['attendanceData'] || changes['cardClass'] || changes['isAllGood']){
       this.workDurationString = this.calculateTotalWork();
       this.updateStatus();
+      // console.log(this.attendanceData, " : attendance Data")
     }
   }
   
@@ -107,7 +108,10 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   updateStatus(){
     const today = new Date();
     today.setHours(0,0,1);
-    if(this.attendanceData.attendanceData.length > 0 && this.attendanceData.attendanceData[0].clockIn){
+    if (this.regularization?.status === 'Accept') {
+      this.attendanceData.status = AttendaceStatus.PRESENT;
+    }
+    else if(this.attendanceData.attendanceData.length > 0 && this.attendanceData.attendanceData[0].clockIn){
       const firstDataDate = new Date(this.attendanceData.attendanceData[0].clockIn);
       if(firstDataDate < today){
         const isSaturday = firstDataDate.getDay() === 6;
@@ -145,7 +149,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   }
 
   localDate(dateStr: string | Date): Date{
-    return new Date(dateStr);
+    return new Date(moment(dateStr).local().format());
   }
   
 

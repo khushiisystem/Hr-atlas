@@ -164,7 +164,7 @@ export class EditProfilePage implements OnInit {
           this.loader.dismiss();
           const lastRoute = localStorage.getItem('lastRoute') || '/tabs/home';
           localStorage.setItem('lastRoute', '/tabs/home');
-          this.router.navigate([lastRoute], {replaceUrl: true});
+          this.router.navigateByUrl(lastRoute, {replaceUrl: true});
         }
       }, (error) =>{
         this.shareServ.presentToast(error.error || error.error.message, 'top', 'danger');

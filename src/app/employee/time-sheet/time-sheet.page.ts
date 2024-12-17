@@ -128,10 +128,10 @@ export class TimeSheetPage implements OnInit {
       categoryId: ['', Validators.required],
       subCategoryId: ['', Validators.required],
       // userId: '',
-      description: ['', Validators.required],
+      description: ['', [Validators.required, Validators.minLength(5)]],
       startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
-      tag: ['', Validators.required],
+      endTime: ['', [Validators.required]],
+      tag: ['', [Validators.required, Validators.minLength(2)]],
       date: [new Date().toISOString(), Validators.required],
     });
     this.getTimesheetList();
@@ -140,9 +140,8 @@ export class TimeSheetPage implements OnInit {
     this.getSubCategories();
     this.getTimesheetDay();
     this.getTimesheetMonth();
-    this.getUserTimesheet();
-    // this.getAssignProjects();
     this.getAssignProjectById();
+    this.getUserTimesheet();
     console.log(this.timeSheetForm.value)
   }
 
@@ -293,7 +292,7 @@ export class TimeSheetPage implements OnInit {
   }
 
   getTimesheetList() {
-    this.timesheetSer.getTimesheetList(this.pageIndex * 100, 100).subscribe(res => {
+    this.timesheetSer.getTimesheetList(this.pageIndex * 100, 10, this.timesheetDate).subscribe(res => {
       if(res) {
         this.timesheetList = res;
         // console.log("admin Timesheet: ", this.timesheetList);
@@ -398,15 +397,23 @@ export class TimeSheetPage implements OnInit {
 
   getUserTimesheet() {
     const userId = localStorage.getItem('userId') || "";
-    this.timesheetSer.getUserTimesheet(this.pageIndex * 100, 100, userId).subscribe(res => {
+    this.timesheetSer.getUserTimesheet(this.pageIndex * 100, 100, userId, this.timesheetDate).subscribe(res => {
       if(res) {
         this.userTimesheet = res; 
         // console.log("getUserTimesheet: ", this.userTimesheet); 
-        this.highlightedDates = this.getHighlightedDatesFunction();
+        if(this.userRole === "Employee") {
+          this.highlightedDates = this.getHighlightedDatesFunction();
+        }
         // console.log(this.highlightedDates)
       }
     })
   }
+
+  getStatusClass(status: string): string {
+    return status?.toLowerCase() === 'pending' ? 'status-pending' :
+      status?.toLowerCase() ===  'reject' ? 'status-reject' :
+      status?.toLowerCase() ===  'accept' ? 'status-accept' : ''
+  }  
 
   getHighlightedDatesFunction(): Array<{date: string, textColor: string, backgroundColor: string}> {
     let dataArray: Array<{date: string, textColor: string, backgroundColor: string}> = [];
@@ -442,5 +449,7 @@ export class TimeSheetPage implements OnInit {
   onDateChange(event: any) {
     this.timesheetDate = event.detail.value; // Update the selected date
     this.getTimesheetDay(); // Refresh data for the new selected date
+    this.getTimesheetList();
+    this.getUserTimesheet();
   }
 }

@@ -44,3 +44,14 @@
     box-shadow: rgba(var(--ion-color-rose-rgb), 0.3) 0px 10px 15px -3px;
   }
   
+  .no-timesheets-message {
+    text-align: center;
+    font-size: 1.2em;
+    color: gray;
+    margin-top: 20px;
+  }
+  
+  .status-pending { color: orange; font-weight: bold; }
+  .status-reject { color: red; font-weight: bold; }  
+  .status-accept { color: green; font-weight: bold; }
+  
