@@ -139,6 +139,9 @@ export class AdminService {
     getEmployeePayslip(payslipData: {employeeId: string, date: string}): Observable<IPayslipResponse> {
         return this.http.get<IPayslipResponse>(environment.Api + `api/paySlip?employeeId=${payslipData.employeeId}&date=${payslipData.date}`);
     }
+    getPaySlipData(date: string): Observable<IPayslipResponse> {
+        return this.http.get<IPayslipResponse>(environment.Api + `api/paySlip/getPaySlipData?date=${date}`);
+    }
     createPayrollLog(payslipData: ICreditLogsRequest): Observable<ICreditLogsResponse> {
         return this.http.post<ICreditLogsResponse>(environment.Api + `api/payrollHistory`, payslipData);
     }
