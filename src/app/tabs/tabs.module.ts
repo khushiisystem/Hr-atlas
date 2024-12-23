@@ -56,6 +56,7 @@ import { CategoryFormPage } from "../admin/timesheet-category/category-form/cate
 import { TimesheetFormPage } from "../employee/time-sheet/timesheet-form/timesheet-form.page";
 import { AdminTimesheetsPage } from "../admin/admin-timesheets/admin-timesheets.page";
 import { RegularizationPage } from "../share/components/regularization/regularization.page";
+import { PdfDetailsPage } from "../share/components/pdf-details/pdf-details.page";
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { RegularizationPage } from "../share/components/regularization/regulariz
     CategoryFormPage,
     TimesheetFormPage,
     AdminTimesheetsPage,
-    RegularizationPage
+    RegularizationPage,
+    PdfDetailsPage
   ],
   imports: [
     ReadMorePageModule,

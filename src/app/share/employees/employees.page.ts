@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonInfiniteScroll } from '@ionic/angular';
 import * as moment from 'moment';
 import { Subject, debounceTime } from 'rxjs';
@@ -50,6 +51,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
     private shareServ: ShareService,
     private loader: LoaderService,
     private roleStateServ: RoleStateService,
+    public router: Router,
   ) { 
     roleStateServ.getState().subscribe(res => {
       if(res){
@@ -204,7 +206,6 @@ export class EmployeesPage implements OnInit, OnDestroy {
     }
   }
 
-
   generatePaySlip(event: Event){
     event.preventDefault();
     event.stopPropagation();
@@ -213,6 +214,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
       this.shareServ.presentToast('Payslip generated', 'top', 'success');
       this.selectedEmployee = [];
       this.loader.dismiss();
+      this.router.navigateByUrl('/tabs/pdf-details')
     }, (error) => {
       console.log(error);
       this.shareServ.presentToast(error.error.message, 'top', 'danger');

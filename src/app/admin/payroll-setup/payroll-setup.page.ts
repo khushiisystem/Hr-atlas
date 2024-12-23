@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Platform } from '@ionic/angular';
 import { IEmpSelect } from 'src/app/share/employees/employees.page';
 
@@ -13,6 +14,7 @@ export class PayrollSetupPage implements OnInit, OnDestroy {
 
   constructor(
     private platform: Platform,
+    private router: Router,
   ) { 
     this.backButtonEvent();
   }
@@ -47,7 +49,10 @@ export class PayrollSetupPage implements OnInit, OnDestroy {
     }, 2000);
   }
 
-  goBack(){history.back();}
+  goBack(){
+    // history.back();
+    this.router.navigateByUrl("/tabs/home")
+  }
 
   backButtonEvent() {
     this.platform.backButton.subscribeWithPriority(100, async () => {

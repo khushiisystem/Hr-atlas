@@ -33,6 +33,7 @@ import { TimesheetCategoryPage } from '../admin/timesheet-category/timesheet-cat
 import { TimesheetSubCategoryPage } from '../admin/timesheet-sub-category/timesheet-sub-category.page';
 import { TimesheetFormPage } from '../employee/time-sheet/timesheet-form/timesheet-form.page';
 import { AdminTimesheetsPage } from '../admin/admin-timesheets/admin-timesheets.page';
+import { PdfDetailsPage } from '../share/components/pdf-details/pdf-details.page';
 
 const routes: Routes = [
   {
@@ -106,6 +107,12 @@ const routes: Routes = [
         path: 'sub-category',
         title: 'TimeSheet Sub-Category',
         component: TimesheetSubCategoryPage,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'pdf-details',
+        title: 'Pdf Details',
+        component: PdfDetailsPage,
         canActivate: [AuthGuard]
       },
       // {

@@ -1,0 +1,59 @@
+.table-container {
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: .1rem;
+    border: 1px solid #ccc;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    padding: 20px 10px 20px 10px;
+  }
+  // ion-checkbox {
+  //   --size: 20px;
+  // }
+
+  .button-container {
+    margin-top: 1rem;
+    text-align: right;
+  }
+  ion-button {
+    --border-radius: 5px; /* Rounded button corners */
+    --background: #3880ff;
+    --background-activated: #3171e0;
+    font-size: 15px;
+    padding: 5px;
+  }
+
+
+  // .optbar {
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-evenly;
+  //   margin: 0 16px;
+  //   transition: all 0.5s ease;
+
+  //   &.btns {
+  //       background-color: var(--ion-color-light-tint);
+  //       justify-content: flex-start;
+  //       margin: 16px 0px 0;
+  //       padding: 0px 16px;
+  //       border-radius: 100px;
+  //       transition: all 0.3s ease;
+  //   }
+  // }
+
+//   tbody tr:nth-child(odd) {
+//     background-color: #f9f9f9;
+//   }
+//   tbody tr:nth-child(even) {
+//     background-color: #ffffff; 
+//   }
