@@ -29,22 +29,22 @@
         </tr>
         <tr>
           <td><span>Net Payable Days</span></td>
-          <td><span>{{payslipData && payslipData.workingDays ? payslipData.workingDays : 0}}</span></td>
+          <td><span>{{payslipData && payslipData.netPayableDays ? payslipData.netPayableDays : 0}}</span></td>
           <td><span>Account no.</span></td>
           <td><span>-</span></td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td><span>Advance</span></td>
           <td><span>{{payslipData && payslipData.advanceSalary ? payslipData.advanceSalary : 0}}</span></td>
           <td><span>leaves Carry Forward</span></td>
           <td><span>{{payslipData && payslipData.leavesCarryForward ? payslipData.leavesCarryForward : 0}}</span></td>
-        </tr>
-        <tr>
+        </tr> -->
+        <!-- <tr>
           <td><span>Total Leaves</span></td>
           <td><span>{{payslipData && payslipData.totalLeaves ? payslipData.totalLeaves : 0}}</span></td>
           <td><span>LOP</span></td>
           <td><span>{{payslipData && payslipData.lop ? payslipData.lop : 0}}</span></td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
 
@@ -61,14 +61,14 @@
         <tr>
           <td><span>Basic Salary</span></td>
           <td class="ion-text-center">
-            <span *ngIf="payslipData">{{  payslipData.basicSalary | currency:'INR'}}</span>
+            <span *ngIf="payslipData">{{  payslipData.monthSalary | currency:'INR'}}</span>
             <span *ngIf="!payslipData">{{ 0 | currency:'INR'}}</span>
           </td>
-          <td><span>Advance Pay Deduction</span></td>
+          <!-- <td><span>Advance Pay Deduction</span></td>
           <td class="ion-text-center">
             <span *ngIf="payslipData">{{  payslipData.deductionAmount | currency:'INR'}}</span>
             <span *ngIf="!payslipData">{{ 0 | currency:'INR'}}</span>
-          </td>
+          </td> -->
         </tr>
         <tr *ngIf="payslipData">
           <td>
@@ -77,9 +77,13 @@
           <td class="ion-text-center">
             <span *ngIf="payslipData.bonus">{{payslipData.bonus | currency:"INR"}}</span>
           </td>
-          <td><span>Other Deduction</span></td>
+          <!-- <td><span>Other Deduction</span></td>
           <td class="ion-text-center">
             <span>{{  payslipData.otherDeduction | currency:'INR'}}</span>
+          </td> -->
+          <td><span>LOP Amount</span></td>
+          <td class="ion-text-center">
+            <span>{{  payslipData.totalDeduction | currency:'INR'}}</span>
           </td>
         </tr>
         <tr *ngIf="payslipData && payslipData.compOff">
@@ -97,7 +101,7 @@
         <tr>
           <td><span>Total Earnings</span></td>
           <td class="ion-text-center">
-            <span *ngIf="payslipData">{{  payslipData.netPay | currency:'INR'}}</span>
+            <span *ngIf="payslipData">{{  payslipData.totalEarning| currency:'INR'}}</span>
             <span *ngIf="!payslipData">{{ 0 | currency:'INR'}}</span>
           </td>
           <td><span>Total Deductions</span></td>
