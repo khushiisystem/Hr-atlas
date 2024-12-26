@@ -4,6 +4,8 @@ export interface IPayslipResponse extends IGeneric {
   employeeId: string;
   lop: number;
   netPay: number;
+  totalEarning: number;
+  netPayableDays: number;
   basicSalary: number;
   workingDays: number;
   employeeName: string;
@@ -19,4 +21,5 @@ export interface IPayslipResponse extends IGeneric {
   incomeTax: number;
   compOff: number;
   netPayInWords: string;
+  monthSalary: number;
 }
