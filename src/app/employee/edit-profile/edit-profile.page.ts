@@ -45,8 +45,8 @@ export class EditProfilePage implements OnInit {
     this.employeeForm = this.fb.group({
       firstName: ['', Validators.compose([Validators.required, Validators.maxLength(50)])],
       lastName: ['', Validators.compose([Validators.maxLength(50)])],
-      email: ['', Validators.compose([Validators.email])],
-      officialEmail: [''],
+      email: ['', Validators.compose([Validators.email, Validators.required])],
+      officialEmail: ['', Validators.compose([Validators.email])],
       mobileNumber: [''],
       alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10), Validators.required])],
       dateOfBirth: '',

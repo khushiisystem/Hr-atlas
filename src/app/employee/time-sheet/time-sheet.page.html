@@ -39,7 +39,7 @@
 
          <!-- categories  -->
          <ion-col size="12">
-           <ion-select label="Category" formControlName="categoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
+           <ion-select label="Category" formControlName="categoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false" (ionChange)="selectCat($event)">
              <div *ngFor="let category of categories; index as i">
                <ion-select-option value="{{category.guid}}">{{category.category}}</ion-select-option>
              </div>
@@ -47,8 +47,18 @@
            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['categoryId'].touched && timeSheetForm.controls['categoryId'].errors">Category is required</ion-text>
          </ion-col>
 
-         <!-- sub-categories  -->
          <ion-col size="12">
+           <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
+             <div *ngFor="let subCategory of subCategories; index as i">
+               <ion-select-option value="{{subCategory}}">{{subCategory}}</ion-select-option>            
+             </div>
+           </ion-select>
+           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">Sub-Category is required</ion-text>
+         </ion-col>
+   
+
+         <!-- sub-categories  -->
+         <!-- <ion-col size="12">
            <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
              <div *ngFor="let subCategory of subCategories; index as i">
                <ion-select-option value="{{subCategory.guid}}">{{subCategory.subCategory}}</ion-select-option>            
@@ -56,7 +66,7 @@
            </ion-select>
            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">Sub-Category is required</ion-text>
          </ion-col>
-   
+    -->
          <ion-col size="6">
            <ion-item fill="solid" detail="false" id="startTime" (click)="markTouched('startTime')">
              <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">

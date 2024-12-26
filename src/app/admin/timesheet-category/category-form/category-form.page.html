@@ -19,6 +19,28 @@
       </ion-input>
     </ion-item>
     <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="catForm.controls['category'].touched && catForm.controls['category'].errors">category name is required</ion-text>
+
+    <div class="ion-padding-top">
+      <ion-text class="ion-padding">Add SubCategory</ion-text>
+      <div *ngFor="let subCategory of SubCategoryArray.controls; let i = index" style="display: flex; align-items: center; justify-content: space-between">
+        <ion-item [detail]="false" fill="solid" class="ion-padding" formArrayName="subCategory"> 
+          <ion-input [formControlName]="i" labelPlacement="floating" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
+            <div slot="label">SubCategory Name<ion-text color="danger">*</ion-text></div>
+          </ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-button (click)="removeSubCategory(i)" class="btnPading" id="click-trigger" size="small" color="danger">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button> 
+        </ion-item>   
+      </div>
+      <ion-item>
+        <ion-button slot="end" (click)="newSubCategory()" id="click-trigger" size="small" color="primary">
+          Add SubCategory
+        </ion-button> 
+      </ion-item>     
+    </div>
+
   </form>
   <ion-button mode="ios" type="submit" expand="block" class="ion-padding" [disabled]="catForm.invalid || isInProgress" color="primary"  (click)="submit()" expand="full" shape="round">
     {{action | titlecase}} Category

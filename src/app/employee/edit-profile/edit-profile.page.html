@@ -97,7 +97,7 @@
             <ion-item detail="false">
               <ion-icon name="mail" aria-hidden="true" slot="start" color="medium"></ion-icon>
               <ion-input labelPlacement="floating" formControlName="email" placeholder="Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="email">
-                <div slot="label">Email</div>
+                <div slot="label">Email <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="employeeForm.controls['email'].touched && employeeForm.controls['email'].errors"></ion-icon>
             </ion-item>
