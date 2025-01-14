@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ShareService } from 'src/app/services/share.service';
@@ -18,7 +18,7 @@ export class CategoryFormPage implements OnInit {
   categoryId: string = '';
   isDataLoaded: boolean = false; 
   isInProgress:boolean = false;
-  category!: ICategory | any;
+  category!: ICategory;
 
   constructor(
     private shareServ: ShareService,
@@ -31,18 +31,32 @@ export class CategoryFormPage implements OnInit {
   ngOnInit() {
     this.catForm = this._fb.group({
       category: ['', [Validators.required, Validators.minLength(3)]],
+      subCategory: this._fb.array([])
     });
 
     if(this.action === 'update' && this.category) {
-      const data = this.category as ICategory
-      this.catForm.patchValue(data);
-      this.categoryId = data.guid;
+      this.category.subCategory.forEach((e: string) =>{
+        this.newSubCategory()      
+      });
+      this.catForm.patchValue(this.category);
+      this.categoryId = this.category.guid;
 
-      console.log("category: ", this.categoryId);
-      console.log("data: ", data.guid)
+      console.log("category: ", this.category);
     }
   }
+  newSubCategory() {
+    const subCategory = this.catForm.controls['subCategory'] as FormArray
+    subCategory.push(new FormControl('', Validators.required))
+  }
 
+  removeSubCategory(index: number) {
+    const subCategory = this.catForm.controls['subCategory'] as FormArray
+    subCategory.removeAt(index);
+  }
+
+  get SubCategoryArray(): FormArray {
+    return this.catForm.controls['subCategory'] as FormArray;
+  }
   closeModel() {
     this.modelCtrl.dismiss();
   }

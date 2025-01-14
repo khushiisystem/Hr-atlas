@@ -18,11 +18,11 @@
         </ion-item>
 
         <ion-item lines="full" mode="ios" [detail]="true" detailIcon="wallet-outline">
-          <ion-input type="number" labelPlacement="floating" label="Current CTC" aria-label="Current CTC" placeholder="00.00" [value]="previousSalary" min="0" [readonly]="true" [step]="100" disabled="true"></ion-input>
+          <ion-input type="number" labelPlacement="floating" label="Old CTC" aria-label="Current CTC" placeholder="00.00" [value]="previousSalary" min="0" [readonly]="true" [step]="100" disabled="true"></ion-input>
         </ion-item>
         
         <ion-item lines="full" mode="ios" [detail]="true" detailIcon="wallet-outline">
-          <ion-input type="number" labelPlacement="floating" label="Revise Salary *" aria-label="Revise Salary" placeholder="00.00" formControlName="current_ctc" [required]="true" [min]="0" [enterkeyhint]="'next'" [inputmode]="'decimal'" [step]="100"></ion-input>
+          <ion-input type="number" labelPlacement="floating" label="Current CTC / Revise Salary *" aria-label="Revise Salary" placeholder="00.00" formControlName="current_ctc" [required]="true" [min]="0" [enterkeyhint]="'next'" [inputmode]="'decimal'" [step]="100"></ion-input>
         </ion-item>
         <ion-item lines="none" [detail]="false" class="errorItem" *ngIf="salarySetupForm.controls['current_ctc'].touched && salarySetupForm.controls['current_ctc'].errors">
           <ion-label class="ion-text-wrap" color="danger"><small>Revise salary is required.</small></ion-label>

@@ -34,7 +34,6 @@ export class LeavesPage implements OnInit {
   ngOnInit() {
     const isSwitched = localStorage.getItem('isSwitchable');
     this.isSwitchable = (isSwitched && isSwitched === 'true') ? true : false;
-    console.log(this.isSwitchable);
     this.leaveType = history.state.tab;
 
     this.getStates();
@@ -43,27 +42,6 @@ export class LeavesPage implements OnInit {
     this.userStateServ.getState().subscribe(res => {
       if(res){
         this.userDetails = res;
-        console.log("resle: ", res);
-        if(res.role === 'Employee'){
-          localStorage.setItem('isSwitchable', 'false');
-          this.isSwitchable = false;
-          // if(this.userDetails.currentAddress.addressLine1 == null || this.userDetails.currentAddress.addressLine1.trim() == '' || !this.userDetails.dateOfBirth){
-          //   // this.openUpdationPopup();
-          // }
-        } else if(res.role === 'Admin' || res.role === 'HR') {
-          localStorage.setItem('isSwitchable', 'true');
-          // this.checkAdminSetups();
-          // this.requestedLeaveList = [];
-          // this.getRequests();
-          // this.today.setHours(0, 0, 0);
-          // this.getTodayAttendance(this.today.toISOString(), 0);
-          this.isSwitchable = true;
-        }
-        this.roleStateServ.updateState(this.userDetails.role);
-        // this.getAttendance();
-        // this.getCalendar();
-        // this.fetchBirthdays();
-        // this.isDataLoaded = true;
       }
     });
 

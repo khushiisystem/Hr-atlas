@@ -5,6 +5,7 @@ import { ShareService } from 'src/app/services/share.service';
 import { TimeSheetService } from 'src/app/services/time-sheet.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { ModalController } from '@ionic/angular';
+import { ICategory } from '../../timesheet-category/timesheet-category.page';
 
 @Component({
   selector: 'app-sub-category-form',
@@ -19,6 +20,10 @@ export class SubCategoryFormPage implements OnInit {
   isDataLOaded: boolean = false;
   isInProgress: boolean = false;
   subCategory!: ISubCategory | any;
+  categories: ICategory[] = [];
+  isDataLoaded: boolean = true;
+  pageIndex: number = 0;
+
 
   constructor(
     private shareServ: ShareService,
@@ -26,10 +31,12 @@ export class SubCategoryFormPage implements OnInit {
     private _fb: FormBuilder,
     private loader: LoaderService,
     private modalCtrl: ModalController,
+    private timesheetSer: TimeSheetService,
   ) { }
 
   ngOnInit() {
     this.subCategoryForm = this._fb.group({
+      categoryId: ['', Validators.required],
       subCategory: ['', [Validators.required, Validators.minLength(3)]],
     });
 
@@ -41,10 +48,22 @@ export class SubCategoryFormPage implements OnInit {
       console.log("subCategory: ", this.subCategoryId);
       console.log("subCategoryId: ", data.guid);
     }
+    this.getCategories();
   }
 
   closeModel() {
     this.modalCtrl.dismiss();
+  }
+
+  getCategories() {
+    this.timesheetSer.getAllCategories(this.pageIndex * 100, 100).subscribe(res => {
+      if(res) {
+        console.log("getSubCategories: ", res)
+        const data: ICategory[] = res;
+        this.categories = data;
+        this.isDataLoaded = true;
+      }
+    })
   }
 
   createSubCategory() {

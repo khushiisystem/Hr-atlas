@@ -9,7 +9,7 @@ import { ShareService } from 'src/app/services/share.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { debounceTime } from 'rxjs';
 
-export interface ICategory {category: string, guid: string}
+export interface ICategory {category: string, guid: string, subCategory: string[]}
 
 @Component({
   selector: 'app-timesheet-category',

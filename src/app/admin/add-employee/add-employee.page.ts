@@ -86,6 +86,7 @@ export class AddEmployeePage implements OnInit {
       maritalStatus: [''],
       imageUrl: [''],
       role: 'Employee',
+      bloodGroup: 'Group A',
       employeeType: ['', Validators.required],
       status: ['Active', Validators.required],
       joiningDate: ['', Validators.required],

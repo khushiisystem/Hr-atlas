@@ -11,7 +11,7 @@
     </ion-button> -->
 
     <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" (click)="markPresent($event)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip> -->
-    <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
+    <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent' || attendanceData.status === 'Half Day'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
     <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="triggerModal()">Regularization</ion-chip> -->
 
   </ion-card-header>
@@ -80,7 +80,7 @@
     <ion-card-content [class.show]="regCard && isAllGood && !isWeekOff" *ngIf="regularization != null"> 
       <div class="ion-activatable rounded-rectangle">
         <ion-text><h2>Name: {{regularization.user.firstName}} {{regularization!.user!.lastName}}</h2></ion-text>
-        <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && regularization.status ==='Pending'" (click)="handleModalAction(regularization);"><ion-icon name="create-outline" id="open-modal"></ion-icon></ion-button>
+        <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'  && regularization.status ==='Pending'" (click)="handleModalAction(regularization);"><ion-icon name="create-outline" id="open-modal"></ion-icon></ion-button>
         <!-- <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && regularization.status ==='Pending'" (click)="triggerModal(regularization);"><ion-icon name="create-outline" id="open-modal"></ion-icon></ion-button -->
       </div>
       <div class="ion-padding-bottom">
@@ -97,7 +97,7 @@
         <ion-chip color="danger" class="ion-no-margin ion-text-center btnChip" *ngIf="regularization.status === 'Pending'" (click)="approveReject('reject', regularization.guid)">Reject</ion-chip>    
       </div>
     </ion-card-content>
-    <div class="ion-text-end ion-padding-vertical" *ngIf="!isWeekOff">
+    <div class="ion-text-end ion-padding-vertical" *ngIf="!isWeekOff && regularization != null">
       <ion-button fill="clear" size="small" (click)="regCard = !regCard">
         <span>{{regCard ? 'Hide RegularizationForm Details' : 'Show Hide RegularizationForm Details'}}</span>
         <ion-icon [name]="regCard ? 'chevron-up-outline' : 'chevron-down-outline'" slot="end" [size]="'small'"></ion-icon>
@@ -205,7 +205,7 @@
               <!-- description  -->
               <ion-item fill="solid">
                 <ion-textarea formControlName="description" [minlength]="5" maxlength="250" labelPlacement="floating" placeholder="Descirption" rows="3">
-                  <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
+                  <div slot="label">Description <ion-text color="danger">*</ion-text></div>
                 </ion-textarea>
               </ion-item>
               <ion-text color="danger" class="error_txt" *ngIf="regularizationForm.controls['description'].touched && regularizationForm.controls['description'].errors">Description must be at least 5 characters </ion-text>

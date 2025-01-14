@@ -13,6 +13,17 @@
 
 <ion-content [fullscreen]="true">
   <form [formGroup]="subCategoryForm">
+    <!-- categories  -->
+    <ion-item [detail]="false" fill="solid" class="ion-padding">
+      <ion-select label="Category" formControlName="categoryId" interface="popover" label-placement="floating" [multiple]="false">
+        <div *ngFor="let category of categories; index as i">
+          <ion-select-option value="{{category.guid}}">{{category.category}}</ion-select-option>
+        </div>
+      </ion-select>
+    </ion-item>
+    <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="subCategoryForm.controls['categoryId'].touched && subCategoryForm.controls['categoryId'].errors">Category is required</ion-text>
+
+    <!-- sub-categories  -->
     <ion-item [detail]="false" fill="solid" class="ion-padding"> 
       <ion-input labelPlacement="floating" formControlName="subCategory" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
         <div slot="label">Sub-Category Name <ion-text color="danger">*</ion-text></div>

@@ -6,6 +6,7 @@ export interface IEmployeeRequest {
   lastName: string;
   email: string;
   officialEmail: string;
+  bloodGroup: string;
   mobileNumber: string;
   alternateMobileNumber: string;
   dateOfBirth: string | Date;
