@@ -51,6 +51,7 @@ export class EditProfilePage implements OnInit {
       alternateMobileNumber: ['', Validators.compose([Validators.minLength(9), Validators.maxLength(10), Validators.required])],
       dateOfBirth: '',
       gender: ['Male', Validators.required],
+      bloodGroup: ["Group A", Validators.required],
       maritalStatus: ['', Validators.required],
       imageUrl: [''],
       guid: [''],

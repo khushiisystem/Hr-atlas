@@ -257,7 +257,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
   getAttendance(){
     this.apiSubscription = this.shareServ.todayAttendance().subscribe(res => {
-      console.log("res Attendance: ", res);
+      // console.log("res Attendance: ", res);
       if(res) {
         let hours = 0;
         let minutes = 0;
@@ -335,6 +335,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   
   getCalendar(){
     this.eventsList = [];
+    // console.log("this.eventsList: " + this.eventsList)
     this.apiSubscription = this.adminServ.getEventHollyday(moment.utc(this.today).format()).subscribe(res => {
       if(res) {
         if(res.length < 1) {

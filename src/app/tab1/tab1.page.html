@@ -179,7 +179,7 @@
       </ng-container>
     </ion-list>
 
-    <ion-list mode="ios" inset="true" class="eventList">
+    <ion-list *ngIf="eventsLoaded && eventsList.length > 1" mode="ios" inset="true" class="eventList">
       <ion-list-header [color]="!eventsLoaded ? 'light' : ''">
         <ion-label>
           <ng-container *ngIf="eventsLoaded">
@@ -306,7 +306,7 @@
             <ion-ripple-effect class="customRipple"></ion-ripple-effect>
             <ion-card-content>
               <div class="icon_card">
-                <ion-icon name="wallet-sharp" aria-hidden="true"></ion-icon>
+                <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
               </div>
               <ion-text>Time Sheet</ion-text>
             </ion-card-content>
@@ -328,7 +328,7 @@
             <ion-ripple-effect class="customRipple"></ion-ripple-effect>
             <ion-card-content>
               <div class="icon_card">
-                <ion-icon name="wallet-sharp" aria-hidden="true"></ion-icon>
+                <ion-icon name="document-text-outline" aria-hidden="true"></ion-icon>
               </div>
               <ion-text>Assign-Project</ion-text>
             </ion-card-content>

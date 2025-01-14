@@ -99,6 +99,12 @@
               <div slot="label" class="label">Marital Status</div>
             </ion-input>
           </ion-item>
+          <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item" *ngIf="adminDetail">
+            <ion-icon name="accessibility-outline" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
+            <ion-input aria-label="Blood Group" labelPlacement="floating" [readonly]="true" [value]="adminDetail.bloodGroup || '-'">
+              <div slot="label" class="label">Blood Group</div>
+            </ion-input>
+          </ion-item>         
           <ng-container *ngIf="!adminDetail || !dataLoaded ">
             <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item" *ngFor="let item of [0,1,2,3,4]">
               <ion-avatar slot="start">

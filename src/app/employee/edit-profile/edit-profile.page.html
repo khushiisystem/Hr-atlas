@@ -71,6 +71,15 @@
                 <ion-select-option value="Unmarried">Unmarried</ion-select-option>
               </ion-select>
             </ion-item>
+            <ion-item detail="false">
+              <ion-icon name="heart" aria-hidden="true" slot="start" color="medium"></ion-icon>
+              <ion-select labelPlacement="floating" formControlName="bloodGroup" placeholder="Select" interface="action-sheet" expandedIcon="caret-up">
+                <div slot="label">Blood Group <ion-text color="danger">*</ion-text></div>
+                <ion-select-option value="Group A">Group A</ion-select-option>
+                <ion-select-option value="Group B">Group B</ion-select-option>
+                <ion-select-option value="Group c">Group C</ion-select-option>
+              </ion-select>
+            </ion-item>
           </ion-list>
         </div>
         

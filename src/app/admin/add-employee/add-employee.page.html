@@ -66,6 +66,16 @@
       <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['officialEmail'].touched && employeeForm.controls['officialEmail'].errors">
         Official Email is required
       </ion-text>
+
+      <ion-item detail="false">
+        <ion-select labelPlacement="floating" formControlName="bloodGroup" placeholder="Blood Group" interface="action-sheet">
+          <div slot="label">Blood Group<ion-text color="danger">*</ion-text></div>
+          <ion-select-option value="Group A">Group A</ion-select-option>
+          <ion-select-option value="Group B">Group B</ion-select-option>
+          <ion-select-option value="Group C">Group C</ion-select-option>
+        </ion-select>        
+      </ion-item>
+
       <ion-item detail="false">
         <ion-select labelPlacement="floating" formControlName="role" placeholder="Role" interface="action-sheet">
           <div slot="label">Role <ion-text color="danger">*</ion-text></div>
@@ -169,7 +179,7 @@
       <ion-item>
         <div class="form-input flexInput">
           <ion-input labelPlacement="floating" formControlName="probationPeriod" class="flex_input" placeholder="In Days" required="true" type="number" [required]="true" inputmode="numeric" [enterkeyhint]="'next'" autocomplete="probationPeriod" min="0" step="1" max="300">
-            <div slot="label">Provisional Period <ion-text color="danger">*</ion-text></div>
+            <div slot="label">Probation Period <ion-text color="danger">*</ion-text></div>
           </ion-input>
           <div class="toggleBtn">
             <ion-note color="medium">Day(s)</ion-note>
@@ -177,7 +187,7 @@
         </div>
       </ion-item>
       <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['probationPeriod'].touched && employeeForm.controls['probationPeriod'].errors">
-        Provisional period is required.
+        Probation Period is required.
       </ion-text>
       
       <ion-item>

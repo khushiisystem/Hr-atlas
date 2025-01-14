@@ -122,6 +122,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       this.getWorkWeek();
     }
     this.getByIdRegularization();
+    // console.log("this.getPresent: " , this.getPresent);
   }
 
   ionViewWillEnter(){
@@ -185,59 +186,151 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     });
   }
 
-  getMonthLyAttendance(){
-    this.attendanceLoaded = false;
-    this.loader.present('');
-    if(this.pageIndex === 0){this.attendanceList = [];}
-    this.setStartDate(this.attendanceDate);
-    this.apiSubscription = this.shareServ.monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 100, 100).subscribe(res => {
-      if(res.length < 1){
-        this.moreAttendance = false;
-        this.attendanceLoaded = true;
-        this.loader.dismiss();
-        return;
-      } else {
-        this.moreAttendance = res.length > 39;
-        if(this.moreAttendance){
-          this.pageIndex++;
-          this.getMonthLyAttendance();
-        }
-        
-        res.forEach((e: IClockInResponce) => {
-          this.attendanceList.push(e);
-          const data = {
-            date: this.returnCustomDate(e.clockIn),
-            textColor: this.checkStatus(e.status).color,
-            backgroundColor: this.checkStatus(e.status).backgroud,
-          };
-          const index = this.highlightedDates.findIndex((item: IHighlightedDate) => item.date === this.returnCustomDate(e.created_date));
-          if(index != -1){
-            this.highlightedDates[index] = data;
-          } else {
-            this.highlightedDates.push(data);
-          }
+  // getMonthLyAttendance(){
+  //   this.attendanceLoaded = false;
+  //   this.loader.present('');
+  //   if(this.pageIndex === 0){this.attendanceList = [];}
+  //   this.setStartDate(this.attendanceDate);
+  //   this.apiSubscription = this.shareServ.monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 40, 40).subscribe(res => {
+  //     // console.log("resMonth: " , res);
+  //     if(res.length < 1){
+  //       this.moreAttendance = false;
+  //       this.attendanceLoaded = true;
+  //       this.loader.dismiss();
+  //       return;
+  //     } else {
+  //       res.forEach((e: IClockInResponce) => {
+  //         this.attendanceList.push(e);
+  //         const data = {
+  //           date: this.returnCustomDate(e.clockIn),
+  //           textColor: this.checkStatus(e.status).color,
+  //           backgroundColor: this.checkStatus(e.status).backgroud,
+  //         };
+  //         const index = this.highlightedDates.findIndex((item: IHighlightedDate) => item.date === this.returnCustomDate(e.created_date));
+  //         if(index != -1){
+  //           this.highlightedDates[index] = data;
+  //         } else {
+  //           this.highlightedDates.push(data);
+  //         }
 
-          this.presents = 0;
-          this.absent = 0;
-          this.dateList.forEach((item) => {
-            if(this.checkDates(new Date(e.clockIn), new Date(item.created_date))){
+  //         this.presents = 0;
+  //         this.absent = 0;
+  //         this.dateList.forEach((item) => {
+  //           if(this.checkDates(new Date(e.clockIn), new Date(item.created_date))){
+  //             item.attendanceData = [...item.attendanceData, e];
+  //             item.status = this.updateStatus(item.attendanceData, e.status);
+  //             item.created_date = new Date(e.clockIn).toISOString();
+  //           }
+  //           item.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
+  //           this.cdr.detectChanges();
+  //         });
+  //       });
+  //       this.loader.dismiss();
+  //       this.attendanceLoaded = true;
+  //       this.moreAttendance = res.length > 39;
+  //       if(this.moreAttendance){
+  //         this.pageIndex++;
+  //         this.getMonthLyAttendance();
+  //       }
+  //     }
+  //   }, (error) => {
+  //     this.attendanceLoaded = true;
+  //     this.moreAttendance = false;
+  //     this.loader.dismiss();
+  //   });
+  // }
+  
+
+  getMonthLyAttendance() {
+  this.attendanceLoaded = false;
+  this.loader.present('');
+
+  if (this.pageIndex === 0) {
+    this.attendanceList = [];
+    this.highlightedDates = [];
+  }
+
+  this.setStartDate(this.attendanceDate);
+  
+  this.apiSubscription = this.shareServ
+    .monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 40, 40)
+    .subscribe(
+      (res) => {
+        // console.log("getMonthResponse: ", res);
+        if (res.length < 1) {
+          // No more attendance data
+          this.moreAttendance = false;
+          this.attendanceLoaded = true;
+          this.loader.dismiss();
+          return;
+        }
+
+        this.moreAttendance = res.length > 39; // If more data is available
+        this.pageIndex++;
+
+        // Process attendance data
+        const highlightedDatesMap: { [key: string]: IHighlightedDate } = {};
+        const updatedDateList = this.dateList.map((item) => {
+          res.forEach((e: IClockInResponce) => {
+            if (this.checkDates(new Date(e.clockIn), new Date(item.created_date))) {
               item.attendanceData = [...item.attendanceData, e];
               item.status = this.updateStatus(item.attendanceData, e.status);
               item.created_date = new Date(e.clockIn).toISOString();
             }
-            item.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
-            this.cdr.detectChanges();
+
+            // Increment present/absent counters
+            if (
+              item.status === AttendaceStatus.LEAVE ||
+              e.status === AttendaceStatus.ABSENT
+            ) {
+              this.absent++;
+            } else {
+              this.presents++;
+            }
+
+            // Highlighted dates data
+            const data = {
+              date: this.returnCustomDate(e.clockIn),
+              textColor: this.checkStatus(e.status).color,
+              backgroundColor: this.checkStatus(e.status).backgroud,
+            };
+
+            highlightedDatesMap[data.date] = data;
           });
+
+          return item;
         });
-        this.loader.dismiss();
+
+        // Update highlighted dates (reduce DOM updates)
+        Object.values(highlightedDatesMap).forEach((data) => {
+          const index = this.highlightedDates.findIndex(
+            (item: IHighlightedDate) => item.date === data.date
+          );
+          if (index !== -1) {
+            this.highlightedDates[index] = data;
+          } else {
+            this.highlightedDates.push(data);
+          }
+        });
+
+        this.dateList = updatedDateList; // Update the date list
+        this.cdr.detectChanges(); // Trigger change detection only once
+
+        // Load more data if available
+        if (this.moreAttendance) {
+          this.getMonthLyAttendance();
+        }
+
         this.attendanceLoaded = true;
+        this.loader.dismiss();
+      },
+      (error) => {
+        this.attendanceLoaded = true;
+        this.moreAttendance = false;
+        this.loader.dismiss();
       }
-    }, (error) => {
-      this.attendanceLoaded = true;
-      this.moreAttendance = false;
-      this.loader.dismiss();
-    });
-  }
+    );
+}
 
   updateStatus(attendanceData: Array<any>, currentStatus = AttendaceStatus.ABSENT): AttendaceStatus{
     const firstDataDate = new Date(attendanceData[0].clockIn);
@@ -249,8 +342,25 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
         const durationMs = this.calculateDuration(item.clockIn, item.clockOut);
         totalDurationMs += durationMs;
       });
-      return totalDurationMs < (28800000/2) ? AttendaceStatus.ABSENT : totalDurationMs >= (28800000/2) && totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : currentStatus;
-    } else return currentStatus;
+     const isSaturday = firstDataDate.getDay() === 6;
+     if (isSaturday && totalDurationMs >= 14400000) {
+       return AttendaceStatus.PRESENT;
+     } else {
+       return totalDurationMs < (28800000/2) ? AttendaceStatus.ABSENT : totalDurationMs >= (28800000/2) && totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : currentStatus;
+     }
+   }
+   else {
+    return currentStatus;
+   }
+   
+    // if(firstDataDate < updatedDate){
+    //   let totalDurationMs = 0;
+    //   attendanceData.forEach((item: {clockIn: string, clockOut: string | null}) => {
+    //     const durationMs = this.calculateDuration(item.clockIn, item.clockOut);
+    //     totalDurationMs += durationMs;
+    //   });
+    //   return totalDurationMs < (28800000/2) ? AttendaceStatus.ABSENT : totalDurationMs >= (28800000/2) && totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : currentStatus;
+    // } else return currentStatus;
   }
   calculateDuration(clockIn: string, clockOut: string | null) {
     if (!clockOut) return 0;
@@ -370,6 +480,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   getCalendar(){
     this. calendarLoaded= false;
     this.apiSubscription = this.shareServ.getEventHollyday(moment.utc(this.attendanceDate).format()).subscribe(res => {
+      // console.log("res: " + res);
       if(res) {
         if(res.length < 1) {
           this. calendarLoaded= true;
@@ -541,6 +652,10 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   
   selectDate(event: DatetimeCustomEvent){
     if(event.detail.value){
+      if(!moment(this.attendanceDate).isSame(event.detail.value , 'year')) {
+        this.attendanceDate = event.detail.value;
+        this.getCalendar();
+      }
       this.fetchAll(event.detail.value as string);
     }
   }
@@ -582,6 +697,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     let customDate = '';
     if(this.attendanceDate){
       customDate = `${moment.monthsShort()[new Date(this.attendanceDate).getMonth()]} ${new Date(this.attendanceDate).getFullYear()}`;
+        // this.getCalendar();
     }
     return customDate;
   }
@@ -690,7 +806,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     return moment(this.today).year() - moment(this.attendanceDate).year() >= 1;
   }
   ngOnDestroy(): void {
-    this.apiSubscription.unsubscribe();
+    if(this.apiSubscription) {
+      this.apiSubscription.unsubscribe();
+    }
   }
 
   get isJoinedDate(): boolean {
