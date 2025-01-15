@@ -121,8 +121,6 @@ export class ProjectsPage implements OnInit {
   openDeletePopover(projectId: string, index: number) {
     this.selectedProjectId = projectId;
     this.selectedIndex = index;
-    // console.log("index: ", index);
-    // console.log("projecrId: ", projectId);
   }
   deleteCat() {
     if (this.selectedProjectId) {

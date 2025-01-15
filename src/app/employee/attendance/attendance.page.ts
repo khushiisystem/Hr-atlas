@@ -122,7 +122,6 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       this.getWorkWeek();
     }
     this.getByIdRegularization();
-    // console.log("this.getPresent: " , this.getPresent);
   }
 
   ionViewWillEnter(){
@@ -192,7 +191,6 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   //   if(this.pageIndex === 0){this.attendanceList = [];}
   //   this.setStartDate(this.attendanceDate);
   //   this.apiSubscription = this.shareServ.monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 40, 40).subscribe(res => {
-  //     // console.log("resMonth: " , res);
   //     if(res.length < 1){
   //       this.moreAttendance = false;
   //       this.attendanceLoaded = true;
@@ -256,7 +254,6 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     .monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 40, 40)
     .subscribe(
       (res) => {
-        // console.log("getMonthResponse: ", res);
         if (res.length < 1) {
           // No more attendance data
           this.moreAttendance = false;
@@ -480,7 +477,6 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   getCalendar(){
     this. calendarLoaded= false;
     this.apiSubscription = this.shareServ.getEventHollyday(moment.utc(this.attendanceDate).format()).subscribe(res => {
-      // console.log("res: " + res);
       if(res) {
         if(res.length < 1) {
           this. calendarLoaded= true;
@@ -825,7 +821,6 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   getByIdRegularization() {
     this.shareServ.getByIdRegularization(this.employeeId).subscribe(res => {
       if(res) {
-        // console.log("reg_res: ", res);
         if (res instanceof Array) {
           this.getReg = res;
         }

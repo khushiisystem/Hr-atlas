@@ -29,14 +29,12 @@ export interface ITimesheet {
   status: ETimesheet;
   totalTime: number;
   adminId: string;
+  subCategoryId: string;
   project: {
     title: string;
   };
   timesheetCategory: {
     category: string;
-  };
-  timesheetSubCategory: {
-    subCategory: string;
   };
   user: {
     firstName: string;
@@ -137,12 +135,10 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetList();
     this.getProjects();
     this.getCategories();
-    this.getSubCategories();
     this.getTimesheetDay();
     this.getTimesheetMonth();
     this.getAssignProjectById();
     this.getUserTimesheet();
-    console.log(this.timeSheetForm.value)
   }
 
   getFormGroup(ctrlName: string): FormGroup{
@@ -189,7 +185,6 @@ export class TimeSheetPage implements OnInit {
         const data : IProject[] = res;
         this.projects = data;
         this.isDataLoaded = true;
-        // console.log("projects: ", this.projects)
       }
     }, (error) => {
       this.isDataLoaded = true;
@@ -202,7 +197,6 @@ export class TimeSheetPage implements OnInit {
   //     if(res) {
   //       const data: IAssignPro[] = res;
   //       this.assProjects = data;
-  //       console.log("get assProj res: ", this.assProjects);
   //     }
   //   })
   // }
@@ -212,7 +206,6 @@ export class TimeSheetPage implements OnInit {
       if(res) {
         const data: IAssignPro[] = res;
         this.assProjects = data;
-        // console.log("get assProj res: ", this.assProjects);
       }
     })
   }
@@ -220,9 +213,7 @@ export class TimeSheetPage implements OnInit {
   getCategories() {
     this.timesheetSer.getAllCategories(this.pageIndex * 100, 100).subscribe(res => {
       if(res) {
-        // const data: ICategory[] = res;
         this.categories = res;
-        console.log("this.categories: ", this.categories)
         this.isDataLoaded = true;
       }
     })
@@ -230,10 +221,9 @@ export class TimeSheetPage implements OnInit {
 
   selectCat(event: any) {
     this.subCategories = this.categories.find(val => val.guid === event.detail.value )?.subCategory || [];
-    console.log(this.subCategories);
   }
 
-  getSubCategories() {
+  // getSubCategories() {
     // this.isDataLoaded = false;
     // if(this.pageIndex < 1) {
     //   this.subCategories = [];
@@ -245,7 +235,7 @@ export class TimeSheetPage implements OnInit {
     //     this.isDataLoaded = true;
     //   }
     // })
-  }
+  // }
 
   clear() {
     this.timeSheetForm.reset();
@@ -255,12 +245,10 @@ export class TimeSheetPage implements OnInit {
   }
   
   submit() {
-    // console.log("form value : ", this.timeSheetForm.value);
     if(this.update) {
       if(this.timesheetId.trim() == '') { return }
       this.timesheetSer.updateTimesheet(this.timesheetId, this.timeSheetForm.value).subscribe(res => {
         if(res) {
-          // console.log("updated timesheet: ", res);
           this.update = false;
           this.getTimesheetList();
           this.getUserTimesheet();
@@ -278,7 +266,6 @@ export class TimeSheetPage implements OnInit {
       this.timesheetSer.addTimesheet(this.timeSheetForm.value).subscribe(res => {
         if(res) {
           // this.isAdmin = false;
-          // console.log("res: ", res);
           this.getTimesheetList();
           this.getUserTimesheet();
           this.getTimesheetDay();
@@ -290,7 +277,6 @@ export class TimeSheetPage implements OnInit {
           });
         }
       }, (error) => {
-        console.log(error.error, "error");
         this.shareServ.presentToast(error.error , 'top', 'danger');
       }); 
     }       
@@ -301,7 +287,6 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getTimesheetList(this.pageIndex * 100, 10, this.timesheetDate).subscribe(res => {
       if(res) {
         this.timesheetList = res;
-        // console.log("admin Timesheet: ", this.timesheetList);
         // this.isAdmin = true;
       }
     });
@@ -376,7 +361,6 @@ export class TimeSheetPage implements OnInit {
     }  
     this.timesheetSer.approveReject(data).subscribe(res => {
       if(res) {
-        // console.log("res: ", res);
         this.getUserTimesheet();
         this.getTimesheetList();
       }
@@ -386,7 +370,6 @@ export class TimeSheetPage implements OnInit {
   updateTimesheet(timesheet: ITimesheet) {    
     this.timeSheetForm.patchValue(timesheet);
     this.timesheetId = timesheet.guid;
-    console.log("id", this.timesheetId);
     this.update = true;
     if(this.content){   
       this.content.scrollToTop(100);
@@ -396,7 +379,7 @@ export class TimeSheetPage implements OnInit {
   deleteTimesheet(id: string) {
     this.timesheetSer.deleteTimesheet(id).subscribe(res => {
       if(res) {
-        console.log("deleted successfully");
+        this.shareServ.presentToast("Timesheet deleted successfully", 'top', 'success')
       }
     });
   }
@@ -406,11 +389,9 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getUserTimesheet(this.pageIndex * 100, 100, userId, this.timesheetDate).subscribe(res => {
       if(res) {
         this.userTimesheet = res; 
-        // console.log("getUserTimesheet: ", this.userTimesheet); 
         if(this.userRole === "Employee") {
           this.highlightedDates = this.getHighlightedDatesFunction();
         }
-        // console.log(this.highlightedDates)
       }
     })
   }

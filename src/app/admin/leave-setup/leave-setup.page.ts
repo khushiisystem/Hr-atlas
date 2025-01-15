@@ -36,14 +36,12 @@ export class LeaveSetupPage implements OnInit {
       reserveDays: 0,
     });
 
-    console.log(this.leaveSetupForm.value, "form");
     this.getSetup();
   }
   
   getSetup(){
     this.adminServ.getLeaveSetup().subscribe(res => {
       if(res) {
-        console.log(res, "res");
         this.leaveSetupForm.patchValue(res);
       }
       this.loaderServ.dismiss();
@@ -56,7 +54,6 @@ export class LeaveSetupPage implements OnInit {
     if(this.leaveSetupForm.invalid){
       return;
     } else {
-      console.log(this.leaveSetupForm.value, "form");
       this.adminServ.addLeaveSetup(this.leaveSetupForm.value).subscribe(res => {
         if(res){
           this.shareServ.presentToast('Leave setup successfully.', 'top', 'success');

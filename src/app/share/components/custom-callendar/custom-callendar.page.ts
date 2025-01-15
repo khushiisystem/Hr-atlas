@@ -28,7 +28,6 @@ export class CustomCallendarPage implements OnInit {
     this.weekInYear = moment().weeksInYear();
     this.weekDays = moment.weekdaysMin();
     this.focusedDay = this.today;
-    // console.log(this.focusedDay, this.today);
   }
 
   ngOnInit() {
@@ -54,7 +53,6 @@ export class CustomCallendarPage implements OnInit {
 
     this.weekDates = datesInCurrentWeek;
     // this.currentDate = new Date(this.weekDates[0]);
-    // console.log(this.getWeekDates(this.currentWeek, this.today.getFullYear()));
   }
 
 

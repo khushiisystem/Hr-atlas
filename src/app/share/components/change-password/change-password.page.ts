@@ -55,7 +55,6 @@ export class ChangePasswordPage implements OnInit {
           this.loader.dismiss();
         }
       }, (error) => {
-        console.log(error);
         this.shareServ.presentToast(error.error.Message ||'Something is wrong.', 'top', 'danger');
         this.isInProgress = false;
         this.loader.dismiss();

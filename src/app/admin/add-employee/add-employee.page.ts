@@ -121,7 +121,6 @@ export class AddEmployeePage implements OnInit {
     if(this.action === 'edit' && this.employeeId.trim() !== '' && this.employeeId !== null){
       this.getProfile();
     } else {this.isDataLoaded = true;}
-    console.log("employeeId: ", this.employeeId, ", userId: ", this.userId);
 
     // this.insertWorkInfoToUser();
     // this.updateEmployee();
@@ -135,7 +134,6 @@ export class AddEmployeePage implements OnInit {
         this.isDataLoaded = true;
       }
     }, (error) => {
-      console.log(error, "get error");
       this.isDataLoaded = true;
     });
   }
@@ -205,13 +203,11 @@ export class AddEmployeePage implements OnInit {
   }
   
   submit(){
-    console.log(this.employeeForm.value);
     if(this.employeeForm.invalid){
       return;
     } else {
       this.isInProgress = true;
       this.loader.present('');
-      console.log(this.employeeForm.value, "form");
       this.action === 'add' ? this.addEmployee() : this.updateEmployee();
     }
   }
@@ -235,8 +231,6 @@ export class AddEmployeePage implements OnInit {
   }
   
   updateEmployee(){
-    console.log("res1: ", this.employeeForm.value);
-    console.log('Action:', this.action, "empId: ", this.employeeId);
     this.adminServ.updateEmployee(this.employeeId, this.employeeForm.value).subscribe(res => {
       if(res){
         this.shareServ.presentToast('Employee updated successfully.', 'top', 'success');
@@ -255,7 +249,6 @@ export class AddEmployeePage implements OnInit {
   }
 
   insertWorkInfoToUser(){
-    // console.log('Action:', this.action);
 
     this.adminServ.insertWorkInfoToUser(this.employeeId, this.employeeForm.value).subscribe(res => {
       if(res){

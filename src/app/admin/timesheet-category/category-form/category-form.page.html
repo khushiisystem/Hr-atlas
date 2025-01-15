@@ -21,7 +21,7 @@
     <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="catForm.controls['category'].touched && catForm.controls['category'].errors">category name is required</ion-text>
 
     <div class="ion-padding-top">
-      <ion-text class="ion-padding">Add SubCategory</ion-text>
+      <ion-text class="ion-padding">SubCategory</ion-text>
       <div *ngFor="let subCategory of SubCategoryArray.controls; let i = index" style="display: flex; align-items: center; justify-content: space-between">
         <ion-item [detail]="false" fill="solid" class="ion-padding" formArrayName="subCategory"> 
           <ion-input [formControlName]="i" labelPlacement="floating" type="text" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">

@@ -61,7 +61,6 @@ export class TimesheetSubCategoryPage {
     this.isMoreData = false;
     this.timeSheetSer.searchSubCategory(value).subscribe(res => {
       if(res && res.data) {
-        console.log("res.data: ", res.data);
         res.data.forEach((subCategory: any) => {
           if(!this.AllSubCategory.includes(subCategory)) {
             this.AllSubCategory.push(subCategory);
@@ -79,7 +78,6 @@ export class TimesheetSubCategoryPage {
     this.timeSheetSer.getAllSubCategories(this.pageIndex * 10, 10).subscribe(res => {
       if(res) {
         const data: any[] = res;
-        console.log("sub-categories : ", data);
         
         this.isDataLoaded = true;
         for(let i = 0; i < data.length; i++) {
@@ -117,7 +115,6 @@ export class TimesheetSubCategoryPage {
     });
     (await projectModel).present();
     (await projectModel).onDidDismiss().then(result => {
-      console.log("result: ",result)
       if(result.data) {
         // this.AllSubCategory.push(result.data);  
         this.pageIndex = 0;
@@ -132,8 +129,6 @@ export class TimesheetSubCategoryPage {
   openDeletePopover(projectId: string, index: number) {
     this.selectedSubCatId = projectId;
     this.selectedIndex = index;
-    // console.log("index: ", index);
-    // console.log("projecrId: ", projectId);
   }
 
   deleteCat() {

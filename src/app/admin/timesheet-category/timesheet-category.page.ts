@@ -60,7 +60,6 @@ export class TimesheetCategoryPage implements OnInit {
     this.isMoreData = false;
     this.timeSheetSer.searchCategory(value).subscribe(res => {
       if(res && res.data) {
-        console.log("res: ", res.data);
         res.data.forEach((category: any) => {
           if (!this.AllCategory.includes(category)) {
             this.AllCategory.push(category);
@@ -113,7 +112,6 @@ export class TimesheetCategoryPage implements OnInit {
     });
     (await projectModel).present();
     (await projectModel).onDidDismiss().then(result => {
-      console.log("result: ",result)
       if(result.data) {
         // this.AllCategory.push(result.data);  
         this.pageIndex = 0;
@@ -126,8 +124,6 @@ export class TimesheetCategoryPage implements OnInit {
   openDeletePopover(projectId: string, index: number) {
     this.selectedProjectId = projectId;
     this.selectedIndex = index;
-    // console.log("index: ", index);
-    // console.log("projecrId: ", projectId);
   }
   deleteCat() {
     if (this.selectedProjectId) {

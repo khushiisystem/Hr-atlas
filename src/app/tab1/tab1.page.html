@@ -141,7 +141,7 @@
         <ion-label>
           <ng-container *ngIf="birthdayLoaded">
             <ion-img src="../../assets/images/cake.svg" class="eventIcon" alt="Birthday"></ion-img>
-            Upcoming Birthday
+            Today's Birthday
             <h6>{{getTodaysBirthday().length > 0 ? getTodaysBirthday()[0].dateOfBirth : nextBirthdays[0].dateOfBirth | date:'MMMM'}}</h6>
           </ng-container>
           <ion-skeleton-text *ngIf="!birthdayLoaded" animated="true" style="width: 80%; height: 10px;"></ion-skeleton-text>

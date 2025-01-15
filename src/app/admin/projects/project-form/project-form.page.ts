@@ -45,7 +45,6 @@ export class ProjectFormPage implements OnInit {
       this.projectsForm.patchValue(data);
       this.projectId = data.guid;
 
-      console.log("projectId", this.projectId);
     }
     this.getEmployeeList();
   }
@@ -98,7 +97,6 @@ export class ProjectFormPage implements OnInit {
   }
 
   submit() {
-    console.log("first : ", this.projectsForm.value);
     // this.modelCtrl.dismiss(this.projectsForm.value);
 
     if(this.projectsForm.invalid) {
@@ -108,7 +106,6 @@ export class ProjectFormPage implements OnInit {
       this.isInProgress = true;
       if(this.action === 'add') {
         this.createProject();
-        console.log("second", this.projectsForm.value);
       }
       else {
         this.updateProject();

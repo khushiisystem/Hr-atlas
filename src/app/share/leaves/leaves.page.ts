@@ -23,7 +23,6 @@ export class LeavesPage implements OnInit {
     this.roleStateServ.getState().subscribe(res => {
       if(res){
         this.userRole = res;
-        console.log("res: ", res);
       } else {
         this.userRole = localStorage.getItem('userRole') || "";
       }

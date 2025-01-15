@@ -55,14 +55,12 @@ export class ProfilePage implements OnInit {
         this.dataLoaded = true;
       }
     }, (error) => {
-      console.log(error, "error");
       this.dataLoaded = true;
     });
   }
 
   // getWorkDetails(){
   //   this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
-  //     console.log("res: " + res);
   //     if(res) {
   //       this.workDetail = res;
   //       this.workLoaded = true;
@@ -72,10 +70,8 @@ export class ProfilePage implements OnInit {
 
     getWorkDetails(){
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
-      console.log("res: " + res);
       if(res) {
         this.workDetail = res;
-        console.log("workDetail: " + this.workDetail);
         this.workLoaded = true;
       }
     });

@@ -62,7 +62,6 @@ export class PdfDetailsPage implements OnInit {
   //     this.adminServ.getPaySlipData(moment.utc(this.payslipDate).format()).subscribe(res => {
   //     if(res != null){
   //       this.payslipData = res;
-  //       console.log("getPaySlipData: ", res);
   //     } else {
   //       this.payslipData = null as any;
   //     }
@@ -91,7 +90,6 @@ export class PdfDetailsPage implements OnInit {
   }
 
   sendData() {
-    console.log('Data sent:', this.payslipData);
     alert('Data has been sent!');
     // this.getPaySlip();
   }

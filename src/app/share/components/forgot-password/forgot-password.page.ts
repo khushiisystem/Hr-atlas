@@ -83,8 +83,6 @@ export class ForgotPasswordPage implements OnInit {
   verifyOtp(){
     if(this.otpRequested) return;
     this.otpRequested = true;
-    // console.log(this.otpCtrl.value, "value");
-    // console.log(this.getOTPForm.value, "email form");
     this.loader.present('');
     this.isInProgress = true;
     const data: IOptVerifyRequest = {
@@ -100,7 +98,6 @@ export class ForgotPasswordPage implements OnInit {
         this.isInProgress = false;
       }
     }, (error) => {
-      console.log(error.error)
       this.shareServ.presentToast(error.message || error.error.message || error.error.HttpResponse ||'Something is wrong.', 'top', 'danger');
       this.loader.dismiss();
       this.isInProgress = false;
@@ -123,7 +120,6 @@ export class ForgotPasswordPage implements OnInit {
     } else {
       this.loader.present('');
       this.shareServ.resetPassword(this.passwordForm.value).subscribe(res => {
-        console.log("res: ", res);
         if(res) {
           this.shareServ.presentToast('Password successfully changed.', 'top', 'success');
           this.activeEvent = 'sendOTP';

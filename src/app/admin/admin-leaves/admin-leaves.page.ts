@@ -155,7 +155,6 @@ export class AdminLeavesPage implements OnInit {
         this.logsLoaded = true;
       }
     }, (error) => {
-      console.log(error.error)
       this.logsLoaded = true;
     });
   }

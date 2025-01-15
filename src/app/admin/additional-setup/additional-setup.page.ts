@@ -150,7 +150,6 @@ export class AdditionalSetupPage implements OnInit {
           this.isEmployeeLoaded = true;
         }
       }, (error) => {
-        console.log(error, "search error");
         this.isEmployeeLoaded = true;
       });
     } else {
@@ -214,7 +213,6 @@ export class AdditionalSetupPage implements OnInit {
       employeeIds: employeeId,
       workWeekId: workWeek
     }
-    console.log(data, 'data');
     this.adminServ.assignWorkWeek(data).subscribe(res => {
       if(res){
         if(res.Message){
@@ -230,7 +228,6 @@ export class AdditionalSetupPage implements OnInit {
         this.selectedEmployee = [];
       }
     }, (error) => {
-      console.log(error, "error");
       this.shareServ.presentToast('Something is wrong', 'top', 'danger');
       this.loader.dismiss();
     });
@@ -264,7 +261,6 @@ export class AdditionalSetupPage implements OnInit {
   }
 
   createNewWorks(){
-    console.log(this.workWeekForm.value);
     this.loader.present('');
     this.adminServ.createWorkWeek(this.workWeekForm.value).subscribe(res => {
       if(res){
