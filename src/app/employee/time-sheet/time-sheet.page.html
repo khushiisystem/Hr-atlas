@@ -198,7 +198,7 @@
             <div class="date">
               <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
               <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
-              <p><span>SubCategory :</span> <span>{{timesheet.timesheetSubCategory.subCategory}}</span></p>
+              <p><span>SubCategory :</span> <span>{{timesheet.subCategoryId}}</span></p>
               <p><span>Status :</span> <span [ngClass]="getStatusClass(timesheet.status)">{{timesheet.status}}</span></p>
               <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
               <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span></p>
@@ -233,7 +233,7 @@
           <div class="date">
             <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
             <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
-            <p><span>SubCategory :</span> <span>{{timesheet.timesheetSubCategory.subCategory}}</span></p>
+            <p><span>SubCategory :</span><span>{{timesheet.subCategoryId}}</span></p>
             <p><span>Status :</span> <span>{{timesheet.status}}</span></p>
             <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
             <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span></p>

@@ -53,7 +53,7 @@ export class SideNavPage implements OnInit {
   }
 
   goNextAttendance(route: string[],){
-    console.log(this.userRole, " userrole")
+    // console.log(this.userRole, " userrole")
     if(this.userRole === 'Employee'){
       this.router.navigate(['/tabs/attendance/' + this.userId]);
     } else if(this.userRole === 'Admin' || this.userRole === 'HR'){

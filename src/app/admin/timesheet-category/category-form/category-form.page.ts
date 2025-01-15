@@ -41,7 +41,6 @@ export class CategoryFormPage implements OnInit {
       this.catForm.patchValue(this.category);
       this.categoryId = this.category.guid;
 
-      console.log("category: ", this.category);
     }
   }
   newSubCategory() {
@@ -90,7 +89,6 @@ export class CategoryFormPage implements OnInit {
   }
 
   submit() {
-    console.log("first : ", this.catForm.value);
     // this.modelCtrl.dismiss(this.projectsForm.value);
     if(this.catForm.invalid) {
       return;
@@ -100,7 +98,6 @@ export class CategoryFormPage implements OnInit {
       // this.loader.present('');
       if(this.action === 'add') {
         this.createCategory();
-        console.log("second", this.catForm.value);
       }
       else {
         this.updateCategory();

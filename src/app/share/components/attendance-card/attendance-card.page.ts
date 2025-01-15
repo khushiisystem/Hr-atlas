@@ -89,7 +89,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     if(changes['attendanceData'] || changes['cardClass'] || changes['isAllGood']){
       this.workDurationString = this.calculateTotalWork();
       this.updateStatus();
-      // console.log("attendance Data: ", this.attendanceData)      
     }
   }
   
@@ -131,7 +130,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       const durationMs = this.calculateDuration(item.clockIn, item.clockOut);
       this.totalDurationMs += durationMs;
     });
-    // console.log(", this.formatDuration(this.totalDurationMs): " + this.formatDuration(this.totalDurationMs));
     return this.formatDuration(this.totalDurationMs);
   }
   calculateDuration(clockIn: string, clockOut: string | null) {
@@ -139,7 +137,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     const startTime: Date = new Date(clockIn);
     const endTime: Date = new Date(clockOut);
     const durationMs: any = endTime.getTime() - startTime.getTime();
-    // console.log("startTime: ", startTime, ", endTime: ", endTime, ", durationMs: ", durationMs);
     return durationMs;
   }
   formatDuration(ms: number): string {
@@ -170,11 +167,8 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   }
 
   // openModal() {
-  //   console.log('Attempting to open modal');
   //   if (!this.isModalOpen) {
-  //     console.log('Opening modal...');
   //     this.modal.present().then(() => {
-  //       console.log('Modal opened');
   //     }).catch((err) => {
   //       console.error('Error opening modal:', err);
   //     });
@@ -227,7 +221,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   //   this._shareServ.addRegularization(this.regularizationForm.value).subscribe(
   //     (res) => {
   //       if(res) {
-  //         console.log("res_mes: ", res.message);
   //         this._shareServ.presentToast(res.message , 'top', 'success')
   //         this._loader.dismiss();
   //         this.regularizationForm.reset();
@@ -248,7 +241,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     } 
     this._shareServ.approveRegularization(data).subscribe(res => {
       if(res) {
-        // console.log("res_accept: ", res);
         this.regularization
         this.regularizationUpdated.emit();
       }
@@ -266,7 +258,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   //   });
   //   await abcModal.present();
   //   await abcModal.onDidDismiss().then((value) => {
-  //     console.log(value);
   //   })
   // }
 
@@ -275,7 +266,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       if(this.regularizationId.trim() == '') { return }
       this._shareServ.updateRegularization(this.regularizationId, this.regularizationForm.value).subscribe(res => {
         if(res) {
-          // console.log("res: ", res);
           this.regularizationForm.reset();
           this.update = false;
           this.closeModal();
@@ -291,7 +281,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       this._shareServ.addRegularization(this.regularizationForm.value).subscribe(
         async (res) => {
           if(res) {
-            // console.log("res_mes: ", res.message);
             this._shareServ.presentToast(res.message , 'top', 'success')
             this._loader.dismiss();
             this.regularizationForm.reset();
@@ -299,7 +288,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
             this.regularizationUpdated.emit();          
             await this.modal.dismiss(res);
             // await this.modal.onDidDismiss().then(value => {
-            //   console.log(value);
             // });
             this.regularizationForm.patchValue({ attendanceData: this.attendanceData.created_date })
           } else {
@@ -315,7 +303,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   updateRegularization(regul: IRegularization) {
     this.regularizationForm.patchValue(regul);
     this.regularizationId = this.regularization!.guid;
-    // console.log("id: ", this.regularizationId);
 
     this.update = true;
     if(this.content){   
@@ -324,12 +311,9 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   }
 
   handleModalAction(regul: IRegularization) {
-    // console.log('Button clicked with regularization:', regul);
-    // console.log(this.isModalOpen, "isModelOpen");
     this.openModal();
   
     if (regul) {
-      // console.log('Patching form with data:', regul);
       this.updateRegularization(regul);
     }
   }

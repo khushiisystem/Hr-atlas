@@ -97,7 +97,6 @@ export class AssignProjectPage implements OnInit {
     this.adminServ.getEmployees('Active', this.pageIndex * 100, 100).subscribe(res => {
       if(res){
 
-        // console.log("getEmployeeList res: ",res);
         const data: IEmployeeResponse[] = res;
         this.allEmployeeList = data;
         this.isDataLoaded = true;
@@ -117,7 +116,6 @@ export class AssignProjectPage implements OnInit {
         const data: IProject[] = res;
         this.projects = data;
         this.isDataLoaded = true; 
-        // console.log("projects: ", this.projects);       
       }
     })
   }
@@ -127,7 +125,6 @@ export class AssignProjectPage implements OnInit {
       if(res) {
         const data: IAssignPro[] = res;
         this.assProjects = data;
-        console.log("get assProj res: ", this.assProjects);
       }
     })
   }
@@ -137,7 +134,6 @@ export class AssignProjectPage implements OnInit {
   //     if(res) {
   //       const data: IAssignPro[] = res;
   //       this.assProjects = data;
-  //       console.log("get assProj res: ", this.assProjects);
   //     }
   //   })
   // }
@@ -148,7 +144,6 @@ export class AssignProjectPage implements OnInit {
       this.timesheetSer.updateAssignProject(this.assProjectId, this.assignProjectForm.value).subscribe(res => {
         if(res) {
           this.shareServ.presentToast('Assign Project Updated successfully.', 'top', 'success');
-          // console.log("update: ", res);
           this.assignProjectForm.reset();
           this.updateForm = false;
           this.assProjectId = '';
@@ -161,11 +156,9 @@ export class AssignProjectPage implements OnInit {
       });
     }
     else {
-      console.log("add")
       this.timesheetSer.addAssignProject(this.assignProjectForm.value).subscribe(res => {
         if(res) {
           this.shareServ.presentToast('Assign Project successfully.', 'top', 'success');
-          // console.log("add : ", res);
           this.assignProjectForm.reset();
           this.getAssignProjects();
           this.assignProjectForm.patchValue({

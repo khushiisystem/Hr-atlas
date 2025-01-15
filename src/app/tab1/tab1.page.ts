@@ -108,7 +108,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
       centeredSlides: true,
     })
     this.getTimesheetTimeOfDay();
-    // console.log("minutes, hours, this.wHours: ", this.wHours);
   }
   ngAfterViewInit(): void {
     this.swiperReady();
@@ -117,7 +116,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     this.apiSubscription.unsubscribe();
   }
   swiperSlideChanged(e: any) {
-    // console.log('changed: ', e);
   }
  
   swiperReady() {
@@ -188,7 +186,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     //     <small><em>Settings > Calendar setup > leave Setup</em></small>
     //   </ion-card-content>
     // </ion-card>`);
-        // console.log(this.swiper, "swper");
         // this.swiper.autoplay.start();
       }
     });
@@ -257,18 +254,14 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
   getAttendance(){
     this.apiSubscription = this.shareServ.todayAttendance().subscribe(res => {
-      // console.log("res Attendance: ", res);
       if(res) {
         let hours = 0;
         let minutes = 0;
-        console.log("minutes: ", minutes)
         // for (const workTime of res) {
         //   if (workTime.workingTime) {
-        //     // console.log("a: ", workTime.workingTime);
         //     hours += parseInt(workTime.workingTime.split(':')[0]);
         //     minutes += parseInt(workTime.workingTime.split(':')[1]);
         //     this.wHours += hours+Math.floor(minutes/60);
-        //     console.log("minutes, hours, this.wHours: ", minutes);
         //   }
         // }
 
@@ -279,7 +272,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           }
         }
         
-        console.log("Total time in minutes: ", this.workingTime);
       }
       if(res && !res.message && !res[0].clockOut) {
         if(res[0].clockIn && res[0].clockIn.trim() !== '' && !res[0].clockOut){
@@ -298,7 +290,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     }, (error) => {
       this.isRunning = false;
       this.clockInDataLoaded = true;
-      console.log(error.error.Message, 'err');
     }); 
   }
 
@@ -335,7 +326,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   
   getCalendar(){
     this.eventsList = [];
-    // console.log("this.eventsList: " + this.eventsList)
     this.apiSubscription = this.adminServ.getEventHollyday(moment.utc(this.today).format()).subscribe(res => {
       if(res) {
         if(res.length < 1) {
@@ -400,7 +390,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
       
         // Convert the result object to an array of values
         var resultArray = Object.values(result);
-        console.log(resultArray);
 
         const sortArray = res.sort((a,b) => new Date(a.dateOfBirth).getTime() - new Date(b.dateOfBirth).getTime());
         if(sortArray.length > 0){
@@ -472,7 +461,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           if(this.clockInId){
             this.shareServ.clockOut(this.clockInId).subscribe(res => {
               if(res){
-                console.log(res);
                 this.isRunning = false;
                 this.buttonLabel = 'Clock In';
                 this.loader.dismiss();
@@ -552,7 +540,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   //   (await employeeModel).present();
 
   //   (await employeeModel).onDidDismiss().then(result => {
-  //     console.log(result, "result");
   //   });
   // }
 
@@ -761,7 +748,6 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           this.timesheetTime += day.totalTime;
         }
         this.hours = Math.floor(this.timesheetTime / 60);
-        // console.log("hours: ", this.hours , ", totalDaytime: ", this.timesheetTime);
       }
     })
   }

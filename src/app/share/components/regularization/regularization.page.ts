@@ -39,8 +39,6 @@ export class RegularizationPage implements OnInit {
 
     this.regularizationForm.get('clockIn')?.valueChanges.subscribe(() => this.calculateTotalTime());
     this.regularizationForm.get('clockOut')?.valueChanges.subscribe(() => this.calculateTotalTime());
-    console.log(this.regularizationData, " :regularization");
-    console.log(this.attendance, " :attendance");
     if(this.regularizationData){
       this.update = true;
       this.regularizationForm.patchValue(this.regularizationData);
@@ -112,7 +110,6 @@ export class RegularizationPage implements OnInit {
       if(this.regularizationData.guid.trim() == '') { return }
       this._shareServ.updateRegularization(this.regularizationData.guid, this.regularizationForm.value).subscribe(res => {
         if(res) {
-          console.log("res: ", res);
           this.regularizationForm.reset();
           this.update = false;
           this.modelCtrl.dismiss(res);
@@ -124,7 +121,6 @@ export class RegularizationPage implements OnInit {
       this._shareServ.addRegularization(this.regularizationForm.value).subscribe(
         async (res) => {
           if(res) {
-            console.log("res_mes: ", res.message);
             this._shareServ.presentToast(res.message , 'top', 'success')
             this._loader.dismiss();
             this.regularizationForm.reset();

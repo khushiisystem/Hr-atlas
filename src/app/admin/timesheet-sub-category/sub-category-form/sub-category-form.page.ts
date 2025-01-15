@@ -45,8 +45,6 @@ export class SubCategoryFormPage implements OnInit {
       this.subCategoryForm.patchValue(data);
       this.subCategoryId = data.guid;
 
-      console.log("subCategory: ", this.subCategoryId);
-      console.log("subCategoryId: ", data.guid);
     }
     this.getCategories();
   }
@@ -58,7 +56,6 @@ export class SubCategoryFormPage implements OnInit {
   getCategories() {
     this.timesheetSer.getAllCategories(this.pageIndex * 100, 100).subscribe(res => {
       if(res) {
-        console.log("getSubCategories: ", res)
         const data: ICategory[] = res;
         this.categories = data;
         this.isDataLoaded = true;
@@ -93,7 +90,6 @@ export class SubCategoryFormPage implements OnInit {
   }
 
   submit() {
-    console.log("form value: ", this.subCategoryForm.value);
     if(this.subCategoryForm.invalid) {
       return;
     }
