@@ -205,4 +205,12 @@ export class EmployeeLeavesPage implements OnInit {
     await cancelAlert.present();
   }
 
+  handleRefresh(event: any) {
+    console.log("Refresher triggered employee page");
+    setTimeout(() => {
+      event.target.complete();
+      window.location.reload();
+    }, 1000);
+  }
+
 }

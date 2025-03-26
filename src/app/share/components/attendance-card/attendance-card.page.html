@@ -11,7 +11,7 @@
     </ion-button> -->
 
     <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" (click)="markPresent($event)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip> -->
-    <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent' || attendanceData.status === 'Half Day'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
+    <ion-chip color="tertiary" *ngIf="(userRole === 'Employee' && !isWeekOff) && attendanceData.status === 'Absent' || attendanceData.status === 'Half Day' || (attendanceData.status === 'Leave' && leaveStartDay === 'Half Day')" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
     <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="triggerModal()">Regularization</ion-chip> -->
 
   </ion-card-header>
@@ -45,15 +45,15 @@
       <div class="ion-margin-top leaveDate">
         <ion-label color="tertiary" class="ion-text-wrap" *ngIf="attendanceData.leaveData.startDate">
           <ion-icon name="calendar" size="small"></ion-icon>
-          <ion-text>{{attendanceData.leaveData.startDate | date}} - {{attendanceData.leaveData.endDate | date}}</ion-text>
+          <ion-text>test 1 {{attendanceData.leaveData.startDate | date}} - {{attendanceData.leaveData.endDate | date}}</ion-text>
         </ion-label>
         <ion-label color="tertiary" class="ion-text-wrap" *ngIf="attendanceData.leaveData.from">
           <ion-icon name="calendar" size="small"></ion-icon>
-          <ion-text>{{attendanceData.leaveData.from.date | date}} &middot; {{leaveStartDay}}</ion-text>
+          <ion-text>test 2 {{attendanceData.leaveData.from.date | date}} &middot; {{leaveStartDay}}</ion-text>
         </ion-label>
         <ion-label color="tertiary" class="ion-text-wrap" *ngIf="attendanceData.leaveData.to && attendanceData.leaveData.to.date">
           <ion-icon name="calendar" size="small"></ion-icon>
-          <ion-text>{{attendanceData.leaveData.to.date | date}} &middot; {{leaveEndDay}}</ion-text>
+          <ion-text>test 3 {{attendanceData.leaveData.to.date | date}} &middot; {{leaveEndDay}}</ion-text>
         </ion-label>
       </div>
       <p>

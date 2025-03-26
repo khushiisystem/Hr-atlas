@@ -1,94 +1,108 @@
-<div class="container">
-  <ion-segment [(ngModel)]="activeTab" mode="md">
-    <ion-segment-button value="status">
-      <ion-label>Status</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="logs">
-      <ion-label>Logs</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-
-  <div *ngIf="activeTab === 'status'">
-    <ion-list inset="true" mode="ios" *ngIf="leaveStatus && leaveStatus.loseOfPay && !showApplyForm || selectedLeaveType === 'LOP'">
-      <ion-list-header>
-        <ion-label>Loss Of Pay</ion-label>
-        <ion-button size="small" color="primary" shape="round" strong="true" mode="ios" fill="solid" *ngIf="leaveStatus.loseOfPay.createdLeave > 0 && (!showApplyForm || selectedLeaveType !== 'LOP')" (click)="selectedLeaveType = 'LOP'; showApplyForm = true;" class="applyBtn">
-          <ion-label>Apply</ion-label>
-        </ion-button>
-      </ion-list-header>
-      <ion-item detail="false">
-        <ion-label>Total:</ion-label>
-        <ion-text>{{ leaveStatus.loseOfPay.totalLeave }}</ion-text>
-      </ion-item>
-      <ion-item detail="false">
-        <ion-label>Credited:</ion-label>
-        <ion-text>{{ leaveStatus.loseOfPay.createdLeave }}</ion-text>
-      </ion-item>
-      <ion-item detail="false">
-        <ion-label>Applied:</ion-label>
-        <ion-text>{{ leaveStatus.loseOfPay.applyLeave }}</ion-text>
-      </ion-item>
-    </ion-list>
+<ion-content [fullscreen]="true" color="light">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="container">
 
 
-    <ion-list inset="true" mode="ios" *ngIf="leaveStatus && leaveStatus.casualLeave && !showApplyForm || selectedLeaveType === 'CL'">
-      <ion-list-header>
-        <ion-label>Casual Leaves</ion-label>
-        <ion-button size="small" color="primary" shape="round" strong="true" mode="ios" fill="solid" class="applyBtn" *ngIf="leaveStatus.casualLeave.createdLeave > 0 && (!showApplyForm || selectedLeaveType !== 'CL')" (click)="selectedLeaveType = 'CL'; showApplyForm = true;">Apply</ion-button>
-      </ion-list-header>
-      <ion-item detail="false">
-        <ion-label>Total:</ion-label>
-        <ion-text>{{ leaveStatus.casualLeave.totalLeave }}</ion-text>
-      </ion-item>
-      <ion-item detail="false">
-        <ion-label>Credited:</ion-label>
-        <ion-text>{{ leaveStatus.casualLeave.createdLeave }}</ion-text>
-      </ion-item>
-      <ion-item detail="false">
-        <ion-label>Applied:</ion-label>
-        <ion-text>{{ leaveStatus.casualLeave.applyLeave }}</ion-text>
-      </ion-item>
-    </ion-list>
+    <ion-segment [(ngModel)]="activeTab" mode="md">
+      <ion-segment-button value="status">
+        <ion-label>Status</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="logs">
+        <ion-label>Logs</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-    <ion-card class="leave_card" mode="md" *ngIf="showApplyForm && selectedLeaveType === 'LOP'">
-      <ion-card-header>
-        <ion-card-title>Apply LOP Leave</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <app-leave-apply-form [leaveType]="'Loss of Pay'" (saveForm)="leaveApply($event)"
-        ></app-leave-apply-form>
-        <ion-button mode="md" fill="solid" expand="block" color="danger" shape="round" strong="true" class="ion-margin-top" (click)="showApplyForm = false; selectedLeaveType = ''">Cancel</ion-button>
-      </ion-card-content>
-    </ion-card>
 
-    <ion-card class="leave_card" mode="md" *ngIf="showApplyForm && selectedLeaveType === 'CL'">
-      <ion-card-header>
-        <ion-card-title>Apply Casual Leave</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <app-leave-apply-form [leaveType]="'Casual Leave'" (saveForm)="leaveApply($event)"
-        ></app-leave-apply-form>
-        <ion-button mode="md" fill="solid" expand="block" color="danger" shape="round" strong="true" class="ion-margin-top" (click)="showApplyForm = false; selectedLeaveType = ''">Cancel</ion-button>
-      </ion-card-content>
-    </ion-card>
+    <div *ngIf="activeTab === 'status'">
+      <ion-list inset="true" mode="ios"
+        *ngIf="leaveStatus && leaveStatus.loseOfPay && !showApplyForm || selectedLeaveType === 'LOP'">
+        <ion-list-header>
+          <ion-label>Loss Of Pay</ion-label>
+          <ion-button size="small" color="primary" shape="round" strong="true" mode="ios" fill="solid"
+            *ngIf="leaveStatus.loseOfPay.createdLeave > 0 && (!showApplyForm || selectedLeaveType !== 'LOP')"
+            (click)="selectedLeaveType = 'LOP'; showApplyForm = true;" class="applyBtn">
+            <ion-label>Apply</ion-label>
+          </ion-button>
+        </ion-list-header>
+        <ion-item detail="false">
+          <ion-label>Total:</ion-label>
+          <ion-text>{{ leaveStatus.loseOfPay.totalLeave }}</ion-text>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-label>Credited:</ion-label>
+          <ion-text>{{ leaveStatus.loseOfPay.createdLeave }}</ion-text>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-label>Applied:</ion-label>
+          <ion-text>{{ leaveStatus.loseOfPay.applyLeave }}</ion-text>
+        </ion-item>
+      </ion-list>
 
-    <div class="ion-text-center ion-padding" *ngIf="!leaveStatus">
-      <ion-spinner name="circular" color="primary"></ion-spinner>
+
+      <ion-list inset="true" mode="ios"
+        *ngIf="leaveStatus && leaveStatus.casualLeave && !showApplyForm || selectedLeaveType === 'CL'">
+        <ion-list-header>
+          <ion-label>Casual Leaves</ion-label>
+          <ion-button size="small" color="primary" shape="round" strong="true" mode="ios" fill="solid" class="applyBtn"
+            *ngIf="leaveStatus.casualLeave.createdLeave > 0 && (!showApplyForm || selectedLeaveType !== 'CL')"
+            (click)="selectedLeaveType = 'CL'; showApplyForm = true;">Apply</ion-button>
+        </ion-list-header>
+        <ion-item detail="false">
+          <ion-label>Total:</ion-label>
+          <ion-text>{{ leaveStatus.casualLeave.totalLeave }}</ion-text>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-label>Credited:</ion-label>
+          <ion-text>{{ leaveStatus.casualLeave.createdLeave }}</ion-text>
+        </ion-item>
+        <ion-item detail="false">
+          <ion-label>Applied:</ion-label>
+          <ion-text>{{ leaveStatus.casualLeave.applyLeave }}</ion-text>
+        </ion-item>
+      </ion-list>
+
+      <ion-card class="leave_card" mode="md" *ngIf="showApplyForm && selectedLeaveType === 'LOP'">
+        <ion-card-header>
+          <ion-card-title>Apply LOP Leave</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <app-leave-apply-form [leaveType]="'Loss of Pay'" (saveForm)="leaveApply($event)"></app-leave-apply-form>
+          <ion-button mode="md" fill="solid" expand="block" color="danger" shape="round" strong="true"
+            class="ion-margin-top" (click)="showApplyForm = false; selectedLeaveType = ''">Cancel</ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card class="leave_card" mode="md" *ngIf="showApplyForm && selectedLeaveType === 'CL'">
+        <ion-card-header>
+          <ion-card-title>Apply Casual Leave</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <app-leave-apply-form [leaveType]="'Casual Leave'" (saveForm)="leaveApply($event)"></app-leave-apply-form>
+          <ion-button mode="md" fill="solid" expand="block" color="danger" shape="round" strong="true"
+            class="ion-margin-top" (click)="showApplyForm = false; selectedLeaveType = ''">Cancel</ion-button>
+        </ion-card-content>
+      </ion-card>
+
+      <div class="ion-text-center ion-padding" *ngIf="!leaveStatus">
+        <ion-spinner name="circular" color="primary"></ion-spinner>
+      </div>
     </div>
-  </div>
 
-  <div *ngIf="activeTab === 'logs'">
-    <div class="emptyDiv" *ngIf="logsLoaded && leaveLogs.length < 1">
-      <img src="../../../assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
-      <ion-label class="ion-text-wrap">Logs are empty.</ion-label>
-    </div>
+    <div *ngIf="activeTab === 'logs'">
+      <div class="emptyDiv" *ngIf="logsLoaded && leaveLogs.length < 1">
+        <img src="../../../assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
+        <ion-label class="ion-text-wrap">Logs are empty.</ion-label>
+      </div>
 
-    <div class="ion-text-center ion-padding" *ngIf="!logsLoaded">
-      <ion-spinner name="circular" color="primary"></ion-spinner>
-    </div>
-    <leave-card *ngFor="let leaveItem of leaveLogs; index as a" [leaveItem]="leaveItem" (actionReturn)="leaveAction($event)"></leave-card>
+      <div class="ion-text-center ion-padding" *ngIf="!logsLoaded">
+        <ion-spinner name="circular" color="primary"></ion-spinner>
+      </div>
+      <leave-card *ngFor="let leaveItem of leaveLogs; index as a" [leaveItem]="leaveItem"
+        (actionReturn)="leaveAction($event)"></leave-card>
 
-    <!-- <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of leaveLogs; index as a">
+      <!-- <ion-card class="log_card" mode="ios" *ngFor="let leaveItem of leaveLogs; index as a">
       <ion-card-content>
         <ion-icon name="ellipse" class="statusIcon" aria-hidden="true" aria-label="status" [color]="getStatus(leaveItem.status).color"></ion-icon>
         <p>
@@ -112,11 +126,13 @@
         <ion-button color="danger" mode="ios" fill="clear" size="small" [strong]="true" (click)="cancelLeave(leaveItem.guid)">Cancel Leave</ion-button>
       </div>
     </ion-card> -->
-    
-    
-    <ion-infinite-scroll #emplogList (ionInfinite)="loadLogs($any($event))" [position]="'bottom'" *ngIf="moreData">
-      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
+
+
+      <ion-infinite-scroll #emplogList (ionInfinite)="loadLogs($any($event))" [position]="'bottom'" *ngIf="moreData">
+        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+        </ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </div>
+
   </div>
-</div>
+</ion-content>

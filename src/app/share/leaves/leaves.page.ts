@@ -28,7 +28,7 @@ export class LeavesPage implements OnInit {
       }
     });
   }
-
+ 
 
   ngOnInit() {
     const isSwitched = localStorage.getItem('isSwitchable');
@@ -66,9 +66,10 @@ export class LeavesPage implements OnInit {
 
   handleRefresh(event: any) {
     setTimeout(() => {
-      window.location.reload();
+      
       event.target.complete();
-    }, 2000);
+      // window.location.reload();
+    }, 1000);
   }
 
 }

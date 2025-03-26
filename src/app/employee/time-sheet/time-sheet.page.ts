@@ -58,7 +58,7 @@ export class TimeSheetPage implements OnInit {
   currentYear: number = moment().year();
   projects: IProject[] = [];
   categories: ICategory[] = [];
-  subCategories: string[] = []; 
+  subCategories: ISubCategory[] = []; 
   pageIndex: number = 0;
   minDate: Date = new Date();
   maxDate: Date = new Date();
@@ -139,6 +139,7 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetMonth();
     this.getAssignProjectById();
     this.getUserTimesheet();
+    this.getSubCategories();
   }
 
   getFormGroup(ctrlName: string): FormGroup{
@@ -198,7 +199,7 @@ export class TimeSheetPage implements OnInit {
   //       const data: IAssignPro[] = res;
   //       this.assProjects = data;
   //     }
-  //   })
+  //   }) 
   // }
 
   getAssignProjectById() {
@@ -213,6 +214,7 @@ export class TimeSheetPage implements OnInit {
   getCategories() {
     this.timesheetSer.getAllCategories(this.pageIndex * 100, 100).subscribe(res => {
       if(res) {
+        // console.log("check cat : ", res)
         this.categories = res;
         this.isDataLoaded = true;
       }
@@ -220,22 +222,24 @@ export class TimeSheetPage implements OnInit {
   }
 
   selectCat(event: any) {
-    this.subCategories = this.categories.find(val => val.guid === event.detail.value )?.subCategory || [];
+    // this.subCategories = this.categories.find(val => val.guid === event.detail.value )?.subCategory || [];
   }
 
-  // getSubCategories() {
-    // this.isDataLoaded = false;
-    // if(this.pageIndex < 1) {
-    //   this.subCategories = [];
-    // }
-    // this.timesheetSer.getAllSubCategories(this.pageIndex * 100, 100).subscribe(res => {
-    //   if(res) {
-    //     const data: ISubCategory[] = res;
-    //     this.subCategories = data;
-    //     this.isDataLoaded = true;
-    //   }
-    // })
-  // }
+  getSubCategories() {
+    this.isDataLoaded = false;
+    if(this.pageIndex < 1) {
+      this.subCategories = [];
+    }
+    this.timesheetSer.getAllSubCategories(this.pageIndex * 100, 100).subscribe(res => {
+      if(res) {
+        // const data: ISubCategory[] = res;
+        // console.log("this subb cat : ", this.subCategories)
+        // console.log("check sub cat : ", data);
+        this.subCategories = res;
+        this.isDataLoaded = true;
+      }
+    })
+  }
 
   clear() {
     this.timeSheetForm.reset();

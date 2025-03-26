@@ -17,7 +17,7 @@ export class ForgotPasswordPage implements OnInit {
   otpConfig: NgOtpInputConfig = {
     length: 6,
     allowNumbersOnly: true,
-    inputClass: 'otp_input',
+    inputClass: 'otp_input', 
     containerClass: 'otp_input_container'
   };
   userEvents: string[] = ['sendOTP', 'getOTP', 'setPassword'];

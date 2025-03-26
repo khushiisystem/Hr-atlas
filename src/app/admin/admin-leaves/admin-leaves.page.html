@@ -1,37 +1,52 @@
 <div #tabsContent>
-  <ion-segment [(ngModel)]="activeTab" mode="md" class="tab_segment">
-    <ion-segment-button *ngFor="let tab of tabs" [value]="tab.value">
-      <ion-label>{{tab.label}}</ion-label>
-    </ion-segment-button>
-  </ion-segment>
+<ion-content [fullscreen]="true" color="light">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+    <ion-segment [(ngModel)]="activeTab" mode="md" class="tab_segment">
+      <ion-segment-button *ngFor="let tab of tabs" [value]="tab.value">
+        <ion-label>{{tab.label}}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-  <div *ngIf="activeTab === 'requests'">
-    
-    <div class="emptyDiv" *ngIf="requestLoaded && requestedLeaveList.length < 1">
-      <img src="../../../assets/images/empty_trash.svg" class="emptyImg" alt="Empty">
-      <ion-label class="ion-text-wrap">No any request.</ion-label>
+
+
+    <div *ngIf="activeTab === 'requests'">
+
+      <div class="emptyDiv" *ngIf="requestLoaded && requestedLeaveList.length < 1">
+        <img src="../../../assets/images/empty_trash.svg" class="emptyImg" alt="Empty">
+        <ion-label class="ion-text-wrap">No any request.</ion-label>
+      </div>
+
+      <leave-card *ngFor="let leaveItem of requestedLeaveList; index as a" [leaveItem]="leaveItem"
+        (actionReturn)="leaveApprovel($event)"></leave-card>
+      <div class="ion-text-center ion-margin" *ngIf="!requestLoaded"><ion-spinner name="circular"
+          color="tertiary"></ion-spinner></div>
     </div>
-    
-    <leave-card *ngFor="let leaveItem of requestedLeaveList; index as a" [leaveItem]="leaveItem" (actionReturn)="leaveApprovel($event)"></leave-card>
-    <div class="ion-text-center ion-margin" *ngIf="!requestLoaded"><ion-spinner name="circular" color="tertiary"></ion-spinner></div>
-  </div>
 
-  <div *ngIf="activeTab === 'logs'">
-    <div class="ion-text-center ion-margin" *ngIf="!logsLoaded"><ion-spinner name="circular" color="tertiary"></ion-spinner></div>
+    <div *ngIf="activeTab === 'logs'">
+      <div class="ion-text-center ion-margin" *ngIf="!logsLoaded"><ion-spinner name="circular"
+          color="tertiary"></ion-spinner></div>
 
-    <div class="emptyDiv" *ngIf="logsLoaded && leaveLogs.length < 1">
-      <img src="../../../assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
-      <ion-label class="ion-text-wrap">No any leave assigned you.</ion-label>
+      <div class="emptyDiv" *ngIf="logsLoaded && leaveLogs.length < 1">
+        <img src="../../../assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
+        <ion-label class="ion-text-wrap">No any leave assigned you.</ion-label>
+      </div>
+
+
+      <leave-card *ngFor="let leaveItem of leaveLogs; index as a" [leaveItem]="leaveItem"
+        (actionReturn)="leaveApprovel($event)"></leave-card>
+
     </div>
 
-    <leave-card *ngFor="let leaveItem of leaveLogs; index as a" [leaveItem]="leaveItem" (actionReturn)="leaveApprovel($event)"></leave-card>
-  </div>
+    <ion-infinite-scroll #requestsInfiniteScroll (ionInfinite)="loadRequests($any($event))" [position]="'bottom'"
+      *ngIf="activeTab === 'requests' && moreRequests">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 
-  <ion-infinite-scroll #requestsInfiniteScroll (ionInfinite)="loadRequests($any($event))" [position]="'bottom'" *ngIf="activeTab === 'requests' && moreRequests">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading..."></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
-
-  <ion-infinite-scroll #logsInfiniteScroll (ionInfinite)="loadLogs($any($event))" [position]="'bottom'" *ngIf="activeTab === 'logs' && moreLogs">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading..."></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+    <ion-infinite-scroll #logsInfiniteScroll (ionInfinite)="loadLogs($any($event))" [position]="'bottom'"
+      *ngIf="activeTab === 'logs' && moreLogs">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading..."></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-content>
 </div>

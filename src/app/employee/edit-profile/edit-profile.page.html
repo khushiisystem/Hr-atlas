@@ -74,7 +74,7 @@
             <ion-item detail="false">
               <ion-icon name="heart" aria-hidden="true" slot="start" color="medium"></ion-icon>
               <ion-select labelPlacement="floating" formControlName="bloodGroup" placeholder="Select" interface="action-sheet" expandedIcon="caret-up">
-                <div slot="label">Blood Group <ion-text color="danger">*</ion-text></div>
+                <div slot="label">Blood Group</div>
                 <ion-select-option value="Group A">Group A</ion-select-option>
                 <ion-select-option value="Group B">Group B</ion-select-option>
                 <ion-select-option value="Group c">Group C</ion-select-option>
@@ -92,14 +92,14 @@
             </ion-list-header>
             <ion-item detail="false">
               <ion-icon name="call" aria-hidden="true" slot="start" color="medium"></ion-icon>
-              <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Mobile Number" type="tel" [readonly]="true">
+              <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Mobile Number" type="tel" [readonly]="false">
                 <div slot="label">Mobile Number </div>
               </ion-input>
             </ion-item>
             <ion-item detail="false">
               <ion-icon name="call" aria-hidden="true" slot="start" color="medium"></ion-icon>
               <ion-input labelPlacement="floating" formControlName="alternateMobileNumber" placeholder="Alternate Mobile Number" type="tel" inputmode="tel" [enterkeyhint]="'next'" autocomplete="alternateMobileNumber" >
-                <div slot="label">Emergency Mobile Number <ion-text color="danger">*</ion-text></div>
+                <div slot="label">Alternate Phone Number<ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="employeeForm.controls['alternateMobileNumber'].touched && employeeForm.controls['alternateMobileNumber'].errors"></ion-icon>
             </ion-item>
@@ -131,8 +131,8 @@
               <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger" *ngIf="getGroup('currentAddress').controls['addressLine1'].touched && getGroup('currentAddress').controls['addressLine1'].errors"></ion-icon>
             </ion-item>
             <ion-item detail="false">
-              <ion-input labelPlacement="floating" formControlName="addressLine2" placeholder="Address Line 2" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2" required="true">
-                <div slot="label">Address Line 2 <ion-text color="danger">*</ion-text></div>
+              <ion-input labelPlacement="floating" formControlName="addressLine2" placeholder="Address Line 2" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2" >
+                <div slot="label">Address Line 2</div>
               </ion-input>
               <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger" *ngIf="getGroup('currentAddress').controls['addressLine2'].touched && getGroup('currentAddress').controls['addressLine2'].errors"></ion-icon>
             </ion-item>
@@ -181,8 +181,8 @@
                 <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger" *ngIf="getGroup('permanentAddress').controls['addressLine1'].touched && getGroup('permanentAddress').controls['addressLine1'].errors"></ion-icon>
               </ion-item>
               <ion-item detail="false">
-                <ion-input labelPlacement="floating" formControlName="addressLine2" placeholder="Address Line 2" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2" required="true">
-                  <div slot="label">Address Line 2 <ion-text color="danger">*</ion-text></div>
+                <ion-input labelPlacement="floating" formControlName="addressLine2" placeholder="Address Line 2" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2" >
+                  <div slot="label">Address Line 2 </div>
                 </ion-input>
                 <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger" *ngIf="getGroup('permanentAddress').controls['addressLine2'].touched && getGroup('permanentAddress').controls['addressLine2'].errors"></ion-icon>
               </ion-item>

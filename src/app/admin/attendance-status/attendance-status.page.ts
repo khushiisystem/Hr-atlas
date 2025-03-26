@@ -46,32 +46,33 @@ export class AttendanceStatusPage implements OnInit {
     private adminServ: AdminService,
     private router: Router,
   ) { }
-  
+
   ngOnInit() {
     this.today.setFullYear(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
     this.attendanceDate = this.today;
     this.getEmployeeList();
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.userId = localStorage.getItem("userId") ?? "";
   }
 
-  getEmployeeList(){
+  getEmployeeList() {
     this.isDataLoaded = false;
-    if(this.pageIndex < 1){
+    if (this.pageIndex < 1) {
       this.employeeList = [];
     }
     this.adminServ.getEmployees('Active', this.pageIndex * 30, 30).subscribe(res => {
-      if(res){
+      if (res) {
         const data: IEmployeeResponse[] = res;
-        for(let i=0; i<data.length; i++){
+        for (let i = 0; i < data.length; i++) {
           this.employeeList.push(res[i]);
         }
         this.isMoreData = res.length > 29;
       }
-      this.today.setHours(0,0,0);
-      this.getTodayAttendance(this.today.toISOString());
+      this.today.setHours(0, 0, 0);
+      const localDate = new Date(this.attendanceDate.getTime() - this.attendanceDate.getTimezoneOffset() * 60000);
+      this.getTodayAttendance(localDate.toISOString());
     }, (error) => {
       this.isMoreData = false;
       this.isDataLoaded = true;
@@ -82,7 +83,7 @@ export class AttendanceStatusPage implements OnInit {
   getTodayAttendance(dateStr: string) {
     this.attendanceLoaded = false;
     this.adminServ.getDailyAttendance(dateStr, this.pageIndex * 60, 60).subscribe(res => {
-      if(res.length < 1){
+      if (res.length < 1) {
         this.isDataLoaded = true;
         this.attendanceLoaded = true;
         return;
@@ -97,7 +98,7 @@ export class AttendanceStatusPage implements OnInit {
     });
   }
 
-  loadData(event: InfiniteScrollCustomEvent){
+  loadData(event: InfiniteScrollCustomEvent) {
     if (this.isMoreData) {
       this.pageIndex++;
       this.getEmployeeList();
@@ -107,20 +108,20 @@ export class AttendanceStatusPage implements OnInit {
   }
 
   getName(employee: IEmployeeResponse) {
-    if(employee.lastName && employee.lastName.trim() !== ''){
-      return `${employee.firstName.slice(0,1)}`;
+    if (employee.lastName && employee.lastName.trim() !== '') {
+      return `${employee.firstName.slice(0, 1)}`;
     } else {
-      return `${employee.firstName.slice(0,1)}`;
+      return `${employee.firstName.slice(0, 1)}`;
     }
   }
 
-  getStatus(empId: string){
+  getStatus(empId: string) {
     let status: AttendaceStatus = AttendaceStatus.ABSENT;
-    if(this.attendanceList.length < 1){
+    if (this.attendanceList.length < 1) {
       return AttendaceStatus.ABSENT;
     } else {
       this.attendanceList.forEach((item) => {
-        if(item.employeeId === empId){
+        if (item.employeeId === empId && item.status === "Present") {
           status = item.status;
         }
       });
@@ -128,21 +129,22 @@ export class AttendanceStatusPage implements OnInit {
     return status;
   }
 
-  selectEmployee(empData: IEmployeeResponse){
-    this.router.navigate([`tabs/attendance/${empData.guid}`], {state: {tab: "listView"}});
+  selectEmployee(empData: IEmployeeResponse) {
+    this.router.navigate([`tabs/attendance/${empData.guid}`], { state: { tab: "listView" } });
   }
 
-  selectAttendanceDate(event: any){
-    if(event.detail.value){
+  selectAttendanceDate(event: any) {
+    if (event.detail.value) {
       this.attendanceDate = new Date(event.detail.value);
       this.pageIndex = 0;
       this.attendanceList = [];
       this.getTodayAttendance(this.attendanceDate.toISOString());
     }
   }
-  selectDate(event: Date){
+  selectDate(event: Date) {
+    const localDate = new Date(event.getTime() - event.getTimezoneOffset() * 60000);
     this.attendanceList = [];
-    this.getTodayAttendance(event.toISOString());
+    this.getTodayAttendance(localDate.toISOString());
   }
 
   ngOnDestroy(): void {
@@ -150,7 +152,7 @@ export class AttendanceStatusPage implements OnInit {
     this.attendanceList = [];
   }
 
-  goBack() {history.back();}
+  goBack() { history.back(); }
 
   handleRefresh(event: any) {
     setTimeout(() => {
