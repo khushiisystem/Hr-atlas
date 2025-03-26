@@ -50,7 +50,7 @@
          <ion-col size="12">
            <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
              <div *ngFor="let subCategory of subCategories; index as i">
-               <ion-select-option value="{{subCategory}}">{{subCategory}}</ion-select-option>            
+               <ion-select-option value="{{subCategory.guid}}">{{subCategory.subCategory}}</ion-select-option>            
              </div>
            </ion-select>
            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">Sub-Category is required</ion-text>

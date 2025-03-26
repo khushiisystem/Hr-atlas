@@ -14,13 +14,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" color="light">
-  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+<ion-content color="light">
+  <!-- <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)" >
     <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+  </ion-refresher> -->
 
-  <app-employee-leaves *ngIf="userRole === 'Employee'"></app-employee-leaves>
-
+  <app-employee-leaves *ngIf="userRole === 'Employee'"></app-employee-leaves> 
   <app-admin-leaves *ngIf="userRole === 'Admin' || userRole === 'HR'" [leaveType]="leaveType ? leaveType : ''"></app-admin-leaves>
   <!-- <app-admin-leaves *ngIf="userRole === userDetails.role" [leaveType]="leaveType ? leaveType : ''"></app-admin-leaves> -->
 

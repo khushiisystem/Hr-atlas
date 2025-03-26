@@ -233,4 +233,12 @@ export class AdminLeavesPage implements OnInit {
       this.getLogs();
     }
   }
+
+  handleRefresh(event: any) {
+    console.log("Refresher triggered ", this.userRole);
+    setTimeout(() => {
+      event.target.complete();
+      window.location.reload();
+    }, 2000);
+  }
 }

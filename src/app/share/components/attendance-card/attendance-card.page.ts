@@ -108,7 +108,17 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     const today = new Date();
     today.setHours(0,0,1);
     if (this.regularization?.status === 'Accept') {
-      this.attendanceData.status = AttendaceStatus.PRESENT;
+      let regDate = new Date(this.regularization.attandanceDate);
+      let totalTime:number = +this.regularization.totalTime.split('h')[0];
+      if(totalTime < 5){
+        this.attendanceData.status = AttendaceStatus.ABSENT;
+      }else if(totalTime < 9 && regDate.getDay()=== 6){
+        this.attendanceData.status = AttendaceStatus.PRESENT;
+      }else if(totalTime < 9){
+        this.attendanceData.status = AttendaceStatus.HALF_DAY;
+      }else{
+        this.attendanceData.status = AttendaceStatus.PRESENT;
+      }
     }
     else if(this.attendanceData.attendanceData.length > 0 && this.attendanceData.attendanceData[0].clockIn){
       const firstDataDate = new Date(this.attendanceData.attendanceData[0].clockIn);
