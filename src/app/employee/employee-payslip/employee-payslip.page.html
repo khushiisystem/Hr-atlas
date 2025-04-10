@@ -1,120 +1,107 @@
 <div class="container">
   <div class="payslipData ion-padding-vertical">
     <h4 class="ion-text-center">Spundan Consultancy & IT Solutions Pvt Ltd</h4>
-    <p class="ion-text-center">Payslip for {{ getMonth() + ' &dash; ' + getPayslipDate().getFullYear() }} ({{ getStartDate | date }} To {{ getendDate | date }})</p>
-  
+    <p class="ion-text-center">Payslip for {{ getMonth() + ' &dash; ' + getPayslipDate().getFullYear() }} ({{
+      getStartDate | date }} To {{ getendDate | date }})</p>
+
     <table class="table basicDesc ion-margin-top">
       <tbody>
+        <tr>
+          <td class="paysliptr"><span>Employee name</span></td>
+          <td class="paysliptr"><span>{{payslipData.employeeName || ""}}</span></td>
+          <td class="paysliptr"><span>Bank Name</span></td>
+          <td class="paysliptr"><span class="paysliptextcenter">-</span></td>
+
+        </tr>
+        <tr>
+
+          <td><span>Designation</span></td>
+          <td>
+            <span *ngIf="payslipData">{{ payslipData.designation || ""}}</span>
+          </td>
+          <td><span>Account no.</span></td>
+          <td><span class="paysliptextcenter">-</span></td>
+
+        </tr>
+
         <tr>
           <td><span>Working Days</span></td>
           <td>
             <span *ngIf="payslipData">{{payslipData.workingDays || 31}}</span>
           </td>
-          <td><span>Designation</span></td>
-          <td>
-            <span *ngIf="payslipData">{{  payslipData.designation || ""}}</span>
-          </td>
-        </tr>
-        <tr>
-          <td><span>Employee name</span></td>
-          <td><span>{{payslipData.employeeName || ""}}</span></td>
           <td><span>Pay Mode</span></td>
-          <td><span>-</span></td>
-        </tr>
-        <tr>
-          <!-- <td><span>PAN No.</span></td>
-          <td><span>-</span></td> -->
-          <td></td>
-          <td></td>
-          <td><span>Bank Name</span></td>
-          <td><span>-</span></td>
+          <td><span class="paysliptextcenter">-</span></td>
+
         </tr>
         <tr>
           <td><span>Net Payable Days</span></td>
           <td><span>{{payslipData && payslipData.netPayableDays ? payslipData.netPayableDays : 0}}</span></td>
-          <td><span>Account no.</span></td>
-          <td><span>-</span></td>
+          <td></td>
+          <td></td>
         </tr>
-        <!-- <tr>
-          <td><span>Advance</span></td>
-          <td><span>{{payslipData && payslipData.advanceSalary ? payslipData.advanceSalary : 0}}</span></td>
-          <td><span>leaves Carry Forward</span></td>
-          <td><span>{{payslipData && payslipData.leavesCarryForward ? payslipData.leavesCarryForward : 0}}</span></td>
-        </tr> -->
-        <!-- <tr>
-          <td><span>Total Leaves</span></td>
-          <td><span>{{payslipData && payslipData.totalLeaves ? payslipData.totalLeaves : 0}}</span></td>
-          <td><span>LOP</span></td>
-          <td><span>{{payslipData && payslipData.lop ? payslipData.lop : 0}}</span></td>
-        </tr> -->
       </tbody>
     </table>
 
     <table class="table salaryTable ion-margin-top">
       <thead>
         <tr>
-          <th><span class="ion-text-start">Earnings</span></th>
-          <th><span>Amount</span></th>
-          <th><span class="ion-text-start">Deduction</span></th>
-          <th><span>Amount</span></th>
+          <th class="paysliptr"><span class="ion-text-start">Earnings</span></th>
+          <th class="paysliptr"><span class="ion-text-start">Amount</span></th>
+          <th class="paysliptr"><span class="ion-text-start">Deduction</span></th>
+          <th class="paysliptr"><span class="ion-text-start">Amount</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><span>Basic Salary</span></td>
-          <td class="ion-text-center">
-            <span *ngIf="payslipData">{{  payslipData.monthSalary | currency:'INR'}}</span>
+          <td>
+            <span *ngIf="payslipData">{{ payslipData.basicSalary | currency:'INR'}}</span>
             <span *ngIf="!payslipData">{{ 0 | currency:'INR'}}</span>
           </td>
-          <!-- <td><span>Advance Pay Deduction</span></td>
-          <td class="ion-text-center">
-            <span *ngIf="payslipData">{{  payslipData.deductionAmount | currency:'INR'}}</span>
-            <span *ngIf="!payslipData">{{ 0 | currency:'INR'}}</span>
-          </td> -->
-        </tr>
-        <tr *ngIf="payslipData">
+          <td><span>LOP Amount</span></td>
           <td>
+            <span>{{ payslipData.totalDeduction - payslipData.otherDeduction | currency:'INR'}}</span>
+          </td>
+        </tr>
+        <tr *ngIf="payslipData && (payslipData.bonus || payslipData.otherDeduction)">
+          <td >
             <span *ngIf="payslipData.bonus">Bonus</span>
           </td>
-          <td class="ion-text-center">
+          <td>
             <span *ngIf="payslipData.bonus">{{payslipData.bonus | currency:"INR"}}</span>
           </td>
-          <!-- <td><span>Other Deduction</span></td>
-          <td class="ion-text-center">
-            <span>{{  payslipData.otherDeduction | currency:'INR'}}</span>
-          </td> -->
-          <td><span>LOP Amount</span></td>
-          <td class="ion-text-center">
-            <span>{{  payslipData.totalDeduction | currency:'INR'}}</span>
+          <td><span *ngIf="payslipData.otherDeduction">Other Deduction</span></td>
+          <td>
+            <span *ngIf="payslipData.otherDeduction">{{ payslipData.otherDeduction | currency:'INR'}}</span>
           </td>
         </tr>
         <tr *ngIf="payslipData && payslipData.compOff">
           <td>
-            <span *ngIf="payslipData.compOff">CompOff</span>
+            <span>CompOff</span>
           </td>
-          <td class="ion-text-center">
-            <span *ngIf="payslipData.compOff">{{payslipData.compOff | currency:"INR"}}</span>
+          <td>
+            <span>{{payslipData.compOff | currency:"INR"}}</span>
           </td>
           <td></td>
-          <td class="ion-text-center"></td>
+          <td></td>
         </tr>
       </tbody>
       <tfoot>
-        <tr>
+        <tr style="background-color: rgba(var(--ion-color-medium-rgb), 0.2)">
           <td><span>Total Earnings</span></td>
-          <td class="ion-text-center">
-            <span *ngIf="payslipData">{{  payslipData.totalEarning| currency:'INR'}}</span>
+          <td>
+            <span *ngIf="payslipData">{{ payslipData.totalEarning| currency:'INR'}}</span>
             <span *ngIf="!payslipData">{{ 0 | currency:'INR'}}</span>
           </td>
           <td><span>Total Deductions</span></td>
-          <td class="ion-text-center">
-            <span *ngIf="payslipData">{{  payslipData.totalDeduction | currency:'INR'}}</span>
+          <td>
+            <span *ngIf="payslipData">{{ payslipData.totalDeduction | currency:'INR'}}</span>
             <span *ngIf="!payslipData">{{ 0 | currency:'INR'}}</span>
           </td>
         </tr>
         <tr>
           <td *ngIf="payslipData" colspan="4">
-            <span>Net Pay: {{ payslipData.netPay || 0 | currency:'INR'}}</span>
+            <span style="margin-top: 10px;">Net Pay: {{ payslipData.netPay || 0 | currency:'INR'}}</span>
             <span>In Words: {{payslipData.netPayInWords}}</span>
           </td>
           <td *ngIf="!payslipData" colspan="4"><span>Net Pay: 0</span></td>
@@ -127,19 +114,20 @@
         </tr>
       </tfoot>
     </table>
-  
+
     <div class="footer ion-text-center ion-margin-vertical">
       <div class="logoDiv">
         <img src="./assets/images/5.png" alt="Photo" height="30px" />
-        <!-- <p><ion-text>Authorized Signature</ion-text></p> -->
         <address>
-          <ion-label>3rd Floor, 315 Sai Ram Plaza, 63 Mangal Nagar Road, Vishnu Puri Colony, Indore, Madhya Pradesh-452001</ion-label>
+          <ion-label>3rd Floor, 315 Sai Ram Plaza, 63 Mangal Nagar Road, Vishnu Puri Colony, Indore, Madhya
+            Pradesh-452001</ion-label>
         </address>
       </div>
     </div>
   </div>
-  
-  <ion-button mode="ios" (click)="downloadReceipt()" [disabled]="downloading" size="large" expand="block" [shape]="'round'" [strong]="true" class="ion-margin">
+
+  <ion-button mode="ios" (click)="downloadReceipt()" [disabled]="downloading" size="large" expand="block"
+    [shape]="'round'" [strong]="true" class="ion-margin">
     <span>{{!downloading ? "Download" : "Downloading..."}}</span>
   </ion-button>
 </div>

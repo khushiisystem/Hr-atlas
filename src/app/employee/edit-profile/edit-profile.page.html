@@ -99,7 +99,7 @@
             <ion-item detail="false">
               <ion-icon name="call" aria-hidden="true" slot="start" color="medium"></ion-icon>
               <ion-input labelPlacement="floating" formControlName="alternateMobileNumber" placeholder="Alternate Mobile Number" type="tel" inputmode="tel" [enterkeyhint]="'next'" autocomplete="alternateMobileNumber" >
-                <div slot="label">Alternate Phone Number<ion-text color="danger">*</ion-text></div>
+                <div slot="label">Emergency Phone Number<ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'" *ngIf="employeeForm.controls['alternateMobileNumber'].touched && employeeForm.controls['alternateMobileNumber'].errors"></ion-icon>
             </ion-item>

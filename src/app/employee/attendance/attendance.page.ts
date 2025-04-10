@@ -105,7 +105,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   ngAfterContentChecked(): void {
     this.cdr.detectChanges();
   }
- 
+
   ngOnInit() {
     // const backTab = history.state?.tab ?? "status";
     const backTab = localStorage.getItem("activeTab") || "status";
@@ -172,7 +172,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     });
     return role;
   }
-
+ 
   reseteEmployee() {
     this.employee = null as any;
     this.employeeId = '';
@@ -281,7 +281,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
               res.forEach((e: IClockInResponce) => {
                 if (this.checkDates(new Date(e.clockIn), new Date(item.created_date))) {
                   item.attendanceData = [...item.attendanceData, e];
-                  item.status = this.updateStatus(item.attendanceData, e.status);
+                  // item.status = this.updateStatus(item.attendanceData, e.status);
+                  item.status = e.status;
+                  // console.log(item.created_date, item.status, e.status);
                   item.created_date = new Date(e.clockIn).toISOString();
                 }
 
@@ -340,6 +342,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   updateStatus(attendanceData: Array<any>, currentStatus = AttendaceStatus.ABSENT): AttendaceStatus {
+    console.log(attendanceData);
     const firstDataDate = new Date(attendanceData[0].clockIn);
     const updatedDate = new Date(this.today);
     updatedDate.setHours(0, 0, 1);
@@ -350,10 +353,12 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
         totalDurationMs += durationMs;
       });
       const isSaturday = firstDataDate.getDay() === 6;
-      if (isSaturday && totalDurationMs >= 14400000) {
+      if (isSaturday && totalDurationMs >= 18000000) {
+        return AttendaceStatus.PRESENT;
+      } else if (totalDurationMs >= 28800000) {
         return AttendaceStatus.PRESENT;
       } else {
-        return totalDurationMs < (28800000 / 2) ? AttendaceStatus.ABSENT : totalDurationMs >= (28800000 / 2) && totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : currentStatus;
+        return totalDurationMs < (18000000) ? AttendaceStatus.ABSENT : totalDurationMs >= (18000000) && totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : currentStatus;
       }
     }
     else {
@@ -551,7 +556,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
             this.absent = 0;
             this.dateList.forEach((e) => {
               if (this.checkDates(new Date(item), new Date(e.created_date)) && e.status != AttendaceStatus.PRESENT) {
-                console.log("res : ",res[a]);
+                // console.log("res : ", res[a]);
                 e.leaveData = res[a];
                 e.created_date = new Date(item).toISOString();
                 e.status = AttendaceStatus.LEAVE;
@@ -796,6 +801,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   getStatusByDate(date1: string | moment.Moment) {
+    // console.log("get status by date : "+date1);
     if (date1 == '') { return null; }
     const index = this.dateList.findIndex((event: AttListItem) => moment(date1).format('yyyy/MM/DD') === moment(event.created_date).format('yyyy/MM/DD'));
     const fullLeaveIndex = this.fullLeaves.findIndex((item) => moment(item.date).isSame(date1));
@@ -838,6 +844,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
 
   getByIdRegularization() {
     this.shareServ.getByIdRegularization(this.employeeId).subscribe(res => {
+      // console.log(res);
       if (res) {
         if (res instanceof Array) {
           this.getReg = res;
@@ -851,6 +858,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   getRegularization(date: string | Date): IRegularization | null {
+    // console.log("get regularization : "+date);
     return this.getReg.find((item: IRegularization) => moment(date).isSame(item.attandanceDate, 'year') && moment(date).isSame(item.attandanceDate, 'month') && moment(date).isSame(item.attandanceDate, 'day')) || null;
   }
 

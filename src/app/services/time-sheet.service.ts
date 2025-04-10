@@ -111,6 +111,10 @@ export class TimeSheetService {
     return this._http.get<any>(environment.Api + `api/timesheet/getMonthTimesheet?date=${date}`);
   }
 
+  getAllTimesheetOfMonth(date: string) {
+    return this._http.get<any>(environment.Api + `api/timesheet/getMontlytimesheetdata?date=${date}`);
+  }
+
   // get particular user timesheet list
   getUserTimesheet(pageIndex: number, pagesize: number, id: string, date: string): Observable<any> {
     return this._http.get<any>(environment.Api + `api/timesheet/getUsersTimesheet?skip=${pageIndex}&limit=${pagesize}&userId=${id}&date=${date}`)

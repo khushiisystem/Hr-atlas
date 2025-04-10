@@ -107,30 +107,30 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   updateStatus(){
     const today = new Date();
     today.setHours(0,0,1);
-    if (this.regularization?.status === 'Accept') {
+    if (this.regularization?.status === 'Accept' && this.attendanceData.status !== AttendaceStatus.PRESENT) {
       let regDate = new Date(this.regularization.attandanceDate);
       let totalTime:number = +this.regularization.totalTime.split('h')[0];
       if(totalTime < 5){
         this.attendanceData.status = AttendaceStatus.ABSENT;
-      }else if(totalTime < 9 && regDate.getDay()=== 6){
+      }else if(totalTime >= 5 && regDate.getDay()=== 6){
         this.attendanceData.status = AttendaceStatus.PRESENT;
-      }else if(totalTime < 9){
+      }else if(totalTime < 8){
         this.attendanceData.status = AttendaceStatus.HALF_DAY;
       }else{
         this.attendanceData.status = AttendaceStatus.PRESENT;
       }
     }
-    else if(this.attendanceData.attendanceData.length > 0 && this.attendanceData.attendanceData[0].clockIn){
-      const firstDataDate = new Date(this.attendanceData.attendanceData[0].clockIn);
-      if(firstDataDate < today){
-        const isSaturday = firstDataDate.getDay() === 6;
-        if (isSaturday && this.totalDurationMs >= 14400000) {
-          this.attendanceData.status = AttendaceStatus.PRESENT;
-        } else {
-          this.attendanceData.status = this.totalDurationMs < (28800000/2) ? AttendaceStatus.ABSENT : this.totalDurationMs >= (28800000/2) && this.totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : AttendaceStatus.PRESENT;
-        }
-      }
-    }
+    // else if(this.attendanceData.attendanceData.length > 0 && this.attendanceData.attendanceData[0].clockIn){
+    //   const firstDataDate = new Date(this.attendanceData.attendanceData[0].clockIn);
+    //   if(firstDataDate < today){
+    //     const isSaturday = firstDataDate.getDay() === 6;
+    //     if (isSaturday && this.totalDurationMs >= 18000000) {
+    //       this.attendanceData.status = AttendaceStatus.PRESENT;
+    //     } else {
+    //       this.attendanceData.status = this.totalDurationMs < (18000000) ? AttendaceStatus.ABSENT : this.totalDurationMs >= (18000000) && this.totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : AttendaceStatus.PRESENT;
+    //     }
+    //   }
+    // }
     this.cdr.detectChanges();
   }
 
