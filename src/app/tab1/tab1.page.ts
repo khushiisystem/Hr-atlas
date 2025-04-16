@@ -109,6 +109,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     })
     this.getTimesheetTimeOfDay();
   }
+
   ngAfterViewInit(): void {
     this.swiperReady();
   }

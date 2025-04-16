@@ -118,10 +118,10 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       this.getByIdRegularization();
       this.fethcDetail();
       this.createDateList(this.attendanceDate);
-      this.getCalendar();
       this.getLogs();
       this.getWorkWeek();
       this.getMonthLyAttendance();
+      this.getCalendar();
     }
   }
 
@@ -283,7 +283,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
                   item.attendanceData = [...item.attendanceData, e];
                   // item.status = this.updateStatus(item.attendanceData, e.status);
                   item.status = e.status;
-                  // console.log(item.created_date, item.status, e.status);
+                  console.log(item.created_date, item.status, e.status);
                   item.created_date = new Date(e.clockIn).toISOString();
                 }
 
@@ -666,7 +666,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     if (event.detail.value) {
       if (!moment(this.attendanceDate).isSame(event.detail.value, 'year')) {
         this.attendanceDate = event.detail.value;
-        this.getCalendar();
+        // this.getCalendar();
         this.onDateChange();
       }
       this.fetchAll(event.detail.value as string);
@@ -699,8 +699,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     });
 
     this.createDateList(monthDate);
-    this.getMonthLyAttendance();
     this.getLogs();
+    this.getMonthLyAttendance();
+    this.getCalendar();
     if (this.workWeekDetail) {
       this.addWeekOffDays();
     }
@@ -754,9 +755,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     }
     this.onDateChange();
     this.fetchAll(this.attendanceDate);
-    if (!moment(previousMonth).isSame(this.attendanceDate, "year")) {
-      this.getCalendar();
-    }
+    // if (!moment(previousMonth).isSame(this.attendanceDate, "year")) {
+    //   this.getCalendar();
+    // }
   }
 
   decrementMonth() {
@@ -765,9 +766,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     this.attendanceDate = new Date(moment(currentMonth).endOf("month").format()).toISOString();
     this.onDateChange();
     this.fetchAll(this.attendanceDate);
-    if (!moment(previousMonth).isSame(this.attendanceDate, "year")) {
-      this.getCalendar();
-    }
+    // if (!moment(previousMonth).isSame(this.attendanceDate, "year")) {
+    //   this.getCalendar();
+    // }
   }
 
   incrementYear() {
@@ -778,7 +779,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       const atDate = moment(updateYear).endOf("month").format();
       this.attendanceDate = new Date(atDate).toISOString();
     }
-    this.getCalendar();
+    // this.getCalendar();
     this.onDateChange();
     this.fetchAll(this.attendanceDate);
   }
@@ -787,7 +788,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     const currentMonth = moment(this.attendanceDate).subtract(1, 'year');
     const atDate = moment(currentMonth).endOf("month").format();
     this.attendanceDate = new Date(atDate).toISOString();
-    this.getCalendar();
+    // this.getCalendar();
     this.onDateChange();
     this.fetchAll(this.attendanceDate);
   }

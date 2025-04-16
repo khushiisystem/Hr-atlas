@@ -21,11 +21,11 @@
     </ion-datetime>
     <div class="cal_col">
       <p class="p1"></p>
-      <p>pending</p>
+      <p>Pending</p>
       <p class="p3"></p>
-      <p>approved</p>
+      <p>Approved</p>
       <p class="p2"></p>
-      <p>reject</p>
+      <p>Reject</p>
     </div>
   </div>
   <!-- <div *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'"> -->
@@ -62,7 +62,7 @@
           <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover"
             label-placement="floating" fill="solid" mode="md" [multiple]="false">
             <div *ngFor="let subCategory of subCategories; index as i">
-              <ion-select-option value="{{subCategory.guid}}">{{subCategory.subCategory}}</ion-select-option>
+              <ion-select-option value="{{subCategory}}">{{subCategory}}</ion-select-option>
             </div>
           </ion-select>
           <ion-text color="danger" class="error_txt"
@@ -81,6 +81,17 @@
            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">Sub-Category is required</ion-text>
          </ion-col>
     -->
+        <ion-col size="12">
+          <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date') "
+            [required]="true" class="dateInput" [disabled]="true" [readonly]="true"
+            style="pointer-events: none; opacity: 0.7; touch-action: none;">
+            <div slot="label">Date <ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors">Date is
+            required</ion-text>
+        </ion-col>
+
         <ion-col size="6">
           <ion-item fill="solid" detail="false" id="startTime" (click)="markTouched('startTime')">
             <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time"
@@ -105,15 +116,7 @@
             required</ion-text>
         </ion-col>
 
-        <ion-col size="12" id="startdate" (click)="markTouched('date')">
-          <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date')"
-            [required]="true" class="dateInput">
-            <div slot="label">Date <ion-text color="danger">*</ion-text></div>
-          </ion-input>
-          <ion-text color="danger" class="error_txt"
-            *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors">Date is
-            required</ion-text>
-        </ion-col>
+        <ion-text color="danger" class="error_txt" *ngIf="timesheetTimeError">{{timesheetTimeError}}</ion-text>
 
         <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true"
           [breakpoints]="[0.75, 1]" #startDateModal>
@@ -125,7 +128,7 @@
             </ion-header>
             <ion-content>
               <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime
-                (ionChange)="selectDate($any($event))">
+                readonly="true" (ionChange)="selectDate($any($event))">
                 <ion-buttons slot="buttons">
                   <ion-button mode="ios" color="danger"
                     (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
@@ -158,13 +161,13 @@
             must be at least 5 characters</ion-text>
           <ol style="background-color: rgba(244, 250, 136, 0.405); padding: 5px 0 10px 35px;">
             <li>Please fill timesheet in between 0 to 3 hours for each entry.</li>
-            <li>Minium 3 entries are required to complete 8 hours timesheet for each day.</li>
+            <li>Minimum 3 entries are required to complete 8 hours timesheet for each day.</li>
           </ol>
         </ion-col>
       </ion-row>
 
       <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round"
-        [disabled]="timeSheetForm.invalid" (click)="submit()">
+        [disabled]="timeSheetForm.invalid || timesheetTimeError.length > 0" (click)="submit()">
         {{ update ? 'Update' : 'Add' }}
       </ion-button>
       <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round"
@@ -265,54 +268,65 @@
   </div>
 
   <div *ngIf="userRole?.trim() === 'Admin' || userRole?.trim() === 'HR'">
-    <div class="timesheet">
-      <div style="text-align: center; font-weight: bold; margin: 1rem 0;">Monthly Time Sheet</div>
-  
-      <div class="timesheet-select">
-        <p>Select Project:</p>
-  
-        <ion-item>
-          <ion-select [(ngModel)]="selectedProject" (ionChange)="filterTimesheetsByProject()" interface="popover" placeholder="All Projects">
-            <ion-select-option *ngFor="let pName of projectList" [value]="pName">
-              {{ pName }}
-            </ion-select-option>
-          </ion-select>
-        </ion-item>
-      </div>
-  
-      <ion-card>
-        <ion-card-content>
-          <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Employee</th>
-                  <th>Project</th>
-                  <th>Start Time</th>
-                  <th>End Time</th>
-                  <th>Date</th>
-                  <th>Hours</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let entry of filteredAllTimeSheetOfMonth">
-                  <td>{{ entry?.user?.firstName }}</td>
-                  <td>{{ entry?.project?.title }}</td>
-                  <td>{{ entry?.startTime }}</td>
-                  <td>{{ entry?.endTime }}</td>
-                  <td>{{ entry?.date | date: 'shortDate' }}</td>
-                  <td>{{ entry?.totalTime }}</td>
-                  <td>{{ entry?.status }}</td>
-                </tr>
-              </tbody>
-            </table>
+    <ng-container *ngIf="filteredAllTimeSheetOfMonth.length > 0; else noMonthlyTimesheetMessage">
+      <div class="timesheet">
+        <div style="text-align: center; font-weight: bold; margin: 1rem 0;">Monthly Time Sheet</div>
+
+        <div class="timesheet-row">
+          <div class="timesheet-select">
+            <p>Select Project:</p>
+
+            <ion-item>
+              <ion-select [(ngModel)]="selectedProject" (ionChange)="filterTimesheetsByProject()" interface="popover"
+                placeholder="All Projects">
+                <ion-select-option *ngFor="let pName of projectList" [value]="pName">
+                  {{ pName }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
           </div>
-        </ion-card-content>
-      </ion-card>
-    </div>
+
+          <ion-button slot="end" (click)="download()">Export</ion-button>
+
+        </div>
+
+        <ion-card>
+          <ion-card-content>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>Project</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Date</th>
+                    <th>Hours</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let entry of filteredAllTimeSheetOfMonth">
+                    <td>{{ entry?.user?.firstName }}</td>
+                    <td>{{ entry?.project?.title }}</td>
+                    <td>{{ entry?.startTime }}</td>
+                    <td>{{ entry?.endTime }}</td>
+                    <td>{{ entry?.date }}</td>
+                    <td>{{ entry?.totalTime }}</td>
+                    <td>{{ entry?.status }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ng-container>
+    <ng-template #noMonthlyTimesheetMessage>
+      <p class="no-timesheets-message">No monthly timesheets available.</p>
+    </ng-template>
   </div>
-  
+
 
 
   <div *ngIf="userRole.trim() === 'Employee'">

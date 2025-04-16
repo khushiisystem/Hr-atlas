@@ -23,7 +23,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="stickyTab">
+  <div class="stickyTab" style="z-index: 10;">
     <ion-segment mode="ios" [scrollable]="true" color="secondary" class="topSegment" [(ngModel)]="activeTab" (ngModelChange)="onTabChange()">
       <ion-segment-button value="status">Status</ion-segment-button>
       <ion-segment-button value="listView">List View</ion-segment-button>

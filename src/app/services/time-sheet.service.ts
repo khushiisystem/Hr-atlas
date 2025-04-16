@@ -115,6 +115,14 @@ export class TimeSheetService {
     return this._http.get<any>(environment.Api + `api/timesheet/getMontlytimesheetdata?date=${date}`);
   }
 
+  getDownload(date: string){
+    const url = environment.Api + `api/timesheet/download?date=${date}`
+    return this._http.get(url, {
+      responseType: 'blob',
+      observe: 'response'
+    });
+  }
+
   // get particular user timesheet list
   getUserTimesheet(pageIndex: number, pagesize: number, id: string, date: string): Observable<any> {
     return this._http.get<any>(environment.Api + `api/timesheet/getUsersTimesheet?skip=${pageIndex}&limit=${pagesize}&userId=${id}&date=${date}`)

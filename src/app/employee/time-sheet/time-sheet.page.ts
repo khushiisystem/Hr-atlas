@@ -1,4 +1,5 @@
 
+
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatetimeCustomEvent, IonContent, ModalController } from '@ionic/angular';
@@ -59,7 +60,8 @@ export class TimeSheetPage implements OnInit {
   currentYear: number = moment().year();
   projects: IProject[] = [];
   categories: ICategory[] = [];
-  subCategories: ISubCategory[] = [];
+  // subCategories: ISubCategory[] = [];
+  subCategories: string[] = [];
   pageIndex: number = 0;
   minDate: Date = new Date();
   maxDate: Date = new Date();
@@ -70,7 +72,7 @@ export class TimeSheetPage implements OnInit {
   timesheetOfTheDay: ITimesheet[] = [];
   timesheetOfTheMonth: ITimesheet[] = [];
   allTimeSheetOfMonth: ITimesheet[] = [];
-  filteredAllTimeSheetOfMonth: ITimesheet[] = [];   
+  filteredAllTimeSheetOfMonth: ITimesheet[] = [];
   projectList: string[] = ["All"];
   selectedProject: string = "All";
   timeSheet!: ITimesheet | any;
@@ -99,7 +101,8 @@ export class TimeSheetPage implements OnInit {
   date = new Date();
   formattedDate = this.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   userId: string = "";
-
+  formDate: string = "";
+  timesheetTimeError: string = "";
   constructor(
     private _fb: FormBuilder,
     private adminSer: AdminService,
@@ -144,7 +147,7 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetMonth();
     this.getAssignProjectById();
     this.getUserTimesheet();
-    this.getSubCategories();
+    // this.getSubCategories();
     this.getAllTimeSheetOfTheMonth();
   }
 
@@ -153,23 +156,50 @@ export class TimeSheetPage implements OnInit {
   }
 
   getDate(ctrlName: string) {
-    const formDate = this.timeSheetForm.controls[ctrlName].value;
-    return formDate != '' ? new Date(formDate).toDateString() : "";
+    this.formDate = this.timeSheetForm.controls[ctrlName].value;
+    return this.formDate != '' ? new Date(this.formDate).toDateString() : "";
   }
 
   selectDate(event: DatetimeCustomEvent) {
     this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).utc().format());
   }
 
+  checkTimesheetTime() {
+    this.timesheetTimeError = "";
+
+    let startTime = this.getStartTime();
+    let endTime = this.getEndTime();
+
+    if(startTime >= endTime){
+      this.timesheetTimeError = "End time must be greater than start time";
+      return;
+    }
+
+    let totalTimeDuration = this.calculateDuration(startTime.toString(), endTime.toString());
+    if (totalTimeDuration / 3600000 > 9) {
+      this.timesheetTimeError = "Total time must be less than 9 hours";
+      return;
+    }
+
+    let totaltimeofalltimesheet = +this.calculateTotalWork().split('h')[0];
+    if ((totalTimeDuration / 3600000 + totaltimeofalltimesheet) > 9) {
+      this.timesheetTimeError = "Total time of all timesheet must be less than 9 hours";
+      return;
+    }
+  }
+
   getStartTime() {
     const formValue = this.timeSheetForm.controls['startTime'].value;
     return formValue ? new Date(moment(formValue).format()) : '';
   }
+
   setStartTime(event: DatetimeCustomEvent) {
     this.timeSheetForm.patchValue({
       startTime: moment(event.detail.value).utc().format()
     });
+    this.checkTimesheetTime();
   }
+
   markTouched(ctrlName: string) {
     this.timeSheetForm.controls[ctrlName].markAsTouched();
   }
@@ -182,6 +212,7 @@ export class TimeSheetPage implements OnInit {
     this.timeSheetForm.patchValue({
       endTime: moment(event.detail.value).utc().format()
     });
+    this.checkTimesheetTime();
   }
 
 
@@ -220,7 +251,6 @@ export class TimeSheetPage implements OnInit {
   getCategories() {
     this.timesheetSer.getAllCategories(this.pageIndex * 100, 100).subscribe(res => {
       if (res) {
-        // console.log("check cat : ", res)
         this.categories = res;
         this.isDataLoaded = true;
       }
@@ -228,7 +258,7 @@ export class TimeSheetPage implements OnInit {
   }
 
   selectCat(event: any) {
-    // this.subCategories = this.categories.find(val => val.guid === event.detail.value )?.subCategory || [];
+    this.subCategories = this.categories.find(val => val.guid === event.detail.value)?.subCategory || [];
   }
 
   getSubCategories() {
@@ -238,9 +268,6 @@ export class TimeSheetPage implements OnInit {
     }
     this.timesheetSer.getAllSubCategories(this.pageIndex * 100, 100).subscribe(res => {
       if (res) {
-        // const data: ISubCategory[] = res;
-        // console.log("this subb cat : ", this.subCategories)
-        // console.log("check sub cat : ", data);
         this.subCategories = res;
         this.isDataLoaded = true;
       }
@@ -255,6 +282,11 @@ export class TimeSheetPage implements OnInit {
   }
 
   submit() {
+
+   if(this.timesheetTimeError){
+    return;
+   }
+
     if (this.update) {
       if (this.timesheetId.trim() == '') { return }
       this.timesheetSer.updateTimesheet(this.timesheetId, this.timeSheetForm.value).subscribe(res => {
@@ -360,6 +392,7 @@ export class TimeSheetPage implements OnInit {
           // Convert startTime & endTime to IST and format to HH:mm AM/PM
           const start = new Date(timesheet.startTime);
           const end = new Date(timesheet.endTime);
+          const date = timesheet.date.split('T')[0];
 
           const options: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
@@ -379,12 +412,12 @@ export class TimeSheetPage implements OnInit {
             startTime: start.toLocaleTimeString('en-IN', options),
             endTime: end.toLocaleTimeString('en-IN', options),
             totalTime: formattedTotalTime,
+            date,
           };
         });
 
         this.allTimeSheetOfMonth.forEach(timesheet => {
           if (!this.projectList.includes(timesheet.project.title)) {
-            console.log("timeshett project name : ", timesheet.project.title);
             this.projectList.push(timesheet.project.title)
           }
         })
@@ -403,7 +436,49 @@ export class TimeSheetPage implements OnInit {
       );
     }
   }
-  
+
+  download() {
+    this.timesheetSer.getDownload(this.timesheetDate).subscribe({
+      next: (response) => {
+        // Make sure blob is not null
+        const blob = response.body;
+        if (!blob) {
+          console.error('Response body is empty');
+          return;
+        }
+
+        const contentDisposition = response.headers.get('content-disposition');
+        let filename = 'timesheet.xlsx';
+
+        // Try to extract filename from content-disposition header if available
+        if (contentDisposition) {
+          const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+          if (matches != null && matches[1]) {
+            filename = matches[1].replace(/['"]/g, '');
+          }
+        }
+
+        // Create a download link and trigger the download
+        const downloadLink = document.createElement('a');
+        const url = window.URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = filename;
+
+        // Add link to document, click it, then remove it
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        // Clean up the URL object to free memory
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error downloading timesheet:', err);
+        // Handle error - maybe show a user-friendly message
+      }
+    });
+  }
+
 
   calculateTimeDifference(startTime: string, endTime: string): string {
     const start = moment(startTime);
@@ -496,9 +571,19 @@ export class TimeSheetPage implements OnInit {
 
 
   onDateChange(event: any) {
+    const newDate = new Date(event.detail.value);
+    const prevDate = new Date(this.timesheetDate);
+
     this.timesheetDate = event.detail.value; // Update the selected date
+
+    if (newDate.getMonth() !== prevDate.getMonth() || newDate.getFullYear() !== prevDate.getFullYear()) {
+      this.getAllTimeSheetOfTheMonth();
+    }
+
     this.getTimesheetDay(); // Refresh data for the new selected date
     this.getTimesheetList();
     this.getUserTimesheet();
+
+    this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).format());
   }
 }

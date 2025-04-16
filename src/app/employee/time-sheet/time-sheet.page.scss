@@ -61,9 +61,18 @@
     padding:10px;
   }
 
-  .timesheet-select{
+  .timesheet-row{
     display: flex;
     width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .timesheet-select{
+    display: flex;
+    width: 250px;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .table-container {
