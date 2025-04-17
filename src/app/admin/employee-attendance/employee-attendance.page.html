@@ -34,28 +34,6 @@
 
   <div [ngSwitch]="activeTab" *ngIf="employee">
     <div *ngSwitchCase="'status'">
-      <!-- <ion-list [inset]="true" mode="ios">
-        <ion-item>
-          <ion-icon color="success" slot="start" name="list-circle" size="large"></ion-icon>
-          <ion-label>Present</ion-label>
-          <ion-note slot="end">{{getPresent}}/{{getLastDate}}</ion-note>
-        </ion-item>
-        <ion-item>
-          <ion-icon color="danger" slot="start" name="list-circle" size="large"></ion-icon>
-          <ion-label>Absent</ion-label>
-          <ion-note slot="end">{{getAbsent + getLeaves}}/{{getLastDate}}</ion-note>
-        </ion-item>
-        <ion-item>
-          <ion-icon color="danger" slot="start" name="list-circle" size="large"></ion-icon>
-          <ion-label>LOP</ion-label>
-          <ion-note slot="end">{{filterLogs('Loss of Pay')}}</ion-note>
-        </ion-item>
-        <ion-item>
-          <ion-icon color="warning" slot="start" name="list-circle" size="large"></ion-icon>
-          <ion-label>Applied Leaves</ion-label>
-          <ion-note slot="end">{{leaveLogs.length}}</ion-note>
-        </ion-item>
-      </ion-list> -->
 
       <ion-grid>
         <ion-row>

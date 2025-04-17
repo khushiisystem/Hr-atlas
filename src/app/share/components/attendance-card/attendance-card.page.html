@@ -165,25 +165,6 @@
             <ion-text color="danger" class="error_txt"
               *ngIf="regularizationForm.controls['attandanceDate'].touched && regularizationForm.controls['attandanceDate'].errors">Attandance
               Date is required</ion-text>
-            <!-- <ion-modal trigger="attandanceDate" [initialBreakpoint]="0.85" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.85, 1]" #startDateModal>
-                <ng-template>
-                  <ion-header>
-                    <ion-toolbar>
-                      <ion-title>Select Date</ion-title>
-                    </ion-toolbar>
-                  </ion-header>
-                  <ion-content>
-                    <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))"> -->
-            <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
-            <!-- <ion-buttons slot="buttons">
-                        <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
-                        <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
-                      </ion-buttons>
-                    </ion-datetime>
-                  </ion-content>
-                </ng-template>
-              </ion-modal> -->
-            <!-- date  -->
 
             <ion-item fill="solid" class="ion-padding-bottom" detail="false" id="clockIn"
               (click)="markTouched('clockIn')">

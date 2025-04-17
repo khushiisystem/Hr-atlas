@@ -120,17 +120,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
         this.attendanceData.status = AttendaceStatus.PRESENT;
       }
     }
-    // else if(this.attendanceData.attendanceData.length > 0 && this.attendanceData.attendanceData[0].clockIn){
-    //   const firstDataDate = new Date(this.attendanceData.attendanceData[0].clockIn);
-    //   if(firstDataDate < today){
-    //     const isSaturday = firstDataDate.getDay() === 6;
-    //     if (isSaturday && this.totalDurationMs >= 18000000) {
-    //       this.attendanceData.status = AttendaceStatus.PRESENT;
-    //     } else {
-    //       this.attendanceData.status = this.totalDurationMs < (18000000) ? AttendaceStatus.ABSENT : this.totalDurationMs >= (18000000) && this.totalDurationMs < 28800000 ? AttendaceStatus.HALF_DAY : AttendaceStatus.PRESENT;
-    //     }
-    //   }
-    // }
     this.cdr.detectChanges();
   }
 
@@ -175,20 +164,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       this.isModalOpen = true;      
     }
   }
-
-  // openModal() {
-  //   if (!this.isModalOpen) {
-  //     this.modal.present().then(() => {
-  //     }).catch((err) => {
-  //       console.error('Error opening modal:', err);
-  //     });
-  //     this.isModalOpen = true;
-  //   } else {
-  //     console.warn('Modal already open or reference not found');
-  //   }
-  // }
   
-
   closeModal() {
     this.modal.dismiss();
     this.isModalOpen = false;
@@ -226,24 +202,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     this.regularizationForm.controls['attandanceDate'].patchValue(moment(event.detail.value).utc().format());
   }
 
-  // addRegularization() {
-  //   this._loader.present('');
-  //   this._shareServ.addRegularization(this.regularizationForm.value).subscribe(
-  //     (res) => {
-  //       if(res) {
-  //         this._shareServ.presentToast(res.message , 'top', 'success')
-  //         this._loader.dismiss();
-  //         this.regularizationForm.reset();
-  //         this.closeModal();
-  //       } else {
-  //         this._loader.dismiss();
-  //       }
-  //   }, (error) => {
-  //     this._shareServ.presentToast(error.error.message , 'top', 'danger');
-  //     this._loader.dismiss();
-  //   })
-  // }
-
   approveReject(status: string , guid: string) {
     const data: IApproveRegularizationReq = {
       status: status === 'accept' ? ERegularization.ACCEPT : ERegularization.REJECT,
@@ -256,20 +214,6 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       }
     })
   }
-
-  // async triggerModal(regularizationData: IRegularization | null = null) {
-  //   const abcModal = await this.modelCtrl.create({
-  //     component: RegularizationPage,
-  //     mode: 'md',
-  //     componentProps: {
-  //       regularizationData,
-  //       attendance: this.attendanceData
-  //     }
-  //   });
-  //   await abcModal.present();
-  //   await abcModal.onDidDismiss().then((value) => {
-  //   })
-  // }
 
   submit() {
     if(this.update) {

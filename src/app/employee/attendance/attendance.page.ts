@@ -194,60 +194,6 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     });
   }
 
-  // getMonthLyAttendance(){
-  //   this.attendanceLoaded = false;
-  //   this.loader.present('');
-  //   if(this.pageIndex === 0){this.attendanceList = [];}
-  //   this.setStartDate(this.attendanceDate);
-  //   this.apiSubscription = this.shareServ.monthlyAttendance(this.employeeId, this.attendanceDate, this.pageIndex * 40, 40).subscribe(res => {
-  //     if(res.length < 1){
-  //       this.moreAttendance = false;
-  //       this.attendanceLoaded = true;
-  //       this.loader.dismiss();
-  //       return;
-  //     } else {
-  //       res.forEach((e: IClockInResponce) => {
-  //         this.attendanceList.push(e);
-  //         const data = {
-  //           date: this.returnCustomDate(e.clockIn),
-  //           textColor: this.checkStatus(e.status).color,
-  //           backgroundColor: this.checkStatus(e.status).backgroud,
-  //         };
-  //         const index = this.highlightedDates.findIndex((item: IHighlightedDate) => item.date === this.returnCustomDate(e.created_date));
-  //         if(index != -1){
-  //           this.highlightedDates[index] = data;
-  //         } else {
-  //           this.highlightedDates.push(data);
-  //         }
-
-  //         this.presents = 0;
-  //         this.absent = 0;
-  //         this.dateList.forEach((item) => {
-  //           if(this.checkDates(new Date(e.clockIn), new Date(item.created_date))){
-  //             item.attendanceData = [...item.attendanceData, e];
-  //             item.status = this.updateStatus(item.attendanceData, e.status);
-  //             item.created_date = new Date(e.clockIn).toISOString();
-  //           }
-  //           item.status === AttendaceStatus.LEAVE || e.status === AttendaceStatus.ABSENT ? this.absent++ : this.presents++;
-  //           this.cdr.detectChanges();
-  //         });
-  //       });
-  //       this.loader.dismiss();
-  //       this.attendanceLoaded = true;
-  //       this.moreAttendance = res.length > 39;
-  //       if(this.moreAttendance){
-  //         this.pageIndex++;
-  //         this.getMonthLyAttendance();
-  //       }
-  //     }
-  //   }, (error) => {
-  //     this.attendanceLoaded = true;
-  //     this.moreAttendance = false;
-  //     this.loader.dismiss();
-  //   });
-  // }
-
-
   getMonthLyAttendance() {
     this.attendanceLoaded = false;
     this.loader.present('');
@@ -619,6 +565,14 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       }
     });
     return (fullDays.length + (halfDays.length * 0.5));
+  }
+
+  getUnplanned() {
+    let uplCount = 0;
+    this.leaveLogs.forEach((item) => {
+      if(item.isUnplanned) uplCount++;
+    });
+    return uplCount;
   }
 
   returnCustomDate(selectDate: string | Date) {

@@ -38,41 +38,6 @@ export class PdfDetailsPage implements OnInit {
     }
   }
 
-  // employees = [
-  //   { name: 'abc', payment: 2000, checked: false },
-  //   { name: 'xyz', payment: 3000, checked: false },
-  //   { name: 'lmn', payment: 4000, checked: false },
-  // ];
-
-  // toggleSelectAll() {
-  //   this.employees.forEach((employee) => {
-  //     employee.checked = this.selectAll;
-  //   });
-  // }
-
-  // checkSelectAllStatus() {
-  //   this.selectAll = this.employees.every((employee) => employee.checked);
-  // }
-
-  // moment.utc(this.payslipDate).format()
-
-  // getPaySlip() {
-  //   this.loader.present('');
-  //   // this.adminServ.getPaySlipData(moment(this.payslipDate).utc().format()).subscribe(res => {
-  //     this.adminServ.getPaySlipData(moment.utc(this.payslipDate).format()).subscribe(res => {
-  //     if(res != null){
-  //       this.payslipData = res;
-  //     } else {
-  //       this.payslipData = null as any;
-  //     }
-  //     this.loader.dismiss();
-  //   }, (error) => {
-  //     this.payslipData = null as any;
-  //     this.shareServ.presentToast(error.error, 'top', 'danger');
-  //     this.loader.dismiss();
-  //   });
-  // }
-
   getPaySlip() {
     this.loader.present('');
     this.adminServ.getPaySlipData(moment.utc(this.payslipDate).format()).subscribe((res: any) => {

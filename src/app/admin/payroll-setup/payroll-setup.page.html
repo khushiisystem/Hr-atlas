@@ -24,19 +24,6 @@
     <app-employees [isChecklist]="true" [isPayroll]="true" (employee)="selectEmploye($event)"></app-employees>
   </ng-container>
 
-  <!-- <ion-card mode="ios" color="light" *ngIf="employee">
-    <ion-item [lines]="'none'" [detail]="false">
-      <div class="empDetail">
-        <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-        <ion-text>ID: {{employee.employeeId}}</ion-text>
-      </div>
-      <ion-button slot="end" mode="md" fill="clear" [strong]="true" aria-label="Chnage employee" color="danger" (click)="reseteEmployee()">
-        <ion-icon name="pencil-outline" slot="icon-only" aria-hidden="true"></ion-icon>
-        Change
-      </ion-button>
-    </ion-item>
-  </ion-card> -->
-
   <app-employee-payroll *ngIf="employee" [employee]="employee" (createSalary)="formSubmited($event)"></app-employee-payroll>
 
 </ion-content>

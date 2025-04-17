@@ -74,6 +74,7 @@ export class EmployeeLeavesPage implements OnInit {
   }
 
   leaveApply(event: string){
+    console.log('event check : ',event);
     if(event === 'success'){
       this.logsLoaded = false;
       this.showApplyForm = !this.showApplyForm;

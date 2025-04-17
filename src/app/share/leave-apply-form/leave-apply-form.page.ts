@@ -108,7 +108,7 @@ export class LeaveApplyFormPage implements OnInit {
       this.loader.present('');
       this.shareServ.leaveApply(this.leaveApplyForm.value).subscribe(res => {
         if(res){
-          this.shareServ.presentToast('Leave requested successfully', 'top', 'success');
+          this.shareServ.presentToast(res.isUnplanned ? "you are appling late" : "leave applied successfully", 'top', res.isUnplanned ? "warning" : "success");
           this.loader.dismiss();
           this.saveForm.emit("success");
         }
