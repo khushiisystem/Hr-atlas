@@ -28,7 +28,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
   private readonly debounceTimeMs = 1500;
   userId: string = '';
   isHold: boolean = false;
-  empType: 'All' | 'Active' | 'InActive' = 'Active';
+  empType: 'All' | 'Active' | 'InActive' | 'Resigned' = 'Active';
 
   constructor(
     private adminServ: AdminService,
@@ -181,7 +181,7 @@ export class DirectoryPage implements OnInit, OnDestroy {
     }
   }
 
-  getTypedEmployee(event: 'All' | 'Active' | 'InActive'){
+  getTypedEmployee(event: 'All' | 'Active' | 'InActive'| 'Resigned'){
     this.isDataLoaded = false;
     this.empType = event;
     this.pageIndex = 0;

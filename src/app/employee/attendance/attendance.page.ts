@@ -125,6 +125,30 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     }
   }
 
+  getAppliedLeaves() {
+    // console.log("leaves logs : ",this.leaveLogs);
+    let count = 0;
+    this.leaveLogs.forEach(ll => {
+      if (ll.status === "Pending" || ll.status === "Accept") {
+        ll.fullDayDates.forEach(fdl => count++);
+        ll.halfDayDates.forEach(hdl => count += 0.5);
+      }
+    })
+    // console.log("Appplied leave count : ",count);
+    return count;
+  }
+
+  getUnplanned() {
+    let count = 0;
+    this.leaveLogs.forEach(ll => {
+      if (ll.isUnplanned && (ll.status === "Pending" || ll.status === "Accept")) {
+        ll.fullDayDates.forEach(fdl => count++);
+        ll.halfDayDates.forEach(hdl => count += 0.5);
+      }
+    })
+    return count;
+  }
+
   onTabChange() {
     localStorage.setItem("activeTab", this.activeTab);
   }
@@ -146,7 +170,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
 
   get getPresent(): number {
     return this.dateList.reduce((pres, item) => {
-      return item.status === AttendaceStatus.PRESENT || item.status === AttendaceStatus.WEEK_OFF || item.status === AttendaceStatus.HOLiDAY ? pres + 1 : pres;
+      return item.status === AttendaceStatus.PRESENT || item.status === AttendaceStatus.WEEK_OFF || item.status === AttendaceStatus.HOLiDAY ? pres + 1 : item.status === AttendaceStatus.HALF_DAY ? pres + 0.5 : pres;
     }, 0);
   }
   get getLeaves(): number {
@@ -172,7 +196,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     });
     return role;
   }
- 
+
   reseteEmployee() {
     this.employee = null as any;
     this.employeeId = '';
@@ -229,7 +253,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
                   item.attendanceData = [...item.attendanceData, e];
                   // item.status = this.updateStatus(item.attendanceData, e.status);
                   item.status = e.status;
-                  console.log(item.created_date, item.status, e.status);
+                  // console.log(item.created_date, item.status, e.status);
                   item.created_date = new Date(e.clockIn).toISOString();
                 }
 
@@ -288,7 +312,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   updateStatus(attendanceData: Array<any>, currentStatus = AttendaceStatus.ABSENT): AttendaceStatus {
-    console.log(attendanceData);
+    // console.log(attendanceData);
     const firstDataDate = new Date(attendanceData[0].clockIn);
     const updatedDate = new Date(this.today);
     updatedDate.setHours(0, 0, 1);
@@ -565,14 +589,6 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       }
     });
     return (fullDays.length + (halfDays.length * 0.5));
-  }
-
-  getUnplanned() {
-    let uplCount = 0;
-    this.leaveLogs.forEach((item) => {
-      if(item.isUnplanned) uplCount++;
-    });
-    return uplCount;
   }
 
   returnCustomDate(selectDate: string | Date) {

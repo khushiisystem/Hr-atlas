@@ -31,15 +31,16 @@
     </div>
 
     <ng-container *ngIf="userRole === 'Admin' || userRole === 'HR'">
-      <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" size="auto" side="bottom" alignment="end" class="filter">
+      <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" side="bottom" alignment="end" class="filter">
         <ng-template>
           <ion-content>
             <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
             <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Resigned' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Resigned')">Resigned</ion-item>
             <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
           </ion-content>
         </ng-template>
-      </ion-popover>
+      </ion-popover> 
     </ng-container>
 
     <ion-list *ngIf="userRole === 'Admin' || userRole === 'HR'" mode="ios" inset="false">

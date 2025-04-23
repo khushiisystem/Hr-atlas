@@ -135,11 +135,12 @@
       <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['subDepartment'].touched && employeeForm.controls['subDepartment'].errors">
         Sub department is required.
       </ion-text>
-
+ 
       <ion-item>
         <ion-select labelPlacement="floating" formControlName="status" placeholder="Select" interface="action-sheet" [required]="true" (ionChange)="statusChange($event)" expandedIcon="caret-up">
           <div slot="label">Status <ion-text color="danger">*</ion-text></div>
           <ion-select-option value="Active">Active</ion-select-option>
+          <ion-select-option value="Resigned">Resigned</ion-select-option>
           <ion-select-option value="InActive">In Active</ion-select-option>
         </ion-select>
       </ion-item>
@@ -160,7 +161,7 @@
         Joining date is required.
       </ion-text>
 
-      <ion-item *ngIf="employeeForm.controls['status'].value === 'InActive'">
+      <ion-item *ngIf="employeeForm.controls['status'].value !== 'Active'">
         <div class="form-input" (click)="toggleCtrl('resignationDate')">
           <ion-input labelPlacement="floating" [readonly]="true" [value]="getDate1('resignationDate') | date:'yyyy-MM-dd'" required="true" type="date">
             <div slot="label">Resignation Date <ion-text color="danger">*</ion-text></div>

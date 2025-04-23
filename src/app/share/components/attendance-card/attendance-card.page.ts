@@ -44,6 +44,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   regularizationId: string = "";
   update: boolean = false;
   @Output() regularizationUpdated: EventEmitter<void> = new EventEmitter<void>();
+  isDisable: boolean = false;
 
 
 
@@ -203,6 +204,10 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   }
 
   approveReject(status: string , guid: string) {
+
+    if(this.isDisable) return ;
+
+    this.isDisable = true;
     const data: IApproveRegularizationReq = {
       status: status === 'accept' ? ERegularization.ACCEPT : ERegularization.REJECT,
       regulariztinGuid : guid
@@ -212,6 +217,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
         this.regularization
         this.regularizationUpdated.emit();
       }
+      this.isDisable = false;
     })
   }
 

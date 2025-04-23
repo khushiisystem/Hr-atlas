@@ -296,7 +296,7 @@ export class AddEmployeePage implements OnInit {
   }
 
   statusChange(event: any){
-    if(this.employeeForm.controls["status"].value === 'InActive'){
+    if(this.employeeForm.controls["status"].value === 'Resigned'){
       this.employeeForm.addControl('resignationDate', new FormControl('', Validators.compose([Validators.required])));
     } else {
       this.employeeForm.removeControl("resignationDate");

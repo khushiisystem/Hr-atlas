@@ -169,7 +169,7 @@ export class EmployeeLeavesPage implements OnInit {
       this.cancelLeave(event.leaveId);
     }
   }
-
+ 
   async cancelLeave(leaveId: string) {
     const cancelAlert = await this.alertCtrl.create({
       header: 'Leave Cancel',

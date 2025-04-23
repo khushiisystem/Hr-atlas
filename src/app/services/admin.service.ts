@@ -22,7 +22,7 @@ import { ICreditLogsRequest, ICreditLogsResponse } from "../interfaces/request/I
 export class AdminService {
     constructor(private http: HttpClient){}
 
-    getEmployees(empType: 'All' | 'Active' | 'InActive', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
+    getEmployees(empType: 'All' | 'Active' | 'InActive'| 'Resigned'|'Both', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
       return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}`);
     }
     addEmployees(employeeData: IEmployeeRequest): Observable<IEmployeeResponse>{
