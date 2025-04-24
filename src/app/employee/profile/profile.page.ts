@@ -59,15 +59,6 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  // getWorkDetails(){
-  //   this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
-  //     if(res) {
-  //       this.workDetail = res;
-  //       this.workLoaded = true;
-  //     }
-  //   });
-  // }
-
     getWorkDetails(){
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
       if(res) {
@@ -85,25 +76,6 @@ export class ProfilePage implements OnInit {
       nativeEl.value = accordionvalue;
     }
   };
-
-  // async editProfile(){
-  //   const profileModal = this.modalCtrl.create({
-  //     component: EditProfilePage,
-  //     mode: 'md',
-  //     showBackdrop: true,
-  //     backdropDismiss: false,
-  //     initialBreakpoint: 1,
-  //     componentProps: {userId: this.employeeId}
-  //   });
-
-  //   (await profileModal).present();
-
-  //   (await profileModal).onDidDismiss().then(result => {
-  //     if(result.role === 'confirm'){
-  //       this.getEmployeeDetails();
-  //     }
-  //   });
-  // }
 
   accordionChange(event: CustomEvent){
     if(event.detail.value){

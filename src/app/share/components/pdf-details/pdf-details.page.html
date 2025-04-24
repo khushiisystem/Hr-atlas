@@ -13,30 +13,6 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- <ion-content [fullscreen]="true" class="ion-padding">
-  <div class="table-container">
-    <table class="ion-padding table">
-      <thead>
-        <tr>
-          <th><ion-checkbox [(ngModel)]="selectAll" (ionChange)="toggleSelectAll()" slot="start"></ion-checkbox></th>
-          <th>Employee Name</th>
-          <th>Payment</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let employee of employees; let i = index">
-          <td><ion-checkbox [(ngModel)]="employee.checked" slot="start" (ionChange)="checkSelectAllStatus()"></ion-checkbox></td>
-          <td>{{ employee.name }}</td>
-          <td>{{ employee.payment }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</ion-content> -->
-
-
-
-
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="optbar btns">
     <ion-button style="padding: 0 0 10px 0;" mode="md" color="tertiary" class="" fill="solid" shape="round" size="small"(click)="openCalendar = true">

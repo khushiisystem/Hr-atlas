@@ -42,7 +42,7 @@ export class EmployeePayslipPage implements OnInit {
     return moment(this.payslipData.payslipDate).startOf("date").format();
   }
   get getendDate() {
-    return moment(this.payslipData.payslipDate).endOf("date").format();
+    return moment(this.payslipData.payslipDate).endOf("date").add(this.payslipData.workingDays - 1, 'days').format();
   }
   getMonth() {
     const monthArry = moment.months();

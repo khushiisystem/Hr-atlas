@@ -55,3 +55,43 @@
   .status-reject { color: red; font-weight: bold; }  
   .status-accept { color: green; font-weight: bold; }
   
+
+  .timesheet{
+    margin: 20px;
+    padding:10px;
+  }
+
+  .timesheet-row{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .timesheet-select{
+    display: flex;
+    width: 250px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  
+  th, td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  

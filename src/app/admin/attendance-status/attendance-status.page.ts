@@ -62,7 +62,7 @@ export class AttendanceStatusPage implements OnInit {
     if (this.pageIndex < 1) {
       this.employeeList = [];
     }
-    this.adminServ.getEmployees('Active', this.pageIndex * 30, 30).subscribe(res => {
+    this.adminServ.getEmployees('Both', this.pageIndex * 30, 30).subscribe(res => {
       if (res) {
         const data: IEmployeeResponse[] = res;
         for (let i = 0; i < data.length; i++) {

@@ -6,15 +6,16 @@
         <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
       </ion-item>
       <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="optionPop" class="ion-margin-start ion-no-padding" *ngIf="userRole === 'Admin'">
-        <ion-icon name="ellipsis-vertical" aria-hidden="true" aria-label="Option"></ion-icon>
+        <ion-icon name="funnel" aria-hidden="true" aria-label="Option"></ion-icon>
       </ion-button>
     </div>
     <ion-popover trigger="optionPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter" *ngIf="userRole === 'Admin'">
       <ng-template>
         <ion-content>
-          <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
-          <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item>
+          <!-- <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item> -->
+          <!-- <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item> -->
           <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
+          <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Resigned' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Resigned')">Resigned</ion-item>
         </ion-content>
       </ng-template>
     </ion-popover>
@@ -28,7 +29,7 @@
       </ion-item>
     </ion-list> -->
     
-    <div class="optbar btns" *ngIf="(isChecklist || isPayroll) && employeeList.length > 0">
+    <div class="optbar btns" *ngIf="(isChecklist || isPayroll) && employeeList.length > 0 && empType != 'InActive'">
       <ion-chip mode="ios" [ngClass]="selectedEmployee.length > (employeeList.length-1) ? 'chipBtn filled' : 'chipBtn'" color="tertiary" aria-label="mark all" *ngIf="isChecklist" (click)="allSelect()">
         <ion-icon name="checkmark" aria-hidden="true" aria-label="mark all"></ion-icon>
         <ion-label>Mark All</ion-label>

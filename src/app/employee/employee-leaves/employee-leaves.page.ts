@@ -74,6 +74,7 @@ export class EmployeeLeavesPage implements OnInit {
   }
 
   leaveApply(event: string){
+    console.log('event check : ',event);
     if(event === 'success'){
       this.logsLoaded = false;
       this.showApplyForm = !this.showApplyForm;
@@ -168,7 +169,7 @@ export class EmployeeLeavesPage implements OnInit {
       this.cancelLeave(event.leaveId);
     }
   }
-
+ 
   async cancelLeave(leaveId: string) {
     const cancelAlert = await this.alertCtrl.create({
       header: 'Leave Cancel',

@@ -1,3 +1,5 @@
+
+
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatetimeCustomEvent, IonContent, ModalController } from '@ionic/angular';
@@ -58,7 +60,8 @@ export class TimeSheetPage implements OnInit {
   currentYear: number = moment().year();
   projects: IProject[] = [];
   categories: ICategory[] = [];
-  subCategories: ISubCategory[] = []; 
+  // subCategories: ISubCategory[] = [];
+  subCategories: string[] = [];
   pageIndex: number = 0;
   minDate: Date = new Date();
   maxDate: Date = new Date();
@@ -68,6 +71,10 @@ export class TimeSheetPage implements OnInit {
   userTimesheet: ITimesheet[] = [];
   timesheetOfTheDay: ITimesheet[] = [];
   timesheetOfTheMonth: ITimesheet[] = [];
+  allTimeSheetOfMonth: ITimesheet[] = [];
+  filteredAllTimeSheetOfMonth: ITimesheet[] = [];
+  projectList: string[] = ["All"];
+  selectedProject: string = "All";
   timeSheet!: ITimesheet | any;
   timesheetId: string = '';
   update: boolean = false;
@@ -76,7 +83,7 @@ export class TimeSheetPage implements OnInit {
   dayHours: number = 0;
   dayMinutes: number = 0;
   getTime: number = 0;
-  getMonth: number= 0;
+  getMonth: number = 0;
   timesheetDate: string = new Date().toISOString();
   todayTimesheetDuration: number = 0;
   totalMontTime: number = 0;
@@ -92,9 +99,10 @@ export class TimeSheetPage implements OnInit {
     backgroundColor: string,
   }> = [];
   date = new Date();
-  formattedDate = this.date.toLocaleDateString("en-US", { month: "short",  day: "numeric",  year: "numeric" });
+  formattedDate = this.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   userId: string = "";
-
+  formDate: string = "";
+  timesheetTimeError: string = "";
   constructor(
     private _fb: FormBuilder,
     private adminSer: AdminService,
@@ -106,7 +114,7 @@ export class TimeSheetPage implements OnInit {
   ) {
     this.userId = localStorage.getItem('userId') || '';
     this.roleStateServ.getState().subscribe(res => {
-      if(res){
+      if (res) {
         this.userRole = res;
       } else {
         this.userRole = localStorage.getItem('userRole') || "";
@@ -114,13 +122,13 @@ export class TimeSheetPage implements OnInit {
     });
     // this.isLoggedIn = localStorage.getItem('token') != null && localStorage.getItem('token')?.toString().trim() != "";
     // this.activeTab = this.leaveType ? this.leaveType : 'requests'
-   }
+  }
 
   ngOnInit() {
     this.minDate.setDate(this.minDate.getDate() + 2);
     this.maxDate = this.minDate;
     const currentTime = moment().format();
-    
+
     this.timeSheetForm = this._fb.group({
       projectId: ['', Validators.required],
       categoryId: ['', Validators.required],
@@ -139,36 +147,64 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetMonth();
     this.getAssignProjectById();
     this.getUserTimesheet();
-    this.getSubCategories();
+    // this.getSubCategories();
+    this.getAllTimeSheetOfTheMonth();
   }
 
-  getFormGroup(ctrlName: string): FormGroup{
+  getFormGroup(ctrlName: string): FormGroup {
     return (this.timeSheetForm.controls[ctrlName] as FormGroup);
   }
 
-  getDate(ctrlName: string){
-    const formDate = this.timeSheetForm.controls[ctrlName].value;
-      return formDate != '' ? new Date(formDate).toDateString() : "";
+  getDate(ctrlName: string) {
+    this.formDate = this.timeSheetForm.controls[ctrlName].value;
+    return this.formDate != '' ? new Date(this.formDate).toDateString() : "";
   }
 
-  selectDate(event: DatetimeCustomEvent){
+  selectDate(event: DatetimeCustomEvent) {
     this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).utc().format());
   }
 
-  getStartTime(){
+  checkTimesheetTime() {
+    this.timesheetTimeError = "";
+
+    let startTime = this.getStartTime();
+    let endTime = this.getEndTime();
+
+    if(startTime >= endTime){
+      this.timesheetTimeError = "End time must be greater than start time";
+      return;
+    }
+
+    let totalTimeDuration = this.calculateDuration(startTime.toString(), endTime.toString());
+    if (totalTimeDuration / 3600000 > 9) {
+      this.timesheetTimeError = "Total time must be less than 9 hours";
+      return;
+    }
+
+    let totaltimeofalltimesheet = +this.calculateTotalWork().split('h')[0];
+    if ((totalTimeDuration / 3600000 + totaltimeofalltimesheet) > 9) {
+      this.timesheetTimeError = "Total time of all timesheet must be less than 9 hours";
+      return;
+    }
+  }
+
+  getStartTime() {
     const formValue = this.timeSheetForm.controls['startTime'].value;
     return formValue ? new Date(moment(formValue).format()) : '';
   }
+
   setStartTime(event: DatetimeCustomEvent) {
     this.timeSheetForm.patchValue({
       startTime: moment(event.detail.value).utc().format()
     });
+    this.checkTimesheetTime();
   }
+
   markTouched(ctrlName: string) {
     this.timeSheetForm.controls[ctrlName].markAsTouched();
   }
 
-  getEndTime(){
+  getEndTime() {
     const formValue = this.timeSheetForm.controls['endTime'].value;
     return formValue ? new Date(moment(formValue).format()) : '';
   }
@@ -176,14 +212,15 @@ export class TimeSheetPage implements OnInit {
     this.timeSheetForm.patchValue({
       endTime: moment(event.detail.value).utc().format()
     });
+    this.checkTimesheetTime();
   }
 
-  
+
 
   getProjects() {
     this.timesheetSer.getAllProjects(this.pageIndex * 100, 100).subscribe(res => {
-      if(res) {
-        const data : IProject[] = res;
+      if (res) {
+        const data: IProject[] = res;
         this.projects = data;
         this.isDataLoaded = true;
       }
@@ -192,7 +229,7 @@ export class TimeSheetPage implements OnInit {
     });
   }
 
-    // get assign project 
+  // get assign project 
   // getAssignProjects() {
   //   this.timesheetSer.getAllAssignProjects(this.pageIndex * 100, 100).subscribe(res => {
   //     if(res) {
@@ -204,7 +241,7 @@ export class TimeSheetPage implements OnInit {
 
   getAssignProjectById() {
     this.timesheetSer.getAssignProjectById(this.userId).subscribe(res => {
-      if(res) {
+      if (res) {
         const data: IAssignPro[] = res;
         this.assProjects = data;
       }
@@ -213,8 +250,7 @@ export class TimeSheetPage implements OnInit {
 
   getCategories() {
     this.timesheetSer.getAllCategories(this.pageIndex * 100, 100).subscribe(res => {
-      if(res) {
-        // console.log("check cat : ", res)
+      if (res) {
         this.categories = res;
         this.isDataLoaded = true;
       }
@@ -222,19 +258,16 @@ export class TimeSheetPage implements OnInit {
   }
 
   selectCat(event: any) {
-    // this.subCategories = this.categories.find(val => val.guid === event.detail.value )?.subCategory || [];
+    this.subCategories = this.categories.find(val => val.guid === event.detail.value)?.subCategory || [];
   }
 
   getSubCategories() {
     this.isDataLoaded = false;
-    if(this.pageIndex < 1) {
+    if (this.pageIndex < 1) {
       this.subCategories = [];
     }
     this.timesheetSer.getAllSubCategories(this.pageIndex * 100, 100).subscribe(res => {
-      if(res) {
-        // const data: ISubCategory[] = res;
-        // console.log("this subb cat : ", this.subCategories)
-        // console.log("check sub cat : ", data);
+      if (res) {
         this.subCategories = res;
         this.isDataLoaded = true;
       }
@@ -247,19 +280,24 @@ export class TimeSheetPage implements OnInit {
       date: new Date().toISOString()
     });
   }
-  
+
   submit() {
-    if(this.update) {
-      if(this.timesheetId.trim() == '') { return }
+
+   if(this.timesheetTimeError){
+    return;
+   }
+
+    if (this.update) {
+      if (this.timesheetId.trim() == '') { return }
       this.timesheetSer.updateTimesheet(this.timesheetId, this.timeSheetForm.value).subscribe(res => {
-        if(res) {
+        if (res) {
           this.update = false;
           this.getTimesheetList();
           this.getUserTimesheet();
           this.getTimesheetDay();
           this.getTimesheetMonth();
           this.shareServ.presentToast("Timesheet updated successfully", 'top', 'success')
-          this.timeSheetForm.reset();          
+          this.timeSheetForm.reset();
           this.timeSheetForm.patchValue({
             date: new Date().toISOString()
           });
@@ -268,7 +306,7 @@ export class TimeSheetPage implements OnInit {
     }
     else {
       this.timesheetSer.addTimesheet(this.timeSheetForm.value).subscribe(res => {
-        if(res) {
+        if (res) {
           // this.isAdmin = false;
           this.getTimesheetList();
           this.getUserTimesheet();
@@ -281,15 +319,15 @@ export class TimeSheetPage implements OnInit {
           });
         }
       }, (error) => {
-        this.shareServ.presentToast(error.error , 'top', 'danger');
-      }); 
-    }       
+        this.shareServ.presentToast(error.error, 'top', 'danger');
+      });
+    }
 
   }
 
   getTimesheetList() {
     this.timesheetSer.getTimesheetList(this.pageIndex * 100, 10, this.timesheetDate).subscribe(res => {
-      if(res) {
+      if (res) {
         this.timesheetList = res;
         // this.isAdmin = true;
       }
@@ -299,7 +337,7 @@ export class TimeSheetPage implements OnInit {
   // timesheet day start 
   getTimesheetDay() {
     this.timesheetSer.getTimesheetDay(this.timesheetDate).subscribe(res => {
-      if(res && res instanceof Array) {
+      if (res && res instanceof Array) {
         this.timesheetOfTheDay = res;
 
         // this.totalDayTime = 0;
@@ -312,9 +350,9 @@ export class TimeSheetPage implements OnInit {
     })
   }
 
-  calculateTotalWork(): string{
+  calculateTotalWork(): string {
     this.todayTimesheetDuration = 0;
-    this.timesheetOfTheDay.forEach((item: {startTime: string, endTime: string}) => {
+    this.timesheetOfTheDay.forEach((item: { startTime: string, endTime: string }) => {
       const durationMs = this.calculateDuration(item.startTime, item.endTime);
       this.todayTimesheetDuration += durationMs;
     });
@@ -335,10 +373,10 @@ export class TimeSheetPage implements OnInit {
 
   getTimesheetMonth() {
     this.timesheetSer.getTimesheetMonth(this.timesheetDate).subscribe(res => {
-      if(res) {
+      if (res) {
         this.timesheetOfTheMonth = res;
         this.totalMontTime = 0;
-        for(let month of this.timesheetOfTheMonth) {
+        for (let month of this.timesheetOfTheMonth) {
           this.totalMontTime += month.totalTime;
         }
         this.hours = Math.floor(this.totalMontTime / 60);
@@ -347,42 +385,137 @@ export class TimeSheetPage implements OnInit {
     })
   }
 
+  getAllTimeSheetOfTheMonth() {
+    this.timesheetSer.getAllTimesheetOfMonth(this.timesheetDate).subscribe(res => {
+      if (res) {
+        this.allTimeSheetOfMonth = res.map((timesheet: ITimesheet) => {
+          // Convert startTime & endTime to IST and format to HH:mm AM/PM
+          const start = new Date(timesheet.startTime);
+          const end = new Date(timesheet.endTime);
+          const date = timesheet.date.split('T')[0];
+
+          const options: Intl.DateTimeFormatOptions = {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+            timeZone: 'Asia/Kolkata',
+          };
+
+          // Convert totalTime (in minutes) to "Xh Ym"
+          const totalMinutes = Number(timesheet.totalTime);
+          const hours = Math.floor(totalMinutes / 60);
+          const minutes = totalMinutes % 60;
+          const formattedTotalTime = `${hours}h ${minutes}m`;
+
+          return {
+            ...timesheet,
+            startTime: start.toLocaleTimeString('en-IN', options),
+            endTime: end.toLocaleTimeString('en-IN', options),
+            totalTime: formattedTotalTime,
+            date,
+          };
+        });
+
+        this.allTimeSheetOfMonth.forEach(timesheet => {
+          if (!this.projectList.includes(timesheet.project.title)) {
+            this.projectList.push(timesheet.project.title)
+          }
+        })
+
+        this.filterTimesheetsByProject();
+      }
+    })
+  }
+
+  filterTimesheetsByProject() {
+    if (this.selectedProject === 'All') {
+      this.filteredAllTimeSheetOfMonth = this.allTimeSheetOfMonth;
+    } else {
+      this.filteredAllTimeSheetOfMonth = this.allTimeSheetOfMonth.filter(
+        (ts) => ts.project?.title === this.selectedProject
+      );
+    }
+  }
+
+  download() {
+    this.timesheetSer.getDownload(this.timesheetDate).subscribe({
+      next: (response) => {
+        // Make sure blob is not null
+        const blob = response.body;
+        if (!blob) {
+          console.error('Response body is empty');
+          return;
+        }
+
+        const contentDisposition = response.headers.get('content-disposition');
+        let filename = 'timesheet.xlsx';
+
+        // Try to extract filename from content-disposition header if available
+        if (contentDisposition) {
+          const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+          if (matches != null && matches[1]) {
+            filename = matches[1].replace(/['"]/g, '');
+          }
+        }
+
+        // Create a download link and trigger the download
+        const downloadLink = document.createElement('a');
+        const url = window.URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = filename;
+
+        // Add link to document, click it, then remove it
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
+        // Clean up the URL object to free memory
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error downloading timesheet:', err);
+        // Handle error - maybe show a user-friendly message
+      }
+    });
+  }
+
+
   calculateTimeDifference(startTime: string, endTime: string): string {
     const start = moment(startTime);
     const end = moment(endTime);
     const duration = moment.duration(end.diff(start));
-    
+
     const hours = Math.floor(duration.asHours());
     const minutes = duration.minutes();
-  
+
     return `${hours}h ${minutes}m`;
   }
 
-  approveReject(status: string , guid: string) {
+  approveReject(status: string, guid: string) {
     const data: ApproveTimesheetReq = {
       status: status === 'accept' ? ETimesheet.ACCEPT : ETimesheet.REJECT,
       timesheetGuid: guid
-    }  
+    }
     this.timesheetSer.approveReject(data).subscribe(res => {
-      if(res) {
+      if (res) {
         this.getUserTimesheet();
         this.getTimesheetList();
       }
     });
   }
 
-  updateTimesheet(timesheet: ITimesheet) {    
+  updateTimesheet(timesheet: ITimesheet) {
     this.timeSheetForm.patchValue(timesheet);
     this.timesheetId = timesheet.guid;
     this.update = true;
-    if(this.content){   
+    if (this.content) {
       this.content.scrollToTop(100);
     }
   }
 
   deleteTimesheet(id: string) {
     this.timesheetSer.deleteTimesheet(id).subscribe(res => {
-      if(res) {
+      if (res) {
         this.shareServ.presentToast("Timesheet deleted successfully", 'top', 'success')
       }
     });
@@ -391,9 +524,9 @@ export class TimeSheetPage implements OnInit {
   getUserTimesheet() {
     const userId = localStorage.getItem('userId') || "";
     this.timesheetSer.getUserTimesheet(this.pageIndex * 100, 100, userId, this.timesheetDate).subscribe(res => {
-      if(res) {
-        this.userTimesheet = res; 
-        if(this.userRole === "Employee") {
+      if (res) {
+        this.userTimesheet = res;
+        if (this.userRole === "Employee") {
           this.highlightedDates = this.getHighlightedDatesFunction();
         }
       }
@@ -402,45 +535,55 @@ export class TimeSheetPage implements OnInit {
 
   getStatusClass(status: string): string {
     return status?.toLowerCase() === 'pending' ? 'status-pending' :
-      status?.toLowerCase() ===  'reject' ? 'status-reject' :
-      status?.toLowerCase() ===  'accept' ? 'status-accept' : ''
-  }  
+      status?.toLowerCase() === 'reject' ? 'status-reject' :
+        status?.toLowerCase() === 'accept' ? 'status-accept' : ''
+  }
 
-  getHighlightedDatesFunction(): Array<{date: string, textColor: string, backgroundColor: string}> {
-    let dataArray: Array<{date: string, textColor: string, backgroundColor: string}> = [];
-  
+  getHighlightedDatesFunction(): Array<{ date: string, textColor: string, backgroundColor: string }> {
+    let dataArray: Array<{ date: string, textColor: string, backgroundColor: string }> = [];
+
     this.userTimesheet.forEach(element => {
-      let bgColor: string = 
+      let bgColor: string =
         element.status === ETimesheet.PENDING ? "orange" :
-        element.status === ETimesheet.REJECT ? "red" :
-        element.status === ETimesheet.ACCEPT ? "green" : "initial";
-  
+          element.status === ETimesheet.REJECT ? "red" :
+            element.status === ETimesheet.ACCEPT ? "green" : "initial";
+
       const eleDate = new Date(element.date);
-      
+
       // Format the date as YYYY-MM-DD (pad month and day with leading zeros)
       const formattedDate = `${eleDate.getFullYear()}-${(eleDate.getMonth() + 1).toString().padStart(2, '0')}-${eleDate.getDate().toString().padStart(2, '0')}`;
-      
-      const data: {date: string, textColor: string, backgroundColor: string} = {
+
+      const data: { date: string, textColor: string, backgroundColor: string } = {
         date: formattedDate,
         textColor: "white",
         backgroundColor: bgColor
       };
-  
+
       // Check if the date already exists in the array by comparing 'date'
       if (!dataArray.some(d => d.date === data.date)) {
         dataArray.push(data);
       }
     });
-  
+
     return dataArray;
   }
-  
-  
+
+
 
   onDateChange(event: any) {
+    const newDate = new Date(event.detail.value);
+    const prevDate = new Date(this.timesheetDate);
+
     this.timesheetDate = event.detail.value; // Update the selected date
+
+    if (newDate.getMonth() !== prevDate.getMonth() || newDate.getFullYear() !== prevDate.getFullYear()) {
+      this.getAllTimeSheetOfTheMonth();
+    }
+
     this.getTimesheetDay(); // Refresh data for the new selected date
     this.getTimesheetList();
     this.getUserTimesheet();
+
+    this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).format());
   }
 }

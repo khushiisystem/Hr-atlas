@@ -23,7 +23,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="stickyTab">
+  <div class="stickyTab" style="z-index: 10;">
     <ion-segment mode="ios" [scrollable]="true" color="secondary" class="topSegment" [(ngModel)]="activeTab" (ngModelChange)="onTabChange()">
       <ion-segment-button value="status">Status</ion-segment-button>
       <ion-segment-button value="listView">List View</ion-segment-button>
@@ -49,15 +49,15 @@
             </ion-item>
           </ion-col>
           <ion-col size="6" sizeSm="4">
-            <circular-progress-bar [value]="leaveLogs.length" [maxValue]="getLastDate" color="var(--ion-color-warning)"></circular-progress-bar>
+            <circular-progress-bar [value]="getAppliedLeaves()" [maxValue]="getLastDate" color="var(--ion-color-warning)"></circular-progress-bar>
             <ion-item lines="none" [detail]="false" color="light">
               <ion-label class="ion-text-center">Applied Leaves</ion-label>
             </ion-item>
           </ion-col>
           <ion-col size="6" sizeSm="4">
-            <circular-progress-bar [value]="filterLogs('Loss of Pay')" [maxValue]="getLastDate" color="var(--ion-color-danger)"></circular-progress-bar>
+            <circular-progress-bar [value]="getUnplanned()" [maxValue]="getLastDate" color="var(--ion-color-secondary)"></circular-progress-bar>
             <ion-item lines="none" [detail]="false" color="light">
-              <ion-label class="ion-text-center">LOP</ion-label>
+              <ion-label class="ion-text-center">Unplanned Leaves</ion-label>
             </ion-item>
           </ion-col>
         </ion-row>

@@ -14,9 +14,9 @@
     <ion-icon name="ellipse" aria-hidden="true" aria-label="status" [color]="getStatus(leaveItem.status).color"></ion-icon>
   </ion-card-header>
   <ion-card-content>
-    <p>
+    <!-- <p>
       <b>Type: <ion-text>{{leaveItem.leaveType}}</ion-text> </b>
-    </p>
+    </p> -->
     <p>
       <b>Status: </b> <ion-text [color]="getStatus(leaveItem.status).color">{{getStatus(leaveItem.status).leaveStatus}}</ion-text>
     </p>
@@ -32,6 +32,9 @@
     <p class="purpose">
       <strong>Purpose: </strong>
       <read-more-text [textString]="leaveItem.purpose" [maxLength]="100"></read-more-text>
+    </p>
+    <p *ngIf="leaveItem.isUnplanned">
+      <ion-text color="secondary">Unplanned leave</ion-text>
     </p>
   </ion-card-content>
 

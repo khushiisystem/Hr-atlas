@@ -69,17 +69,6 @@ export class EmployeeProfilePage {
     });
   }
 
-  // getWorkDetails(){
-  //   this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
-  //     if(res) {
-  //       this.workDetail = res;
-  //       this.workLoaded = true;
-  //     }
-  //   }, (error) => {
-  //     this.workLoaded = true;
-  //   });
-  // }
-
   getWorkDetails(){
     this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
       if(res) {
@@ -157,25 +146,6 @@ export class EmployeeProfilePage {
     this.router.navigate([`/tabs/employee/workinfo`], navigationExtras);
   }
   
-  // async editProfile(){
-  //   const employeeModel = this.modalCtrl.create({
-  //     component: AddEmployeePage,
-  //     componentProps: {
-  //       action: "edit",
-  //       employeeId: this.employeeDetail.guid
-  //     },
-  //     mode: 'md',
-  //     initialBreakpoint: 1
-  //   });
-
-  //   (await employeeModel).present();
-
-  //   (await employeeModel).onDidDismiss().then(result => {
-  //     if(result.data) {
-  //       this.getEmployeeDetails();
-  //     }
-  //   });
-  // }
   editProfile(){
     localStorage.setItem('lastRoute', this.router.url);
     this.router.navigate([`/tabs/edit-profile/${this.employeeId}`], {replaceUrl: true});

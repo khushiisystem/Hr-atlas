@@ -10,11 +10,6 @@
       <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>
     <ion-progress-bar type="indeterm                                                                                                        inate" *ngIf="!isDataLoaded"></ion-progress-bar>
-    <!-- <ng-container *ngIf="userRole === 'Admin'">
-      <ion-button mode="ios" color="tertiary" fill="clear" strong="true" id="filterPop" slot="end" aria-label="Filter">
-        <ion-icon name="funnel" aria-hidden="true" aria-label="filter"></ion-icon>
-      </ion-button>
-    </ng-container> -->
   </ion-toolbar>
 </ion-header>
 
@@ -23,12 +18,6 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="container">
-    <!-- <ion-row class="ion-padding-horizontal" *ngIf="searchString.trim() !== '' || employeeList.length > 0 || isHold">
-      <ion-col size="12">
-        <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
-      </ion-col>
-    </ion-row> -->
-
     <div class="stickyTop ion-padding-vertical">
       <div class="optbar">
         <ion-item detail="false" lines="none" mode="md">
@@ -42,15 +31,16 @@
     </div>
 
     <ng-container *ngIf="userRole === 'Admin' || userRole === 'HR'">
-      <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" size="auto" side="bottom" alignment="end" class="filter">
+      <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" side="bottom" alignment="end" class="filter">
         <ng-template>
           <ion-content>
             <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
             <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Resigned' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Resigned')">Resigned</ion-item>
             <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
           </ion-content>
         </ng-template>
-      </ion-popover>
+      </ion-popover> 
     </ng-container>
 
     <ion-list *ngIf="userRole === 'Admin' || userRole === 'HR'" mode="ios" inset="false">
@@ -77,12 +67,6 @@
             <ion-text class="role" *ngIf="employee"><small>{{employee.jobTitle}}</small></ion-text>
           </div>
         </ion-item>
-    
-        <!-- <ion-item-options side="end" (ionSwipe)="deleteEmployee(employee.guid); editSlide.closeOpened();">
-          <ion-item-option color="danger" aria-label="Delete" (click)="deleteEmployee(employee.guid); editSlide.closeOpened();" [expandable]="true">
-            <ion-icon name="trash-outline" aria-hidden="true" slot="icon-only" size="large"></ion-icon>
-          </ion-item-option>
-        </ion-item-options> -->
       </ion-item-sliding>
     </ion-list>
     

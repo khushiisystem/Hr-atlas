@@ -1,7 +1,8 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']"
+        routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
         <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -9,56 +10,69 @@
     <ion-thumbnail slot="end" class="logo_img ion-margin-end">
       <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>
-    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>         
+    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true" mode="md">
   <!-- </ calander -->
   <div class="ionPadding" mode="ios">
-    <ion-datetime presentation="date" [value]="timesheetDate" (ionChange)="onDateChange($event)" [highlightedDates]="highlightedDates">    
+    <ion-datetime presentation="date" [value]="timesheetDate" (ionChange)="onDateChange($event)"
+      [highlightedDates]="highlightedDates">
     </ion-datetime>
     <div class="cal_col">
-      <p class="p1"></p><p>pending</p>
-      <p class="p3"></p><p>approved</p>
-      <p class="p2"></p><p>reject</p>
+      <p class="p1"></p>
+      <p>Pending</p>
+      <p class="p3"></p>
+      <p>Approved</p>
+      <p class="p2"></p>
+      <p>Reject</p>
     </div>
   </div>
-   <!-- <div *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'"> -->
-   <div *ngIf="userRole.trim() === 'Employee'">
-     <form [formGroup]="timeSheetForm" class="ion-padding">    
-       <ion-row>
-         <!-- project  -->
-         <ion-col size="12">
-           <ion-select formControlName="projectId" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
-             <div *ngFor="let assProject of assProjects; index as i">
-               <ion-select-option value="{{assProject.project.guid}}">{{assProject.project.title}}</ion-select-option>
-             </div>
-           </ion-select>
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['projectId'].touched && timeSheetForm.controls['projectId'].errors">Project is required</ion-text>
-         </ion-col>
+  <!-- <div *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'"> -->
+  <div *ngIf="userRole.trim() === 'Employee'">
+    <form [formGroup]="timeSheetForm" class="ion-padding">
+      <ion-row>
+        <!-- project  -->
+        <ion-col size="12">
+          <ion-select formControlName="projectId" label="Projects" interface="popover" label-placement="floating"
+            mode="md" fill="solid">
+            <div *ngFor="let assProject of assProjects; index as i">
+              <ion-select-option value="{{assProject.project.guid}}">{{assProject.project.title}}</ion-select-option>
+            </div>
+          </ion-select>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['projectId'].touched && timeSheetForm.controls['projectId'].errors">Project is
+            required</ion-text>
+        </ion-col>
 
-         <!-- categories  -->
-         <ion-col size="12">
-           <ion-select label="Category" formControlName="categoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false" (ionChange)="selectCat($event)">
-             <div *ngFor="let category of categories; index as i">
-               <ion-select-option value="{{category.guid}}">{{category.category}}</ion-select-option>
-             </div>
-           </ion-select>
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['categoryId'].touched && timeSheetForm.controls['categoryId'].errors">Category is required</ion-text>
-         </ion-col>
+        <!-- categories  -->
+        <ion-col size="12">
+          <ion-select label="Category" formControlName="categoryId" interface="popover" label-placement="floating"
+            fill="solid" mode="md" [multiple]="false" (ionChange)="selectCat($event)">
+            <div *ngFor="let category of categories; index as i">
+              <ion-select-option value="{{category.guid}}">{{category.category}}</ion-select-option>
+            </div>
+          </ion-select>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['categoryId'].touched && timeSheetForm.controls['categoryId'].errors">Category
+            is required</ion-text>
+        </ion-col>
 
-         <ion-col size="12">
-           <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
-             <div *ngFor="let subCategory of subCategories; index as i">
-               <ion-select-option value="{{subCategory.guid}}">{{subCategory.subCategory}}</ion-select-option>            
-             </div>
-           </ion-select>
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">Sub-Category is required</ion-text>
-         </ion-col>
-   
+        <ion-col size="12">
+          <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover"
+            label-placement="floating" fill="solid" mode="md" [multiple]="false">
+            <div *ngFor="let subCategory of subCategories; index as i">
+              <ion-select-option value="{{subCategory}}">{{subCategory}}</ion-select-option>
+            </div>
+          </ion-select>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">Sub-Category
+            is required</ion-text>
+        </ion-col>
 
-         <!-- sub-categories  -->
-         <!-- <ion-col size="12">
+
+        <!-- sub-categories  -->
+        <!-- <ion-col size="12">
            <ion-select label="Sub-Category" formControlName="subCategoryId" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
              <div *ngFor="let subCategory of subCategories; index as i">
                <ion-select-option value="{{subCategory.guid}}">{{subCategory.subCategory}}</ion-select-option>            
@@ -67,188 +81,288 @@
            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['subCategoryId'].touched && timeSheetForm.controls['subCategoryId'].errors">Sub-Category is required</ion-text>
          </ion-col>
     -->
-         <ion-col size="6">
-           <ion-item fill="solid" detail="false" id="startTime" (click)="markTouched('startTime')">
-             <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
-               <div slot="label">Start Time<ion-text color="danger">*</ion-text></div>
-             </ion-input>
-            </ion-item>
-            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['startTime'].touched && timeSheetForm.controls['startTime'].errors">Start Time is required</ion-text>
-         </ion-col>
-   
-         <ion-col size="6">
-           <ion-item fill="solid" detail="false" id="endTime" (click)="markTouched('endTime')">
-             <ion-input labelPlacement="floating" [value]="getEndTime() |date:'HH:mm'" placeholder="Hrs" type="time" readonly="true">
-               <div slot="label">End Time<ion-text color="danger">*</ion-text></div>
-             </ion-input>
-            </ion-item>
-            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['endTime'].touched && timeSheetForm.controls['endTime'].errors">End Time is required</ion-text>
-         </ion-col>
-   
-          <ion-col size="12" id="startdate" (click)="markTouched('date')">
-            <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date')" [required]="true" class="dateInput">
-              <div slot="label">Date <ion-text color="danger">*</ion-text></div>
+        <ion-col size="12">
+          <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('date') "
+            [required]="true" class="dateInput" [disabled]="true" [readonly]="true"
+            style="pointer-events: none; opacity: 0.7; touch-action: none;">
+            <div slot="label">Date <ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors">Date is
+            required</ion-text>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-item fill="solid" detail="false" id="startTime" (click)="markTouched('startTime')">
+            <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time"
+              readonly="true">
+              <div slot="label">Start Time<ion-text color="danger">*</ion-text></div>
             </ion-input>
-            <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['date'].touched && timeSheetForm.controls['date'].errors">Date is required</ion-text>
-          </ion-col>
-          
-          <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
-            <ng-template>
-              <ion-header>
-                <ion-toolbar>
-                  <ion-title>Select Date</ion-title>
-                </ion-toolbar>
-              </ion-header>
-              <ion-content>
-                <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
-                  <ion-buttons slot="buttons">
-                    <ion-button mode="ios" color="danger" (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
-                    <ion-button mode="ios" color="primary" (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
-                  </ion-buttons>
-                </ion-datetime>
-              </ion-content>
-            </ng-template>
-          </ion-modal>
-   
-         <!-- tag  -->
-         <ion-col size="12">
-           <ion-input formControlName="tag" [minlength]="2" [maxlength]="100" labelPlacement="floating" type="text" inputmode="text" color="primary" fill="solid" [value]="" class="dateInput">
-             <div slot="label">Tag/Title <ion-text color="danger">*</ion-text></div>
-           </ion-input>    
-           <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors">Tag / Title must be at least 2 characters</ion-text>
-         </ion-col>  
-         
-         <ion-col>
-          <ion-textarea formControlName="description" [minlength]="5" [maxlength]="250" labelPlacement="floating" color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
+          </ion-item>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['startTime'].touched && timeSheetForm.controls['startTime'].errors">Start Time
+            is required</ion-text>
+        </ion-col>
+
+        <ion-col size="6">
+          <ion-item fill="solid" detail="false" id="endTime" (click)="markTouched('endTime')">
+            <ion-input labelPlacement="floating" [value]="getEndTime() |date:'HH:mm'" placeholder="Hrs" type="time"
+              readonly="true">
+              <div slot="label">End Time<ion-text color="danger">*</ion-text></div>
+            </ion-input>
+          </ion-item>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['endTime'].touched && timeSheetForm.controls['endTime'].errors">End Time is
+            required</ion-text>
+        </ion-col>
+
+        <ion-text color="danger" class="error_txt" *ngIf="timesheetTimeError">{{timesheetTimeError}}</ion-text>
+
+        <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true"
+          [breakpoints]="[0.75, 1]" #startDateModal>
+          <ng-template>
+            <ion-header>
+              <ion-toolbar>
+                <ion-title>Select Date</ion-title>
+              </ion-toolbar>
+            </ion-header>
+            <ion-content>
+              <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime
+                readonly="true" (ionChange)="selectDate($any($event))">
+                <ion-buttons slot="buttons">
+                  <ion-button mode="ios" color="danger"
+                    (click)="datetime.cancel();startDateModal.dismiss();">Cancel</ion-button>
+                  <ion-button mode="ios" color="primary"
+                    (click)="datetime.confirm();startDateModal.dismiss()">Done</ion-button>
+                </ion-buttons>
+              </ion-datetime>
+            </ion-content>
+          </ng-template>
+        </ion-modal>
+
+        <!-- tag  -->
+        <ion-col size="12">
+          <ion-input formControlName="tag" [minlength]="2" [maxlength]="100" labelPlacement="floating" type="text"
+            inputmode="text" color="primary" fill="solid" [value]="" class="dateInput">
+            <div slot="label">Tag/Title <ion-text color="danger">*</ion-text></div>
+          </ion-input>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['tag'].touched && timeSheetForm.controls['tag'].errors">Tag / Title must be at
+            least 2 characters</ion-text>
+        </ion-col>
+
+        <ion-col>
+          <ion-textarea formControlName="description" [minlength]="5" [maxlength]="250" labelPlacement="floating"
+            color="primary" fill="solid" mode="md" placeholder="Project Descirption" rows="3">
             <div slot="label">Descirption <ion-text color="danger">*</ion-text></div>
           </ion-textarea>
-          <ion-text color="danger" class="error_txt" *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors">Description must be at least 5 characters</ion-text>
+          <ion-text color="danger" class="error_txt"
+            *ngIf="timeSheetForm.controls['description'].touched && timeSheetForm.controls['description'].errors">Description
+            must be at least 5 characters</ion-text>
           <ol style="background-color: rgba(244, 250, 136, 0.405); padding: 5px 0 10px 35px;">
             <li>Please fill timesheet in between 0 to 3 hours for each entry.</li>
-            <li>Minium 3 entries are required to complete 8 hours timesheet for each day.</li>
+            <li>Minimum 3 entries are required to complete 8 hours timesheet for each day.</li>
           </ol>
-         </ion-col> 
-       </ion-row>
-   
-       <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round" [disabled]="timeSheetForm.invalid" (click)="submit()">
-        {{ update ? 'Update' : 'Add' }} 
-       </ion-button>        
-       <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round" (click)="clear()">Clear</ion-button>
-       
-       <ion-modal trigger="startTime" #startTime [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
-         <ng-template>
-           <ion-content>
-             <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setStartTime($any($event))" [max]="today.toISOString()">
-               <span slot="title">Start Time</span>
-               <ion-buttons slot="buttons">
-                 <ion-button mode="md" color="danger" (click)="datetime.cancel(); startTime.dismiss()">Cancel</ion-button>
-                 <ion-button mode="md" color="primary" (click)="datetime.confirm(); startTime.dismiss()">Done</ion-button>
-               </ion-buttons>
-             </ion-datetime>
-           </ion-content>
-         </ng-template>
-       </ion-modal>
-     
-       <ion-modal trigger="endTime" #endTime [initialBreakpoint]="1" [keepContentsMounted]="true" (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
-         <ng-template>
-           <ion-content>
-             <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime (ionChange)="setEndTime($any($event))" [max]="today.toISOString()">
-               <span slot="title">End Time</span>
-               <ion-buttons slot="buttons">
-                 <ion-button mode="md" color="danger" (click)="datetime.cancel(); endTime.dismiss()">Cancel</ion-button>
-                 <ion-button mode="md" color="primary" (click)="datetime.confirm(); endTime.dismiss()">Done</ion-button>
-               </ion-buttons>
-             </ion-datetime>
-           </ion-content>
-         </ng-template>
-       </ion-modal>
-     </form>
-   </div>
-   
-   <ion-grid *ngIf="userRole.trim() === 'Employee'">
-     <ion-row class="ion-justify-content-end ion-padding-start ion-padding-end">
-       <ion-col size="6">
-         <div>
-           <p>Time Filled for Day: </p>
-           <span>{{calculateTotalWork()}}</span>
-         </div>
-       </ion-col>
-       <ion-col size="6">
-         <div>
-           <p>Time Filled for Month: </p>
-           <span>{{hours}}h: {{minutes}}m</span>
-         </div>
-       </ion-col>
-     </ion-row>
-   </ion-grid>
-    <!-- update  -->
-    
-    <div *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
-      <ng-container *ngIf="timesheetList.length > 0; else noTimesheetMessage">
-        <ion-card class="ion-margin" *ngFor="let timesheet of timesheetList; index as i">
-          <div class="wrapper">
-            <div class="ion-activatable rounded-rectangle">
-              <h4>{{timesheet.project.title}}</h4>
-              <!-- update btn  -->
-              <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'" (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
-           </div>     
-            <div class="ion-activatable circle">
-            </div>
-            <!-- *ngIf="userRole.trim() === 'Employee'" -->
-            <div class="date">
-              <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
-              <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
-              <p><span>SubCategory :</span> <span>{{timesheet.subCategoryId}}</span></p>
-              <p><span>Status :</span> <span [ngClass]="getStatusClass(timesheet.status)">{{timesheet.status}}</span></p>
-              <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
-              <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span></p>
-              <p><span>Tag/ Title : {{timesheet.tag}}</span> <span></span></p>
-            </div>
-            <div class="ion-activatable para">
-              <p><b>Description: </b>{{timesheet.description}}</p>
-            </div>
-            <div class="btnStyle" *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
-              <ion-button size="small" fill="clear" class="reject-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('reject', timesheet.guid)">Reject</ion-button>
-              <ion-button size="small" fill="clear" class="approve-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('accept', timesheet.guid)">Approve</ion-button>
-            </div>  
-          </div>
-        </ion-card>
-      </ng-container>
-      <ng-template #noTimesheetMessage>
-        <p class="no-timesheets-message">No timesheets available.</p>
-      </ng-template>
-    </div>
+        </ion-col>
+      </ion-row>
 
-    <div *ngIf="userRole.trim() === 'Employee'">
-      <ion-card class="ion-margin" *ngFor="let timesheet of userTimesheet; index as i">
+      <ion-button mode="md" type="submit" class="submitBtn" color="primary" expand="full" shape="round"
+        [disabled]="timeSheetForm.invalid || timesheetTimeError.length > 0" (click)="submit()">
+        {{ update ? 'Update' : 'Add' }}
+      </ion-button>
+      <ion-button mode="md" type="submit" class="submitBtn" color="medium" expand="full" shape="round"
+        (click)="clear()">Clear</ion-button>
+
+      <ion-modal trigger="startTime" #startTime [initialBreakpoint]="1" [keepContentsMounted]="true"
+        (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+        <ng-template>
+          <ion-content>
+            <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime
+              (ionChange)="setStartTime($any($event))" [max]="today.toISOString()">
+              <span slot="title">Start Time</span>
+              <ion-buttons slot="buttons">
+                <ion-button mode="md" color="danger"
+                  (click)="datetime.cancel(); startTime.dismiss()">Cancel</ion-button>
+                <ion-button mode="md" color="primary"
+                  (click)="datetime.confirm(); startTime.dismiss()">Done</ion-button>
+              </ion-buttons>
+            </ion-datetime>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+
+      <ion-modal trigger="endTime" #endTime [initialBreakpoint]="1" [keepContentsMounted]="true"
+        (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
+        <ng-template>
+          <ion-content>
+            <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime
+              (ionChange)="setEndTime($any($event))" [max]="today.toISOString()">
+              <span slot="title">End Time</span>
+              <ion-buttons slot="buttons">
+                <ion-button mode="md" color="danger" (click)="datetime.cancel(); endTime.dismiss()">Cancel</ion-button>
+                <ion-button mode="md" color="primary" (click)="datetime.confirm(); endTime.dismiss()">Done</ion-button>
+              </ion-buttons>
+            </ion-datetime>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </form>
+  </div>
+
+  <ion-grid *ngIf="userRole.trim() === 'Employee'">
+    <ion-row class="ion-justify-content-end ion-padding-start ion-padding-end">
+      <ion-col size="6">
+        <div>
+          <p>Time Filled for Day: </p>
+          <span>{{calculateTotalWork()}}</span>
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <div>
+          <p>Time Filled for Month: </p>
+          <span>{{hours}}h: {{minutes}}m</span>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <!-- update  -->
+
+  <div *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
+    <ng-container *ngIf="timesheetList.length > 0; else noTimesheetMessage">
+      <ion-card class="ion-margin" *ngFor="let timesheet of timesheetList; index as i">
         <div class="wrapper">
           <div class="ion-activatable rounded-rectangle">
             <h4>{{timesheet.project.title}}</h4>
             <!-- update btn  -->
-            <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' || userRole.trim() !== 'HR'" (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
-         </div>     
+            <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'"
+              (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
+          </div>
           <div class="ion-activatable circle">
           </div>
           <!-- *ngIf="userRole.trim() === 'Employee'" -->
           <div class="date">
             <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
             <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
-            <p><span>SubCategory :</span><span>{{timesheet.subCategoryId}}</span></p>
-            <p><span>Status :</span> <span>{{timesheet.status}}</span></p>
+            <p><span>SubCategory :</span> <span>{{timesheet.subCategoryId}}</span></p>
+            <p><span>Status :</span> <span [ngClass]="getStatusClass(timesheet.status)">{{timesheet.status}}</span></p>
             <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
-            <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span></p>
+            <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span>
+            </p>
             <p><span>Tag/ Title : {{timesheet.tag}}</span> <span></span></p>
           </div>
           <div class="ion-activatable para">
             <p><b>Description: </b>{{timesheet.description}}</p>
           </div>
           <div class="btnStyle" *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
-            <ion-button size="small" fill="clear" class="reject-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('reject', timesheet.guid)">Reject</ion-button>
-            <ion-button size="small" fill="clear" class="approve-button" *ngIf="timesheet.status === 'Pending'" (click)="approveReject('accept', timesheet.guid)">Approve</ion-button>
-          </div>  
+            <ion-button size="small" fill="clear" class="reject-button" *ngIf="timesheet.status === 'Pending'"
+              (click)="approveReject('reject', timesheet.guid)">Reject</ion-button>
+            <ion-button size="small" fill="clear" class="approve-button" *ngIf="timesheet.status === 'Pending'"
+              (click)="approveReject('accept', timesheet.guid)">Approve</ion-button>
+          </div>
         </div>
       </ion-card>
-    </div>
+    </ng-container>
+    <ng-template #noTimesheetMessage>
+      <p class="no-timesheets-message">No timesheets available.</p>
+    </ng-template>
+  </div>
+
+  <div *ngIf="userRole?.trim() === 'Admin' || userRole?.trim() === 'HR'">
+    <ng-container *ngIf="filteredAllTimeSheetOfMonth.length > 0; else noMonthlyTimesheetMessage">
+      <div class="timesheet">
+        <div style="text-align: center; font-weight: bold; margin: 1rem 0;">Monthly Time Sheet</div>
+
+        <div class="timesheet-row">
+          <div class="timesheet-select">
+            <p>Select Project:</p>
+
+            <ion-item>
+              <ion-select [(ngModel)]="selectedProject" (ionChange)="filterTimesheetsByProject()" interface="popover"
+                placeholder="All Projects">
+                <ion-select-option *ngFor="let pName of projectList" [value]="pName">
+                  {{ pName }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </div>
+
+          <ion-button slot="end" (click)="download()">Export</ion-button>
+
+        </div>
+
+        <ion-card>
+          <ion-card-content>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>Project</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Date</th>
+                    <th>Hours</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let entry of filteredAllTimeSheetOfMonth">
+                    <td>{{ entry?.user?.firstName }}</td>
+                    <td>{{ entry?.project?.title }}</td>
+                    <td>{{ entry?.startTime }}</td>
+                    <td>{{ entry?.endTime }}</td>
+                    <td>{{ entry?.date }}</td>
+                    <td>{{ entry?.totalTime }}</td>
+                    <td>{{ entry?.status }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ng-container>
+    <ng-template #noMonthlyTimesheetMessage>
+      <p class="no-timesheets-message">No monthly timesheets available.</p>
+    </ng-template>
+  </div>
+
+
+
+  <div *ngIf="userRole.trim() === 'Employee'">
+    <ion-card class="ion-margin" *ngFor="let timesheet of userTimesheet; index as i">
+      <div class="wrapper">
+        <div class="ion-activatable rounded-rectangle">
+          <h4>{{timesheet.project.title}}</h4>
+          <!-- update btn  -->
+          <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' || userRole.trim() !== 'HR'"
+            (click)="updateTimesheet(timesheet)"><ion-icon name="create-outline"></ion-icon></ion-button>
+        </div>
+        <div class="ion-activatable circle">
+        </div>
+        <!-- *ngIf="userRole.trim() === 'Employee'" -->
+        <div class="date">
+          <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
+          <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
+          <p><span>SubCategory :</span><span>{{timesheet.subCategoryId}}</span></p>
+          <p><span>Status :</span> <span>{{timesheet.status}}</span></p>
+          <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
+          <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span>
+          </p>
+          <p><span>Tag/ Title : {{timesheet.tag}}</span> <span></span></p>
+        </div>
+        <div class="ion-activatable para">
+          <p><b>Description: </b>{{timesheet.description}}</p>
+        </div>
+        <div class="btnStyle" *ngIf="userRole.trim() === 'Admin' || userRole.trim() === 'HR'">
+          <ion-button size="small" fill="clear" class="reject-button" *ngIf="timesheet.status === 'Pending'"
+            (click)="approveReject('reject', timesheet.guid)">Reject</ion-button>
+          <ion-button size="small" fill="clear" class="approve-button" *ngIf="timesheet.status === 'Pending'"
+            (click)="approveReject('accept', timesheet.guid)">Approve</ion-button>
+        </div>
+      </div>
+    </ion-card>
+  </div>
   <!-- </div> -->
-  
+
 </ion-content>

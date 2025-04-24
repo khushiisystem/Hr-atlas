@@ -55,7 +55,7 @@ export class AdminProfilePage implements OnInit {
     this.dataLoaded = false;
     this.shareServ.getEmployeeById(this.userId).subscribe(res => {
       if(res) {
-        console.log("res: ", res)
+        // console.log("res: ", res)
         this.adminDetail = res;
         this.dataLoaded = true;
       }

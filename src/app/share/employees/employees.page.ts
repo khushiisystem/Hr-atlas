@@ -39,7 +39,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   pageIndex: number = 0;
   userRole: string = "";
   searchString: string = "";
-  empType: 'All' | 'Active' | 'InActive' = 'Active';
+  empType: 'All' | 'Active' | 'InActive' | 'Resigned' = 'Active';
   selectedEmployee: any[] = [];
   payslipDate: Date = new Date();
   today: Date = new Date();
@@ -94,7 +94,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
     });
   }
   
-  getTypedEmployee(event: 'All' | 'Active' | 'InActive'){
+  getTypedEmployee(event: 'All' | 'Active' | 'InActive' | 'Resigned'){
     this.empType = event;
     this.pageIndex = 0;
     this.selectedEmployee = [];

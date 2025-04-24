@@ -1,6 +1,7 @@
 import { LeaveDayType, LeaveType } from "../enums/leaveCreditPeriod";
 
 export interface ILeaveRequest {
+    isUnplanned:boolean,
     from: {
         date: string | Date,
         dayType: LeaveDayType,
