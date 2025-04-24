@@ -175,12 +175,13 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
   get getLeaves(): number {
     return this.dateList.reduce((leave, item) => {
+      // console.log(item);
       return item.status === AttendaceStatus.LEAVE ? leave + 1 : leave;
     }, 0);
   }
   get getAbsent(): number {
     return this.dateList.reduce((abs, item) => {
-      return item.status === AttendaceStatus.ABSENT ? abs + 1 : abs;
+      return item.status === AttendaceStatus.ABSENT ? abs + 1 : item.status === AttendaceStatus.HALF_DAY ? abs + 0.5 : abs;
     }, 0);
   }
   get getLastDate(): number {

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatetimeChangeEventDetail, ModalController } from '@ionic/angular';
 import * as moment from 'moment';
@@ -85,7 +85,7 @@ export class EditProfilePage implements OnInit {
         Validators.pattern('^[6-9][0-9]{9}$'),
         Validators.maxLength(10)
       ])],
-      dateOfBirth:['', Validators.required],
+      dateOfBirth: ['', Validators.required],
       gender: ['Male', Validators.required],
       bloodGroup: ["Group A"],
       maritalStatus: ['', Validators.required],
@@ -159,6 +159,41 @@ export class EditProfilePage implements OnInit {
     });
 
     if (this.userId.trim() !== '') { this.getEmployeeDetail(); }
+  }
+
+  toTitleCaseAndTrim(event: any, controlPath: string): void {
+    const value = event.detail.value;
+    const formattedValue = value
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, ' ') // normalize multiple spaces
+      .replace(/\w\S*/g, (txt: string) =>
+        txt.charAt(0).toUpperCase() + txt.substring(1)
+      );
+
+    // Get the control using the provided path
+    const control = this.getControlByPath(controlPath);
+    // Only set the value if the control exists
+    if (control) {
+      control.setValue(formattedValue, { emitEvent: false });
+    }
+  }
+
+  // Helper method to get control by path (handles nested form groups)
+  getControlByPath(path: string): AbstractControl | null {
+    const parts = path.split('.');
+    let currentControl: AbstractControl | null = this.employeeForm;
+
+    for (const part of parts) {
+      if (currentControl instanceof FormGroup) {
+        currentControl = currentControl.get(part);
+        if (!currentControl) return null;
+      } else {
+        return null;
+      }
+    }
+
+    return currentControl;
   }
 
   getEmployeeDetail() {
