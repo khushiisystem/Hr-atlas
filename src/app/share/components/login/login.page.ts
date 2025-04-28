@@ -79,10 +79,10 @@ export class LoginPage implements OnInit {
   
   checkInput() {
     if (this.validateInput(this.inputValue)) {
-      console.log('valid output');
+      // console.log('valid output');
       this.router.navigate(['./home']);
     } else {
-      console.log('Invalid input');
+      // console.log('Invalid input');
     }
   }
 

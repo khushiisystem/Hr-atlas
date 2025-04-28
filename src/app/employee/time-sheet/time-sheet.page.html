@@ -242,12 +242,13 @@
           <!-- *ngIf="userRole.trim() === 'Employee'" -->
           <div class="date">
             <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
+            <p><span>Project :</span> <span>{{timesheet.project.title}}</span></p>
             <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
-            <p><span>SubCategory :</span> <span>{{timesheet.subCategoryId}}</span></p>
-            <p><span>Status :</span> <span [ngClass]="getStatusClass(timesheet.status)">{{timesheet.status}}</span></p>
+            <p *ngIf="timesheet.subCategoryId"><span>SubCategory :</span> <span>{{timesheet.subCategoryId}}</span></p>
             <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
             <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span>
             </p>
+            <p><span>Status :</span> <span [ngClass]="getStatusClass(timesheet.status)">{{timesheet.status}}</span></p>
             <p><span>Tag/ Title : {{timesheet.tag}}</span> <span></span></p>
           </div>
           <div class="ion-activatable para">
@@ -298,9 +299,10 @@
                   <tr>
                     <th>Employee</th>
                     <th>Project</th>
+                    <th>Tag</th>
+                    <th>Date</th>
                     <th>Start Time</th>
                     <th>End Time</th>
-                    <th>Date</th>
                     <th>Hours</th>
                     <th>Status</th>
                   </tr>
@@ -309,9 +311,10 @@
                   <tr *ngFor="let entry of filteredAllTimeSheetOfMonth">
                     <td>{{ entry?.user?.firstName }}</td>
                     <td>{{ entry?.project?.title }}</td>
+                    <td>{{ entry?.tag }}</td>
+                    <td>{{ entry?.date }}</td>
                     <td>{{ entry?.startTime }}</td>
                     <td>{{ entry?.endTime }}</td>
-                    <td>{{ entry?.date }}</td>
                     <td>{{ entry?.totalTime }}</td>
                     <td>{{ entry?.status }}</td>
                   </tr>
@@ -343,12 +346,13 @@
         <!-- *ngIf="userRole.trim() === 'Employee'" -->
         <div class="date">
           <p><span>Employee :</span> <span>{{timesheet.user.firstName}} {{timesheet.user.lastName}}</span></p>
+          <p><span>Project :</span> <span>{{timesheet.project.title}}</span></p>
           <p><span>Category :</span> <span>{{timesheet.timesheetCategory.category}}</span></p>
-          <p><span>SubCategory :</span><span>{{timesheet.subCategoryId}}</span></p>
-          <p><span>Status :</span> <span>{{timesheet.status}}</span></p>
+          <p *ngIf="timesheet.subCategoryId"><span>SubCategory :</span><span>{{timesheet.subCategoryId}}</span></p>
           <p><span>Date :</span> <span>{{timesheet.date | date: 'dd-MMMM-yyyy'}}</span></p>
           <p><span>Time :</span> <span>{{ calculateTimeDifference(timesheet.startTime!, timesheet.endTime!) }}</span>
           </p>
+          <p><span>Status :</span> <span [ngClass]="getStatusClass(timesheet.status)">{{timesheet.status}}</span></p>
           <p><span>Tag/ Title : {{timesheet.tag}}</span> <span></span></p>
         </div>
         <div class="ion-activatable para">

@@ -65,7 +65,7 @@ export class TimeSheetPage implements OnInit {
   pageIndex: number = 0;
   minDate: Date = new Date();
   maxDate: Date = new Date();
-  minEndDate: any;
+  minEndDate: any; 
   startDate!: string;
   timesheetList: ITimesheet[] = [];
   userTimesheet: ITimesheet[] = [];
@@ -132,13 +132,13 @@ export class TimeSheetPage implements OnInit {
     this.timeSheetForm = this._fb.group({
       projectId: ['', Validators.required],
       categoryId: ['', Validators.required],
-      subCategoryId: ['', Validators.required],
+      subCategoryId: [''],
       // userId: '',
       description: ['', [Validators.required, Validators.minLength(5)]],
       startTime: ['', Validators.required],
       endTime: ['', [Validators.required]],
       tag: ['', [Validators.required, Validators.minLength(2)]],
-      date: [new Date().toISOString(), Validators.required],
+      date: [new Date(), Validators.required],
     });
     this.getTimesheetList();
     this.getProjects();
@@ -283,6 +283,8 @@ export class TimeSheetPage implements OnInit {
 
   submit() {
 
+    // console.log("time sheet form : ",this.timeSheetForm.value);
+
    if(this.timesheetTimeError){
     return;
    }
@@ -392,7 +394,7 @@ export class TimeSheetPage implements OnInit {
           // Convert startTime & endTime to IST and format to HH:mm AM/PM
           const start = new Date(timesheet.startTime);
           const end = new Date(timesheet.endTime);
-          const date = timesheet.date.split('T')[0];
+          const date = new Date(timesheet.date).toDateString();
 
           const options: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
@@ -421,6 +423,13 @@ export class TimeSheetPage implements OnInit {
             this.projectList.push(timesheet.project.title)
           }
         })
+
+        this.allTimeSheetOfMonth.sort((a, b) => {
+          const dateA = new Date(a.date).getTime();
+          const dateB = new Date(b.date).getTime();
+          return dateB - dateA; // descending
+        });
+        
 
         this.filterTimesheetsByProject();
       }
@@ -575,7 +584,6 @@ export class TimeSheetPage implements OnInit {
     const prevDate = new Date(this.timesheetDate);
 
     this.timesheetDate = event.detail.value; // Update the selected date
-
     if (newDate.getMonth() !== prevDate.getMonth() || newDate.getFullYear() !== prevDate.getFullYear()) {
       this.getAllTimeSheetOfTheMonth();
     }
@@ -583,7 +591,8 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetDay(); // Refresh data for the new selected date
     this.getTimesheetList();
     this.getUserTimesheet();
-
-    this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).format());
+    
+    this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).utc().format());
+    // console.log("time sheet date : ",this.timeSheetForm.value);
   }
 }
