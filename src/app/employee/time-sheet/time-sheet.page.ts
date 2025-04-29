@@ -65,7 +65,7 @@ export class TimeSheetPage implements OnInit {
   pageIndex: number = 0;
   minDate: Date = new Date();
   maxDate: Date = new Date();
-  minEndDate: any; 
+  minEndDate: any;
   startDate!: string;
   timesheetList: ITimesheet[] = [];
   userTimesheet: ITimesheet[] = [];
@@ -103,6 +103,9 @@ export class TimeSheetPage implements OnInit {
   userId: string = "";
   formDate: string = "";
   timesheetTimeError: string = "";
+  page: number = 1;
+  pageSize: number = 10;
+
   constructor(
     private _fb: FormBuilder,
     private adminSer: AdminService,
@@ -170,7 +173,7 @@ export class TimeSheetPage implements OnInit {
     let startTime = this.getStartTime();
     let endTime = this.getEndTime();
 
-    if(startTime >= endTime){
+    if (startTime >= endTime) {
       this.timesheetTimeError = "End time must be greater than start time";
       return;
     }
@@ -285,9 +288,9 @@ export class TimeSheetPage implements OnInit {
 
     // console.log("time sheet form : ",this.timeSheetForm.value);
 
-   if(this.timesheetTimeError){
-    return;
-   }
+    if (this.timesheetTimeError) {
+      return;
+    }
 
     if (this.update) {
       if (this.timesheetId.trim() == '') { return }
@@ -429,7 +432,7 @@ export class TimeSheetPage implements OnInit {
           const dateB = new Date(b.date).getTime();
           return dateB - dateA; // descending
         });
-        
+
 
         this.filterTimesheetsByProject();
       }
@@ -591,8 +594,18 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetDay(); // Refresh data for the new selected date
     this.getTimesheetList();
     this.getUserTimesheet();
-    
+
     this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).utc().format());
     // console.log("time sheet date : ",this.timeSheetForm.value);
   }
+
+  get paginatedEntries() {
+    const startIndex = (this.page - 1) * this.pageSize;
+    return this.filteredAllTimeSheetOfMonth.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.filteredAllTimeSheetOfMonth.length / this.pageSize);
+  }
+
 }
