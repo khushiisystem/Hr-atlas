@@ -20,48 +20,48 @@ import { ICreditLogsRequest, ICreditLogsResponse } from "../interfaces/request/I
     providedIn: 'root'
 })
 export class AdminService {
-    constructor(private http: HttpClient){}
+    constructor(private http: HttpClient) { }
 
-    getEmployees(empType: 'All' | 'Active' | 'InActive'| 'Resigned'|'Both', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
-      return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}`);
+    getEmployees(empType: 'All' | 'Active' | 'InActive' | 'Resigned' | 'Both', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]> {
+        return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}`);
     }
-    addEmployees(employeeData: IEmployeeRequest): Observable<IEmployeeResponse>{
+    addEmployees(employeeData: IEmployeeRequest): Observable<IEmployeeResponse> {
         return this.http.post<IEmployeeResponse>(environment.Api + `api/user`, employeeData);
     }
-    updateEmployee(employeeId: string, employeeData: IEmployeeRequest): Observable<IEmployeeResponse>{
+    updateEmployee(employeeId: string, employeeData: IEmployeeRequest): Observable<IEmployeeResponse> {
         return this.http.put<IEmployeeResponse>(environment.Api + `api/user/${employeeId}`, employeeData);
     }
     // updateEmployee(employeeId: string, employeeData: any): Observable<any>{
     //     return this.http.put<any>(environment.Api + `api/user/${employeeId}`, employeeData);
     // }
-    getEmployeeById(employeeId: string): Observable<IEmployeeResponse>{
+    getEmployeeById(employeeId: string): Observable<IEmployeeResponse> {
         return this.http.get<IEmployeeResponse>(environment.Api + `api/user/${employeeId}`);
     }
-    deleteEmployee(employeeId: string): Observable<any>{
+    deleteEmployee(employeeId: string): Observable<any> {
         return this.http.delete<any>(environment.Api + `api/user/${employeeId}`);
     }
     insertWorkInfoToUser(userId: string, employeeData: any): Observable<any> {
         return this.http.put<any>(environment.Api + `api/user/insert/${userId}`, employeeData);
     }
 
-    addEmployeesWork(workData: IEmployeeWorkRequest): Observable<IEmployeeWorkRequest>{
+    addEmployeesWork(workData: IEmployeeWorkRequest): Observable<IEmployeeWorkRequest> {
         return this.http.post<IEmployeeWorkRequest>(environment.Api + `api/employeeWork`, workData);
     }
-    updateEmployeeWork(employeeWorkId: string, employeeWorkData: IEmployeeRequest): Observable<IEmployeeWrokResponse>{
+    updateEmployeeWork(employeeWorkId: string, employeeWorkData: IEmployeeRequest): Observable<IEmployeeWrokResponse> {
         return this.http.put<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/${employeeWorkId}`, employeeWorkData);
     }
-    getWorkByEmployeeId(employeeId: string): Observable<IEmployeeWrokResponse>{
-        return this.http.post<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/userId`, {userId: employeeId});
+    getWorkByEmployeeId(employeeId: string): Observable<IEmployeeWrokResponse> {
+        return this.http.post<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/userId`, { userId: employeeId });
     }
-    deleteEmployeeWork(employeeId: string): Observable<IEmployeeWrokResponse>{
+    deleteEmployeeWork(employeeId: string): Observable<IEmployeeWrokResponse> {
         return this.http.delete<IEmployeeWrokResponse>(environment.Api + `api/employeeWork/${employeeId}`);
     }
 
     // attendance setup
-    saveAttendanceSetup(data: AttendanceSetupRequest): Observable<IAttendanceSetupResponse>{
+    saveAttendanceSetup(data: AttendanceSetupRequest): Observable<IAttendanceSetupResponse> {
         return this.http.post<IAttendanceSetupResponse>(environment.Api + 'api/attendancesetup', data);
     }
-    getAttendanceSetup(): Observable<IAttendanceSetupResponse>{
+    getAttendanceSetup(): Observable<IAttendanceSetupResponse> {
         return this.http.get<IAttendanceSetupResponse>(environment.Api + `api/attendancesetup`);
     }
     updateEmployeeAttendance(uuid: string, attendanceData: udpateAttendanceRequst): Observable<any> {
@@ -98,7 +98,7 @@ export class AdminService {
     getLeaveSetup(): Observable<ILeaveSetupResponse> {
         return this.http.get<ILeaveSetupResponse>(environment.Api + `api/leaveSetup/getLeaveSetup`);
     }
-    leaveApprove(leaveData: {leaveGuid: string, approveLeave: boolean}): Observable<any> {
+    leaveApprove(leaveData: { leaveGuid: string, approveLeave: boolean }): Observable<any> {
         return this.http.put<any>(environment.Api + `api/applyLeave/approveLeave`, leaveData);
     }
 
@@ -133,10 +133,10 @@ export class AdminService {
         return this.http.get<ISalarySetupResponse>(environment.Api + `api/salary/getSalarybeforeDate?employeeId=${userId}&date=${date}`);
     }
 
-    createPayslip(payslipData: {employeeIds: Array<string>, payslipDate: string}): Observable<any> {
+    createPayslip(payslipData: { employeeIds: Array<string>, payslipDate: string }): Observable<any> {
         return this.http.post<any>(environment.Api + `api/paySlip`, payslipData);
     }
-    getEmployeePayslip(payslipData: {employeeId: string, date: string}): Observable<IPayslipResponse> {
+    getEmployeePayslip(payslipData: { employeeId: string, date: string }): Observable<IPayslipResponse> {
         return this.http.get<IPayslipResponse>(environment.Api + `api/paySlip?employeeId=${payslipData.employeeId}&date=${payslipData.date}`);
     }
     getPaySlipData(date: string): Observable<IPayslipResponse> {
@@ -150,6 +150,10 @@ export class AdminService {
     }
     getLogHistoryByEmployeeId(employeeId: string): Observable<ICreditLogsResponse[]> {
         return this.http.get<ICreditLogsResponse[]>(environment.Api + `api/payrollHistory?employeeId=${employeeId}`);
+    }
+
+    sendPayrollEmail(emailData: { e_id: string, paylslipdate: Date }[]): Observable<any>  {
+        return this.http.post<any>(environment.Api + `api/paySlip/sendPayslipEmail`, emailData);
     }
 
 }
