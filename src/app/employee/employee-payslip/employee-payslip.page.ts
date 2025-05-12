@@ -80,7 +80,7 @@ export class EmployeePayslipPage implements OnInit {
           )
           .then(() => {
             this.downloading = false;
-            console.log("File is opened");
+            // console.log("File is opened");
           })
           .catch((e) => {
             console.log("Error opening file", e);

@@ -38,7 +38,7 @@ export class SettingsPage implements OnInit {
     (await attendanceModal).present();
 
     (await attendanceModal).onDidDismiss().then(result => {
-      console.log(result);
+      // console.log(result);
     });
   }
 
@@ -52,7 +52,7 @@ export class SettingsPage implements OnInit {
     (await leaveModal).present();
 
     (await leaveModal).onDidDismiss().then(result => {
-      console.log(result, "result");
+      // console.log(result, "result");
     });
   }
 
@@ -104,7 +104,7 @@ export class SettingsPage implements OnInit {
 
     (await eventModal).onDidDismiss().then(result => {
       if(result && result.role === 'confirm'){
-        console.log(result);
+        // console.log(result);
       }
     });
   }
