@@ -152,4 +152,8 @@ export class AdminService {
         return this.http.get<ICreditLogsResponse[]>(environment.Api + `api/payrollHistory?employeeId=${employeeId}`);
     }
 
+    sendPayrollEmail(emailData: { e_id: string, paylslipdate: Date }[]): Observable<any>  {
+        return this.http.post<any>(environment.Api + `api/paySlip/sendPayslipEmail`, emailData);
+    }
+
 }

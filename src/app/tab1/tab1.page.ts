@@ -149,7 +149,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
           }
           this.requestedLeaveList = [];
           this.getRequests();
-          this.today.setHours(0, 0, 0);
+          // this.today.setHours(0, 0, 0);
           this.getTodayAttendance(this.today.toISOString(), 0);
           this.isSwitchable = true;
         }
@@ -586,7 +586,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   }
 
   instructionsClosed(event: any){
-    console.log(event, "popover");
+    // console.log(event, "popover");
   }
 
   async tutorialModal(setup: 'leave' | 'attendance') {

@@ -207,7 +207,7 @@ export class EmployeeLeavesPage implements OnInit {
   }
 
   handleRefresh(event: any) {
-    console.log("Refresher triggered employee page");
+    // console.log("Refresher triggered employee page");
     setTimeout(() => {
       event.target.complete();
       window.location.reload();

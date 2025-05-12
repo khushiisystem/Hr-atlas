@@ -39,12 +39,18 @@
       <table class="ion-padding table">
         <thead>
           <tr>
+            <th>
+              <input type="checkbox" (change)="selectAllPayslip($event)"  class="custom-checkbox" #selectAllRef/>
+            </th>
             <th>Employee Name</th>
             <th>Payment</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let payslip of payslipData">
+          <tr *ngFor="let payslip of emailData">
+            <td>
+              <input type="checkbox" [(ngModel)]="payslip.checked" class="custom-checkbox" (change)="onItemChange(payslip, selectAllRef)"/>
+            </td>
             <td>{{ payslip.employeeName }}</td>
             <td>{{ payslip.netPay }}</td>
           </tr>

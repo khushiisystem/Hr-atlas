@@ -103,6 +103,9 @@ export class TimeSheetPage implements OnInit {
   userId: string = "";
   formDate: string = "";
   timesheetTimeError: string = "";
+  page: number = 1;
+  pageSize: number = 10;
+
   constructor(
     private _fb: FormBuilder,
     private adminSer: AdminService,
@@ -132,13 +135,13 @@ export class TimeSheetPage implements OnInit {
     this.timeSheetForm = this._fb.group({
       projectId: ['', Validators.required],
       categoryId: ['', Validators.required],
-      subCategoryId: ['', Validators.required],
+      subCategoryId: [''],
       // userId: '',
       description: ['', [Validators.required, Validators.minLength(5)]],
       startTime: ['', Validators.required],
       endTime: ['', [Validators.required]],
       tag: ['', [Validators.required, Validators.minLength(2)]],
-      date: [new Date().toISOString(), Validators.required],
+      date: [new Date(), Validators.required],
     });
     this.getTimesheetList();
     this.getProjects();
@@ -170,7 +173,7 @@ export class TimeSheetPage implements OnInit {
     let startTime = this.getStartTime();
     let endTime = this.getEndTime();
 
-    if(startTime >= endTime){
+    if (startTime >= endTime) {
       this.timesheetTimeError = "End time must be greater than start time";
       return;
     }
@@ -283,9 +286,11 @@ export class TimeSheetPage implements OnInit {
 
   submit() {
 
-   if(this.timesheetTimeError){
-    return;
-   }
+    // console.log("time sheet form : ",this.timeSheetForm.value);
+
+    if (this.timesheetTimeError) {
+      return;
+    }
 
     if (this.update) {
       if (this.timesheetId.trim() == '') { return }
@@ -392,7 +397,7 @@ export class TimeSheetPage implements OnInit {
           // Convert startTime & endTime to IST and format to HH:mm AM/PM
           const start = new Date(timesheet.startTime);
           const end = new Date(timesheet.endTime);
-          const date = timesheet.date.split('T')[0];
+          const date = new Date(timesheet.date).toDateString();
 
           const options: Intl.DateTimeFormatOptions = {
             hour: '2-digit',
@@ -421,6 +426,13 @@ export class TimeSheetPage implements OnInit {
             this.projectList.push(timesheet.project.title)
           }
         })
+
+        this.allTimeSheetOfMonth.sort((a, b) => {
+          const dateA = new Date(a.date).getTime();
+          const dateB = new Date(b.date).getTime();
+          return dateB - dateA; // descending
+        });
+
 
         this.filterTimesheetsByProject();
       }
@@ -575,7 +587,6 @@ export class TimeSheetPage implements OnInit {
     const prevDate = new Date(this.timesheetDate);
 
     this.timesheetDate = event.detail.value; // Update the selected date
-
     if (newDate.getMonth() !== prevDate.getMonth() || newDate.getFullYear() !== prevDate.getFullYear()) {
       this.getAllTimeSheetOfTheMonth();
     }
@@ -584,6 +595,17 @@ export class TimeSheetPage implements OnInit {
     this.getTimesheetList();
     this.getUserTimesheet();
 
-    this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).format());
+    this.timeSheetForm.controls['date'].patchValue(moment(event.detail.value).utc().format());
+    // console.log("time sheet date : ",this.timeSheetForm.value);
   }
+
+  get paginatedEntries() {
+    const startIndex = (this.page - 1) * this.pageSize;
+    return this.filteredAllTimeSheetOfMonth.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.filteredAllTimeSheetOfMonth.length / this.pageSize);
+  }
+
 }
