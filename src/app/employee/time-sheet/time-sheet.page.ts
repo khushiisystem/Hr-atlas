@@ -246,7 +246,12 @@ export class TimeSheetPage implements OnInit {
     this.timesheetSer.getAssignProjectById(this.userId).subscribe(res => {
       if (res) {
         const data: IAssignPro[] = res;
-        this.assProjects = data;
+        data.forEach((project)  => {
+          if(project.project){
+            this.assProjects.push(project)
+            console.log("data check for project : ",project.project.title)
+          }
+        })
       }
     })
   }
