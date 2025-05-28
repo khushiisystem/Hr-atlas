@@ -39,6 +39,9 @@
             <div *ngFor="let assProject of assProjects; index as i">
               <ion-select-option value="{{assProject.project.guid}}">{{assProject.project.title}}</ion-select-option>
             </div>
+            <div *ngFor="let dProject of defaultProject; index as i">
+              <ion-select-option value="{{dProject.guid}}">{{dProject.title}}</ion-select-option>
+            </div>
           </ion-select>
           <ion-text color="danger" class="error_txt"
             *ngIf="timeSheetForm.controls['projectId'].touched && timeSheetForm.controls['projectId'].errors">Project is
