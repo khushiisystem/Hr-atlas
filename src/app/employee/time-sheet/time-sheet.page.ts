@@ -501,50 +501,86 @@ export class TimeSheetPage implements OnInit {
     }
   }
 
-  download() {
-    this.timesheetSer.getDownload(this.timesheetDate).subscribe({
-      next: (response) => {
-        // Make sure blob is not null
-        const blob = response.body;
-        if (!blob) {
-          console.error("Response body is empty");
-          return;
-        }
+  async download() {
+    try {
+      const response = await this.timesheetSer
+        .getDownload(this.timesheetDate)
+        .toPromise();
+      if (!response?.body) throw new Error("No file data");
 
-        const contentDisposition = response.headers.get("content-disposition");
-        let filename = "timesheet.xlsx";
+      const date = new Date();
+      const filename = `timesheet-${date.getDate()}-${
+        date.getMonth() + 1
+      }-${date.getFullYear()}.xlsx`;
 
-        // Try to extract filename from content-disposition header if available
-        if (contentDisposition) {
-          const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(
-            contentDisposition
-          );
-          if (matches != null && matches[1]) {
-            filename = matches[1].replace(/['"]/g, "");
-          }
-        }
+      // Check if running in mobile app (cordova/capacitor)
+      const isMobile = !!(window as any).cordova || !!(window as any).Capacitor;
 
-        // Create a download link and trigger the download
-        const downloadLink = document.createElement("a");
-        const url = window.URL.createObjectURL(blob);
-        downloadLink.href = url;
-        downloadLink.download = filename;
-
-        // Add link to document, click it, then remove it
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-
-        // Clean up the URL object to free memory
-        window.URL.revokeObjectURL(url);
-      },
-      error: (err) => {
-        console.error("Error downloading timesheet:", err);
-        // Handle error - maybe show a user-friendly message
-      },
-    });
+      if (isMobile) {
+        // Mobile: Save to device using File API
+        await this.saveToDevice(response.body, filename);
+      } else {
+        // Web: Standard download
+        const url = URL.createObjectURL(response.body);
+        const link = Object.assign(document.createElement("a"), {
+          href: url,
+          download: filename,
+          style: { display: "none" },
+        });
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.error("Download failed:", error);
+      alert("Download failed");
+    }
   }
 
+  private async saveToDevice(blob: Blob, filename: string) {
+    return new Promise((resolve, reject) => {
+      // Use cordova file plugin if available
+      if ((window as any).resolveLocalFileSystemURL) {
+        const cordova = (window as any).cordova;
+        const directory =
+          cordova.file.externalDataDirectory || cordova.file.dataDirectory;
+
+        (window as any).resolveLocalFileSystemURL(
+          directory,
+          (dir: any) => {
+            dir.getFile(
+              filename,
+              { create: true },
+              (file: any) => {
+                file.createWriter((writer: any) => {
+                  writer.onwriteend = () => {
+                    alert(`File saved: ${filename}`);
+                    resolve(true);
+                  };
+                  writer.onerror = reject;
+                  writer.write(blob);
+                });
+              },
+              reject
+            );
+          },
+          reject
+        );
+      } else {
+        // Fallback: try to trigger download anyway
+        const url = URL.createObjectURL(blob);
+        const link = Object.assign(document.createElement("a"), {
+          href: url,
+          download: filename,
+        });
+        link.click();
+        URL.revokeObjectURL(url);
+        resolve(true);
+      }
+    });
+  }
+  
   calculateTimeDifference(startTime: string, endTime: string): string {
     const start = moment(startTime);
     const end = moment(endTime);
