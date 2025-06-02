@@ -28,6 +28,7 @@ export interface IEmployeeRequest {
   designation: string,
   department: string,
   subDepartment: string
+  accountInfo: IAccountInfo,
 }
 
 export interface IAddress {
@@ -37,4 +38,11 @@ export interface IAddress {
   state: string;
   country: string;
   zipCode: string;
+}
+
+export interface IAccountInfo {
+  bankName: string;
+  accountHolderName: string;
+  accountNumber: string;
+  ifscCode: string;
 }

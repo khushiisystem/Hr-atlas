@@ -22,17 +22,14 @@
     <!-- <div class="searchInput ion-padding-horizontal ion-margin-top" style="background-color: #fff;">
       <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()" legacy="false" [color]="'light'"></ion-input>
     </div> -->
-  
+
     <ion-list *ngIf="isDataLoaded" [inset]="true" mode="md">
       <ion-item lines="inset" [button]="true" [detail]="false" type="button" mode="md" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="selectEmployee(employee)">
         <ion-avatar class="employee_img" slot="start" mode="md">
           <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
           <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl" />
         </ion-avatar>
-        <!-- <div class="employee_data"> -->
           <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-          <!-- <ion-text class="role" *ngIf="employee.employeeWorkDetails"><small>{{employee.employeeWorkDetails.jobTitle | titlecase}}</small></ion-text> -->
-        <!-- </div> -->
         <ion-button fill="solid" mode="ios" [color]="getStatus(employee.guid) === 'Absent' ? 'danger' : 'success'" slot="end" shape="round" class="statusBtn" *ngIf="attendanceLoaded">{{getStatus(employee.guid).slice(0,1)}}</ion-button>
         <ion-thumbnail slot="end" *ngIf="!attendanceLoaded" class="skeleton_thumb">
           <ion-skeleton-text [animated]="true"></ion-skeleton-text>
@@ -40,13 +37,15 @@
       </ion-item>
     </ion-list>
 
-    <div class="ion-padding ion-text-center" *ngIf="employeeList.length < 1 || attendanceList.length === 0" style="background-color: #fff;">
+    <div class="ion-padding ion-text-center" *ngIf="employeeList.length < 1 || attendanceList.length === 0"
+      style="background-color: #fff;">
       <ion-spinner name="crescent" color="tertiary" *ngIf="!isDataLoaded"></ion-spinner>
       <ion-text *ngIf="isDataLoaded && employeeList.length < 1">Data not found</ion-text>
     </div>
   </div>
 
   <ion-infinite-scroll #infiniteScroll (ionInfinite)="loadData($any($event))" [position]="'bottom'">
-    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data..."></ion-infinite-scroll-content>
+    <ion-infinite-scroll-content loadingSpinner="bubbles"
+      loadingText="Loading more data..."></ion-infinite-scroll-content>
   </ion-infinite-scroll>
 </ion-content>
