@@ -123,4 +123,9 @@ ion-modal ion-toolbar {
     --padding-bottom: var(--ion-padding, 0);
     padding-bottom: var(--ion-padding, 10px);
 }
-  
+
+.clock-status-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

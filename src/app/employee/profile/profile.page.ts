@@ -21,7 +21,7 @@ export class ProfilePage implements OnInit {
   employeeDetail!: IEmployeeResponse;
   workDetail!: IEmployeeWrokResponse;
   workWeekDetail!: IEmplpoyeeWorWeek;
-  activeTab: string[] = ["experience", "Personal", "Employment", "workWeek", "Contact", "Address", "Social_info"];
+  activeTab: string[] = ["experience","Account", "Personal", "Employment", "workWeek", "Contact", "Address", "Social_info"];
   weekArray: string[] = [];
   offDays: string[] = [];
   dataLoaded: boolean = false;

@@ -18,7 +18,6 @@
       *ngIf="(userRole === 'Employee' && !isWeekOff && !regularization?.status ) && ( attendanceData.status === 'Absent'  ||  (attendanceData.status === 'Leave' && leaveStartDay === 'Half Day'))"
       class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
     <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="triggerModal()">Regularization</ion-chip> -->
-
   </ion-card-header>
 
   <ion-card-content [class.show]="openCard && isAllGood && !isWeekOff">
@@ -47,6 +46,14 @@
         </tr>
       </tbody>
     </table>
+
+    <div *ngIf="attendanceData.attendanceData.length > 0" class="clock-status-container">
+      <ion-text [color]="calculateClockInStatus().status">{{calculateClockInStatus().string}}</ion-text>
+      <ion-text *ngIf="clockOutStatus.status" [color]="clockOutStatus.status">
+  {{clockOutStatus.string}}
+</ion-text>
+    </div>
+
     <div *ngIf="attendanceData.leaveData != null">
       <div class="ion-margin-top leaveDate">
         <ion-label color="tertiary" class="ion-text-wrap" *ngIf="attendanceData.leaveData.startDate">
@@ -69,7 +76,8 @@
       </p> -->
       <ion-text *ngIf="attendanceData.leaveData.isUnplanned" color="warning">Unplanned leave</ion-text>
       <p class="purpose">
-        <b>Leave Purpose : </b><read-more-text [textString]="attendanceData.leaveData.purpose" [maxLength]="100"></read-more-text>
+        <b>Leave Purpose : </b><read-more-text [textString]="attendanceData.leaveData.purpose"
+          [maxLength]="100"></read-more-text>
       </p>
       <div class="ion-text-end">
         <ion-chip style="cursor: default;"
@@ -120,7 +128,8 @@
           <h2>Description: {{regularization.description}}</h2>
         </ion-text>
         <ion-text>
-          <h2><b>Status: </b><span [ngClass]="getStatusClass(regularization.status)">{{regularization.status}}</span></h2>
+          <h2><b>Status: </b><span [ngClass]="getStatusClass(regularization.status)">{{regularization.status}}</span>
+          </h2>
         </ion-text>
       </div>
       <div class="regBtn" *ngIf="userRole === 'Admin' || userRole === 'HR'">

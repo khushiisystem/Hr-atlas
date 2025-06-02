@@ -22,7 +22,7 @@ export class AdminProfilePage implements OnInit {
   adminDetail!: IEmployeeResponse;
   workDetail!: IEmployeeWrokResponse;
   workWeekDetail!: IEmplpoyeeWorWeek;
-  activeTab: string[] = ["Personal", "Employment", "workWeek", "Contact", "Address", "Social_info", "Settings"];
+  activeTab: string[] = ["Personal", "Employment", "workWeek", "Contact", "Address", "Account", "Social_info", "Settings"];
   dataLoaded: boolean = false;
   workLoaded: boolean = false;
   randomList: any[] = [];
