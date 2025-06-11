@@ -83,7 +83,7 @@ export class SalarySetupPage implements OnInit {
       }
     }, (error) => {
       this.isInProcess = false;
-      this.shareServ.presentToast(error.error.Message, "top", "danger");
+      // this.shareServ.presentToast(error.error.Message, "top", "danger");
     });
   }
 

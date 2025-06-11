@@ -191,13 +191,13 @@ export class TimeSheetPage implements OnInit {
       startTime.toString(),
       endTime.toString()
     );
-    if (totalTimeDuration / 3600000 > 9) {
-      this.timesheetTimeError = "Total time must be less than 9 hours";
-      return;
-    }
+    // if (totalTimeDuration / 3600000 > 9) {
+    //   this.timesheetTimeError = "Total time must be less than 9 hours";
+    //   return;
+    // }
 
     let totaltimeofalltimesheet = +this.calculateTotalWork().split("h")[0];
-    if (totalTimeDuration / 3600000 + totaltimeofalltimesheet > 9) {
+    if (totalTimeDuration / 3600000 + totaltimeofalltimesheet > 24) {
       this.timesheetTimeError =
         "Total time of all timesheet must be less than 9 hours";
       return;
