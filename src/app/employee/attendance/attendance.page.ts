@@ -27,6 +27,7 @@ export enum ERegularization {
   PENDING = "Pending",
   REJECT = "Reject",
   ACCEPT = "Accept",
+  REVIEW = "Review",
 }
 
 export interface IHighlightedDate {
@@ -139,29 +140,6 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       this.getCalendar();
     }
   }
-
-  // getAttendance() {
-  //   this.apiSubscription = this.shareServ.todayAttendance().subscribe((res) => {
-  //     if (res) {
-  //       let date = new Date(Date.now());
-  //       this.dateList.forEach((item) => {
-  //         let checkDate = new Date(item.created_date);
-  //         if (checkDate.getDate() === date.getDate()) {
-  //           // console.log("item check : ", item);
-  //           for (let e of res) {
-  //             let resDate = new Date(e.clockIn);
-  //             if (resDate.getDate() === date.getDate()) {
-  //               // console.log("res check : ", e);
-  //               // item.attendanceData.push(e);
-  //               // item.status = e.status;
-  //             }
-  //           }
-  //         }
-  //       });
-  //       // console.log("date check : ", date.getDate());
-  //     }
-  //   });
-  // }
 
   getAppliedLeaves() {
     // console.log("leaves logs : ",this.leaveLogs);
@@ -319,18 +297,15 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
                   )
                 ) {
                   item.attendanceData = [...item.attendanceData, e];
-                  item.status = this.updateStatus(
-                    item.attendanceData,
-                    e.status
-                  );
-                  if (
-                    item.status === AttendaceStatus.PRESENT &&
-                    e.status !== AttendaceStatus.ABSENT
-                  ) {
+                  if (item.status === AttendaceStatus.PRESENT) {
                   } else {
                     item.status = e.status;
-                  }
-                  // console.log(item.created_date, item.status, e.status);
+                    // console.log(item.created_date, item.status, e.status);
+                    item.status = this.updateStatus(
+                      item.attendanceData,
+                    e.status
+                  );
+                }
                   item.created_date = new Date(e.clockIn).toISOString();
                 }
 
@@ -395,32 +370,45 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     // console.log(attendanceData);
     const firstDataDate = new Date(attendanceData[0].clockIn);
     const updatedDate = new Date(this.today);
-    updatedDate.setHours(0, 0, 1);
-    if (firstDataDate < updatedDate) {
-      let totalDurationMs = 0;
-      attendanceData.forEach(
-        (item: { clockIn: string; clockOut: string | null }) => {
-          const durationMs = this.calculateDuration(
-            item.clockIn,
-            item.clockOut
-          );
-          totalDurationMs += durationMs;
-        }
-      );
-      const isSaturday = firstDataDate.getDay() === 6;
-      if (isSaturday && totalDurationMs >= 18000000) {
-        return AttendaceStatus.PRESENT;
-      } else if (totalDurationMs >= 28800000) {
-        return AttendaceStatus.PRESENT;
-      } else {
-        return totalDurationMs < 18000000
-          ? AttendaceStatus.ABSENT
-          : totalDurationMs >= 18000000 && totalDurationMs < 28800000
-          ? AttendaceStatus.HALF_DAY
-          : currentStatus;
-      }
-    } else {
+
+    const clockInDate = new Date(attendanceData[0].clockIn);
+    const todayDate = new Date(this.today);
+
+    // Strip the time part
+    clockInDate.setHours(0, 0, 0, 0);
+    todayDate.setHours(0, 0, 0, 0);
+
+    if (clockInDate.getTime() === todayDate.getTime()) {
+      // Dates match
       return currentStatus;
+    } else {
+      updatedDate.setHours(0, 0, 1);
+      if (firstDataDate < updatedDate) {
+        let totalDurationMs = 0;
+        attendanceData.forEach(
+          (item: { clockIn: string; clockOut: string | null }) => {
+            const durationMs = this.calculateDuration(
+              item.clockIn,
+              item.clockOut
+            );
+            totalDurationMs += durationMs;
+          }
+        );
+        const isSaturday = firstDataDate.getDay() === 6;
+        if (isSaturday && totalDurationMs >= 18000000) {
+          return AttendaceStatus.PRESENT;
+        } else if (totalDurationMs >= 28800000) {
+          return AttendaceStatus.PRESENT;
+        } else {
+          return totalDurationMs < 18000000
+            ? AttendaceStatus.ABSENT
+            : totalDurationMs >= 18000000 && totalDurationMs < 28800000
+            ? AttendaceStatus.HALF_DAY
+            : currentStatus;
+        }
+      } else {
+        return currentStatus;
+      }
     }
 
     // if(firstDataDate < updatedDate){

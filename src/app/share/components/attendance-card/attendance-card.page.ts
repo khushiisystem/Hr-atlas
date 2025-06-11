@@ -82,6 +82,11 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   @Output() regularizationUpdated: EventEmitter<void> =
     new EventEmitter<void>();
   isDisable: boolean = false;
+  clockInStatus: { status: string; str: string } = { status: "", str: "" };
+  clockOutStatus: { status: string | boolean; str: string } = {
+    status: false,
+    str: "",
+  };
 
   constructor(
     private rolseStateServ: RoleStateService,
@@ -110,16 +115,33 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       ?.valueChanges.subscribe(() => this.calculateTotalTime());
   }
 
-  calculateClockInStatus(): { status: string; string: string } {
+  getClockInStatus() {
+    if (!this.attendanceData.attendanceData) return;
+    this.clockInStatus = this.calculateClockInStatus();
+  }
+
+  calculateClockInStatus(): { status: string; str: string } {
     // Find the earliest clock-in time
+    if (
+      this.attendanceData.status !== "Present" ||
+      !this.attendanceData.attendanceData
+    ) {
+      return { status: "", str: "" };
+    }
+
     const earliestClockIn = this.attendanceData.attendanceData.reduce(
-      (earliest, current) =>
-        current.clockIn < earliest ? current.clockIn : earliest,
-      this.attendanceData.attendanceData[0].clockIn
+      (earliest, current) => {
+        if (!current.clockIn) return earliest;
+
+        const currentClockIn = new Date(current.clockIn);
+        const earliestClockIn = new Date(earliest.clockIn);
+        if (!earliest) return currentClockIn;
+
+        return currentClockIn < earliestClockIn ? current : earliest;
+      }
     );
 
-    const clockInDate = new Date(earliestClockIn);
-
+    const clockInDate = new Date(earliestClockIn.clockIn);
     // Create reference times for the same date
     const tenAM = new Date(
       clockInDate.getFullYear(),
@@ -148,22 +170,22 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     if (clockInDate <= tenFifteenAM) {
       return {
         status: "success",
-        string: `On Time : ${timeString}`,
+        str: `On Time : ${timeString}`,
       };
     } else {
       const diffMs = clockInDate.getTime() - tenFifteenAM.getTime();
       const diffMin = Math.ceil(diffMs / 60000); // Use ceil for more accurate "late by" calculation
       return {
         status: "danger",
-        string: `Late : ${timeString}`,
+        str: `Late : ${timeString}`,
       };
     }
   }
 
-  calculateClockOutStatus(): { status: boolean | string; string: string } {
+  calculateClockOutStatus(): { status: boolean | string; str: string } {
     // Early return if no attendance data
     if (!this.attendanceData?.attendanceData?.length) {
-      return { status: false, string: "" };
+      return { status: false, str: "" };
     }
 
     const today = new Date();
@@ -188,7 +210,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
 
     // Return early if no valid clock out found
     if (!latestClockOut) {
-      return { status: false, string: "" };
+      return { status: false, str: "" };
     }
 
     const clockOutDate = new Date(latestClockOut);
@@ -198,37 +220,50 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     clockOutDay.setHours(0, 0, 0, 0);
 
     if (clockOutDay.getTime() === today.getTime()) {
-      console.log("check late by");
-      return { status: false, string: "" };
+      // console.log("check late by");
+      return { status: false, str: "" };
     }
 
     // Determine required hours based on day of week
     const dayOfWeek = clockOutDate.getDay();
     const requiredHours = dayOfWeek === 6 ? 5 : 9; // Saturday: 5hrs, Others: 9hrs
 
-    // Safely parse work duration with regex
-    const workDurationMatch =
-      this.workDurationString?.match(/(\d+(?:\.\d+)?)h/);
-    const workedHours = workDurationMatch
-      ? parseFloat(workDurationMatch[1])
-      : 0;
+    const durationStr = this.workDurationString || "";
 
-    // Check if worked hours meet requirement
-    if (workedHours < requiredHours) {
-      const timeString = clockOutDate.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
+    // Match hours, minutes, and seconds from the string
+    const hoursMatch = durationStr.match(/(\d+(?:\.\d+)?)h/);
+    const minutesMatch = durationStr.match(/(\d+(?:\.\d+)?)m/);
+    const secondsMatch = durationStr.match(/(\d+(?:\.\d+)?)s/);
+
+    // Convert all to minutes
+    const hours = hoursMatch ? parseFloat(hoursMatch[1]) * 60 : 0;
+    const minutes = minutesMatch ? parseFloat(minutesMatch[1]) : 0;
+    const seconds = secondsMatch ? parseFloat(secondsMatch[1]) / 60 : 0;
+
+    // Total worked time in minutes
+    const workedMinutes = hours + minutes + seconds;
+
+    // Compare with required time (assume requiredMinutes is in minutes)
+    if (workedMinutes < requiredHours * 60) {
+      const remainingMinutes = requiredHours * 60 - workedMinutes;
+      const remHours = Math.floor(remainingMinutes / 60);
+      const remMins = Math.round(remainingMinutes % 60);
+
+      const timeString = [
+        remHours > 0 ? `${remHours}h` : "",
+        remMins > 0 ? `${remMins}m` : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
 
       return {
         status: "danger",
-        string: `Early: ${timeString}`,
+        str: `Early: ${timeString}`,
       };
     }
 
     // Default return - requirements met
-    return { status: false, string: "" };
+    return { status: false, str: "" };
   }
 
   calculateTotalTime() {
@@ -246,8 +281,8 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   }
 
   // Add this getter to your component
-  get clockOutStatus() {
-    return this.calculateClockOutStatus();
+  getClockOutStatus() {
+    this.clockOutStatus = this.calculateClockOutStatus();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -263,6 +298,8 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.updateStatus();
+    this.getClockInStatus();
+    this.getClockOutStatus();
   }
 
   get userRole() {
@@ -397,7 +434,11 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     this.isDisable = true;
     const data: IApproveRegularizationReq = {
       status:
-        status === "accept" ? ERegularization.ACCEPT : ERegularization.REJECT,
+        status === "accept"
+          ? ERegularization.ACCEPT
+          : status === "review"
+          ? ERegularization.REVIEW
+          : ERegularization.REJECT,
       regulariztinGuid: guid,
     };
     this._shareServ.approveRegularization(data).subscribe((res) => {
@@ -487,6 +528,8 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       ? "status-accept"
       : status === "Reject"
       ? "status-reject"
+      : status === "Review"
+      ? "status-review"
       : "";
   }
 }

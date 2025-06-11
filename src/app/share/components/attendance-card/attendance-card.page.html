@@ -48,10 +48,10 @@
     </table>
 
     <div *ngIf="attendanceData.attendanceData.length > 0" class="clock-status-container">
-      <ion-text [color]="calculateClockInStatus().status">{{calculateClockInStatus().string}}</ion-text>
+      <ion-text [color]="clockInStatus.status">{{clockInStatus.str}}</ion-text>
       <ion-text *ngIf="clockOutStatus.status" [color]="clockOutStatus.status">
-  {{clockOutStatus.string}}
-</ion-text>
+        {{clockOutStatus.str}}
+      </ion-text>
     </div>
 
     <div *ngIf="attendanceData.leaveData != null">
@@ -103,7 +103,7 @@
           <h2>Name: {{regularization.user.firstName}} {{regularization!.user!.lastName}}</h2>
         </ion-text> -->
         <ion-button size="small"
-          *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'  && regularization.status ==='Pending'"
+          *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'  && regularization.status ==='Pending' || regularization.status ==='Review'"
           (click)="handleModalAction(regularization);"><ion-icon name="create-outline"
             id="open-modal"></ion-icon></ion-button>
         <!-- <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && regularization.status ==='Pending'" (click)="triggerModal(regularization);"><ion-icon name="create-outline" id="open-modal"></ion-icon></ion-button -->
@@ -136,6 +136,9 @@
         <ion-chip color="success" class="ion-no-margin ion-text-center btnChip ion-margin-end"
           *ngIf="regularization.status === 'Pending'"
           (click)="approveReject('accept', regularization.guid)">Approve</ion-chip>
+        <ion-chip color="primary" class="ion-no-margin ion-text-center btnChip ion-margin-end"
+          *ngIf="regularization.status === 'Pending'"
+          (click)="approveReject('review', regularization.guid)">Review</ion-chip>
         <ion-chip color="danger" class="ion-no-margin ion-text-center btnChip"
           *ngIf="regularization.status === 'Pending'"
           (click)="approveReject('reject', regularization.guid)">Reject</ion-chip>
