@@ -25,6 +25,11 @@ export class AdminService {
     getEmployees(empType: 'All' | 'Active' | 'InActive' | 'Resigned' | 'Both', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]> {
         return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}`);
     }
+
+    getPayrollEmployees(empType: 'All' | 'Active' | 'InActive' | 'Resigned' | 'Both', pageIndex: number, pageSize: number, date: any): Observable<IEmployeeResponse[]> {
+        return this.http.get<IEmployeeResponse[]>(environment.Api + `api/payrollHistory/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}&date=${date}`);
+    }
+
     addEmployees(employeeData: IEmployeeRequest): Observable<IEmployeeResponse> {
         return this.http.post<IEmployeeResponse>(environment.Api + `api/user`, employeeData);
     }

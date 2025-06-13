@@ -450,7 +450,8 @@ export class TimeSheetPage implements OnInit {
             // Convert startTime & endTime to IST and format to HH:mm AM/PM
             const start = new Date(timesheet.startTime);
             const end = new Date(timesheet.endTime);
-            const date = new Date(timesheet.date).toDateString();
+            // const date = new Date(timesheet.date).toDateString();
+            const date = moment(timesheet.date).format('YYYY-MM-DD')
 
             const options: Intl.DateTimeFormatOptions = {
               hour: "2-digit",
@@ -472,7 +473,7 @@ export class TimeSheetPage implements OnInit {
               totalTime: formattedTotalTime,
               date,
             };
-          });
+          }).sort((a: ITimesheet, b: ITimesheet) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
           this.allTimeSheetOfMonth.forEach((timesheet) => {
             if (!this.projectList.includes(timesheet.project.title)) {

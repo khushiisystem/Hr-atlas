@@ -56,7 +56,7 @@
       </ion-content>
     </ng-template>
   </ion-modal>
-
+ 
 
   <div class="ion-text-center ion-margin" *ngIf="!isDataLoaded">
     <ion-spinner color="primary" name="circular"></ion-spinner>
@@ -68,7 +68,7 @@
     </ion-item>
 
     <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="isChecklist ? null : selectEmployee(employee)">
-      <div slot="start" class="check_container" (click)="checkEmployee(employee.guid)">
+      <div slot="start" class="check_container" (click)="checkEmployee(employee.guid, employee.salaryStatus)">
         <ion-avatar class="employee_img">
           <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
           <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl" />
@@ -80,6 +80,10 @@
       <div class="employee_data" (click)="!isChecklist ? null : selectEmployee(employee)">
         <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
         <ion-text class="role" *ngIf="employee"><small>{{employee.jobTitle}}</small></ion-text>
+      </div>
+      <div *ngIf="!employee.salaryStatus && payrollSetup">
+         <ion-icon name="alert-circle" color="primary"></ion-icon>
+          <!-- <ion-icon name="warning" color="primary"></ion-icon> -->
       </div>
     </ion-item>
   </ion-list>

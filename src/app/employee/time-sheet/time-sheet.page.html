@@ -295,17 +295,15 @@
         </div>
 
         <ion-card>
-          <ion-card-content>
+          <ion-card-content style="margin: 0; padding: 0;">
             <div class="table-container">
               <table style="table-layout: fixed; width: 100%;">
                 <thead>
                   <tr>
-                    <th style="width: 100px;">Employee</th>
-                    <th style="width: 100px;">Project</th>
-                    <th style="width: 60px;">Tag</th>
-                    <th style="width: 140px;">Date</th>
-                    <th style="width: 95px;">Start Time</th>
-                    <th style="width: 90px;">End Time</th>
+                    <th style="width: 150px">Employee</th>
+                    <th style="width: 150px;">Project</th>
+                    <th style="width: 200px;">Tag</th>
+                    <th style="width: 100px;">Date</th>
                     <th style="width: 80px;">Hours</th>
                     <th style="width: 80px;">Status</th>
                   </tr>
@@ -316,8 +314,6 @@
                     <td>{{ entry?.project?.title }}</td>
                     <td>{{ entry?.tag }}</td>
                     <td>{{ entry?.date }}</td>
-                    <td>{{ entry?.startTime }}</td>
-                    <td>{{ entry?.endTime }}</td>
                     <td>{{ entry?.totalTime }}</td>
                     <td>{{ entry?.status }}</td>
                   </tr>

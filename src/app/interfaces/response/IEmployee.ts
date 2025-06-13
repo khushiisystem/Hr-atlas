@@ -6,6 +6,7 @@ export interface IEmployeeResponse extends IGeneric, IEmployeeRequest {
     employeeId: string;
     effectiveWorkweekDate: string | Date;
     workWeek: string;
+    salaryStatus?: boolean;
     // employeeWorkDetails: {
     //     employeeType: string,
     //     status: string,
