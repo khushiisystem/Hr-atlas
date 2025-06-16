@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
 
-  Api: 'http://192.168.1.20:5274/'
-  // Api: 'http://192.168.1.32:5274/'
+  // Api: 'http://192.168.1.20:5274/'
+  Api: 'http://192.168.1.32:5274/'
   // Api: 'http://localhost:5274/'
   // Api: 'http://192.168.1.31:5274/'
 };
@@ -19,3 +19,4 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+   

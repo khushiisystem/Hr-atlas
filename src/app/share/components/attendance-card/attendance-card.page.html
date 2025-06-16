@@ -9,15 +9,9 @@
           style="vertical-align: middle; margin-right: 5px;"></ion-icon>{{workDurationString}}</ion-note>
     </div>
 
-    <!-- <ion-button [shape]="'round'" [mode]="'ios'" [size]="'small'" [fill]="'clear'" [color]="'medium'" *ngIf="attendanceData.attendanceData.length > 0 || attendanceData.leaveData != null" class="expandBtn">
-      <ion-icon [name]="openCard ? 'chevron-up-outline' : 'chevron-down-outline'" slot="icon-only" [size]="'small'"></ion-icon>
-    </ion-button> -->
-
-    <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" (click)="markPresent($event)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip> -->
     <ion-chip color="tertiary"
       *ngIf="(userRole === 'Employee' && !isWeekOff && !regularization?.status ) && ( attendanceData.status === 'Absent'  ||  (attendanceData.status === 'Leave' && leaveStartDay === 'Half Day'))"
       class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
-    <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="triggerModal()">Regularization</ion-chip> -->
   </ion-card-header>
 
   <ion-card-content [class.show]="openCard && isAllGood && !isWeekOff">

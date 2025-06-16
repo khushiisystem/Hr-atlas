@@ -141,6 +141,10 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     }
   }
 
+  getNewAttendance() {
+    // this.dateList.forEach((e) => console.log(e.status, e.created_date));
+  }
+
   getAppliedLeaves() {
     // console.log("leaves logs : ",this.leaveLogs);
     let count = 0;
@@ -303,9 +307,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
                     // console.log(item.created_date, item.status, e.status);
                     item.status = this.updateStatus(
                       item.attendanceData,
-                    e.status
-                  );
-                }
+                      e.status
+                    );
+                  }
                   item.created_date = new Date(e.clockIn).toISOString();
                 }
 
@@ -354,6 +358,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
 
           this.attendanceLoaded = true;
           this.loader.dismiss();
+          this.getNewAttendance();
         },
         (error) => {
           this.attendanceLoaded = true;

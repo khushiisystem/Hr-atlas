@@ -23,7 +23,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-datetime presentation="date-month-year" color="tertiary" size="cover" mode="md" #yearMonth [(ngModel)]="payrollDate" [max]="today.toISOString()" (ngModelChange)="getPayStructure();">
+      <ion-datetime presentation="date" color="tertiary" size="cover" mode="md" #yearMonth [(ngModel)]="payrollDate" [max]="today.toISOString()" (ngModelChange)="getPayStructure();">
         <ion-buttons slot="buttons">
           <ion-button mode="ios" [strong]="true" color="danger" (click)="yearMonth.cancel(); dateModal.dismiss();">Cancel</ion-button>
           <ion-button mode="ios" [strong]="true" color="primary" [disabled]="!payrollDate" (click)="yearMonth.confirm(); dateModal.dismiss();">Done</ion-button>
@@ -34,7 +34,7 @@
 </ion-modal>
 
 <div [ngSwitch]="activeTab" #tabsContent style="flex: 1;">
-  <div *ngSwitchCase="'earning'">
+  <div *ngSwitchCase="'earning'"> 
     <form [formGroup]="extraIncomeForm">
       <ion-list inset="true" mode="ios">
         <ion-item mode="ios" detail="false">
