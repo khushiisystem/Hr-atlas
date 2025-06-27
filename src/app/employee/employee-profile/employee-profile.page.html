@@ -162,7 +162,7 @@
           color="medium"></ion-icon>
         <ion-label class="ion-text-wrap">
           <!-- <p>Bank Name</p> -->
-          <h2>{{ employeeDetail.accountInfo.bankName || '-' }}</h2>
+          <h2>{{ employeeDetail.accountInfo?.bankName || '-' }}</h2>
         </ion-label>
       </ion-item>
 
@@ -172,7 +172,7 @@
           color="medium"></ion-icon>
         <ion-label class="ion-text-wrap">
           <p>Account Holder Name</p>
-          <h2>{{ employeeDetail.accountInfo.accountHolderName || '-' }}</h2>
+          <h2>{{ employeeDetail.accountInfo?.accountHolderName || '-' }}</h2>
         </ion-label>
       </ion-item>
 
@@ -182,7 +182,7 @@
           color="medium"></ion-icon>
         <ion-label class="ion-text-wrap">
           <p>Account Number</p>
-          <h2>{{ employeeDetail.accountInfo.accountNumber || '-' }}</h2>
+          <h2>{{ employeeDetail.accountInfo?.accountNumber || '-' }}</h2>
         </ion-label>
       </ion-item>
 
@@ -192,7 +192,7 @@
           color="medium"></ion-icon>
         <ion-label class="ion-text-wrap">
           <p>IFSC Code</p>
-          <h2>{{ employeeDetail.accountInfo.ifscCode || '-' }}</h2>
+          <h2>{{ employeeDetail.accountInfo?.ifscCode || '-' }}</h2>
         </ion-label>
       </ion-item>
     </ion-list>
@@ -302,6 +302,13 @@
           <ion-label class="ion-text-wrap">
             <p>Joining Date</p>
             <h2>{{workDetail.joiningDate | date}}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="workDetail.resignationDate" mode="ios" detail="false" class="settingBtns_item">
+          <ion-icon name="calendar-number" size="small" color="medium" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <p>Resignation Date</p>
+            <h2>{{workDetail.resignationDate | date}}</h2>
           </ion-label>
         </ion-item>
         <ion-item mode="ios" detail="false" class="settingBtns_item">

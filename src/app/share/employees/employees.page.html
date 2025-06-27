@@ -1,21 +1,28 @@
-<div class="container ion-padding-top"  *ngIf="userRole === 'Admin'">
+<div class="container ion-padding-top" *ngIf="userRole === 'Admin'">
   <div class="stickyTop ion-padding-bottom">
     <div class="optbar">
       <ion-item detail="false" lines="none" mode="md">
         <ion-icon name="search" aria-hidden="true" size="small" slot="start" class="startIcon"></ion-icon>
-        <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+        <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true"
+          [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
       </ion-item>
-      <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="optionPop" class="ion-margin-start ion-no-padding" *ngIf="userRole === 'Admin'">
+      <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="optionPop"
+        class="ion-margin-start ion-no-padding" *ngIf="userRole === 'Admin'">
         <ion-icon name="funnel" aria-hidden="true" aria-label="Option"></ion-icon>
       </ion-button>
     </div>
-    <ion-popover trigger="optionPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter" *ngIf="userRole === 'Admin'">
+    <ion-popover trigger="optionPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter"
+      *ngIf="userRole === 'Admin'">
       <ng-template>
         <ion-content>
           <!-- <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item> -->
           <!-- <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item> -->
-          <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
-          <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Resigned' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Resigned')">Resigned</ion-item>
+          <ion-item lines="none" detail="false" type="button" button="true"
+            [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios"
+            (click)="getTypedEmployee('Active')">Active</ion-item>
+          <ion-item lines="none" detail="false" type="button" button="true"
+            [color]="empType === 'Resigned' ? 'tertiary' : ''" mode="ios"
+            (click)="getTypedEmployee('Resigned')">Resigned</ion-item>
         </ion-content>
       </ng-template>
     </ion-popover>
@@ -28,14 +35,17 @@
         <ion-icon slot="end" color="tertiary" name="calendar-number-outline"></ion-icon>
       </ion-item>
     </ion-list> -->
-    
+
     <div class="optbar btns" *ngIf="(isChecklist || isPayroll) && employeeList.length > 0 && empType != 'InActive'">
-      <ion-chip mode="ios" [ngClass]="selectedEmployee.length > (employeeList.length-1) ? 'chipBtn filled' : 'chipBtn'" color="tertiary" aria-label="mark all" *ngIf="isChecklist" (click)="allSelect()">
+      <ion-chip mode="ios" [ngClass]="selectedEmployee.length > (employeeList.length-1) ? 'chipBtn filled' : 'chipBtn'"
+        color="tertiary" aria-label="mark all" *ngIf="isChecklist" (click)="allSelect()">
         <ion-icon name="checkmark" aria-hidden="true" aria-label="mark all"></ion-icon>
         <ion-label>Mark All</ion-label>
       </ion-chip>
-      <ion-chip mode="ios" class="chipBtn" color="tertiary" [disabled]="selectedEmployee.length == 0" (click)="deselectAll()">Unmark All</ion-chip>
-      <ion-button mode="md" color="tertiary" class="" fill="solid" shape="round" size="small" *ngIf="isPayroll" (click)="openCalendar = true">
+      <ion-chip mode="ios" class="chipBtn" color="tertiary" [disabled]="selectedEmployee.length == 0"
+        (click)="deselectAll()">Unmark All</ion-chip>
+      <ion-button mode="md" color="tertiary" class="" fill="solid" shape="round" size="small" *ngIf="isPayroll"
+        (click)="openCalendar = true">
         <ion-label>{{payslipDate | date:'MMM, y'}}</ion-label>
         <ion-icon slot="end" name="calendar-number-outline"></ion-icon>
       </ion-button>
@@ -43,20 +53,23 @@
   </div>
 
 
-  <ion-modal [isOpen]="openCalendar" #dateModal [initialBreakpoint]=".65" [keepContentsMounted]="true" mode="ios" [backdropDismiss]="false" [showBackdrop]="true" (didDismiss)="openCalendar = false;">
+  <ion-modal [isOpen]="openCalendar" #dateModal [initialBreakpoint]=".65" [keepContentsMounted]="true" mode="ios"
+    [backdropDismiss]="false" [showBackdrop]="true" (didDismiss)="openCalendar = false;">
     <ng-template>
       <ion-content>
-        <ion-datetime presentation="month-year" size="cover" mode="md" [firstDayOfWeek]="1" #yearMonth [max]="today.toISOString()" (ionChange)="selectPayslipDate($any($event))">
+        <ion-datetime presentation="month-year" size="cover" mode="md" [firstDayOfWeek]="1" #yearMonth
+          [max]="today.toISOString()" (ionChange)="selectPayslipDate($any($event))">
           <ion-label slot="title">Select Year and Month</ion-label>
           <ion-buttons slot="buttons">
             <ion-button mode="md" color="danger" (click)="yearMonth.cancel();dateModal.dismiss()">Cancel</ion-button>
-            <ion-button mode="md" color="primary" [disabled]="!payslipDate" (click)="yearMonth.confirm();dateModal.dismiss();">Done</ion-button>
+            <ion-button mode="md" color="primary" [disabled]="!payslipDate"
+              (click)="yearMonth.confirm();dateModal.dismiss();">Done</ion-button>
           </ion-buttons>
         </ion-datetime>
       </ion-content>
     </ng-template>
   </ion-modal>
- 
+
 
   <div class="ion-text-center ion-margin" *ngIf="!isDataLoaded">
     <ion-spinner color="primary" name="circular"></ion-spinner>
@@ -67,10 +80,12 @@
       <ion-label class="ion-text-center">No any employee.</ion-label>
     </ion-item>
 
-    <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="isChecklist ? null : selectEmployee(employee)">
+    <ion-item [button]="true" [detail]="false" class="list-item" *ngFor="let employee of employeeList; index as i;"
+      (click)="isChecklist ? null : selectEmployee(employee)">
       <div slot="start" class="check_container" (click)="checkEmployee(employee.guid, employee.salaryStatus)">
         <ion-avatar class="employee_img">
-          <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+          <app-name-img [name]="getName(employee)" [classes]="'sm'"
+            *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
           <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl" />
         </ion-avatar>
         <div class="custom_checkbox" *ngIf="isChecklist && isChecked(employee.guid)">
@@ -82,8 +97,13 @@
         <ion-text class="role" *ngIf="employee"><small>{{employee.jobTitle}}</small></ion-text>
       </div>
       <div *ngIf="!employee.salaryStatus && payrollSetup">
-         <ion-icon name="alert-circle" color="primary"></ion-icon>
-          <!-- <ion-icon name="warning" color="primary"></ion-icon> -->
+        <ion-icon name="alert-circle" color="primary"></ion-icon>
+        <!-- <ion-icon name="warning" color="primary"></ion-icon> -->
+      </div>
+      <div *ngIf="payrollSetup" (click)="naviagateToPayslip(employee.guid)">
+        <ion-button fill="clear" class="custom-arrow-button">
+          <ion-icon name="chevron-forward" class="arrow-icon"></ion-icon>
+        </ion-button>
       </div>
     </ion-item>
   </ion-list>
@@ -96,5 +116,6 @@
 </ion-infinite-scroll>
 
 <div *ngIf="isPayroll && selectedEmployee.length > 0" class="footer">
-  <ion-button mode="md" type="button" color="primary" size="large" expand="block" shape="round" class="ion-margin-horizontal sendPayBtn" (click)="generatePaySlip($event)">Generate Payslip</ion-button>
+  <ion-button mode="md" type="button" color="primary" size="large" expand="block" shape="round"
+    class="ion-margin-horizontal sendPayBtn" (click)="generatePaySlip($event)">Generate Payslip</ion-button>
 </div>

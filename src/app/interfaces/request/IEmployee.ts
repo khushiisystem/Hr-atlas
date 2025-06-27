@@ -28,7 +28,7 @@ export interface IEmployeeRequest {
   designation: string,
   department: string,
   subDepartment: string
-  accountInfo: IAccountInfo,
+  accountInfo?: IAccountInfo,
 }
 
 export interface IAddress {

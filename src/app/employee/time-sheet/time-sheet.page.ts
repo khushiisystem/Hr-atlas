@@ -17,6 +17,12 @@ import { RoleStateService } from "src/app/services/roleState.service";
 import { ShareService } from "src/app/services/share.service";
 import { TimeSheetService } from "src/app/services/time-sheet.service";
 
+import { Platform } from '@ionic/angular';
+import { Filesystem, Directory } from "@capacitor/filesystem";
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { environment } from "src/environments/environment";
+import * as mime from 'mime';
+
 export enum ETimesheet {
   PENDING = "Pending",
   REJECT = "Reject",
@@ -112,6 +118,12 @@ export class TimeSheetPage implements OnInit {
   timesheetTimeError: string = "";
   page: number = 1;
   pageSize: number = 10;
+  selectedEntry: any = null;
+  expandedRowIndex: number | null = null;
+  dateModal: boolean = false;
+
+   downloading!: boolean;
+   isCordova: boolean = true;
 
   constructor(
     private _fb: FormBuilder,
@@ -120,8 +132,11 @@ export class TimeSheetPage implements OnInit {
     private modelCtrl: ModalController,
     private roleStateServ: RoleStateService,
     private cdr: ChangeDetectorRef,
-    private shareServ: ShareService
+    private shareServ: ShareService,
+     private platform: Platform,
+        private fileOpener: FileOpener,
   ) {
+     this.isCordova = this.platform.is("mobileweb");
     this.userId = localStorage.getItem("userId") || "";
     this.roleStateServ.getState().subscribe((res) => {
       if (res) {
@@ -161,6 +176,15 @@ export class TimeSheetPage implements OnInit {
     this.getAllTimeSheetOfTheMonth();
   }
 
+  toggleDetailRow(index: number) {
+    // If clicking on the same row, close it; otherwise, open the new row
+    this.expandedRowIndex = this.expandedRowIndex === index ? null : index;
+  }
+
+  selectEntry(entry: any): void {
+    this.selectedEntry = entry;
+  }
+
   getFormGroup(ctrlName: string): FormGroup {
     return this.timeSheetForm.controls[ctrlName] as FormGroup;
   }
@@ -182,7 +206,7 @@ export class TimeSheetPage implements OnInit {
     let startTime = this.getStartTime();
     let endTime = this.getEndTime();
 
-    if (startTime >= endTime) {
+    if (startTime >= endTime && endTime) {
       this.timesheetTimeError = "End time must be greater than start time";
       return;
     }
@@ -446,34 +470,39 @@ export class TimeSheetPage implements OnInit {
       .getAllTimesheetOfMonth(this.timesheetDate)
       .subscribe((res) => {
         if (res) {
-          this.allTimeSheetOfMonth = res.map((timesheet: ITimesheet) => {
-            // Convert startTime & endTime to IST and format to HH:mm AM/PM
-            const start = new Date(timesheet.startTime);
-            const end = new Date(timesheet.endTime);
-            // const date = new Date(timesheet.date).toDateString();
-            const date = moment(timesheet.date).format('YYYY-MM-DD')
+          this.allTimeSheetOfMonth = res
+            .map((timesheet: ITimesheet) => {
+              // Convert startTime & endTime to IST and format to HH:mm AM/PM
+              const start = new Date(timesheet.startTime);
+              const end = new Date(timesheet.endTime);
+              // const date = new Date(timesheet.date).toDateString();
+              const date = moment(timesheet.date).format("YYYY-MM-DD");
 
-            const options: Intl.DateTimeFormatOptions = {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true,
-              timeZone: "Asia/Kolkata",
-            };
+              const options: Intl.DateTimeFormatOptions = {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+                timeZone: "Asia/Kolkata",
+              };
 
-            // Convert totalTime (in minutes) to "Xh Ym"
-            const totalMinutes = Number(timesheet.totalTime);
-            const hours = Math.floor(totalMinutes / 60);
-            const minutes = totalMinutes % 60;
-            const formattedTotalTime = `${hours}h ${minutes}m`;
+              // Convert totalTime (in minutes) to "Xh Ym"
+              const totalMinutes = Number(timesheet.totalTime);
+              const hours = Math.floor(totalMinutes / 60);
+              const minutes = totalMinutes % 60;
+              const formattedTotalTime = `${hours}h ${minutes}m`;
 
-            return {
-              ...timesheet,
-              startTime: start.toLocaleTimeString("en-IN", options),
-              endTime: end.toLocaleTimeString("en-IN", options),
-              totalTime: formattedTotalTime,
-              date,
-            };
-          }).sort((a: ITimesheet, b: ITimesheet) => new Date(a.date).getTime() - new Date(b.date).getTime());
+              return {
+                ...timesheet,
+                startTime: start.toLocaleTimeString("en-IN", options),
+                endTime: end.toLocaleTimeString("en-IN", options),
+                totalTime: formattedTotalTime,
+                date,
+              };
+            })
+            .sort(
+              (a: ITimesheet, b: ITimesheet) =>
+                new Date(a.date).getTime() - new Date(b.date).getTime()
+            );
 
           this.allTimeSheetOfMonth.forEach((timesheet) => {
             if (!this.projectList.includes(timesheet.project.title)) {
@@ -502,86 +531,144 @@ export class TimeSheetPage implements OnInit {
     }
   }
 
-  async download() {
-    try {
-      const response = await this.timesheetSer
-        .getDownload(this.timesheetDate)
-        .toPromise();
-      if (!response?.body) throw new Error("No file data");
-
-      const date = new Date();
-      const filename = `timesheet-${date.getDate()}-${
+  downloadReceipt(): void {
+      this.downloading = true;
+      // const mime = require('mime');
+       const date = new Date();
+      const fileName = `timesheet-${date.getDate()}-${
         date.getMonth() + 1
       }-${date.getFullYear()}.xlsx`;
-
-      // Check if running in mobile app (cordova/capacitor)
-      const isMobile = !!(window as any).cordova || !!(window as any).Capacitor;
-
-      if (isMobile) {
-        // Mobile: Save to device using File API
-        await this.saveToDevice(response.body, filename);
-      } else {
-        // Web: Standard download
-        const url = URL.createObjectURL(response.body);
-        const link = Object.assign(document.createElement("a"), {
-          href: url,
-          download: filename,
-          style: { display: "none" },
+      if (this.isCordova) {
+        this.timesheetSer
+        .getDownload(this.timesheetDate).subscribe((res: any)=> {
+          const blob = new Blob([res], { type: 'application/pdf' });
+          this.shareServ.exportFile(blob, fileName);
+          this.downloading = false;
+        }, (error) => {
+          this.downloading = false;
         });
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-      }
-    } catch (error) {
-      console.error("Download failed:", error);
-      alert("Download failed");
-    }
-  }
-
-  private async saveToDevice(blob: Blob, filename: string) {
-    return new Promise((resolve, reject) => {
-      // Use cordova file plugin if available
-      if ((window as any).resolveLocalFileSystemURL) {
-        const cordova = (window as any).cordova;
-        const directory =
-          cordova.file.externalDataDirectory || cordova.file.dataDirectory;
-
-        (window as any).resolveLocalFileSystemURL(
-          directory,
-          (dir: any) => {
-            dir.getFile(
-              filename,
-              { create: true },
-              (file: any) => {
-                file.createWriter((writer: any) => {
-                  writer.onwriteend = () => {
-                    alert(`File saved: ${filename}`);
-                    resolve(true);
-                  };
-                  writer.onerror = reject;
-                  writer.write(blob);
-                });
-              },
-              reject
-            );
-          },
-          reject
-        );
       } else {
-        // Fallback: try to trigger download anyway
-        const url = URL.createObjectURL(blob);
-        const link = Object.assign(document.createElement("a"), {
-          href: url,
-          download: filename,
-        });
-        link.click();
-        URL.revokeObjectURL(url);
-        resolve(true);
-      }
-    });
-  }
+        var url = encodeURI( environment.Api + `api/timesheet/download?date=${this.timesheetDate}`);
   
+        const downloadoption = {
+          path: `HrAtlas/${fileName}.pdf`,
+          directory: Directory.Documents,
+          url: url,
+          recursive: true
+        };
+  
+        Filesystem.downloadFile(downloadoption).then((result: any) => {
+          this.shareServ.presentToast("PaySlip Download in to Document Folder", "top", "success");
+          this.fileOpener
+          .showOpenWithDialog(
+            result.path,
+            mime.lookup(`${fileName}.pdf`)
+            )
+            .then(() => {
+              this.downloading = false;
+              // console.log("File is opened");
+            })
+            .catch((e) => {
+              console.log("Error opening file", e);
+              this.downloading = true;
+            });
+        })
+          .catch((error) => {
+            const MkdirOptions = {
+              path: `HrAtlas`,
+              directory: Directory.Documents,
+              recursive: true
+            };
+  
+            Filesystem.mkdir(MkdirOptions).then(async (result: any) => {
+              this.downloadReceipt();
+            })
+            console.log(error, "Error");
+            this.downloading = true;
+          });
+      }
+    }
+
+  // async download() {
+  //   try {
+  //     const response = await this.timesheetSer
+  //       .getDownload(this.timesheetDate)
+  //       .toPromise();
+  //     if (!response?.body) throw new Error("No file data");
+
+  //     const date = new Date();
+  //     const filename = `timesheet-${date.getDate()}-${
+  //       date.getMonth() + 1
+  //     }-${date.getFullYear()}.xlsx`;
+
+  //     // Check if running in mobile app (cordova/capacitor)
+  //     const isMobile = !!(window as any).cordova || !!(window as any).Capacitor;
+
+  //     if (isMobile) {
+  //       // Mobile: Save to device using File API
+  //       await this.saveToDevice(response.body, filename);
+  //     } else {
+  //       // Web: Standard download
+  //       const url = URL.createObjectURL(response.body);
+  //       const link = Object.assign(document.createElement("a"), {
+  //         href: url,
+  //         download: filename,
+  //         style: { display: "none" },
+  //       });
+  //       document.body.appendChild(link);
+  //       link.click();
+  //       document.body.removeChild(link);
+  //       URL.revokeObjectURL(url);
+  //     }
+  //   } catch (error) {
+  //     console.error("Download failed:", error);
+  //     alert("Download failed");
+  //   }
+  // }
+
+  // private async saveToDevice(blob: Blob, filename: string) {
+  //   return new Promise((resolve, reject) => {
+  //     // Use cordova file plugin if available
+  //     if ((window as any).resolveLocalFileSystemURL) {
+  //       const cordova = (window as any).cordova;
+  //       const directory =
+  //         cordova.file.externalDataDirectory || cordova.file.dataDirectory;
+
+  //       (window as any).resolveLocalFileSystemURL(
+  //         directory,
+  //         (dir: any) => {
+  //           dir.getFile(
+  //             filename,
+  //             { create: true },
+  //             (file: any) => {
+  //               file.createWriter((writer: any) => {
+  //                 writer.onwriteend = () => {
+      //               alert(`File saved: ${filename}`);
+      //               resolve(true);
+      //             };
+      //             writer.onerror = reject;
+      //             writer.write(blob);
+      //           });
+      //         },
+      //         reject
+      //       );
+      //     },
+      //     reject
+      //   );
+      // } else {
+      //   // Fallback: try to trigger download anyway
+      //   const url = URL.createObjectURL(blob);
+      //   const link = Object.assign(document.createElement("a"), {
+      //     href: url,
+      //     download: filename,
+      //   });
+  //       link.click();
+  //       URL.revokeObjectURL(url);
+  //       resolve(true);
+  //     }
+  //   });
+  // }
+
   calculateTimeDifference(startTime: string, endTime: string): string {
     const start = moment(startTime);
     const end = moment(endTime);
@@ -591,6 +678,17 @@ export class TimeSheetPage implements OnInit {
     const minutes = duration.minutes();
 
     return `${hours}h ${minutes}m`;
+  }
+
+  onStatusChange(event: any, entry: any) {
+    const selectedStatus = event.target.value;
+
+    if (selectedStatus === "Approved") {
+      this.approveReject("accept", entry.guid);
+    } else if (selectedStatus === "Rejected") {
+      this.approveReject("reject", entry.guid);
+    }
+    // Add more conditions for other statuses if needed
   }
 
   approveReject(status: string, guid: string) {
@@ -716,6 +814,19 @@ export class TimeSheetPage implements OnInit {
       moment(event.detail.value).utc().format()
     );
     // console.log("time sheet date : ",this.timeSheetForm.value);
+  }
+
+  onMonthChange(event: any) {
+    this.timesheetDate = event.detail.value; // Update the selected date
+    this.getAllTimeSheetOfTheMonth();
+    this.getAssignProjectById();
+    this.getTimesheetDay(); // Refresh data for the new selected date
+    this.getTimesheetList();
+    this.getUserTimesheet();
+
+    this.timeSheetForm.controls["date"].patchValue(
+      moment(event.detail.value).utc().format()
+    );
   }
 
   get paginatedEntries() {

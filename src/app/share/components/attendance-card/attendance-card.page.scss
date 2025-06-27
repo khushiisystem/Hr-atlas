@@ -1,61 +1,82 @@
-
-.cardItem{
+.cardItem {
     box-shadow: none;
     border-radius: 14px;
-    & ion-card-header{
+
+    & ion-card-header {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
         column-gap: 10px;
         background-color: #40a30f38;
     }
+
     &.Present ion-card-header {
         background-color: #58c95833;
         color: green;
         --background: #58c95833;
         --color: green;
-        
-        & ion-card-title, & ion-card-subtitle{
+
+        & ion-card-title,
+        & ion-card-subtitle {
             --color: green;
             margin-top: 0;
         }
     }
-    &.Absent ion-card-header, &.Leave ion-card-header {
+
+    &.Absent ion-card-header,
+    &.Leave ion-card-header {
         background-color: #ed576b57;
         color: var(--ion-color-danger-shade);
         --background: #ed576b57;
         --color: var(--ion-color-danger-shade);
-        & ion-card-title, & ion-card-subtitle{
+
+        & ion-card-title,
+        & ion-card-subtitle {
             --color: var(--ion-color-danger-shade);
             margin-top: 0;
         }
     }
-    &.Holiday ion-card-header{
+
+    &.Holiday ion-card-header {
         background-color: rgb(99 112 255 / 21%);
         color: var(--ion-color-tertiary-shade);
         --background: rgb(99 112 255 / 21%);
         --color: var(--ion-color-danger-shade);
-        & ion-card-title, & ion-card-subtitle{
+
+        & ion-card-title,
+        & ion-card-subtitle {
             --color: var(--ion-color-tertiary-shade);
             margin-top: 0;
         }
     }
-    &.Off ion-card-header{
-        background-color: rgb(201 14 14 / 29%);
-        color: var(--ion-color-tertiary-shade);
-        --background: rgb(201 14 14 / 29%);
-        --color: var(--ion-color-danger-shade);
-        & ion-card-title, & ion-card-subtitle{
-            --color: var(--ion-color-danger-shade);
+
+    &.Off ion-card-header {
+        background-color: rgb(255 165 0);
+        color: #fff;
+        --background: rgb(255 165 0);
+        --color: #fff;
+
+        & ion-card-title,
+        & ion-card-subtitle {
+            --color: #fff;
             margin-top: 0;
         }
     }
-    &.Half ion-card-header{
+
+    &.Half ion-card-header {
         background-color: #6956004d;
         --background: #6956004d;
         --color: #430101;
-        ion-card-title, & ion-card-subtitle{--color: #430101;margin-top: 0;}
-        ion-note{color: #5f5f5f;}
+
+        ion-card-title,
+        & ion-card-subtitle {
+            --color: #430101;
+            margin-top: 0;
+        }
+
+        ion-note {
+            color: #5f5f5f;
+        }
     }
 
     .expandBtn {
@@ -64,13 +85,37 @@
         --padding-end: 5px;
         --padding-bottom: 5px;
     }
+
     .leaveDate {
-        margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 10px;
-        & ion-icon{margin-right: 5px; vertical-align: middle;}
+        margin-bottom: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+        & ion-icon {
+            margin-right: 5px;
+            vertical-align: middle;
+        }
     }
-    .purpose{white-space: pre-line;}
-    ion-card-content{opacity: 0; visibility: hidden; display: none; transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;
-    &.show{opacity: 1; visibility: visible; display: block; transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;}}
+
+    .purpose {
+        white-space: pre-line;
+    }
+
+    ion-card-content {
+        opacity: 0;
+        visibility: hidden;
+        display: none;
+        transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;
+
+        &.show {
+            opacity: 1;
+            visibility: visible;
+            display: block;
+            transition: display 0.5s ease, opacity 0.3s, all 0.5s ease;
+        }
+    }
+
     will-change: contents height;
 
     .regBtn {
@@ -79,10 +124,21 @@
     }
 }
 
-table{
+table {
     width: 100%;
-    th, td{ text-align: start; width: 33%; padding: 5px;}
-    th, tfoot td{vertical-align: text-top; background-color: #f5f5f5;}
+
+    th,
+    td {
+        text-align: start;
+        width: 33%;
+        padding: 5px;
+    }
+
+    th,
+    tfoot td {
+        vertical-align: text-top;
+        background-color: #f5f5f5;
+    }
 }
 
 ion-modal {
@@ -100,24 +156,37 @@ ion-modal ion-toolbar {
     --background: rgb(34, 102, 247);
     --color: white;
 }
+
 .rounded-rectangle {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    h2 { font-size: 16px; font-weight: 600; margin: auto 0 10px 0; }
-    ion-button { height: 33px; font-size: 15px; }
+
+    h2 {
+        font-size: 16px;
+        font-weight: 600;
+        margin: auto 0 10px 0;
+    }
+
+    ion-button {
+        height: 33px;
+        font-size: 15px;
+    }
 }
 
 .status-pending {
     color: orange;
 }
+
 .status-accept {
     color: green;
 }
+
 .status-reject {
     color: red;
 }
+
 .status-review {
     color: blue;
 }
@@ -128,7 +197,20 @@ ion-modal ion-toolbar {
 }
 
 .clock-status-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.full-day-button {
+    background-color: #58c95833;
+    color: green;
+    --background: #58c95833;
+    --color: green;
+}
+
+.half-day-button {
+    background-color: #6956004d;
+    --background: #6956004d;
+    --color: #430101;
 }

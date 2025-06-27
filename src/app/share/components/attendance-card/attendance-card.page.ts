@@ -20,6 +20,7 @@ import {
   Validators,
 } from "@angular/forms";
 import {
+  AlertController,
   DatetimeCustomEvent,
   IonContent,
   IonicModule,
@@ -39,6 +40,7 @@ import { ShareService } from "src/app/services/share.service";
 import { LoaderService } from "src/app/services/loader.service";
 import { IApproveRegularizationReq } from "src/app/interfaces/request/IApproveRegularization";
 import { RegularizationPage } from "../regularization/regularization.page";
+import { LeaveAction } from "../leave-card/leave-card.page";
 
 @Component({
   selector: "attendance-card",
@@ -62,6 +64,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
   @Input({ required: true }) isWeekOff: boolean = false;
   @Input({ required: true }) isAllGood: boolean = false;
   @Input() regularization: IRegularization | null = null;
+  leaveDay: boolean = false;
   openCard: boolean = true;
   regCard: boolean = true;
   @Output() attendanceCardAction: EventEmitter<{
@@ -87,6 +90,10 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     status: false,
     str: "",
   };
+  selectedDay?: string | null = null;
+  isAttMarking: boolean = false;
+  AttendaceStatus = AttendaceStatus;
+   @Output() actionReturn: EventEmitter<LeaveAction> = new EventEmitter<LeaveAction>();
 
   constructor(
     private rolseStateServ: RoleStateService,
@@ -113,6 +120,75 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     this.regularizationForm
       .get("clockOut")
       ?.valueChanges.subscribe(() => this.calculateTotalTime());
+
+    if (
+      this.attendanceData.status === "Leave" &&
+      this.attendanceData.leaveData
+    ) {
+      const createdDate = new Date(this.attendanceData.created_date)
+        .toISOString()
+        .split("T")[0];
+      const leaveFromDate = new Date(this.attendanceData.leaveData.from.date)
+        .toISOString()
+        .split("T")[0];
+      const leaveToDate = new Date(this.attendanceData.leaveData.to?.date)
+        .toISOString()
+        .split("T")[0];
+
+      const leaveFromDaytype =
+        this.attendanceData.leaveData.from.dayType === "Half Day"
+          ? true
+          : false;
+      const leaveToDaytype =
+        this.attendanceData.leaveData.to?.dayType === "Half Day" ? true : false;
+
+      if (
+        (createdDate === leaveFromDate && leaveFromDaytype) ||
+        (createdDate === leaveToDate && leaveToDaytype)
+      ) {
+        this.leaveDay = true;
+      }
+    }
+  }
+
+  isStatusNot(status: AttendaceStatus, value: AttendaceStatus): boolean {
+    const checkDate = new Date(this.attendanceData.created_date);
+    const isSaturday = checkDate.getDay() === 6; // 6 = Saturday
+
+    if (isSaturday && value === AttendaceStatus.HALF_DAY) {
+      return false;
+    }
+
+    return status !== value;
+  }
+
+  selectDay(event: any, attendanceData: AttListItem) {
+    if (this.isAttMarking) return;
+    this.isAttMarking = true;
+
+    console.log("attendace data : ", this.attendanceData);
+    console.log("Selected day:", event.detail.value);
+    console.log("date :", attendanceData.created_date);
+    console.log("e id:", attendanceData.employeeId);
+
+    this.selectedDay = event?.details?.value;
+    let data = {
+      Day: event?.detail?.value,
+      Date: attendanceData.created_date,
+      EmployeeId: attendanceData.employeeId,
+      Guids: this.attendanceData.attendanceData.map((e) => e.guid),
+    };
+
+    this._shareServ.markAttendance(data).subscribe({
+      next: (res) => {
+        console.log("Attendance marked:", res);
+        this.isAttMarking = false;
+      },
+      error: (err) => {
+        console.error("Attendance marking failed:", err);
+        this.isAttMarking = false;
+      },
+    });
   }
 
   getClockInStatus() {
@@ -272,7 +348,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
 
     if (clockIn && clockOut) {
       const durationMs = this.calculateDuration(clockIn, clockOut);
-      this.totalTimeString = this.formatDurationReg(durationMs); // Update total time string for display
+      this.totalTimeString = this.formatDurationReg(durationMs);
       this.regularizationForm.patchValue({ totalTime: this.totalTimeString });
     } else {
       this.totalTimeString = ""; // Clear if either clockIn or clockOut is missing
@@ -430,6 +506,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
 
   approveReject(status: string, guid: string) {
     if (this.isDisable) return;
+    console.log("is disable : ", this.isDisable);
 
     this.isDisable = true;
     const data: IApproveRegularizationReq = {
@@ -532,4 +609,12 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       ? "status-review"
       : "";
   }
+
+  leaveAction(action: 'Reject' | 'Accept' | 'Cancel') {
+    // if (action === "Cancel" && this.attendanceData.leaveData.guid) {
+    //   this.cancelLeave(this.attendanceData.leaveData.guid);
+    // }
+    this.actionReturn.emit({ action: action, leaveId: this.attendanceData.leaveData.guid });
+  }
+
 }

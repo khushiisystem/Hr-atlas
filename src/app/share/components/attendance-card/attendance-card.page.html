@@ -10,8 +10,23 @@
     </div>
 
     <ion-chip color="tertiary"
-      *ngIf="(userRole === 'Employee' && !isWeekOff && !regularization?.status ) && ( attendanceData.status === 'Absent'  ||  (attendanceData.status === 'Leave' && leaveStartDay === 'Half Day'))"
+      *ngIf="(userRole === 'Employee' && !isWeekOff && !regularization?.status ) && ( attendanceData.status === 'Absent'  ||  (attendanceData.status === 'Leave' && leaveDay ))"
       class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
+    <div class="ion-no-margin ion-text-center btnChip" *ngIf="userRole !== 'Employee'">
+
+      <ion-select *ngIf="(userRole !== 'Employee' && !isWeekOff)" placeholder="Select" interface="popover"
+        class="day-select" [disabled]="selectedDay !== null" (ionChange)="selectDay($event, attendanceData)">
+        <ion-select-option *ngIf="isStatusNot(attendanceData.status, AttendaceStatus.PRESENT)" class="full-day-button"
+          value="full day">Present</ion-select-option>
+
+        <ion-select-option *ngIf="isStatusNot(attendanceData.status, AttendaceStatus.HALF_DAY)" class="half-day-button"
+          value="half day">Half Day</ion-select-option>
+
+        <ion-select-option *ngIf="isStatusNot(attendanceData.status, AttendaceStatus.ABSENT)" class="half-day-button"
+          value="absent">Absent</ion-select-option>
+
+      </ion-select>
+    </div>
   </ion-card-header>
 
   <ion-card-content [class.show]="openCard && isAllGood && !isWeekOff">
@@ -74,11 +89,19 @@
           [maxLength]="100"></read-more-text>
       </p>
       <div class="ion-text-end">
-        <ion-chip style="cursor: default;"
+        <ion-chip style="cursor: default;" *ngIf="attendanceData.leaveData.status !== 'Pending' || userRole === 'Employee' "
           [color]="attendanceData.leaveData.status === 'Accept' ? 'success' : attendanceData.leaveData.status === 'Pending' ? 'warning' : 'danger' ">
           {{attendanceData.leaveData.status === 'Accept' ? 'Accepted' : attendanceData.leaveData.status === 'Pending' ?
           'Pending' : attendanceData.leaveData.status === 'Reject' ? 'Rejected' : attendanceData.leaveData.status}}
         </ion-chip>
+      </div>
+      <div class="ion-text-end">
+        <ng-container *ngIf="userRole === 'Admin' || userRole === 'HR'">
+          <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small"
+            *ngIf="attendanceData.leaveData.status === 'Pending'" (click)="leaveAction('Reject')">Reject</ion-button>
+          <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small"
+            *ngIf="attendanceData.leaveData.status === 'Pending'" (click)="leaveAction('Accept')">Approve</ion-button>
+        </ng-container>
       </div>
     </div>
   </ion-card-content>

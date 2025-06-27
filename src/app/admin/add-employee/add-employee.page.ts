@@ -91,7 +91,7 @@ export class AddEmployeePage implements OnInit {
       status: ['Active', Validators.required],
       joiningDate: ['', Validators.required],
       resignationDate: [''],
-      work_experience: 0,
+      work_experience: 0, 
       workLocation: [''],
       probationPeriod: ['', Validators.required],
       designation: ['', Validators.required],

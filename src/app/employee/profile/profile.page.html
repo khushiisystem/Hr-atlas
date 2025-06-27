@@ -161,6 +161,13 @@
               <h2>{{workDetail.joiningDate | date}}</h2>
             </ion-label>
           </ion-item>
+          <ion-item *ngIf="workDetail.resignationDate" mode="ios" detail="false" class="settingBtns_item">
+            <ion-icon name="calendar-number" size="small" color="medium" slot="start"></ion-icon>
+            <ion-label class="ion-text-wrap">
+              <p>Resgination Date</p>
+              <h2>{{workDetail.resignationDate | date}}</h2>
+            </ion-label>
+          </ion-item>
           <ion-item mode="ios" detail="false" class="settingBtns_item">
             <ion-icon name="business" size="small" color="medium" slot="start"></ion-icon>
             <ion-label class="ion-text-wrap">
@@ -305,22 +312,22 @@
           <ion-row>
             <ion-col size="12">
               <ion-label>Bank Name</ion-label>
-              <ion-input aria-label="Bank Name" [value]="employeeDetail.accountInfo.bankName || '-'"></ion-input>
+              <ion-input aria-label="Bank Name" [value]="employeeDetail.accountInfo?.bankName || '-'"></ion-input>
             </ion-col>
 
             <ion-col size="12">
               <ion-label>Account Holder Name</ion-label>
-              <ion-input aria-label="Account Holder Name" [value]="employeeDetail.accountInfo.accountHolderName || '-'"></ion-input>
+              <ion-input aria-label="Account Holder Name" [value]="employeeDetail.accountInfo?.accountHolderName || '-'"></ion-input>
             </ion-col>
 
             <ion-col size="12">
               <ion-label>Account Number</ion-label>
-              <ion-input aria-label="Account Number" [value]="employeeDetail.accountInfo.accountNumber || '-'"></ion-input>
+              <ion-input aria-label="Account Number" [value]="employeeDetail.accountInfo?.accountNumber || '-'"></ion-input>
             </ion-col>
 
             <ion-col size="12">
               <ion-label>IFSC Code</ion-label>
-              <ion-input aria-label="IFSC Code" [value]="employeeDetail.accountInfo.ifscCode || '-'"></ion-input>
+              <ion-input aria-label="IFSC Code" [value]="employeeDetail.accountInfo?.ifscCode || '-'"></ion-input>
             </ion-col>
           </ion-row>
         </div>

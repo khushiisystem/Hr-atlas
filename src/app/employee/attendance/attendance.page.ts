@@ -4,9 +4,10 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { DatetimeCustomEvent, IonContent } from "@ionic/angular";
+import { DatetimeCustomEvent, IonContent, IonInfiniteScroll } from "@ionic/angular";
 import * as moment from "moment";
 import { Subscription } from "rxjs";
 import { AttendaceStatus } from "src/app/interfaces/enums/leaveCreditPeriod";
@@ -21,6 +22,7 @@ import { AdminService } from "src/app/services/admin.service";
 import { LoaderService } from "src/app/services/loader.service";
 import { RoleStateService } from "src/app/services/roleState.service";
 import { ShareService } from "src/app/services/share.service";
+import { LeaveAction } from "src/app/share/components/leave-card/leave-card.page";
 import { IEmpSelect } from "src/app/share/employees/employees.page";
 
 export enum ERegularization {
@@ -104,6 +106,12 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   employeeDetail!: IEmployeeResponse;
   getReg: IRegularization[] = [];
   regCard: boolean = true;
+  pageNumber: number = 0;
+  logPageNumber: number = 0;
+  requestLoaded: boolean = false;
+  moreRequests: boolean = false;
+  requestedLeaveList: ILeaveLogsResponse[] = [];
+   @ViewChild("requestsInfiniteScroll") requestsInfiniteScroll!: IonInfiniteScroll;
 
   constructor(
     private shareServ: ShareService,
@@ -303,12 +311,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
                   item.attendanceData = [...item.attendanceData, e];
                   if (item.status === AttendaceStatus.PRESENT) {
                   } else {
-                    item.status = e.status;
+                    // item.status = e.status;
                     // console.log(item.created_date, item.status, e.status);
-                    item.status = this.updateStatus(
-                      item.attendanceData,
-                      e.status
-                    );
+                    item.status = e.status !== AttendaceStatus.ABSENT ? this.updateStatus(item.attendanceData,e.status) : e.status
                   }
                   item.created_date = new Date(e.clockIn).toISOString();
                 }
@@ -492,6 +497,11 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
         data.backgroud = "red";
         break;
 
+      case "Week Off":
+        data.color = "#000";
+        data.backgroud = "#ff9211";
+        break;
+
       default:
         break;
     }
@@ -633,7 +643,11 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       )
       .subscribe(
         (res) => {
-          this.leaveLogs = res;
+          console.log("res : ",res);
+          this.leaveLogs = res.sort((a, b) => {
+            return new Date(b.from.date).getTime() - new Date(a.from.date).getTime();
+          });
+
           for (let a = 0; a < res.length; a++) {
             const fullDayLeaves = res[a].fullDayDates || [];
             const halfDayLeaves = res[a].halfDayDates || [];
@@ -1088,4 +1102,59 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       ) || null
     );
   }
+
+    leaveApprovel(event: LeaveAction){
+      const approvel: boolean = event.action === "Accept";
+      
+      this.loader.present('');
+      const leaveData = {
+        leaveGuid: event.leaveId,
+        approveLeave: approvel
+      }
+      this.adminServ.leaveApprove(leaveData).subscribe(res => {
+        if(res){
+          if(res.Message){
+            this.shareServ.presentToast(res.Message, 'top', 'success');
+          } else {
+            this.shareServ.presentToast('Responded', 'top', 'success');
+          }
+          this.logPageNumber = 0;
+          this.pageNumber = 0;
+          this.loader.dismiss();
+          this.requestedLeaves();
+          this.getLogs();
+        }
+      }, (error) => {
+        this.shareServ.presentToast(error.error.message, 'top', 'danger');
+        this.loader.dismiss();
+      })
+    }
+
+    requestedLeaves(){
+        this.requestLoaded = false;
+        const data = {
+          status: 'Pending'
+        };
+        this.shareServ.getLeaveList(data, this.pageNumber * 20, 20).subscribe(res => {
+          if(res) {
+            if(res.length < 1){this.moreRequests = false; this.requestLoaded = true;}
+    
+            if(this.pageNumber < 1){this.requestedLeaveList = [];}
+            for(let i=0; i < res.length; i++){
+              if(!this.requestedLeaveList.some((item: ILeaveLogsResponse) => item.guid === res[i].guid)){
+                this.requestedLeaveList.push(res[i]);
+              }
+            }
+            this.moreRequests = res.length > 19;
+            if(this.requestsInfiniteScroll){
+              if(!this.moreRequests){
+              this.requestsInfiniteScroll.complete();}
+            }
+            this.requestLoaded = true;
+          }
+        }, (error) => {
+          console.log(error.error);
+          this.requestLoaded = true;
+        });
+      }
 }

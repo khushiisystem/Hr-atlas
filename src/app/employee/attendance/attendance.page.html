@@ -66,7 +66,7 @@
  
     <div *ngSwitchCase="'listView'">
       <ng-container *ngFor="let item of dateList; index as a;">
-        <attendance-card (regularizationUpdated)="refreshRegularizationData()" [attendanceData]="item" [cardClass]="isAllLoaded() ? item.status : ''" [regularization]="getRegularization(item.created_date)" [isAllGood]="isAllLoaded()" [isWeekOff]="isWeekOff(item.created_date)" [leaveStartDay]="item.leaveData !== null ? getDayType(item.leaveData.from.date, item.leaveData.guid) : ''" [leaveEndDay]="item.leaveData !== null ? getDayType(item.leaveData.to.date, item.leaveData.guid) : ''" [openCard]="a == 0" (attendanceCardAction)="attAcrdAction($event, item)"></attendance-card>
+        <attendance-card (regularizationUpdated)="refreshRegularizationData()" [attendanceData]="item" [cardClass]="isAllLoaded() ? item.status : ''" [regularization]="getRegularization(item.created_date)" [isAllGood]="isAllLoaded()" [isWeekOff]="isWeekOff(item.created_date)" [leaveStartDay]="item.leaveData !== null ? getDayType(item.leaveData.from.date, item.leaveData.guid) : ''" [leaveEndDay]="item.leaveData !== null ? getDayType(item.leaveData.to.date, item.leaveData.guid) : ''" [openCard]="a == 0" (attendanceCardAction)="attAcrdAction($event, item)" (actionReturn)="leaveApprovel($event)"></attendance-card>
       </ng-container>
       <div class="ion-text-center ion-padding" *ngIf="!isAllLoaded()">
         <ion-spinner color="primary" [name]="'circle'"></ion-spinner>
@@ -133,7 +133,7 @@
       </div>
     </div>
     <div *ngSwitchCase="'leaves'">
-      <leave-card *ngFor="let leaveItem of leaveLogs" [leaveItem]="leaveItem"></leave-card>
+      <leave-card *ngFor="let leaveItem of leaveLogs" [leaveItem]="leaveItem" (actionReturn)="leaveApprovel($event)"></leave-card>
       <div class="emptyDiv ion-padding" *ngIf="leaveLoaded && leaveLogs.length < 1">
         <img src="assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
         <ion-label class="ion-text-wrap">No leaves in this month.</ion-label>
