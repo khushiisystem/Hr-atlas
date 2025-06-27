@@ -643,7 +643,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       )
       .subscribe(
         (res) => {
-          console.log("res : ",res);
+          // console.log("res : ",res);
           this.leaveLogs = res.sort((a, b) => {
             return new Date(b.from.date).getTime() - new Date(a.from.date).getTime();
           });
