@@ -547,7 +547,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     );
     this.loader.dismiss();
 
-    if (this.todayWorkingTime === 0) return;
+    if (this.todayWorkingTime < 0) return;
 
     const today = new Date();
 

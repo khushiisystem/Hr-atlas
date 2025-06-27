@@ -293,24 +293,24 @@
             <ion-row>
               <ion-col size="12">
                 <ion-label>Bank Name</ion-label>
-                <ion-input aria-label="Bank Name" [value]="adminDetail.accountInfo.bankName || '-'"></ion-input>
+                <ion-input aria-label="Bank Name" [value]="adminDetail.accountInfo?.bankName || '-'"></ion-input>
               </ion-col>
 
               <ion-col size="12">
                 <ion-label>Account Holder Name</ion-label>
                 <ion-input aria-label="Account Holder Name"
-                  [value]="adminDetail.accountInfo.accountHolderName || '-'"></ion-input>
+                  [value]="adminDetail.accountInfo?.accountHolderName || '-'"></ion-input>
               </ion-col>
 
               <ion-col size="12">
                 <ion-label>Account Number</ion-label>
                 <ion-input aria-label="Account Number"
-                  [value]="adminDetail.accountInfo.accountNumber || '-'"></ion-input>
+                  [value]="adminDetail.accountInfo?.accountNumber || '-'"></ion-input>
               </ion-col>
 
               <ion-col size="12">
                 <ion-label>IFSC Code</ion-label>
-                <ion-input aria-label="IFSC Code" [value]="adminDetail.accountInfo.ifscCode || '-'"></ion-input>
+                <ion-input aria-label="IFSC Code" [value]="adminDetail.accountInfo?.ifscCode || '-'"></ion-input>
               </ion-col>
             </ion-row>
           </div>

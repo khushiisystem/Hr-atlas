@@ -89,6 +89,14 @@ export class EmployeesPage implements OnInit, OnDestroy {
       });
   }
 
+  naviagateToPayslip(userId: string){
+    this.loader.present("").then(() => {
+      this.loader.dismiss().then(() => {
+        this.router.navigate([`/tabs/payroll/${userId}`]);
+      });
+    });
+  }
+
   getEmployeeList() {
     this.isDataLoaded = false;
     if (this.pageIndex < 1) {

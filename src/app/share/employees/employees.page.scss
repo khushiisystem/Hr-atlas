@@ -142,3 +142,15 @@ ion-list-header ion-label {
     background-color: #fff;
     z-index: 1;
 }
+
+.custom-arrow-button {
+  --background: transparent;
+  --box-shadow: none;
+  --color: transparent; // Removes any default icon color
+  padding: 0; // optional: remove extra padding
+}
+
+.arrow-icon {
+  color: gray; // or use a specific blue: #007bff, var(--ion-color-primary), etc.
+  font-size: 20px; // optional: control size
+}

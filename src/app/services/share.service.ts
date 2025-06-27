@@ -163,4 +163,8 @@ export class ShareService {
   approveRegularization(data: IApproveRegularizationReq): Observable<any> {
     return this.http.put<any>(environment.Api + `api/regularization/approveRegu`,data);
   }
+
+  markAttendance(data: any): Observable<any> {
+    return this.http.put<any>(environment.Api + `api/regularization/markattendance`,data);
+  }
 }

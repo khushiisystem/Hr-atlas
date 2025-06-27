@@ -226,7 +226,7 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       (res) => {
         if (res) {
           this.logHistory = res.sort((item1, item2) =>
-            moment(item1.payslipDate).diff(moment(item2.payslipDate))
+            moment(item2.payslipDate).diff(moment(item1.payslipDate))
           );
           this.fetchAdvance();
           this.historyLoaded = true;

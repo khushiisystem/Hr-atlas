@@ -1,9 +1,11 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
-    <ion-button mode="md" slot="start" [routerDirection]="'back'" (click)="goBack()" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+    <ion-button mode="md" slot="start" [routerDirection]="'back'" (click)="goBack()" fill="clear" [ariaDisabled]="true"
+      class="noRipple noBg">
       <ion-icon name="close" slot="icon-only"></ion-icon>
     </ion-button>
-    <ion-title>{{action === 'add' ? 'Add' : 'Update'}} {{isDataLoaded && employeeForm.controls['role'].value === 'Admin' ? 'Profile' : 'Employee'}}</ion-title>
+    <ion-title>{{action === 'add' ? 'Add' : 'Update'}} {{isDataLoaded && employeeForm.controls['role'].value === 'Admin'
+      ? 'Profile' : 'Employee'}}</ion-title>
     <ion-thumbnail slot="end" class="logo_img ion-margin-end">
       <ion-img src="../../../assets/icon/no_bg_logo.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>
@@ -23,57 +25,72 @@
       </ion-list-header>
       <ion-item detail="false">
         <ion-col>
-          <ion-input labelPlacement="floating" formControlName="firstName" placeholder="First Name" type="text" maxlength="120" minlength="2" inputmode="text" [enterkeyhint]="'next'" autocomplete="name" autofocus="true">
+          <ion-input labelPlacement="floating" formControlName="firstName" placeholder="First Name" type="text"
+            maxlength="120" minlength="2" inputmode="text" [enterkeyhint]="'next'" autocomplete="name" autofocus="true">
             <div slot="label">First Name <ion-text color="danger">*</ion-text></div>
           </ion-input>
         </ion-col>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['firstName'].touched && employeeForm.controls['firstName'].errors">
         First Name is required
-      </ion-text>          
+      </ion-text>
       <ion-item detail="false">
         <ion-col>
-          <ion-input labelPlacement="floating" formControlName="lastName" placeholder="Last Name" type="text" inputmode="text" [enterkeyhint]="'next'">
+          <ion-input labelPlacement="floating" formControlName="lastName" placeholder="Last Name" type="text"
+            inputmode="text" [enterkeyhint]="'next'">
             <div slot="label">Last Name</div>
           </ion-input>
         </ion-col>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['lastName'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['lastName'].errors">
         Last Name is required
       </ion-text>
       <ion-item detail="false">
         <ion-col>
-          <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Phone Number" maxlength="10" minlength="10" inputmode="tel" [enterkeyhint]="'next'" type="tel" autocomplete="mobileNumber">
+          <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Phone Number" maxlength="10"
+            minlength="10" inputmode="tel" [enterkeyhint]="'next'" type="tel" autocomplete="mobileNumber">
             <div slot="label">Phone Number <ion-text color="danger">*</ion-text></div>
           </ion-input>
         </ion-col>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['mobileNumber'].touched && employeeForm.controls['mobileNumber'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['mobileNumber'].touched && employeeForm.controls['mobileNumber'].errors">
         Phone Number is required
       </ion-text>
       <ion-item detail="false">
-        <ion-input labelPlacement="floating" formControlName="email" placeholder="Personal Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="email">
+        <ion-input labelPlacement="floating" formControlName="email" placeholder="Personal Email" type="email"
+          inputmode="email" [enterkeyhint]="'next'" autocomplete="email">
           <div slot="label">Personal Email</div>
         </ion-input>
       </ion-item>
       <ion-item detail="false">
         <ion-col>
-          <ion-input labelPlacement="floating" formControlName="officialEmail" placeholder="Official Email" type="email" inputmode="email" [enterkeyhint]="'next'" autocomplete="officialEmail">
+          <ion-input labelPlacement="floating" formControlName="officialEmail" placeholder="Official Email" type="email"
+            inputmode="email" [enterkeyhint]="'next'" autocomplete="officialEmail">
             <div slot="label">Official Email <ion-text color="danger">*</ion-text></div>
           </ion-input>
         </ion-col>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['officialEmail'].touched && employeeForm.controls['officialEmail'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['officialEmail'].touched && employeeForm.controls['officialEmail'].errors">
         Official Email is required
       </ion-text>
 
       <ion-item detail="false">
-        <ion-select labelPlacement="floating" formControlName="bloodGroup" placeholder="Blood Group" interface="action-sheet">
-          <div slot="label">Blood Group<ion-text color="danger">*</ion-text></div>
-          <ion-select-option value="Group A">Group A</ion-select-option>
-          <ion-select-option value="Group B">Group B</ion-select-option>
-          <ion-select-option value="Group C">Group C</ion-select-option>
-        </ion-select>        
+        <ion-select labelPlacement="floating" formControlName="bloodGroup" placeholder="Blood Group"
+          interface="action-sheet">
+          <div slot="label">Blood Group</div>
+          <ion-select-option value="Group A+">Group A+</ion-select-option>
+          <ion-select-option value="Group A-">Group A-</ion-select-option>
+          <ion-select-option value="Group B+">Group B+</ion-select-option>
+          <ion-select-option value="Group B-">Group B-</ion-select-option>
+          <ion-select-option value="Group AB+">Group AB+</ion-select-option>
+          <ion-select-option value="Group AB-">Group AB-</ion-select-option>
+          <ion-select-option value="Group O+">Group O+</ion-select-option>
+          <ion-select-option value="Group O-">Group O-</ion-select-option>
+        </ion-select>
       </ion-item>
 
       <ion-item detail="false">
@@ -82,62 +99,75 @@
           <ion-select-option value="Admin">Admin</ion-select-option>
           <ion-select-option value="Employee">Employee</ion-select-option>
           <ion-select-option value="HR">HR Admin</ion-select-option>
-        </ion-select>        
+        </ion-select>
       </ion-item>
 
 
       <!-- work-info  -->
       <ion-item detail="false">
-        <ion-input labelPlacement="floating" formControlName="designation" placeholder="Designation" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="designation" [required]="true">
+        <ion-input labelPlacement="floating" formControlName="designation" placeholder="Designation" type="text"
+          inputmode="text" [enterkeyhint]="'next'" autocomplete="designation" [required]="true">
           <div slot="label">Designation <ion-text color="danger">*</ion-text></div>
         </ion-input>
-      </ion-item> 
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['designation'].touched && employeeForm.controls['designation'].errors">
+      </ion-item>
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['designation'].touched && employeeForm.controls['designation'].errors">
         Designation is required.
       </ion-text>
 
       <ion-item>
-        <ion-input labelPlacement="floating" formControlName="jobTitle" placeholder="Job Title" type="text" [required]="true" inputmode="text" [enterkeyhint]="'next'" autocomplete="jobTitle">
+        <ion-input labelPlacement="floating" formControlName="jobTitle" placeholder="Job Title" type="text"
+          [required]="true" inputmode="text" [enterkeyhint]="'next'" autocomplete="jobTitle">
           <div slot="label">Job Title <ion-text color="danger">*</ion-text></div>
         </ion-input>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['jobTitle'].touched && employeeForm.controls['jobTitle'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['jobTitle'].touched && employeeForm.controls['jobTitle'].errors">
         Job Title is required.
       </ion-text>
 
       <ion-item>
-        <ion-select labelPlacement="floating" formControlName="employeeType" placeholder="Select" interface="action-sheet" [required]="true" expandedIcon="caret-up">
+        <ion-select labelPlacement="floating" formControlName="employeeType" placeholder="Select"
+          interface="action-sheet" [required]="true" expandedIcon="caret-up">
           <div slot="label">Employee Type <ion-text color="danger">*</ion-text></div>
           <ion-select-option value="Full Time">Full Time</ion-select-option>
           <ion-select-option value="Intern">Intern</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['employeeType'].touched && employeeForm.controls['employeeType'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['employeeType'].touched && employeeForm.controls['employeeType'].errors">
         Employee type is required.
       </ion-text>
 
       <ion-item>
-        <ion-select labelPlacement="floating" formControlName="department" placeholder="Select" interface="action-sheet" expandedIcon="caret-up">
+        <ion-select labelPlacement="floating" formControlName="department" placeholder="Select" interface="action-sheet"
+          expandedIcon="caret-up">
           <div slot="label">Department <ion-text color="danger">*</ion-text></div>
-          <ion-select-option [value]="depart.name" *ngFor="let depart of deparmentList">{{depart.name}}</ion-select-option>
+          <ion-select-option [value]="depart.name"
+            *ngFor="let depart of deparmentList">{{depart.name}}</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['department'].touched && employeeForm.controls['department'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['department'].touched && employeeForm.controls['department'].errors">
         Department is required.
       </ion-text>
 
       <ion-item>
-        <ion-select labelPlacement="floating" formControlName="subDepartment" placeholder="Select" interface="action-sheet" [required]="true" expandedIcon="caret-up">
+        <ion-select labelPlacement="floating" formControlName="subDepartment" placeholder="Select"
+          interface="action-sheet" [required]="true" expandedIcon="caret-up">
           <div slot="label">Sub Department <ion-text color="danger">*</ion-text></div>
-          <ion-select-option [value]="subDepart" *ngFor="let subDepart of getSubDeparments()">{{subDepart}}</ion-select-option>
+          <ion-select-option [value]="subDepart"
+            *ngFor="let subDepart of getSubDeparments()">{{subDepart}}</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['subDepartment'].touched && employeeForm.controls['subDepartment'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['subDepartment'].touched && employeeForm.controls['subDepartment'].errors">
         Sub department is required.
       </ion-text>
- 
+
       <ion-item>
-        <ion-select labelPlacement="floating" formControlName="status" placeholder="Select" interface="action-sheet" [required]="true" (ionChange)="statusChange($event)" expandedIcon="caret-up">
+        <ion-select labelPlacement="floating" formControlName="status" placeholder="Select" interface="action-sheet"
+          [required]="true" (ionChange)="statusChange($event)" expandedIcon="caret-up">
           <div slot="label">Status <ion-text color="danger">*</ion-text></div>
           <ion-select-option value="Active">Active</ion-select-option>
           <ion-select-option value="Resigned">Resigned</ion-select-option>
@@ -147,7 +177,8 @@
 
       <ion-item>
         <div class="form-input" (click)="toggleCtrl('joiningDate')">
-          <ion-input labelPlacement="floating" readonly="true" [value]="getDate1('joiningDate') | date:'yyyy-MM-dd'" required="true" type="date">
+          <ion-input labelPlacement="floating" readonly="true" [value]="getDate1('joiningDate') | date:'yyyy-MM-dd'"
+            required="true" type="date">
             <div slot="label">Joinig Date <ion-text color="danger">*</ion-text></div>
           </ion-input>
           <div class="toggleBtn">
@@ -157,13 +188,15 @@
           </div>
         </div>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="touchedCtrls.includes('joiningDate') && employeeForm.controls['joiningDate'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="touchedCtrls.includes('joiningDate') && employeeForm.controls['joiningDate'].errors">
         Joining date is required.
       </ion-text>
 
       <ion-item *ngIf="employeeForm.controls['status'].value !== 'Active'">
         <div class="form-input" (click)="toggleCtrl('resignationDate')">
-          <ion-input labelPlacement="floating" [readonly]="true" [value]="getDate1('resignationDate') | date:'yyyy-MM-dd'" required="true" type="date">
+          <ion-input labelPlacement="floating" [readonly]="true"
+            [value]="getDate1('resignationDate') | date:'yyyy-MM-dd'" required="true" type="date">
             <div slot="label">Resignation Date <ion-text color="danger">*</ion-text></div>
           </ion-input>
           <div class="toggleBtn">
@@ -173,13 +206,16 @@
           </div>
         </div>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="touchedCtrls.includes('resignationDate') && employeeForm.controls['resignationDate'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="touchedCtrls.includes('resignationDate') && employeeForm.controls['resignationDate'].errors">
         Resignation date is required.
       </ion-text>
 
       <ion-item>
         <div class="form-input flexInput">
-          <ion-input labelPlacement="floating" formControlName="probationPeriod" class="flex_input" placeholder="In Days" required="true" type="number" [required]="true" inputmode="numeric" [enterkeyhint]="'next'" autocomplete="probationPeriod" min="0" step="1" max="300">
+          <ion-input labelPlacement="floating" formControlName="probationPeriod" class="flex_input"
+            placeholder="In Days" required="true" type="number" [required]="true" inputmode="numeric"
+            [enterkeyhint]="'next'" autocomplete="probationPeriod" min="0" step="1" max="300">
             <div slot="label">Probation Period <ion-text color="danger">*</ion-text></div>
           </ion-input>
           <div class="toggleBtn">
@@ -187,25 +223,28 @@
           </div>
         </div>
       </ion-item>
-      <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="employeeForm.controls['probationPeriod'].touched && employeeForm.controls['probationPeriod'].errors">
+      <ion-text color="danger" class="error_txt ion-padding-start"
+        *ngIf="employeeForm.controls['probationPeriod'].touched && employeeForm.controls['probationPeriod'].errors">
         Probation Period is required.
       </ion-text>
-      
+
       <ion-item>
-        <ion-input labelPlacement="floating" formControlName="work_experience" placeholder="Experience" type="number" inputmode="numeric" [enterkeyhint]="'next'" autocomplete="work_experience" min="0" step="0.5" max="60">
+        <ion-input labelPlacement="floating" formControlName="work_experience" placeholder="Experience" type="number"
+          inputmode="numeric" [enterkeyhint]="'next'" autocomplete="work_experience" min="0" step="0.5" max="60">
           <div slot="label">Work Experience </div>
         </ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-select labelPlacement="floating" formControlName="workLocation" placeholder="Select" interface="action-sheet" expandedIcon="caret-up">
+        <ion-select labelPlacement="floating" formControlName="workLocation" placeholder="Select"
+          interface="action-sheet" expandedIcon="caret-up">
           <div slot="label">Work Location</div>
           <ion-select-option [value]="work" *ngFor="let work of workType">{{work}}</ion-select-option>
         </ion-select>
       </ion-item>
-      
+
     </ion-list>
-    
+
     <ion-list mode="ios" class="ion-padding-bottom" inset="true">
       <ion-list-header>
         <ion-label>Addresses Information</ion-label>
@@ -216,46 +255,56 @@
           <ion-label>Current Address</ion-label>
         </ion-item-divider> -->
         <ion-item detail="false">
-          <ion-input labelPlacement="floating" formControlName="addressLine1" placeholder="Address Line 1" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line1">
+          <ion-input labelPlacement="floating" formControlName="addressLine1" placeholder="Address Line 1" type="text"
+            inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line1">
             <div slot="label">Address Line 1</div>
           </ion-input>
         </ion-item>
         <ion-item detail="false">
-          <ion-input labelPlacement="floating" formControlName="addressLine2" placeholder="Address Line 2" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2">
+          <ion-input labelPlacement="floating" formControlName="addressLine2" placeholder="Address Line 2" type="text"
+            inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2">
             <div slot="label">Address Line 2</div>
           </ion-input>
         </ion-item>
         <ion-item detail="false">
-          <ion-input labelPlacement="floating" formControlName="city" placeholder="City" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="city">
+          <ion-input labelPlacement="floating" formControlName="city" placeholder="City" type="text" inputmode="text"
+            [enterkeyhint]="'next'" autocomplete="city">
             <div slot="label">City</div>
           </ion-input>
         </ion-item>
         <ion-item detail="false">
-          <ion-input labelPlacement="floating" formControlName="state" placeholder="State" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="state">
+          <ion-input labelPlacement="floating" formControlName="state" placeholder="State" type="text" inputmode="text"
+            [enterkeyhint]="'next'" autocomplete="state">
             <div slot="label">State</div>
           </ion-input>
         </ion-item>
         <ion-item detail="false">
-          <ion-input labelPlacement="floating" formControlName="country" placeholder="Country" type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="country">
+          <ion-input labelPlacement="floating" formControlName="country" placeholder="Country" type="text"
+            inputmode="text" [enterkeyhint]="'next'" autocomplete="country">
             <div slot="label">Country</div>
           </ion-input>
         </ion-item>
         <ion-item detail="false">
-          <ion-input labelPlacement="floating" formControlName="zipCode" placeholder="Zip Code" type="text" inputmode="numeric" [enterkeyhint]="'go'" autocomplete="on" minlength="4" maxlength="6" counter="true">
+          <ion-input labelPlacement="floating" formControlName="zipCode" placeholder="Zip Code" type="text"
+            inputmode="numeric" [enterkeyhint]="'go'" autocomplete="on" minlength="4" maxlength="6" counter="true">
             <div slot="label">Zip Code</div>
           </ion-input>
         </ion-item>
       </ion-item-group>
     </ion-list>
 
-    <ion-modal [isOpen]="openCalendar && activeControl === 'joiningDate'" #joiningModal [initialBreakpoint]="0.5" mode="md">
+    <ion-modal [isOpen]="openCalendar && activeControl === 'joiningDate'" #joiningModal [initialBreakpoint]="0.5"
+      mode="md">
       <ng-template>
         <ion-content>
-          <ion-datetime presentation="date" mode="md" [size]="'cover'" #datetime preferWheel="true" (ionChange)="selectDate1($any($event), 'joiningDate')">
+          <ion-datetime presentation="date" mode="md" [size]="'cover'" #datetime preferWheel="true"
+            (ionChange)="selectDate1($any($event), 'joiningDate')">
             <span slot="title">Select Date</span>
             <ion-buttons slot="buttons" class="calenderBtns">
-              <ion-button mode="ios" size="small" strong="true" color="danger" (click)="datetime.cancel();joiningModal.dismiss();">Cancel</ion-button>
-              <ion-button mode="ios" fill="solid" size="small" strong="true" color="primary" (click)="datetime.confirm();joiningModal.dismiss();">Done</ion-button>
+              <ion-button mode="ios" size="small" strong="true" color="danger"
+                (click)="datetime.cancel();modalDismiss();">Cancel</ion-button>
+              <ion-button mode="ios" fill="solid" size="small" strong="true" color="primary"
+                (click)="datetime.confirm();modalDismiss();">Done</ion-button>
             </ion-buttons>
           </ion-datetime>
         </ion-content>
@@ -265,11 +314,14 @@
     <ion-modal [isOpen]="openCalendar && activeControl === 'resignationDate'" [initialBreakpoint]="0.5" mode="md">
       <ng-template>
         <ion-content>
-          <ion-datetime presentation="date" mode="md" [size]="'cover'" #datetime2 preferWheel="true" (ionChange)="selectDate1($any($event), 'resignationDate')">
+          <ion-datetime presentation="date" mode="md" [size]="'cover'" #datetime2 preferWheel="true"
+            (ionChange)="selectDate1($any($event), 'resignationDate')">
             <span slot="title">Select Date</span>
             <ion-buttons slot="buttons" class="calenderBtns">
-              <ion-button mode="ios" color="danger" strong="true" (click)="datetime2.cancel();modalDismiss();">Cancel</ion-button>
-              <ion-button mode="ios" fill="solid"  color="primary" strong="true" (click)="datetime2.confirm();modalDismiss();">Done</ion-button>
+              <ion-button mode="ios" color="danger" strong="true"
+                (click)="datetime2.cancel();modalDismiss();">Cancel</ion-button>
+              <ion-button mode="ios" fill="solid" color="primary" strong="true"
+                (click)="datetime2.confirm();modalDismiss();">Done</ion-button>
             </ion-buttons>
           </ion-datetime>
         </ion-content>
@@ -278,13 +330,16 @@
   </form>
 </ion-content>
 <ion-footer *ngIf="isDataLoaded">
-  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid || isInProgress" color="primary" (click)="submit()" expand="full" shape="round">
+  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="employeeForm.invalid || isInProgress"
+    color="primary" (click)="submit()" expand="full" shape="round">
     <ion-icon name="person-add-outline" aria-hidden="true" slot="start" *ngIf="action === 'add'"></ion-icon>
-    {{action === 'add' ? 'Add' : 'update' | titlecase}} {{isDataLoaded && employeeForm.controls['role'].value === 'Employee' ? 'Employee' : 'Profile'}}
+    {{action === 'add' ? 'Add' : 'update' | titlecase}} {{isDataLoaded && employeeForm.controls['role'].value ===
+    'Employee' ? 'Employee' : 'Profile'}}
   </ion-button>
 
   <!-- insert work info in user  -->
-  <ion-button *ngIf="action === 'edit'" mode="md" type="submit" class="submitBtn" color="primary" (click)="insertWorkInfoToUser()" expand="full" shape="round">
+  <ion-button *ngIf="action === 'edit'" mode="md" type="submit" class="submitBtn" color="primary"
+    (click)="insertWorkInfoToUser()" expand="full" shape="round">
     Insert WorkInfo {{employeeForm.controls['role'].value === 'Employee' ? 'Employee' : 'Profile'}}
   </ion-button>
 </ion-footer>
