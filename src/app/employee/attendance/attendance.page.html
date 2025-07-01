@@ -6,12 +6,14 @@
       </ion-button>
     </ion-buttons>
     <ion-title size="small" color="tertiary">
-      <span *ngIf="employee" class="ion-text-nowrap">{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</span>
+      <span *ngIf="employee" class="ion-text-nowrap">{{employee.firstName | titlecase}} {{employee.lastName || '' |
+        titlecase}}</span>
       <span *ngIf="!employee" class="ion-text-nowrap">Attendance</span>
       <p class="ion-no-margin" *ngIf="employee">Attendance</p>
     </ion-title>
     <div slot="end" class="ion-margin-end toggleview">
-      <ion-button type="button" [fill]="'solid'" shape="round" mode="ios" color="tertiary" size="small" aria-label="Calendar View" (click)="dateModal = true">
+      <ion-button type="button" [fill]="'solid'" shape="round" mode="ios" color="tertiary" size="small"
+        aria-label="Calendar View" (click)="dateModal = true">
         <ion-icon aria-hidden="true" size="small" slot="start" name="calendar"></ion-icon>
         {{getMonthYear().trim() != '' ? getMonthYear() : 'Select Month'}}
       </ion-button>
@@ -24,7 +26,8 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div class="stickyTab" style="z-index: 10;">
-    <ion-segment mode="ios" [scrollable]="true" color="secondary" class="topSegment" [(ngModel)]="activeTab" (ngModelChange)="onTabChange()">
+    <ion-segment mode="ios" [scrollable]="true" color="secondary" class="topSegment" [(ngModel)]="activeTab"
+      (ngModelChange)="onTabChange()">
       <ion-segment-button value="status">Status</ion-segment-button>
       <ion-segment-button value="listView">List View</ion-segment-button>
       <ion-segment-button value="calendarView">Calendar View</ion-segment-button>
@@ -37,25 +40,29 @@
       <ion-grid class="ion-margin-top">
         <ion-row>
           <ion-col size="6" sizeSm="4">
-            <circular-progress-bar [value]="getPresent" [maxValue]="getLastDate" color="var(--ion-color-success)"></circular-progress-bar>
+            <circular-progress-bar [value]="getPresent" [maxValue]="getLastDate"
+              color="var(--ion-color-success)"></circular-progress-bar>
             <ion-item lines="none" [detail]="false" color="light">
               <ion-label class="ion-text-center">Present</ion-label>
             </ion-item>
           </ion-col>
           <ion-col size="6" sizeSm="4">
-            <circular-progress-bar [value]="getAbsent + getLeaves" [maxValue]="getLastDate" color="var(--ion-color-danger)"></circular-progress-bar>
+            <circular-progress-bar [value]="getAbsent + getLeaves" [maxValue]="getLastDate"
+              color="var(--ion-color-danger)"></circular-progress-bar>
             <ion-item lines="none" [detail]="false" color="light">
               <ion-label class="ion-text-center">Absent</ion-label>
             </ion-item>
           </ion-col>
           <ion-col size="6" sizeSm="4">
-            <circular-progress-bar [value]="getAppliedLeaves()" [maxValue]="getLastDate" color="var(--ion-color-warning)"></circular-progress-bar>
+            <circular-progress-bar [value]="getAppliedLeaves()" [maxValue]="getLastDate"
+              color="var(--ion-color-warning)"></circular-progress-bar>
             <ion-item lines="none" [detail]="false" color="light">
               <ion-label class="ion-text-center">Applied Leaves</ion-label>
             </ion-item>
           </ion-col>
           <ion-col size="6" sizeSm="4">
-            <circular-progress-bar [value]="getUnplanned()" [maxValue]="getLastDate" color="var(--ion-color-secondary)"></circular-progress-bar>
+            <circular-progress-bar [value]="getUnplanned()" [maxValue]="getLastDate"
+              color="var(--ion-color-secondary)"></circular-progress-bar>
             <ion-item lines="none" [detail]="false" color="light">
               <ion-label class="ion-text-center">Unplanned Leaves</ion-label>
             </ion-item>
@@ -63,33 +70,41 @@
         </ion-row>
       </ion-grid>
     </div>
- 
+
     <div *ngSwitchCase="'listView'">
       <ng-container *ngFor="let item of dateList; index as a;">
-        <attendance-card (regularizationUpdated)="refreshRegularizationData()" [attendanceData]="item" [cardClass]="isAllLoaded() ? item.status : ''" [regularization]="getRegularization(item.created_date)" [isAllGood]="isAllLoaded()" [isWeekOff]="isWeekOff(item.created_date)" [leaveStartDay]="item.leaveData !== null ? getDayType(item.leaveData.from.date, item.leaveData.guid) : ''" [leaveEndDay]="item.leaveData !== null ? getDayType(item.leaveData.to.date, item.leaveData.guid) : ''" [openCard]="a == 0" (attendanceCardAction)="attAcrdAction($event, item)" (actionReturn)="leaveApprovel($event)"></attendance-card>
+        <attendance-card (regularizationUpdated)="refreshRegularizationData()" [attendanceData]="item"
+          [cardClass]="isAllLoaded() ? item.status : ''" [regularization]="getRegularization(item.created_date)"
+          [isAllGood]="isAllLoaded()" [isWeekOff]="isWeekOff(item.created_date)"
+          [leaveStartDay]="item.leaveData !== null ? getDayType(item.leaveData.from.date, item.leaveData.guid) : ''"
+          [leaveEndDay]="item.leaveData !== null ? getDayType(item.leaveData.to.date, item.leaveData.guid) : ''"
+          [openCard]="a == 0" (attendanceCardAction)="attAcrdAction($event, item)"
+          (actionReturn)="leaveApprovel($event)"></attendance-card>
       </ng-container>
       <div class="ion-text-center ion-padding" *ngIf="!isAllLoaded()">
         <ion-spinner color="primary" [name]="'circle'"></ion-spinner>
       </div>
     </div>
-     
+
     <div *ngSwitchCase="'calendarView'">
       <ion-list inset="true" mode="ios">
         <ion-item detail="false" class="calendarControls">
           <ion-buttons slot="start">
-            <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" aria-label="Next Year" (click)="decrementMonth()">
+            <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin"
+              aria-label="Next Year" (click)="decrementMonth()">
               <ion-icon slot="icon-only" name="chevron-back" aria-label="Previous Month"></ion-icon>
             </ion-button>
           </ion-buttons>
           <ion-label class="ion-text-center">{{ attendanceDate | date:"MMMM yyyy" }}</ion-label>
           <ion-buttons slot="end">
-            <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin" (click)="incrementMonth()" aria-label="Next Month" [disabled]="isNextMonth()">
+            <ion-button color="tertiary" shape="round" fill="clear" strong="true" class="ion-no-margin"
+              (click)="incrementMonth()" aria-label="Next Month" [disabled]="isNextMonth()">
               <ion-icon slot="icon-only" name="chevron-forward" aria-label="Next Month"></ion-icon>
             </ion-button>
           </ion-buttons>
         </ion-item>
       </ion-list>
-      
+
       <ion-card class="calendar_card">
         <ion-card-content>
           <table>
@@ -101,7 +116,11 @@
             <tbody>
               <tr *ngFor="let week of dates">
                 <td *ngFor="let date of week">
-                  <span [ngClass]="getStatusByDate(date ?? '')?.status !== '' ? getStatusByDate(date ?? '')?.status + ' active' : ''">{{ date ? getMomentDate(date) : '' }}</span>
+                  <ng-container *ngIf="getStatusByDate(date ?? '') as statusObj">
+                    <span
+                      [ngClass]="getStatusByDate(date ?? '')?.status !== '' ? getStatusByDate(date ?? '')?.status + ' active' : ''">{{
+                      date ? getMomentDate(date) : '' }}</span>
+                  </ng-container>
                 </td>
               </tr>
             </tbody>
@@ -133,7 +152,8 @@
       </div>
     </div>
     <div *ngSwitchCase="'leaves'">
-      <leave-card *ngFor="let leaveItem of leaveLogs" [leaveItem]="leaveItem" (actionReturn)="leaveApprovel($event)"></leave-card>
+      <leave-card *ngFor="let leaveItem of leaveLogs" [leaveItem]="leaveItem"
+        (actionReturn)="leaveApprovel($event)"></leave-card>
       <div class="emptyDiv ion-padding" *ngIf="leaveLoaded && leaveLogs.length < 1">
         <img src="assets/images/empty_bin.svg" class="emptyImg" alt="Empty">
         <ion-label class="ion-text-wrap">No leaves in this month.</ion-label>
@@ -142,14 +162,18 @@
     <div *ngSwitchDefault>output2</div>
   </div>
 
-  <ion-modal [isOpen]="dateModal" [initialBreakpoint]="0.5" mode="md" [showBackdrop]="true" (didDismiss)="dateModal = false" #dateSelectModal>
+  <ion-modal [isOpen]="dateModal" [initialBreakpoint]="0.5" mode="md" [showBackdrop]="true"
+    (didDismiss)="dateModal = false" #dateSelectModal>
     <ng-template>
       <ion-content>
-        <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [value]="attendanceDate" [max]="today.toISOString()" [min]="minDate.toISOString()" (ionChange)="selectDate($any($event));">
+        <ion-datetime presentation="month-year" size="cover" mode="md" #yearMonth [value]="attendanceDate"
+          [max]="today.toISOString()" [min]="minDate.toISOString()" (ionChange)="selectDate($any($event));">
           <ion-label slot="title">Select Year and Month</ion-label>
           <ion-buttons slot="buttons">
-            <ion-button mode="md" color="danger" (click)="yearMonth.cancel(); dateSelectModal.dismiss();">Cancel</ion-button>
-            <ion-button mode="md" color="primary" (click)="yearMonth.confirm(); dateSelectModal.dismiss();">Done</ion-button>
+            <ion-button mode="md" color="danger"
+              (click)="yearMonth.cancel(); dateSelectModal.dismiss();">Cancel</ion-button>
+            <ion-button mode="md" color="primary"
+              (click)="yearMonth.confirm(); dateSelectModal.dismiss();">Done</ion-button>
           </ion-buttons>
         </ion-datetime>
       </ion-content>

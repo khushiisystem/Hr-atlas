@@ -553,7 +553,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
 
     let clockOutAlert;
 
-    if (this.timesheetTime < this.todayWorkingTime - 25) {
+    if (this.timesheetTime < this.todayWorkingTime - 50) {
       clockOutAlert = await this.alertCtrl.create({
         header: "Timesheet Not filled",
         subHeader:

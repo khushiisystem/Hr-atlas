@@ -1,7 +1,8 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']" routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
+      <ion-button mode="md" [routerDirection]="'back'" [routerLink]="['/tabs/home']"
+        routerLinkActive="router-link-active" type="button" fill="clear" [ariaDisabled]="true" class="noRipple noBg">
         <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -9,43 +10,51 @@
     <ion-thumbnail slot="end" class="logo_img ion-margin-end">
       <ion-img src="../../../assets/icon/hr-atlas_logo_2.png" alt="HR-Atlas"></ion-img>
     </ion-thumbnail>
-    <!-- <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar> -->    
-    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>         
+    <!-- <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar> -->
+    <ion-progress-bar type="indeterminate" *ngIf="!isDataLoaded"></ion-progress-bar>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <form [formGroup]="assignProjectForm" class="ion-padding">
-    
-    
+
+
     <ion-row>
       <ion-col size="12">
-        <ion-select formControlName="projectId" label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid">
+        <ion-select formControlName="projectId" label="Projects" interface="popover" label-placement="floating"
+          mode="md" fill="solid">
           <div *ngFor="let project of projects; index as i">
             <ion-select-option value="{{project.guid}}">{{project.title}}</ion-select-option>
           </div>
-        </ion-select>   
-        <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['projectId'].touched && assignProjectForm.controls['projectId'].errors">
+        </ion-select>
+        <ion-text color="danger" class="error_txt"
+          *ngIf="assignProjectForm.controls['projectId'].touched && assignProjectForm.controls['projectId'].errors">
           Project is required
-        </ion-text>       
+        </ion-text>
       </ion-col>
       <ion-col size="12">
-        <ion-select formControlName="userId" label="Employees List" interface="popover" label-placement="floating" fill="solid" mode="md" [multiple]="false">
-          <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{ emp.lastName }}</ion-select-option>
+        <ion-select formControlName="userId" label="Employees List" interface="popover" label-placement="floating"
+          fill="solid" mode="md" [multiple]="false">
+          <ion-select-option *ngFor="let emp of allEmployeeList; index as i" value="{{emp.guid}}">{{ emp.firstName }} {{
+            emp.lastName }}</ion-select-option>
         </ion-select>
-        <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['userId'].touched && assignProjectForm.controls['userId'].errors">
+        <ion-text color="danger" class="error_txt"
+          *ngIf="assignProjectForm.controls['userId'].touched && assignProjectForm.controls['userId'].errors">
           Employee is required
         </ion-text>
       </ion-col>
       <ion-col size="6" id="startdate" class="ino-padding" (click)="markTouched('startDate')">
-        <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('startDate') | date" [required]="true" class="dateInput">
+        <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getDate('startDate') | date"
+          [required]="true" class="dateInput">
           <div slot="label">Start Date <ion-text color="danger">*</ion-text></div>
         </ion-input>
-        <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['startDate'].touched && assignProjectForm.controls['startDate'].errors">
+        <ion-text color="danger" class="error_txt"
+          *ngIf="assignProjectForm.controls['startDate'].touched && assignProjectForm.controls['startDate'].errors">
           Start Date is required
         </ion-text>
       </ion-col>
-      <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #startDateModal>
+      <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true"
+        [breakpoints]="[0.75, 1]" #startDateModal>
         <ng-template>
           <ion-header>
             <ion-toolbar>
@@ -53,11 +62,14 @@
             </ion-toolbar>
           </ion-header>
           <ion-content>
-            <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectDate($any($event))">
+            <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime
+              (ionChange)="selectDate($any($event))">
               <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
               <ion-buttons slot="buttons">
-                <ion-button mode="ios" color="danger" (click)="datetime.cancel(); startDateModal.dismiss();">Cancel</ion-button>
-                <ion-button mode="ios" color="primary" (click)="datetime.confirm(); startDateModal.dismiss()">Done</ion-button>
+                <ion-button mode="ios" color="danger"
+                  (click)="datetime.cancel(); startDateModal.dismiss();">Cancel</ion-button>
+                <ion-button mode="ios" color="primary"
+                  (click)="datetime.confirm(); startDateModal.dismiss()">Done</ion-button>
               </ion-buttons>
             </ion-datetime>
           </ion-content>
@@ -65,14 +77,18 @@
       </ion-modal>
 
       <ion-col size="6" id="endDate" (click)="markTouched('endDate')">
-        <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getEndDate('endDate') | date" [errorText]="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors ? 'End date is required' : ''" [required]="true" class="dateInput">
+        <ion-input labelPlacement="floating" [color]="'medium'" fill="solid" [value]="getEndDate('endDate') | date"
+          [errorText]="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors ? 'End date is required' : ''"
+          [required]="true" class="dateInput">
           <div slot="label">End Date <ion-text color="danger">*</ion-text></div>
         </ion-input>
-        <ion-text color="danger" class="error_txt" *ngIf="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors">
+        <ion-text color="danger" class="error_txt"
+          *ngIf="assignProjectForm.controls['endDate'].touched && assignProjectForm.controls['endDate'].errors">
           End Date is required
         </ion-text>
       </ion-col>
-      <ion-modal trigger="endDate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true" [breakpoints]="[0.75, 1]" #endDateModal>
+      <ion-modal trigger="endDate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true"
+        [breakpoints]="[0.75, 1]" #endDateModal>
         <ng-template>
           <ion-header>
             <ion-toolbar>
@@ -80,11 +96,14 @@
             </ion-toolbar>
           </ion-header>
           <ion-content>
-            <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime (ionChange)="selectEndDate($any($event))">
+            <ion-datetime presentation="date" mode="md" [size]="'cover'" [preferWheel]="false" #datetime
+              (ionChange)="selectEndDate($any($event))">
               <!-- <span slot="title">Select {{selectedCtrl}} Date</span> -->
               <ion-buttons slot="buttons">
-                <ion-button mode="ios" color="danger" (click)="datetime.cancel();endDateModal.dismiss();">Cancel</ion-button>
-                <ion-button mode="ios" color="primary" (click)="datetime.confirm();endDateModal.dismiss()">Done</ion-button>
+                <ion-button mode="ios" color="danger"
+                  (click)="datetime.cancel();endDateModal.dismiss();">Cancel</ion-button>
+                <ion-button mode="ios" color="primary"
+                  (click)="datetime.confirm();endDateModal.dismiss()">Done</ion-button>
               </ion-buttons>
             </ion-datetime>
           </ion-content>
@@ -93,20 +112,135 @@
     </ion-row>
   </form>
 
-  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="assignProjectForm.invalid || isInProgress" (click)="submit()"  color="primary" expand="full" shape="round">{{updateForm ? 'Update' : 'Submit'}}</ion-button>
+  <ion-button mode="md" type="submit" class="submitBtn" [disabled]="assignProjectForm.invalid || isInProgress"
+    (click)="submit()" color="primary" expand="full" shape="round">{{updateForm ? 'Update' : 'Submit'}}</ion-button>
 
-  <ion-card class="ion-margin" *ngFor="let assProject of assProjects; index as i">
+  <!-- Filter Button -->
+  <div class="filter-section ion-margin">
+    <ion-button fill="outline" size="small" (click)="openFilterModal()" class="filter-btn">
+      <ion-icon name="filter-outline" slot="start"></ion-icon>
+      Filter
+      <ion-badge color="primary" *ngIf="activeFilters.length > 0">{{activeFilters.length}}</ion-badge>
+    </ion-button>
+  </div>
+
+  <!-- Filter Modal -->
+  <ion-modal #filterModal [isOpen]="isFilterModalOpen" (didDismiss)="closeFilterModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Filter Projects</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeFilterModal()">
+              <ion-icon name="close"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding">
+        <!-- Project Selection -->
+        <ion-select label="Projects" interface="popover" label-placement="floating" mode="md" fill="solid"
+          [(ngModel)]="selectedProjectFilter" (selectionChange)="onProjectFilterChange()">
+          <ion-select-option value="">All Projects</ion-select-option>
+          <ion-select-option *ngFor="let project of projects" [value]="project.guid">
+            {{project.title}}
+          </ion-select-option>
+        </ion-select>
+
+        <!-- Employee Selection -->
+        <ion-select label="Employees List" interface="popover" label-placement="floating" fill="solid" mode="md"
+          [multiple]="false" [(ngModel)]="selectedEmployeeFilter" (selectionChange)="onEmployeeFilterChange()">
+          <ion-select-option value="">All Employees</ion-select-option>
+          <ion-select-option *ngFor="let emp of allEmployeeList" [value]="emp.guid">
+            {{ emp.firstName }} {{ emp.lastName }}
+          </ion-select-option>
+        </ion-select>
+
+        <!-- Status Filters -->
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Status Filters</ion-label>
+          </ion-list-header>
+
+          <ion-item>
+            <ion-checkbox [(ngModel)]="filterOptions.running" (ionChange)="onFilterChange()">
+            </ion-checkbox>
+            <ion-label class="ion-margin-start">
+              <h3>Running</h3>
+              <p>Projects currently in progress</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-checkbox [(ngModel)]="filterOptions.expired" (ionChange)="onFilterChange()">
+            </ion-checkbox>
+            <ion-label class="ion-margin-start">
+              <h3>Access Expired</h3>
+              <p>Projects that have expired</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-checkbox [(ngModel)]="filterOptions.expiresIn1Day" (ionChange)="onFilterChange()">
+            </ion-checkbox>
+            <ion-label class="ion-margin-start">
+              <h3>Expires in 1 Day</h3>
+              <p>Projects expiring tomorrow</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-checkbox [(ngModel)]="filterOptions.expiresIn2Days" (ionChange)="onFilterChange()">
+            </ion-checkbox>
+            <ion-label class="ion-margin-start">
+              <h3>Expires in 2 Days</h3>
+              <p>Projects expiring in 2 days</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-checkbox [(ngModel)]="filterOptions.notStarted" (ionChange)="onFilterChange()">
+            </ion-checkbox>
+            <ion-label class="ion-margin-start">
+              <h3>Not Started Yet</h3>
+              <p>Projects that haven't begun</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-content>
+
+      <ion-footer>
+        <ion-toolbar>
+          <div class="filter-actions ion-padding">
+            <ion-button expand="block" color="danger" (click)="clearAllFilters()">
+              Clear All
+            </ion-button>
+            <ion-button expand="block" (click)="applyFilters()" color="primary">
+              Apply Filters
+            </ion-button>
+          </div>
+        </ion-toolbar>
+      </ion-footer>
+    </ng-template>
+  </ion-modal>
+
+  <ion-card class="ion-margin" *ngFor="let assProject of filteredAssProjects; index as i">
     <div class="wrapper">
       <div class="ion-activatable rounded-rectangle">
         <h5>{{assProject.project.title}}</h5>
         <!-- update  -->
         <ion-button size="small" (click)="update(assProject)"><ion-icon name="create-outline"></ion-icon></ion-button>
-     </div> 
+      </div>
       <div class="date">
         <p><span>Employeee : {{assProject.user.firstName}} {{assProject.user.lastName}}</span> <span></span></p>
         <p><span>Start Date :</span> <span>{{assProject.startDate | date: 'dd-MMMM-yyyy'}}</span></p>
-         <p><span>End Date :</span> <span>{{assProject.endDate| date: 'dd-MMMM-yyyy'}}</span></p>
-      </div>       
+        <p><span>End Date :</span> <span>{{assProject.endDate| date: 'dd-MMMM-yyyy'}}</span></p>
+        <p><span>Status :</span> <ion-text [color]="assProject.status.status">
+            <span>{{ assProject.status.message }}</span>
+          </ion-text></p>
+      </div>
     </div>
   </ion-card>
+
 </ion-content>

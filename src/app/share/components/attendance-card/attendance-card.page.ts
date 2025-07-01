@@ -407,6 +407,8 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
         this.attendanceData.status = AttendaceStatus.PRESENT;
       }
     }
+
+    // console.log(this.attendanceData.created_date+" - "+this.attendanceData.status);
     this.cdr.detectChanges();
   }
 
