@@ -135,6 +135,11 @@ export class ShareService {
   employeeAssignedWorkWeek(emplId: string) : Observable<IEmplpoyeeWorWeek> {
     return this.http.get<IEmplpoyeeWorWeek>(environment.Api + `api/workWeekEmployee/employeeId/${emplId}`);
   }
+
+  employeeAssignedWorkWeekWithDate(emplId: string, date: Date) : Observable<IEmplpoyeeWorWeek> {
+    return this.http.get<IEmplpoyeeWorWeek>(environment.Api + `api/workWeekEmployee/employeeId/${emplId}?date=${date}`);
+  }
+  
   getEventHollyday(selectedYear: string | number): Observable<IHollydayResponse[]> {
     return this.http.get<IHollydayResponse[]>(environment.Api + `api/hollyday/allHollyday?date=${selectedYear}`);
   }

@@ -185,7 +185,7 @@ const routes: Routes = [
         title: "Payroll Setup",
         component: PayrollSetupPage,
         canActivate:[AuthGuard, RoleGuard],
-        data: {role: ["Admin"]}
+        data: {role: ["Admin", "HR"]}
       },
       {
         path: 'employee-payroll',

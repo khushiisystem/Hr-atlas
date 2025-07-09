@@ -7,7 +7,11 @@ import {
   ViewChild,
 } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import { DatetimeCustomEvent, IonContent, IonInfiniteScroll } from "@ionic/angular";
+import {
+  DatetimeCustomEvent,
+  IonContent,
+  IonInfiniteScroll,
+} from "@ionic/angular";
 import * as moment from "moment";
 import { Subscription } from "rxjs";
 import { AttendaceStatus } from "src/app/interfaces/enums/leaveCreditPeriod";
@@ -111,7 +115,8 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   requestLoaded: boolean = false;
   moreRequests: boolean = false;
   requestedLeaveList: ILeaveLogsResponse[] = [];
-   @ViewChild("requestsInfiniteScroll") requestsInfiniteScroll!: IonInfiniteScroll;
+  @ViewChild("requestsInfiniteScroll")
+  requestsInfiniteScroll!: IonInfiniteScroll;
 
   constructor(
     private shareServ: ShareService,
@@ -185,6 +190,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   onDateChange() {
+    this.getWorkWeek();
     localStorage.setItem("attendanceDate", this.attendanceDate);
   }
 
@@ -248,10 +254,11 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   getWorkWeek() {
     this.workWeekLoaded = false;
     this.apiSubscription = this.shareServ
-      .employeeAssignedWorkWeek(this.employeeId)
+      .employeeAssignedWorkWeekWithDate(this.employeeId, this.attendanceDate)
       .subscribe(
         (res) => {
           if (res) {
+            // console.log("check res : ", res);
             this.employee = { ...res.employeeDetails, guid: res.employeeId };
             this.presents = 0;
             this.absent = 0;
@@ -313,7 +320,10 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
                   } else {
                     // item.status = e.status;
                     // console.log(item.created_date, item.status, e.status);
-                    item.status = e.status !== AttendaceStatus.ABSENT ? this.updateStatus(item.attendanceData,e.status) : item.status;
+                    item.status =
+                      e.status !== AttendaceStatus.ABSENT
+                        ? this.updateStatus(item.attendanceData, e.status)
+                        : item.status;
                     //  console.log(item.created_date, item.status, e.status);
                   }
                   item.created_date = new Date(e.clockIn).toISOString();
@@ -374,7 +384,10 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
       );
   }
 
-  updateStatus(attendanceData: Array<any>,currentStatus = AttendaceStatus.ABSENT): AttendaceStatus {
+  updateStatus(
+    attendanceData: Array<any>,
+    currentStatus = AttendaceStatus.ABSENT
+  ): AttendaceStatus {
     const firstDataDate = new Date(attendanceData[0].clockIn);
     const updatedDate = new Date(this.today);
 
@@ -414,7 +427,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
           : currentStatus;
       }
     }
-      
+
     return currentStatus;
   }
   calculateDuration(clockIn: string, clockOut: string | null) {
@@ -435,6 +448,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   addWeekOffDays() {
+    // console.log("this.workweeekdetail : ", this.workWeekDetail);
     const weekOfList = this.workWeekDetail.workweekDetails.weekOff;
     this.dateList.forEach((item) => {
       if (
@@ -632,7 +646,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
         (res) => {
           // console.log("res : ",res);
           this.leaveLogs = res.sort((a, b) => {
-            return new Date(b.from.date).getTime() - new Date(a.from.date).getTime();
+            return (
+              new Date(b.from.date).getTime() - new Date(a.from.date).getTime()
+            );
           });
 
           for (let a = 0; a < res.length; a++) {
@@ -879,9 +895,9 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     this.getMonthLyAttendance();
     this.getLogs();
     this.getCalendar();
-    if (this.workWeekDetail) {
-      this.addWeekOffDays();
-    }
+    // if (this.workWeekDetail) {
+    //   this.addWeekOffDays();
+    // }
   }
 
   getMonthYear() {
@@ -1090,20 +1106,21 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     );
   }
 
-    leaveApprovel(event: LeaveAction){
-      const approvel: boolean = event.action === "Accept";
-      
-      this.loader.present('');
-      const leaveData = {
-        leaveGuid: event.leaveId,
-        approveLeave: approvel
-      }
-      this.adminServ.leaveApprove(leaveData).subscribe(res => {
-        if(res){
-          if(res.Message){
-            this.shareServ.presentToast(res.Message, 'top', 'success');
+  leaveApprovel(event: LeaveAction) {
+    const approvel: boolean = event.action === "Accept";
+
+    this.loader.present("");
+    const leaveData = {
+      leaveGuid: event.leaveId,
+      approveLeave: approvel,
+    };
+    this.adminServ.leaveApprove(leaveData).subscribe(
+      (res) => {
+        if (res) {
+          if (res.Message) {
+            this.shareServ.presentToast(res.Message, "top", "success");
           } else {
-            this.shareServ.presentToast('Responded', 'top', 'success');
+            this.shareServ.presentToast("Responded", "top", "success");
           }
           this.logPageNumber = 0;
           this.pageNumber = 0;
@@ -1111,37 +1128,52 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
           this.requestedLeaves();
           this.getLogs();
         }
-      }, (error) => {
-        this.shareServ.presentToast(error.error.message, 'top', 'danger');
+      },
+      (error) => {
+        this.shareServ.presentToast(error.error.message, "top", "danger");
         this.loader.dismiss();
-      })
-    }
+      }
+    );
+  }
 
-    requestedLeaves(){
-        this.requestLoaded = false;
-        const data = {
-          status: 'Pending'
-        };
-        this.shareServ.getLeaveList(data, this.pageNumber * 20, 20).subscribe(res => {
-          if(res) {
-            if(res.length < 1){this.moreRequests = false; this.requestLoaded = true;}
-    
-            if(this.pageNumber < 1){this.requestedLeaveList = [];}
-            for(let i=0; i < res.length; i++){
-              if(!this.requestedLeaveList.some((item: ILeaveLogsResponse) => item.guid === res[i].guid)){
-                this.requestedLeaveList.push(res[i]);
-              }
-            }
-            this.moreRequests = res.length > 19;
-            if(this.requestsInfiniteScroll){
-              if(!this.moreRequests){
-              this.requestsInfiniteScroll.complete();}
-            }
+  requestedLeaves() {
+    this.requestLoaded = false;
+    const data = {
+      status: "Pending",
+    };
+    this.shareServ.getLeaveList(data, this.pageNumber * 20, 20).subscribe(
+      (res) => {
+        if (res) {
+          if (res.length < 1) {
+            this.moreRequests = false;
             this.requestLoaded = true;
           }
-        }, (error) => {
-          console.log(error.error);
+
+          if (this.pageNumber < 1) {
+            this.requestedLeaveList = [];
+          }
+          for (let i = 0; i < res.length; i++) {
+            if (
+              !this.requestedLeaveList.some(
+                (item: ILeaveLogsResponse) => item.guid === res[i].guid
+              )
+            ) {
+              this.requestedLeaveList.push(res[i]);
+            }
+          }
+          this.moreRequests = res.length > 19;
+          if (this.requestsInfiniteScroll) {
+            if (!this.moreRequests) {
+              this.requestsInfiniteScroll.complete();
+            }
+          }
           this.requestLoaded = true;
-        });
+        }
+      },
+      (error) => {
+        console.log(error.error);
+        this.requestLoaded = true;
       }
+    );
+  }
 }

@@ -51,7 +51,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   empType: "All" | "Active" | "InActive" | "Resigned" = "Active";
   selectedEmployee: any[] = [];
   @Input() payslipDate?: Date;
-  @Input() payrollSetup?:boolean;
+  @Input() payrollSetup?: boolean;
   today: Date = new Date();
   private searchSubject = new Subject<string>();
   private readonly debounceTimeMs = 1500;
@@ -78,7 +78,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
       this.today.getMonth(),
       this.today.getDate()
     );
-    if(this.payrollSetup){
+    if (this.payrollSetup) {
       this.payslipDate = this.today;
     }
     this.getEmployeeList();
@@ -89,7 +89,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
       });
   }
 
-  naviagateToPayslip(userId: string){
+  naviagateToPayslip(userId: string) {
     this.loader.present("").then(() => {
       this.loader.dismiss().then(() => {
         this.router.navigate([`/tabs/payroll/${userId}`]);
@@ -164,6 +164,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   }
 
   checkEmployee(employee: string, salaryStatus?: boolean) {
+    if (this.userRole !== "Admin") return;
     if (!salaryStatus) return;
 
     console.log("emp data : ", salaryStatus);
@@ -185,6 +186,8 @@ export class EmployeesPage implements OnInit, OnDestroy {
   }
 
   selectEmployee(empData: IEmpSelect) {
+    if (this.userRole !== "Admin") return;
+
     if (this.selectedEmployee.length > 0) {
       this.checkEmployee(empData.guid);
     } else {
