@@ -35,7 +35,7 @@ export class ShareService {
 
 
   // APIs for employee
-  getAllEmployee(empType: 'All' | 'Active' | 'InActive', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
+  getAllEmployee(empType: "All" | "Active" | "InActive" | "Resigned", pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
     return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}`);
   }
   getEmployeeById(empId: string): Observable<IEmployeeResponse>{

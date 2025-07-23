@@ -34,6 +34,7 @@ import { TimesheetSubCategoryPage } from '../admin/timesheet-sub-category/timesh
 import { TimesheetFormPage } from '../employee/time-sheet/timesheet-form/timesheet-form.page';
 import { AdminTimesheetsPage } from '../admin/admin-timesheets/admin-timesheets.page';
 import { PdfDetailsPage } from '../share/components/pdf-details/pdf-details.page';
+import { DownloadPayslipPage } from '../admin/download-payslip/download-payslip.page';
 
 const routes: Routes = [
   {
@@ -131,6 +132,13 @@ const routes: Routes = [
         path: 'additional-setup',
         title: "Additional Setup",
         component: AdditionalSetupPage,
+        canActivate:[AuthGuard, RoleGuard],
+        data: {role: ["Admin", "HR"]}
+      },
+      {
+        path: 'download-payslip',
+        title: "Download Payslip",
+        component: DownloadPayslipPage,
         canActivate:[AuthGuard, RoleGuard],
         data: {role: ["Admin", "HR"]}
       },

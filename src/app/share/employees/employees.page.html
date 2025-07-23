@@ -1,4 +1,4 @@
-<div class="container ion-padding-top" *ngIf="userRole !== 'Employee'">
+<div class="container ion-padding-top" *ngIf="userRole === 'Admin'">
   <div class="stickyTop ion-padding-bottom">
     <div class="optbar">
       <ion-item detail="false" lines="none" mode="md">
@@ -7,12 +7,11 @@
           [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
       </ion-item>
       <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="optionPop"
-        class="ion-margin-start ion-no-padding" *ngIf="userRole !== 'Employee'">
+        class="ion-margin-start ion-no-padding">
         <ion-icon name="funnel" aria-hidden="true" aria-label="Option"></ion-icon>
       </ion-button>
     </div>
-    <ion-popover trigger="optionPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter"
-      *ngIf="userRole !== 'Employee'">
+    <ion-popover trigger="optionPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter">
       <ng-template>
         <ion-content>
           <!-- <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item> -->
@@ -37,7 +36,7 @@
     </ion-list> -->
 
     <div class="optbar btns"
-      *ngIf="(isChecklist || isPayroll) && employeeList.length > 0 && empType != 'InActive' && userRole === 'Admin'">
+      *ngIf="(isChecklist || isPayroll) && employeeList.length > 0 && empType != 'InActive'">
       <ion-chip mode="ios" [ngClass]="selectedEmployee.length > (employeeList.length-1) ? 'chipBtn filled' : 'chipBtn'"
         color="tertiary" aria-label="mark all" *ngIf="isChecklist" (click)="allSelect()">
         <ion-icon name="checkmark" aria-hidden="true" aria-label="mark all"></ion-icon>
@@ -97,14 +96,9 @@
         <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
         <ion-text class="role" *ngIf="employee"><small>{{employee.jobTitle}}</small></ion-text>
       </div>
-      <div *ngIf="!employee.salaryStatus && payrollSetup && userRole === 'Admin'">
+      <div *ngIf="!employee.salaryStatus && payrollSetup">
         <ion-icon name="alert-circle" color="primary"></ion-icon>
         <!-- <ion-icon name="warning" color="primary"></ion-icon> -->
-      </div>
-      <div *ngIf="payrollSetup" (click)="naviagateToPayslip(employee.guid)">
-        <ion-button fill="clear" class="custom-arrow-button">
-          <ion-icon name="chevron-forward" class="arrow-icon"></ion-icon>
-        </ion-button>
       </div>
     </ion-item>
   </ion-list>

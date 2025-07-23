@@ -47,7 +47,7 @@ export class AddEmployeePage implements OnInit {
       subDepartment: ['Project Management']
     }, {
       name: 'Development Department',
-      subDepartment: ['Frontend Development', 'Backend Development', 'UI / UX', 'DevOps', 'Full Stack Development']
+      subDepartment: ['Frontend Developer', 'Backend Developer', 'UI / UX', 'DevOps', 'Full Stack Developer', 'Quality Assurance']
     }, {
       name: 'Sales Department',
       subDepartment: ['Bussiness Development']
