@@ -121,24 +121,20 @@
         </ion-col>
 
         <ion-col size="6">
-          <ion-item fill="solid" detail="false" id="startTime" (click)="markTouched('startTime')">
-            <ion-input labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time"
-              readonly="true">
-              <div slot="label">Start Time<ion-text color="danger">*</ion-text></div>
-            </ion-input>
-          </ion-item>
+          <ion-input fill="solid" labelPlacement="floating" [value]="getStartTime() |date:'HH:mm'" placeholder="Hrs" type="time"
+            readonly="true" id="startTime" (click)="markTouched('startTime')">
+            <div slot="label">Start Time<ion-text color="danger">*</ion-text></div>
+          </ion-input>
           <ion-text color="danger" class="error_txt"
             *ngIf="timeSheetForm.controls['startTime'].touched && timeSheetForm.controls['startTime'].errors">Start Time
             is required</ion-text>
         </ion-col>
 
         <ion-col size="6">
-          <ion-item fill="solid" detail="false" id="endTime" (click)="markTouched('endTime')">
-            <ion-input labelPlacement="floating" [value]="getEndTime() |date:'HH:mm'" placeholder="Hrs" type="time"
-              readonly="true">
-              <div slot="label">End Time<ion-text color="danger">*</ion-text></div>
-            </ion-input>
-          </ion-item>
+          <ion-input fill="solid" labelPlacement="floating" [value]="getEndTime() |date:'HH:mm'" placeholder="Hrs" type="time"
+            readonly="true" id="endTime" (click)="markTouched('endTime')">
+            <div slot="label">End Time<ion-text color="danger">*</ion-text></div>
+          </ion-input>
           <ion-text color="danger" class="error_txt"
             *ngIf="timeSheetForm.controls['endTime'].touched && timeSheetForm.controls['endTime'].errors">End Time is
             required</ion-text>
@@ -146,7 +142,7 @@
 
         <ion-text color="danger" class="error_txt" *ngIf="timesheetTimeError">{{timesheetTimeError}}</ion-text>
 
-        <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true"
+        <!-- <ion-modal trigger="startdate" [initialBreakpoint]="0.75" mode="ios" [keepContentsMounted]="true"
           [breakpoints]="[0.75, 1]" #startDateModal>
           <ng-template>
             <ion-header>
@@ -166,7 +162,7 @@
               </ion-datetime>
             </ion-content>
           </ng-template>
-        </ion-modal>
+        </ion-modal> -->
 
         <!-- tag  -->
         <ion-col size="12">
