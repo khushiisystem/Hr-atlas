@@ -30,6 +30,7 @@ export class AdminProfilePage implements OnInit {
   numberOfWeek: string[] = [];
   offDays: string[] = [];
   workWeekLoaded: boolean = false;
+  today : any = new Date().toISOString();
 
   constructor(
     private router: Router,
@@ -80,7 +81,7 @@ export class AdminProfilePage implements OnInit {
   getWorkWeek(){
     this.workWeekLoaded = false;
     this.offDays = [];
-    this.shareServ.employeeAssignedWorkWeek(this.userId).subscribe(res => {
+    this.shareServ.employeeAssignedWorkWeekWithDate(this.userId, this.today).subscribe(res => {
       if(res) {
         this.workWeekDetail = res;
         this.weekArray = moment.weekdays();

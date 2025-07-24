@@ -250,3 +250,47 @@ ion-accordion ion-item[slot="header"], .btn_item {--ripple-color: var(--ion-colo
     & ion-card, & ion-item {--background: transparent;}
 }
 .logout-card {font-weight: 600;}
+
+
+.responsive-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  /* Mobile view - flex layout (stack vertically or wrap) */
+//   flex-direction: column;
+  align-items: stretch;
+}
+
+.responsive-buttons ion-button {
+  flex: 1;
+  margin: 4px 0;
+}
+
+/* Desktop view - align to right */
+@media (min-width: 768px) {
+  .responsive-buttons {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .responsive-buttons ion-button {
+    flex: none;
+    margin: 0;
+  }
+}
+
+/* Alternative mobile layout - horizontal with equal width */
+@media (max-width: 767px) {
+  .responsive-buttons.horizontal-mobile {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .responsive-buttons.horizontal-mobile ion-button {
+    flex: 1;
+    margin: 0 4px;
+  }
+}

@@ -34,3 +34,56 @@
     .reject-button { color: red; }
     .approve-button { color: rgb(23, 219, 23); }
   }
+
+  .filter-section {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.filter-btn {
+  --border-radius: 6px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  height: 32px;
+  font-size: 14px;
+  position: relative;
+}
+
+.filter-btn ion-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-actions ion-button {
+  flex: 1;
+}
+
+ion-modal {
+  --border-radius: 16px 16px 0 0;
+}
+
+ion-modal ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: white;
+}
+
+ion-list ion-item {
+  --padding-start: 16px;
+  margin-bottom: 8px;
+}
+
+ion-checkbox {
+  --size: 20px;
+  --border-radius: 4px;
+}

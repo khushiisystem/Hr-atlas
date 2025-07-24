@@ -48,8 +48,10 @@
               <ion-icon [name]="'person'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
               <ion-input labelPlacement="floating" formControlName="lastName" placeholder="last Name" type="text"
                 enterkeyhint="next" inputmode="text" (ionChange)="toTitleCaseAndTrim($event, 'lastName')">
-                <div slot="label">Last Name</div>
+                <div slot="label">Last Name <ion-text color="danger">*</ion-text></div>
               </ion-input>
+              <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
+                *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['firstName'].errors"></ion-icon>
             </ion-item>
             <ion-item detail="false" id="dob">
               <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>

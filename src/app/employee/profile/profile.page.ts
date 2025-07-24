@@ -28,6 +28,7 @@ export class ProfilePage implements OnInit {
   workLoaded: boolean = false;
   workWeekLoaded: boolean = false;
   expandedAccordion: string = "Personal";
+  today : any = new Date().toISOString();
 
   constructor(
     private router: Router,
@@ -86,7 +87,7 @@ export class ProfilePage implements OnInit {
   getWorkWeek(){
     this.workWeekLoaded = false;
     this.offDays = [];
-    this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(res => {
+    this.shareServ.employeeAssignedWorkWeekWithDate(this.employeeId, this.today).subscribe(res => {
       if(res) {
         this.workWeekDetail = res;
         this.weekArray = moment.weekdays();

@@ -3,14 +3,14 @@
     <div>
       <ion-card-title>{{attendanceData.created_date | date:'EEE, dd MMM'}}</ion-card-title>
       <ion-card-subtitle
-        *ngIf="workDurationString.trim() === '0h 0m 0s' || regularization?.status === 'Accept'">{{attendanceData.status}}</ion-card-subtitle>
+        *ngIf="workDurationString.trim() === '0h 0m 0s' || regularization?.status === 'Accept' || attendanceData.status">{{attendanceData.status}}</ion-card-subtitle>
       <ion-note *ngIf="workDurationString.trim() !== '0h 0m 0s' && attendanceData.status !== 'Absent'"><ion-icon
           name="time-outline" size="small"
           style="vertical-align: middle; margin-right: 5px;"></ion-icon>{{workDurationString}}</ion-note>
     </div>
 
     <ion-chip color="tertiary"
-      *ngIf="(userRole === 'Employee' && !isWeekOff && !regularization?.status ) && ( attendanceData.status === 'Absent'  ||  (attendanceData.status === 'Leave' && leaveDay ))"
+      *ngIf="(userRole === 'Employee' && !isWeekOff && !regularization?.status ) && ( attendanceData.status === 'Absent' || attendanceData.status === 'Half Day' ||  (attendanceData.status === 'Leave' && leaveDay ))"
       class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
     <div class="ion-no-margin ion-text-center btnChip" *ngIf="userRole !== 'Employee'">
 

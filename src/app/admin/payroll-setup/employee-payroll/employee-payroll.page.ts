@@ -241,12 +241,23 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
   }
 
   fetchAdvance() {
-    const matchedIndex = this.logHistory
-      .reverse()
-      .findIndex((item) => this.checkDate(item.payslipDate, this.payrollDate));
+    // console.log("payslip date : ", this.payrollDate);
+    // console.log("payroll date : ", this.payrollDate);
+    // console.log("log history : ", this.logHistory)
+
+    const reversedLogHistory = [...this.logHistory].reverse();
+
+    const matchedIndex = reversedLogHistory.findIndex((item) =>
+      this.checkDate(item.payslipDate, this.payrollDate)
+    );
+
+    console.log("matched index : ", matchedIndex);
+
     if (matchedIndex > -1) {
-      this.previousLog = this.logHistory.reverse()[matchedIndex];
+      this.previousLog = reversedLogHistory[matchedIndex];
+      // console.log("previou logs : ", this.previousLog);
       this.extraIncomeForm.patchValue(this.previousLog);
+      // console.log("extraIncomeForm : ", this.extraIncomeForm);
     } else {
       this.previousLog = this.logHistory.reverse()[0];
       this.extraIncomeForm.patchValue({
@@ -260,7 +271,7 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
     }
   }
 
-  checkDate(date1: Date | string , date2: any) {
+  checkDate(date1: Date | string, date2: any) {
     return (
       moment(date1).isSame(date2, "year") &&
       moment(date1).isSame(date2, "month")

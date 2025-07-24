@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Platform } from "@ionic/angular";
+import { RoleStateService } from "src/app/services/roleState.service";
 import { IEmpSelect } from "src/app/share/employees/employees.page";
 
 @Component({
@@ -12,14 +13,26 @@ export class PayrollSetupPage implements OnInit, OnDestroy {
   employeeId: string = "";
   employee!: IEmpSelect;
   payslipDate: Date = new Date();
+  userRole: string = "";
 
-  constructor(private platform: Platform, private router: Router) {
+  constructor(
+    private platform: Platform,
+    private router: Router,
+    private roleStateServ: RoleStateService
+  ) {
     this.backButtonEvent();
+    roleStateServ.getState().subscribe((res) => {
+      if (res) {
+        this.userRole = res;
+      } else {
+        this.userRole = localStorage.getItem("userRole") || "";
+      }
+    });
   }
 
   onPayslipDateChange(date: Date) {
-  this.payslipDate = date;
-}
+    this.payslipDate = date;
+  }
 
   ngOnInit() {}
   ngOnDestroy(): void {
@@ -30,7 +43,7 @@ export class PayrollSetupPage implements OnInit, OnDestroy {
   }
 
   selectEmploye(event: IEmpSelect) {
-    this.employee = event;  
+    this.employee = event;
     this.employeeId = event.guid;
   }
 

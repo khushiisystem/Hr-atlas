@@ -559,7 +559,9 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
         subHeader:
           this.timesheetTime === 0
             ? "Please fill your timesheet before clocking out"
-            : `Complete your timesheet - ${this.newFormatTime(this.todayWorkingTime - this.timesheetTime)} remaining`,
+            : `Complete your timesheet - ${this.newFormatTime(
+                this.todayWorkingTime - this.timesheetTime
+              )} remaining`,
         mode: "md",
         buttons: [
           {
@@ -720,6 +722,11 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   addEmployee() {
     localStorage.setItem("lastRoute", this.router.url);
     this.router.navigate([`/tabs/add-employee/add/${null}`]);
+  }
+
+  downlaodPayslip() {
+    localStorage.setItem("lastRoute", this.router.url);
+    this.router.navigate([`/tabs/download-payslip`]);
   }
 
   getName() {
@@ -931,16 +938,38 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getTimesheetTimeOfDay() {
-    this.timesheetSer.getTimesheetDay(this.timesheetDate).subscribe((res) => {
-      if (res && res instanceof Array) {
-        this.timesheetOfTheDay = res;
-        for (let day of this.timesheetOfTheDay) {
-          this.timesheetTime += day.totalTime;
+    this.timesheetSer
+      .getTimesheetDay(this.timesheetDate)
+      .subscribe((res) => {
+        if (res && res instanceof Array) {
+          this.timesheetOfTheDay = res;
+
+          // for (let day of this.timesheetOfTheDay) {
+          //   this.timesheetTime += day.totalTime;
+          // }
+          this.timesheetTime = 0;
+          this.timesheetOfTheDay.forEach(
+            (item: { startTime: string; endTime: string }) => {
+              const durationMs = this.calculateDuration(
+                item.startTime,
+                item.endTime
+              );
+              this.timesheetTime += durationMs / (1000 * 60);
+            }
+          );
+
+          this.hours = Math.floor(this.timesheetTime / 60);
+          this.timesheetTimeFlag = true;
         }
-        this.hours = Math.floor(this.timesheetTime / 60);
-        this.timesheetTimeFlag = true;
-      }
-    });
+      });
+  }
+
+  calculateDuration(startTime: string, endTime: string) {
+    if (!endTime) return 0;
+    const startTim: Date = new Date(startTime);
+    const endTim: Date = new Date(endTime);
+    const durationMs: any = endTim.getTime() - startTim.getTime();
+    return durationMs;
   }
 
   getTodayAttendanceTime() {

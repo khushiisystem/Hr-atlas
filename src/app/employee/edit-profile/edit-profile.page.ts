@@ -64,6 +64,7 @@ export class EditProfilePage implements OnInit {
       lastName: [
         "",
         Validators.compose([
+          Validators.required,
           Validators.maxLength(50),
           Validators.pattern(/^[A-Za-z\s'-]+$/), // Letters, spaces, apostrophes, and hyphens
         ]),

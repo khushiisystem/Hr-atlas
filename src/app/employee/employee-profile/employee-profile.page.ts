@@ -1,23 +1,27 @@
-import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
-import { IonAccordionGroup, ModalController } from '@ionic/angular';
-import { IAddress } from 'src/app/interfaces/request/IEmployee';
-import { IEmployeeResponse, IEmployeeWrokResponse } from 'src/app/interfaces/response/IEmployee';
-import { LoaderService } from 'src/app/services/loader.service';
-import { RoleStateService } from 'src/app/services/roleState.service';
-import { ShareService } from 'src/app/services/share.service';
-import { AddExperiencePage } from 'src/app/admin/add-experience/add-experience.page';
-import { AddEmployeePage } from 'src/app/admin/add-employee/add-employee.page';
-import { IEmplpoyeeWorWeek } from 'src/app/interfaces/response/IEmplpoyeeWorWeek';
-import * as moment from 'moment';
+import { Component, ViewChild } from "@angular/core";
+import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
+import { IonAccordionGroup, ModalController } from "@ionic/angular";
+import { IAddress } from "src/app/interfaces/request/IEmployee";
+import {
+  IEmployeeResponse,
+  IEmployeeWrokResponse,
+} from "src/app/interfaces/response/IEmployee";
+import { LoaderService } from "src/app/services/loader.service";
+import { RoleStateService } from "src/app/services/roleState.service";
+import { ShareService } from "src/app/services/share.service";
+import { AddExperiencePage } from "src/app/admin/add-experience/add-experience.page";
+import { AddEmployeePage } from "src/app/admin/add-employee/add-employee.page";
+import { IEmplpoyeeWorWeek } from "src/app/interfaces/response/IEmplpoyeeWorWeek";
+import * as moment from "moment";
 
 @Component({
-  selector: 'app-employee-profile',
-  templateUrl: './employee-profile.page.html',
-  styleUrls: ['./employee-profile.page.scss'],
+  selector: "app-employee-profile",
+  templateUrl: "./employee-profile.page.html",
+  styleUrls: ["./employee-profile.page.scss"],
 })
 export class EmployeeProfilePage {
-  @ViewChild('accordionGroup', { static: true }) accordionGroup!: IonAccordionGroup;
+  @ViewChild("accordionGroup", { static: true })
+  accordionGroup!: IonAccordionGroup;
   employeeId: string = "";
   employeeDetail!: IEmployeeResponse;
   workDetail!: IEmployeeWrokResponse;
@@ -37,61 +41,70 @@ export class EmployeeProfilePage {
     private roleStateServ: RoleStateService,
     private modalCtrl: ModalController,
     public router: Router,
-    private loader: LoaderService,
+    private loader: LoaderService
   ) {}
 
-  ionViewWillEnter(){
-    this.employeeId = this.activeRoute.snapshot.params?.['employeeId'];
+  ionViewWillEnter() {
+    this.employeeId = this.activeRoute.snapshot.params?.["employeeId"];
     this.randomList.length = 7;
-    if(this.employeeId.trim() !== ''){
+    if (this.employeeId.trim() !== "") {
       this.getEmployeeDetails();
       this.getWorkDetails();
       this.getWorkWeek();
     }
-    this.roleStateServ.getState().subscribe(res => {
-      this.userRole = res || localStorage.getItem('userRole');
+    this.roleStateServ.getState().subscribe((res) => {
+      this.userRole = res || localStorage.getItem("userRole");
     });
   }
 
-  getEmployeeDetails(){
+  getEmployeeDetails() {
     this.dataLoaded = false;
-    this.loader.present('');
-    this.shareServ.getEmployeeById(this.employeeId).subscribe(res => {
-      if(res){
-        this.employeeDetail = res;
+    this.loader.present("");
+    this.shareServ.getEmployeeById(this.employeeId).subscribe(
+      (res) => {
+        if (res) {
+          this.employeeDetail = res;
+          this.dataLoaded = true;
+          this.loader.dismiss();
+        }
+      },
+      (error) => {
+        console.log(error, "error");
         this.dataLoaded = true;
         this.loader.dismiss();
       }
-    }, (error) => {
-      console.log(error, "error");
-      this.dataLoaded = true;
-      this.loader.dismiss();
-    });
+    );
   }
 
-  getWorkDetails(){
-    this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(res => {
-      if(res) {
-        this.workDetail = res;
+  getWorkDetails() {
+    this.shareServ.getWorkByEmployeeId(this.employeeId).subscribe(
+      (res) => {
+        if (res) {
+          this.workDetail = res;
+          this.workLoaded = true;
+        }
+      },
+      (error) => {
         this.workLoaded = true;
       }
-    }, (error) => {
-      this.workLoaded = true;
-    });
+    );
   }
-  getWorkWeek(){
+  getWorkWeek() {
     this.workWeekLoaded = false;
     this.offDays = [];
-    this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(res => {
-      if(res) {
-        this.workWeekDetail = res;
-        this.weekArray = moment.weekdays();
-        this.offDays = this.workWeekDetail.workweekDetails.weekOff;
+    this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(
+      (res) => {
+        if (res) {
+          this.workWeekDetail = res;
+          this.weekArray = moment.weekdays();
+          this.offDays = this.workWeekDetail.workweekDetails.weekOff;
+          this.workWeekLoaded = true;
+        }
+      },
+      (error) => {
         this.workWeekLoaded = true;
       }
-    }, (error) => {
-      this.workWeekLoaded = true;
-    });
+    );
   }
 
   toggleAccordion = (accordionvalue: string) => {
@@ -103,10 +116,10 @@ export class EmployeeProfilePage {
     }
   };
 
-  goBack(){
+  goBack() {
     history.back();
   }
-  
+
   handleRefresh(event: any) {
     setTimeout(() => {
       window.location.reload();
@@ -114,56 +127,72 @@ export class EmployeeProfilePage {
     }, 2000);
   }
 
-  changeAccordion(event: any){
+  changeAccordion(event: any) {
     this.expandedAccordion = event.detail.value;
   }
 
-  getAddress(add: IAddress){
-    const fullAddress = Object.values(add).join(', ');
-    return Object.values(add).filter((e) => e.trim() !== '').length > 0 ? fullAddress : '';
+  getAddress(add: IAddress) {
+    const values = Object.values(add)
+      .filter((e) => typeof e === "string" && e.trim() !== "") // only non-empty strings
+      .map((e) => e.trim()); // remove extra whitespace
+
+    return values.length > 0 ? values.join(", ") : "";
   }
-  isAvailableAddress(){
-    return this.getAddress(this.employeeDetail.currentAddress) !== '' && this.getAddress(this.employeeDetail.permanentAddress) !== '';
+
+  isAvailableAddress() {
+    return (
+      this.getAddress(this.employeeDetail.currentAddress) !== "" &&
+      this.getAddress(this.employeeDetail.permanentAddress) !== ""
+    );
   }
 
   getName() {
-    if(this.employeeDetail.lastName && this.employeeDetail.lastName.trim() !== ''){
-      return `${this.employeeDetail.firstName.slice(0,1)}${this.employeeDetail.lastName.slice(0,1)}`;
+    if (
+      this.employeeDetail.lastName &&
+      this.employeeDetail.lastName.trim() !== ""
+    ) {
+      return `${this.employeeDetail.firstName.slice(
+        0,
+        1
+      )}${this.employeeDetail.lastName.slice(0, 1)}`;
     } else {
-      return `${this.employeeDetail.firstName.slice(0,2)}`;
+      return `${this.employeeDetail.firstName.slice(0, 2)}`;
     }
   }
 
-  setupWorkInfo(){
+  setupWorkInfo() {
     let navigationExtras: NavigationExtras = {
       queryParams: {
-        action: this.workDetail ? 'edit' : 'add',
+        action: this.workDetail ? "edit" : "add",
         employeeId: this.employeeDetail.employeeId,
         userId: this.employeeDetail.guid,
-      }
-    }
-    localStorage.setItem('lastRoute', this.router.url);
+      },
+    };
+    localStorage.setItem("lastRoute", this.router.url);
     this.router.navigate([`/tabs/employee/workinfo`], navigationExtras);
   }
-  
-  editProfile(){
-    localStorage.setItem('lastRoute', this.router.url);
-    this.router.navigate([`/tabs/edit-profile/${this.employeeId}`], {replaceUrl: true});
+
+  editProfile() {
+    localStorage.setItem("lastRoute", this.router.url);
+    this.router.navigate([`/tabs/edit-profile/${this.employeeId}`], {
+      replaceUrl: true,
+    });
   }
-  monthStatus(){
-    this.router.navigate([`/tabs/attendance/${this.employeeId}`], {state: {tab: "status"}});
+  monthStatus() {
+    this.router.navigate([`/tabs/attendance/${this.employeeId}`], {
+      state: { tab: "status" },
+    });
   }
 
   ionViewWillLeave(): void {
     this.employeeDetail = undefined as any;
     this.workDetail = undefined as any;
-    this.expandedAccordion = '';
+    this.expandedAccordion = "";
     this.dataLoaded = false;
-    this.employeeId = '';
+    this.employeeId = "";
   }
 
   workWeek() {
     this.router.navigate([`/employee-work-week/${this.employeeId}`]);
   }
-
 }

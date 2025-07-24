@@ -803,6 +803,7 @@ export class TimeSheetPage implements OnInit {
       newDate.getFullYear() !== prevDate.getFullYear()
     ) {
       this.getAllTimeSheetOfTheMonth();
+      this.getTimesheetMonth();
     }
 
     this.getAssignProjectById();

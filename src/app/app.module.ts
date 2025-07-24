@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from "@angular/core"
 import { BrowserModule } from "@angular/platform-browser";
 import { RouteReuseStrategy, RouterModule } from "@angular/router";
 
