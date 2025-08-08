@@ -41,6 +41,9 @@ import { LoaderService } from "src/app/services/loader.service";
 import { IApproveRegularizationReq } from "src/app/interfaces/request/IApproveRegularization";
 import { RegularizationPage } from "../regularization/regularization.page";
 import { LeaveAction } from "../leave-card/leave-card.page";
+//chnage 
+import { AdminService } from 'src/app/services/admin.service';
+
 
 @Component({
   selector: "attendance-card",
@@ -101,7 +104,10 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     private _fb: FormBuilder,
     private _shareServ: ShareService,
     private _loader: LoaderService,
-    private modelCtrl: ModalController
+    private modelCtrl: ModalController,
+   
+    private adminServ: AdminService
+
   ) {}
 
   ngOnInit() {
@@ -113,6 +119,7 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
       reason: [""],
       description: ["", Validators.required],
     });
+    
 
     this.regularizationForm
       .get("clockIn")
@@ -617,6 +624,16 @@ export class AttendanceCardPage implements OnInit, OnChanges, AfterViewInit {
     //   this.cancelLeave(this.attendanceData.leaveData.guid);
     // }
     this.actionReturn.emit({ action: action, leaveId: this.attendanceData.leaveData.guid });
+   
   }
 
+
+
+
+
+ 
+
+
 }
+
+

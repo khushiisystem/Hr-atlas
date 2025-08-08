@@ -205,6 +205,8 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   get getPresent(): number {
+    let sdl = this.getSandwichLeaves();
+
     return this.dateList.reduce((pres, item) => {
       return item.status === AttendaceStatus.PRESENT ||
         item.status === AttendaceStatus.WEEK_OFF ||
@@ -213,8 +215,38 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
         : item.status === AttendaceStatus.HALF_DAY
         ? pres + 0.5
         : pres;
-    }, 0);
+    }, 0) - sdl;
   }
+
+  getSandwichLeaves(): number {
+    // console.log("date list : ",this.dateList)
+
+    let consecutiveAbsent = 0;
+    let sdl = 0;
+
+    // console.log("week offs : ",weekOffs)
+
+    this.dateList.forEach((item) => {
+      if (
+        item.status === AttendaceStatus.PRESENT ||
+        (item.status === AttendaceStatus.WEEK_OFF && !consecutiveAbsent)
+      ) {
+        // console.log("consecutive inside : ", consecutiveAbsent);
+        sdl = sdl + Math.floor(consecutiveAbsent/7);
+        consecutiveAbsent = 0;
+      } else {
+        consecutiveAbsent++;
+      }
+    });
+
+    // console.log("consecutive outside : ", consecutiveAbsent);
+    
+    sdl = sdl + Math.floor(consecutiveAbsent/7);
+    // console.log("week offs : ",weekOffs)
+    // console.log("--------------------------------------");
+    return sdl;
+  }
+
   get getLeaves(): number {
     return this.dateList.reduce((leave, item) => {
       // console.log(item);
@@ -222,13 +254,15 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
     }, 0);
   }
   get getAbsent(): number {
+    let sdl = this.getSandwichLeaves();
+    
     return this.dateList.reduce((abs, item) => {
       return item.status === AttendaceStatus.ABSENT
         ? abs + 1
         : item.status === AttendaceStatus.HALF_DAY
         ? abs + 0.5
         : abs;
-    }, 0);
+    }, 0) + sdl;
   }
   get getLastDate(): number {
     return new Date(
@@ -252,6 +286,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   getWorkWeek() {
+    console.log('work week : '+this.attendanceDate)
     this.workWeekLoaded = false;
     this.apiSubscription = this.shareServ
       .employeeAssignedWorkWeekWithDate(this.employeeId, this.attendanceDate)
@@ -448,7 +483,7 @@ export class AttendancePage implements OnInit, OnDestroy, AfterContentChecked {
   }
 
   addWeekOffDays() {
-    // console.log("this.workweeekdetail : ", this.workWeekDetail);
+    console.log("this.workweeekdetail : ", this.workWeekDetail);
     const weekOfList = this.workWeekDetail.workweekDetails.weekOff;
     this.dateList.forEach((item) => {
       if (

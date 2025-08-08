@@ -20,7 +20,7 @@
     <ion-segment-button value="salary_structure">
       <ion-label>Salary Structure</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="advanceLogs">
+    <ion-segment-button value="advanceLogs"> 
       <ion-label>Advance Logs</ion-label>
     </ion-segment-button>
   </ion-segment>
@@ -28,7 +28,7 @@
   <div [ngSwitch]="activeTab" class="container ion-padding-vertical">
     <div *ngSwitchCase="'payslip'">
       <ion-item lines="none" color="primary" type="button" (click)="dateModal = true" class="dateITem">
-        <ion-input label="Select year and month" color="primary" labelPlacement="floating" [readonly]="true" [value]="payslipDate | date"></ion-input>
+        <ion-input label="Select year and month" color="primary" labelPlacement="floating" [readonly]="true" [value]="payslipDate | date: 'MMMM yyyy'"></ion-input>
       </ion-item>
 
       <ion-modal [isOpen]="dateModal" [initialBreakpoint]=".65" [keepContentsMounted]="true" mode="ios" (didDismiss)="dateModal = false" [showBackdrop]="true">

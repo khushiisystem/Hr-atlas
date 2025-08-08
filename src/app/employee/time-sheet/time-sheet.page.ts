@@ -17,11 +17,12 @@ import { RoleStateService } from "src/app/services/roleState.service";
 import { ShareService } from "src/app/services/share.service";
 import { TimeSheetService } from "src/app/services/time-sheet.service";
 
-import { Platform } from '@ionic/angular';
+import { Platform } from "@ionic/angular";
 import { Filesystem, Directory } from "@capacitor/filesystem";
-import { FileOpener } from '@ionic-native/file-opener/ngx';
+import { FileOpener } from "@ionic-native/file-opener/ngx";
 import { environment } from "src/environments/environment";
-import * as mime from 'mime';
+import * as mime from "mime";
+import { LoaderService } from "src/app/services/loader.service";
 
 export enum ETimesheet {
   PENDING = "Pending",
@@ -122,8 +123,8 @@ export class TimeSheetPage implements OnInit {
   expandedRowIndex: number | null = null;
   dateModal: boolean = false;
 
-   downloading!: boolean;
-   isCordova: boolean = true;
+  downloading!: boolean;
+  isCordova: boolean = true;
 
   constructor(
     private _fb: FormBuilder,
@@ -133,10 +134,11 @@ export class TimeSheetPage implements OnInit {
     private roleStateServ: RoleStateService,
     private cdr: ChangeDetectorRef,
     private shareServ: ShareService,
-     private platform: Platform,
-        private fileOpener: FileOpener,
+    private platform: Platform,
+    private fileOpener: FileOpener,
+    private loader: LoaderService
   ) {
-     this.isCordova = this.platform.is("mobileweb");
+    this.isCordova = this.platform.is("mobileweb");
     this.userId = localStorage.getItem("userId") || "";
     this.roleStateServ.getState().subscribe((res) => {
       if (res) {
@@ -466,6 +468,11 @@ export class TimeSheetPage implements OnInit {
   }
 
   getAllTimeSheetOfTheMonth() {
+    if (this.userRole.trim() === "Employee") {
+      return;
+    }
+
+    this.loader.present("");
     this.timesheetSer
       .getAllTimesheetOfMonth(this.timesheetDate)
       .subscribe((res) => {
@@ -490,6 +497,8 @@ export class TimeSheetPage implements OnInit {
               const hours = Math.floor(totalMinutes / 60);
               const minutes = totalMinutes % 60;
               const formattedTotalTime = `${hours}h ${minutes}m`;
+
+              // this.loader.dismiss();
 
               return {
                 ...timesheet,
@@ -516,6 +525,7 @@ export class TimeSheetPage implements OnInit {
             return dateB - dateA; // descending
           });
 
+          this.loader.dismiss();
           this.filterTimesheetsByProject();
         }
       });
@@ -532,38 +542,44 @@ export class TimeSheetPage implements OnInit {
   }
 
   downloadReceipt(): void {
-      this.downloading = true;
-      // const mime = require('mime');
-       const date = new Date();
-      const fileName = `timesheet-${date.getDate()}-${
-        date.getMonth() + 1
-      }-${date.getFullYear()}.xlsx`;
-      if (this.isCordova) {
-        this.timesheetSer
-        .getDownload(this.timesheetDate).subscribe((res: any)=> {
-          const blob = new Blob([res], { type: 'application/pdf' });
+    this.downloading = true;
+    // const mime = require('mime');
+    const date = new Date(this.timesheetDate);
+    const fileName = `timesheet-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}.xlsx`;
+    if (this.isCordova) {
+      this.timesheetSer.getDownload(this.timesheetDate).subscribe(
+        (res: any) => {
+          const blob = new Blob([res], { type: "application/pdf" });
           this.shareServ.exportFile(blob, fileName);
           this.downloading = false;
-        }, (error) => {
+        },
+        (error) => {
           this.downloading = false;
-        });
-      } else {
-        var url = encodeURI( environment.Api + `api/timesheet/download?date=${this.timesheetDate}`);
-  
-        const downloadoption = {
-          path: `HrAtlas/${fileName}.pdf`,
-          directory: Directory.Documents,
-          url: url,
-          recursive: true
-        };
-  
-        Filesystem.downloadFile(downloadoption).then((result: any) => {
-          this.shareServ.presentToast("PaySlip Download in to Document Folder", "top", "success");
+        }
+      );
+    } else {
+      var url = encodeURI(
+        environment.Api + `api/timesheet/download?date=${this.timesheetDate}`
+      );
+
+      const downloadoption = {
+        path: `HrAtlas/${fileName}.pdf`,
+        directory: Directory.Documents,
+        url: url,
+        recursive: true,
+      };
+
+      Filesystem.downloadFile(downloadoption)
+        .then((result: any) => {
+          this.shareServ.presentToast(
+            "PaySlip Download in to Document Folder",
+            "top",
+            "success"
+          );
           this.fileOpener
-          .showOpenWithDialog(
-            result.path,
-            mime.lookup(`${fileName}.pdf`)
-            )
+            .showOpenWithDialog(result.path, mime.lookup(`${fileName}.pdf`))
             .then(() => {
               this.downloading = false;
               // console.log("File is opened");
@@ -573,21 +589,21 @@ export class TimeSheetPage implements OnInit {
               this.downloading = true;
             });
         })
-          .catch((error) => {
-            const MkdirOptions = {
-              path: `HrAtlas`,
-              directory: Directory.Documents,
-              recursive: true
-            };
-  
-            Filesystem.mkdir(MkdirOptions).then(async (result: any) => {
-              this.downloadReceipt();
-            })
-            console.log(error, "Error");
-            this.downloading = true;
+        .catch((error) => {
+          const MkdirOptions = {
+            path: `HrAtlas`,
+            directory: Directory.Documents,
+            recursive: true,
+          };
+
+          Filesystem.mkdir(MkdirOptions).then(async (result: any) => {
+            this.downloadReceipt();
           });
-      }
+          console.log(error, "Error");
+          this.downloading = true;
+        });
     }
+  }
 
   // async download() {
   //   try {
@@ -643,25 +659,25 @@ export class TimeSheetPage implements OnInit {
   //             (file: any) => {
   //               file.createWriter((writer: any) => {
   //                 writer.onwriteend = () => {
-      //               alert(`File saved: ${filename}`);
-      //               resolve(true);
-      //             };
-      //             writer.onerror = reject;
-      //             writer.write(blob);
-      //           });
-      //         },
-      //         reject
-      //       );
-      //     },
-      //     reject
-      //   );
-      // } else {
-      //   // Fallback: try to trigger download anyway
-      //   const url = URL.createObjectURL(blob);
-      //   const link = Object.assign(document.createElement("a"), {
-      //     href: url,
-      //     download: filename,
-      //   });
+  //               alert(`File saved: ${filename}`);
+  //               resolve(true);
+  //             };
+  //             writer.onerror = reject;
+  //             writer.write(blob);
+  //           });
+  //         },
+  //         reject
+  //       );
+  //     },
+  //     reject
+  //   );
+  // } else {
+  //   // Fallback: try to trigger download anyway
+  //   const url = URL.createObjectURL(blob);
+  //   const link = Object.assign(document.createElement("a"), {
+  //     href: url,
+  //     download: filename,
+  //   });
   //       link.click();
   //       URL.revokeObjectURL(url);
   //       resolve(true);
