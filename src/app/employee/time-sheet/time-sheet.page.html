@@ -31,8 +31,8 @@
 
     <ion-item *ngIf="userRole.trim() !== 'Employee'" lines="none" color="primary" type="button"
       (click)="dateModal = true" class="dateITem">
-      <ion-input label="Select year and month" color="primary" labelPlacement="floating" [readonly]="true"
-        [value]="timesheetDate | date"></ion-input>
+      <ion-input label="Select month and year" color="primary" labelPlacement="floating" [readonly]="true"
+         [value]="timesheetDate | date: 'MMMM yyyy'"></ion-input>
     </ion-item>
 
     <ion-modal [isOpen]="dateModal" [initialBreakpoint]=".65" [keepContentsMounted]="true" mode="ios"
@@ -201,8 +201,8 @@
         (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
         <ng-template>
           <ion-content>
-            <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime
-              (ionChange)="setStartTime($any($event))" [max]="today.toISOString()">
+            <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" [hourCycle]="'h12'" #datetime
+              (ionChange)="setStartTime($any($event))">
               <span slot="title">Start Time</span>
               <ion-buttons slot="buttons">
                 <ion-button mode="md" color="danger"
@@ -219,8 +219,8 @@
         (didDismiss)="openCalendar = false" mode="md" [initialBreakpoint]="0.5" [showBackdrop]="true">
         <ng-template>
           <ion-content>
-            <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" #datetime
-              (ionChange)="setEndTime($any($event))" [max]="today.toISOString()">
+            <ion-datetime presentation="time" mode="md" [preferWheel]="true" [size]="'cover'" [hourCycle]="'h12'" #datetime
+              (ionChange)="setEndTime($any($event))">
               <span slot="title">End Time</span>
               <ion-buttons slot="buttons">
                 <ion-button mode="md" color="danger" (click)="datetime.cancel(); endTime.dismiss()">Cancel</ion-button>

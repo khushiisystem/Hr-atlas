@@ -23,24 +23,54 @@
       <ion-input placeholder="Search" [clearOnEdit]="true" [clearInput]="true" fill="outline" shape="round" [(ngModel)]="searchString" (ionInput)="onSearch()" legacy="false" [color]="'light'"></ion-input>
     </div> -->
 
+    <div class="">
+      <div class="optbar">
+        <ion-item detail="false" lines="none" mode="md">
+          <ion-icon name="search" aria-hidden="true" size="small" slot="start" class="startIcon"></ion-icon>
+          <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true"
+            [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+        </ion-item>
+         <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="filterPop" *ngIf="userRole === 'Admin' || userRole === 'HR'" class="ion-margin-start ion-no-padding">
+          <ion-icon name="funnel" aria-hidden="true" aria-label="Option"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+
+     <ng-container *ngIf="userRole === 'Admin' || userRole === 'HR'">
+      <ion-popover trigger="filterPop" dismissOnSelect="true" showBackdrop="false" side="bottom" alignment="end" class="filter">
+        <ng-template>
+          <ion-content>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'All' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('All')">All</ion-item>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'InActive' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('InActive')">In-Active</ion-item>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Resigned' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Resigned')">Resigned</ion-item>
+            <ion-item lines="none" detail="false" type="button" button="true" [color]="empType === 'Active' ? 'tertiary' : ''" mode="ios" (click)="getTypedEmployee('Active')">Active</ion-item>
+          </ion-content>
+        </ng-template>
+      </ion-popover> 
+    </ng-container>
+
     <ion-list *ngIf="isDataLoaded" [inset]="true" mode="md">
-      <ion-item lines="inset" [button]="true" [detail]="false" type="button" mode="md" class="list-item" *ngFor="let employee of employeeList; index as i;" (click)="selectEmployee(employee)">
+      <ion-item lines="inset" [button]="true" [detail]="false" type="button" mode="md" class="list-item"
+        *ngFor="let employee of filterEmployeeList; index as i;" (click)="selectEmployee(employee)">
         <ion-avatar class="employee_img" slot="start" mode="md">
-          <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+          <app-name-img [name]="getName(employee)" [classes]="'sm'"
+            *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
           <img alt="imployee" *ngIf="employee.imageUrl.trim() != ''" [src]="employee.imageUrl" />
         </ion-avatar>
-          <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
-        <ion-button fill="solid" mode="ios" [color]="getStatus(employee.guid) === 'Absent' ? 'danger' : 'success'" slot="end" shape="round" class="statusBtn" *ngIf="attendanceLoaded">{{getStatus(employee.guid).slice(0,1)}}</ion-button>
+        <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
+        <ion-button fill="solid" mode="ios" [color]="getStatus(employee.guid) === 'Absent' ? 'danger' : 'success'"
+          slot="end" shape="round" class="statusBtn"
+          *ngIf="attendanceLoaded">{{getStatus(employee.guid).slice(0,1)}}</ion-button>
         <ion-thumbnail slot="end" *ngIf="!attendanceLoaded" class="skeleton_thumb">
           <ion-skeleton-text [animated]="true"></ion-skeleton-text>
         </ion-thumbnail>
       </ion-item>
     </ion-list>
 
-    <div class="ion-padding ion-text-center" *ngIf="employeeList.length < 1 || attendanceList.length === 0"
+    <div class="ion-padding ion-text-center" *ngIf="filterEmployeeList.length < 1 || attendanceList.length === 0"
       style="background-color: #fff;">
       <ion-spinner name="crescent" color="tertiary" *ngIf="!isDataLoaded"></ion-spinner>
-      <ion-text *ngIf="isDataLoaded && employeeList.length < 1">Data not found</ion-text>
+      <ion-text *ngIf="isDataLoaded && filterEmployeeList.length < 1">Data not found</ion-text>
     </div>
   </div>
 

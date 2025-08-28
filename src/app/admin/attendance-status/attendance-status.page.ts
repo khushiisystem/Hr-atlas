@@ -35,6 +35,7 @@ export class AttendanceStatusPage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   @Output() employee: EventEmitter<IEmpSelect> = new EventEmitter<IEmpSelect>();
   employeeList: IEmployeeResponse[] = [];
+  filterEmployeeList: IEmployeeResponse[] = [];
   attendanceList: IClockInResponce[] = [];
   isDataLoaded: boolean = false;
   isMoreData: boolean = true;
@@ -47,6 +48,7 @@ export class AttendanceStatusPage implements OnInit {
   today: Date = new Date();
   userRole: string = "Admin";
   userId: string = "";
+  empType: "All" | "Active" | "InActive" | "Resigned" | "Both" = "Active";
 
   constructor(private adminServ: AdminService, private router: Router) {}
 
@@ -69,32 +71,56 @@ export class AttendanceStatusPage implements OnInit {
     if (this.pageIndex < 1) {
       this.employeeList = [];
     }
-    this.adminServ.getEmployees("Active", this.pageIndex * 30, 30).subscribe(
-      (res) => {
-        if (res) {
-          const data: IEmployeeResponse[] = res.sort((a, b) =>
-            a.firstName.localeCompare(b.firstName)
-          );
-          for (let i = 0; i < data.length; i++) {
-            this.employeeList.push(res[i]);
+    this.adminServ
+      .getEmployees(this.empType, this.pageIndex * 30, 30)
+      .subscribe(
+        (res) => {
+          if (res) {
+            const data: IEmployeeResponse[] = res.sort((a, b) =>
+              a.firstName.localeCompare(b.firstName)
+            );
+            for (let i = 0; i < data.length; i++) {
+              this.employeeList.push(res[i]);
+            }
+            this.filterEmployeeList = [...this.employeeList];
+            this.isMoreData = res.length > 29;
           }
-          this.isMoreData = res.length > 29;
+          this.today.setHours(0, 0, 0);
+          const localDate = new Date(
+            this.attendanceDate.getTime() -
+              this.attendanceDate.getTimezoneOffset() * 60000
+          );
+          this.getTodayAttendance(localDate.toISOString());
+        },
+        (error) => {
+          this.isMoreData = false;
+          this.isDataLoaded = true;
+          this.infiniteScroll.complete();
         }
-        this.today.setHours(0, 0, 0);
-        const localDate = new Date(
-          this.attendanceDate.getTime() -
-            this.attendanceDate.getTimezoneOffset() * 60000
-        );
-        this.getTodayAttendance(localDate.toISOString());
-      },
-      (error) => {
-        this.isMoreData = false;
-        this.isDataLoaded = true;
-        this.infiniteScroll.complete();
-      }
-    );
+      );
   }
 
+  onSearch() {
+    // this.searchSubject.next(this.searchString);
+    // console.log(this.searchString);
+    const term = this.searchString.toLowerCase().trim();
+    this.filterEmployeeList = this.employeeList.filter((employee) => {
+      // Check if firstname exists and contains the search term
+      const firstname = employee.firstName
+        ? employee.firstName.toLowerCase()
+        : "";
+
+      const lastname = employee.lastName ? employee.lastName.toLowerCase() : "";
+
+      return (
+        firstname.includes(term) ||
+        firstname.startsWith(term) ||
+        lastname.includes(term) ||
+        lastname.startsWith(term)
+      );
+    });
+  }
+ 
   getTodayAttendance(dateStr: string) {
     this.attendanceLoaded = false;
     this.adminServ
@@ -185,5 +211,14 @@ export class AttendanceStatusPage implements OnInit {
       this.getEmployeeList();
       event.target.complete();
     }, 2000);
+  }
+
+  getTypedEmployee(etype: "All" | "Active" | "InActive" | "Resigned" | "Both") {
+    // console.log("e type : ", etype);
+    this.empType = etype;
+    this.pageIndex = 0;
+    this.employeeList = [];
+    this.filterEmployeeList = [];
+    this.getEmployeeList();
   }
 }

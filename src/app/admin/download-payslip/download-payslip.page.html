@@ -104,7 +104,7 @@
               <span class="checkmark"></span>
             </div>
           </div>
-          <div class="employee_data">
+          <div class="employee_data" (click)="naviagateToPayslip(employee.guid)">
             <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || '' | titlecase}}</ion-label>
             <ion-text class="role" *ngIf="employee"><small>{{employee.jobTitle}}</small></ion-text>
           </div>
