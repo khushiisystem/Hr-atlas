@@ -10,7 +10,7 @@
           <td class="paysliptr"><span>Employee name</span></td>
           <td class="paysliptr"><span>{{payslipData.employeeName || ""}}</span></td>
           <td class="paysliptr"><span>Bank Name</span></td>
-          <td class="paysliptr"><span class="paysliptextcenter">-</span></td>
+          <td class="paysliptr"><span class="">{{payslipData.bankName}}</span></td>
 
         </tr>
         <tr>
@@ -20,7 +20,7 @@
             <span *ngIf="payslipData">{{ payslipData.designation || ""}}</span>
           </td>
           <td><span>Account no.</span></td>
-          <td><span class="paysliptextcenter">-</span></td>
+          <td><span class="">{{payslipData.accountNo}}</span></td>
 
         </tr>
 
@@ -30,7 +30,7 @@
             <span *ngIf="payslipData">{{payslipData.workingDays || 31}}</span>
           </td>
           <td><span>Pay Mode</span></td>
-          <td><span class="paysliptextcenter">-</span></td>
+          <td><span class="">Bank Transfer</span></td>
 
         </tr>
         <tr>
@@ -60,11 +60,11 @@
           </td>
           <td><span>LOP Amount</span></td>
           <td>
-            <span>{{ payslipData.totalDeduction - payslipData.otherDeduction | currency:'INR'}}</span>
+            <span>{{ payslipData.totalDeduction - payslipData.otherDeduction - payslipData.deductionAmount | currency:'INR'}}</span>
           </td>
         </tr>
         <tr *ngIf="payslipData && (payslipData.bonus || payslipData.otherDeduction)">
-          <td >
+          <td>
             <span *ngIf="payslipData.bonus">Bonus</span>
           </td>
           <td>
@@ -73,6 +73,20 @@
           <td><span *ngIf="payslipData.otherDeduction">Other Deduction</span></td>
           <td>
             <span *ngIf="payslipData.otherDeduction">{{ payslipData.otherDeduction | currency:'INR'}}</span>
+          </td>
+        </tr>
+        <tr *ngIf="payslipData && (payslipData.advanceSalary || payslipData.deductionAmount)">
+          <td>
+            <span *ngIf="payslipData.advanceSalary">Advance Salary</span>
+          </td>
+          <td>
+            <span *ngIf="payslipData.advanceSalary">{{payslipData.advanceSalary | currency:'INR'}}</span>
+          </td>
+          <td>
+            <span *ngIf="payslipData.deductionAmount">Advance Deduction</span>
+          </td>
+          <td>
+            <span *ngIf="payslipData.deductionAmount">{{payslipData.deductionAmount | currency:'INR'}}</span>
           </td>
         </tr>
         <tr *ngIf="payslipData && payslipData.compOff">
@@ -108,8 +122,11 @@
         </tr>
         <tr>
           <td colspan="4">
-            <h5 style="margin-bottom: 0;">HR Spundan</h5>
-            <h4 style="margin-top: 0;">Authorized Signature</h4>
+            <div>
+              <img style="margin: 0 0 0 0;" src="./assets/images/signature.png" alt="signature" height="25px" />
+              <h5 style="margin-bottom: 0; margin-top: 0; margin-left: 2px;">Pallavi Kulkarni</h5>
+              <h4 style="margin-top: 0; margin-bottom: 0; margin-left: 2px;">Head HR</h4>
+            </div>
           </td>
         </tr>
       </tfoot>

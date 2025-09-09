@@ -38,6 +38,7 @@ export class ProjectFormPage implements OnInit {
   ngOnInit() {
     this.projectsForm = this._fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
+      isDefault: [false]
     });
     
     if(this.action === 'update' && this.title) {

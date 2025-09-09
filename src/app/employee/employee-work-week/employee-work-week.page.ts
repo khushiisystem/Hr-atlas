@@ -16,6 +16,7 @@ export class EmployeeWorkWeekPage implements OnInit {
   numberOfWeek: string[] = [];
   workWeekDetail!: IEmplpoyeeWorWeek;
   isLoaded: boolean = false;
+  today : any = new Date().toISOString();
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -51,7 +52,7 @@ export class EmployeeWorkWeekPage implements OnInit {
   getWorkWeek(){
     this.isLoaded = false;
     this.loaderServ.present('');
-    this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(res => {
+    this.shareServ.employeeAssignedWorkWeekWithDate(this.employeeId, this.today).subscribe(res => {
       if(res) {
         this.workWeekDetail = res;
         this.isLoaded = true;

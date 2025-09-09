@@ -1,7 +1,8 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" fill="clear" [routerDirection]="'back'" [routerLink]="['/tabs/directory']" routerLinkActive="router-link-active" class="noBg noRipple">
+      <ion-button mode="md" fill="clear" [routerDirection]="'back'" [routerLink]="['/tabs/directory']"
+        routerLinkActive="router-link-active" class="noBg noRipple">
         <ion-icon name="chevron-back-outline" aria-hidden="true" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -19,7 +20,8 @@
     <div class="bigAvatarDiv">
       <ng-container *ngIf="employeeDetail">
         <app-name-img [name]="getName()" *ngIf="employeeDetail.imageUrl.trim() === ''"></app-name-img>
-        <img *ngIf="employeeDetail.imageUrl.trim() != ''" [alt]="employeeDetail.firstName" [src]="employeeDetail.imageUrl" />
+        <img *ngIf="employeeDetail.imageUrl.trim() != ''" [alt]="employeeDetail.firstName"
+          [src]="employeeDetail.imageUrl" />
       </ng-container>
       <ion-avatar *ngIf="!employeeDetail">
         <ion-skeleton-text animated="true" style="width: 100%; height: 100%"></ion-skeleton-text>
@@ -31,10 +33,14 @@
           {{employeeDetail ? employeeDetail.firstName + ' ' + employeeDetail.lastName : '' | titlecase}}
           <!-- <p>{{employeeDetail.employeeWorkDetails ? employeeDetail.employeeWorkDetails.jobTitle : employeeDetail.role}}</p> -->
           <p>{{employeeDetail ? (employeeDetail.jobTitle || employeeDetail.role) : ""}}</p>
-          <ion-skeleton-text animated="true" style="width: 95%; height: 15px" *ngIf="!employeeDetail"></ion-skeleton-text>
-          <ion-skeleton-text animated="true" style="width: 40%; height: 10px" *ngIf="!employeeDetail"></ion-skeleton-text>
+          <ion-skeleton-text animated="true" style="width: 95%; height: 15px"
+            *ngIf="!employeeDetail"></ion-skeleton-text>
+          <ion-skeleton-text animated="true" style="width: 40%; height: 10px"
+            *ngIf="!employeeDetail"></ion-skeleton-text>
         </ion-label>
-        <ion-button mode="ios" shape="round" size="small" fill="clear" color="tertiary" aria-label="Edit Profile" class="editSmallBtn" *ngIf="userRole === 'Admin' || userRole === 'HR' && employeeDetail" (click)="editProfile()">
+        <ion-button mode="ios" shape="round" size="small" fill="clear" color="tertiary" aria-label="Edit Profile"
+          class="editSmallBtn" *ngIf="userRole === 'Admin' || userRole === 'HR' && employeeDetail"
+          (click)="editProfile()">
           <ion-icon name="pencil" slot="icon-only" aria-label="Edit"></ion-icon>
         </ion-button>
       </ion-list-header>
@@ -57,14 +63,16 @@
       </ion-label>
     </ion-list-header>
     <ion-item mode="ios" detail="false" class="settingBtns_item">
-      <ion-icon name="person" aria-hidden="true" aria-label="Settings" slot="start" size="small" color="medium" ></ion-icon>
+      <ion-icon name="person" aria-hidden="true" aria-label="Settings" slot="start" size="small"
+        color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <p>Full Name</p>
         <h2>{{employeeDetail.firstName + ' '+ employeeDetail.lastName || '-'}}</h2>
       </ion-label>
     </ion-item>
     <ion-item mode="ios" detail="false" class="settingBtns_item">
-      <ion-icon name="calendar-number" aria-hidden="true" aria-label="Settings" slot="start" size="small" color="medium"></ion-icon>
+      <ion-icon name="calendar-number" aria-hidden="true" aria-label="Settings" slot="start" size="small"
+        color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <p>Birthday</p>
         <h2 *ngIf="employeeDetail.dateOfBirth">{{employeeDetail.dateOfBirth | date}}</h2>
@@ -72,14 +80,16 @@
       </ion-label>
     </ion-item>
     <ion-item mode="ios" detail="false" class="settingBtns_item">
-      <ion-icon [name]="employeeDetail.gender ? employeeDetail.gender === 'Male' ? 'man' : 'woman' : 'transgender'" aria-hidden="true" aria-label="Gender" slot="start" size="small" color="medium"></ion-icon>
+      <ion-icon [name]="employeeDetail.gender ? employeeDetail.gender === 'Male' ? 'man' : 'woman' : 'transgender'"
+        aria-hidden="true" aria-label="Gender" slot="start" size="small" color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <p>Gender</p>
         <h2>{{employeeDetail.gender || '-'}}</h2>
       </ion-label>
     </ion-item>
     <ion-item mode="ios" detail="false" class="settingBtns_item">
-      <ion-icon [name]="employeeDetail.maritalStatus === 'Married' ? 'heart-sharp' : 'heart-half'" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
+      <ion-icon [name]="employeeDetail.maritalStatus === 'Married' ? 'heart-sharp' : 'heart-half'" aria-hidden="true"
+        aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <p>Marital Status</p>
         <h2>{{employeeDetail.maritalStatus}}</h2>
@@ -87,7 +97,8 @@
     </ion-item>
 
     <ng-container *ngIf="!employeeDetail || !dataLoaded ">
-      <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item" *ngFor="let item of [0,1,2,3,4]">
+      <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item"
+        *ngFor="let item of [0,1,2,3,4]">
         <ion-avatar slot="start">
           <ion-skeleton-text [animated]="true" style="width: 100%; height: 100%"></ion-skeleton-text>
         </ion-avatar>
@@ -106,36 +117,89 @@
       </ion-label>
     </ion-list-header>
     <ion-item mode="ios" detail="false" class="settingBtns_item">
-      <ion-icon name="call" aria-hidden="true" aria-label="Phone number" slot="start" size="small" color="medium" ></ion-icon>
+      <ion-icon name="call" aria-hidden="true" aria-label="Phone number" slot="start" size="small"
+        color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <p>Phone Number</p>
         <h2>{{employeeDetail.mobileNumber || '-'}}</h2>
       </ion-label>
     </ion-item>
-    <ion-item mode="ios"  detail="false" class="settingBtns_item">
-      <ion-icon name="call" aria-hidden="true" aria-label="Alternate phone" slot="start" size="small" color="medium"></ion-icon>
+    <ion-item mode="ios" detail="false" class="settingBtns_item">
+      <ion-icon name="call" aria-hidden="true" aria-label="Alternate phone" slot="start" size="small"
+        color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <p>Alternate Phone Number</p>
         <h2>{{employeeDetail.alternateMobileNumber || "--"}}</h2>
       </ion-label>
     </ion-item>
-    <ion-item mode="ios"  detail="false" class="settingBtns_item">
-      <ion-icon [name]="'mail'" aria-hidden="true" aria-label="Email" slot="start" size="small" color="medium"></ion-icon>
+    <ion-item mode="ios" detail="false" class="settingBtns_item">
+      <ion-icon [name]="'mail'" aria-hidden="true" aria-label="Email" slot="start" size="small"
+        color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <p>Personal Email</p>
         <h2>{{employeeDetail.email || '-'}}</h2>
       </ion-label>
     </ion-item>
-    <ion-item mode="ios"  detail="false" class="settingBtns_item">
-      <ion-icon [name]="'mail'" aria-hidden="true" aria-label="Official email" slot="start" size="small" color="medium"></ion-icon>
+    <ion-item mode="ios" detail="false" class="settingBtns_item">
+      <ion-icon [name]="'mail'" aria-hidden="true" aria-label="Official email" slot="start" size="small"
+        color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <p>Official Email</p>
         <h2>{{employeeDetail.officialEmail || "--"}}</h2>
       </ion-label>
     </ion-item>
-    
+
+    <ion-list mode="md" lines="none" class="ion-margin-bottom" *ngIf="userRole === 'Admin' || userRole === 'HR' && employeeDetail">
+      <ion-list-header mode="ios">
+        <ion-label class="ion-text-wrap">
+          <h2>Account Info</h2>
+        </ion-label>
+      </ion-list-header>
+
+      <!-- Bank Name -->
+      <ion-item mode="ios" detail="false" class="settingBtns_item">
+        <ion-icon name="card" aria-hidden="true" aria-label="Bank name" slot="start" size="small"
+          color="medium"></ion-icon>
+        <ion-label class="ion-text-wrap">
+          <!-- <p>Bank Name</p> -->
+          <h2>{{ employeeDetail.accountInfo?.bankName || '-' }}</h2>
+        </ion-label>
+      </ion-item>
+
+      <!-- Account Holder Name -->
+      <ion-item mode="ios" detail="false" class="settingBtns_item">
+        <ion-icon name="person" aria-hidden="true" aria-label="Account holder name" slot="start" size="small"
+          color="medium"></ion-icon>
+        <ion-label class="ion-text-wrap">
+          <p>Account Holder Name</p>
+          <h2>{{ employeeDetail.accountInfo?.accountHolderName || '-' }}</h2>
+        </ion-label>
+      </ion-item>
+
+      <!-- Account Number -->
+      <ion-item mode="ios" detail="false" class="settingBtns_item">
+        <ion-icon name="key" aria-hidden="true" aria-label="Account number" slot="start" size="small"
+          color="medium"></ion-icon>
+        <ion-label class="ion-text-wrap">
+          <p>Account Number</p>
+          <h2>{{ employeeDetail.accountInfo?.accountNumber || '-' }}</h2>
+        </ion-label>
+      </ion-item>
+
+      <!-- IFSC Code -->
+      <ion-item mode="ios" detail="false" class="settingBtns_item">
+        <ion-icon name="cash" aria-hidden="true" aria-label="IFSC Code" slot="start" size="small"
+          color="medium"></ion-icon>
+        <ion-label class="ion-text-wrap">
+          <p>IFSC Code</p>
+          <h2>{{ employeeDetail.accountInfo?.ifscCode || '-' }}</h2>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
     <ng-container *ngIf="!employeeDetail || !dataLoaded ">
-      <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item" *ngFor="let item of [0,1,2,3,4]">
+      <ion-item lines="none" [button]="false" mode="ios" [detail]="false" class="settingBtns_item"
+        *ngFor="let item of [0,1,2,3,4]">
         <ion-avatar slot="start">
           <ion-skeleton-text [animated]="true" style="width: 100%; height: 100%"></ion-skeleton-text>
         </ion-avatar>
@@ -149,7 +213,8 @@
 
   <div *ngIf="userRole === 'Admin' || userRole === 'HR' && (!workLoaded || workDetail)">
     <ng-container *ngIf="workDetail && workDetail.workHistory">
-      <ion-list mode="md" lines="none" class="ion-margin-bottom" *ngFor="let history of workDetail.workHistory; index as a;">
+      <ion-list mode="md" lines="none" class="ion-margin-bottom"
+        *ngFor="let history of workDetail.workHistory; index as a;">
         <ion-list-header mode="ios">
           <ion-label class="ion-text-wrap">
             <h2>Experience</h2>
@@ -190,10 +255,10 @@
             <h2>{{history.work_experience}} year(s)</h2>
           </ion-label>
         </ion-item>
-        <hr *ngIf="a < workDetail.workHistory.length - 1"/>
+        <hr *ngIf="a < workDetail.workHistory.length - 1" />
       </ion-list>
     </ng-container>
-  
+
     <ion-list mode="ios" class="employmentSec ion-margin-bottom" lines="none">
       <ion-list-header mode="ios">
         <ion-label class="ion-text-wrap">
@@ -208,7 +273,8 @@
             <p>{{workDetail.employeeId}}</p>
             <h2>{{workDetail.jobTitle || '--'}}</h2>
           </ion-label>
-          <ion-icon slot="end" name="ellipse" [color]="workDetail.status === 'Active' ? 'success' : 'danger'" size="small"></ion-icon>
+          <ion-icon slot="end" name="ellipse" [color]="workDetail.status === 'Active' ? 'success' : 'danger'"
+            size="small"></ion-icon>
         </ion-item>
         <ion-item mode="ios" detail="false" class="settingBtns_item">
           <ion-icon name="briefcase" size="small" color="medium" slot="start"></ion-icon>
@@ -238,6 +304,13 @@
             <h2>{{workDetail.joiningDate | date}}</h2>
           </ion-label>
         </ion-item>
+        <ion-item *ngIf="workDetail.resignationDate" mode="ios" detail="false" class="settingBtns_item">
+          <ion-icon name="calendar-number" size="small" color="medium" slot="start"></ion-icon>
+          <ion-label class="ion-text-wrap">
+            <p>Resignation Date</p>
+            <h2>{{workDetail.resignationDate | date}}</h2>
+          </ion-label>
+        </ion-item>
         <ion-item mode="ios" detail="false" class="settingBtns_item">
           <ion-icon name="business" size="small" color="medium" slot="start"></ion-icon>
           <ion-label class="ion-text-wrap">
@@ -253,25 +326,25 @@
     <ion-list-header mode="ios">
       <ion-label class="ion-text-wrap">
         <h2>Assigned Work week</h2>
-        <ion-skeleton-text *ngIf="!workWeekLoaded" [animated]="true" style="width: 50%; height: 12px"></ion-skeleton-text>
+        <ion-skeleton-text *ngIf="!workWeekLoaded" [animated]="true"
+          style="width: 50%; height: 12px"></ion-skeleton-text>
       </ion-label>
-      <ion-button fill="clear" strong="true" color="primary" shape="round" mode="ios" size="small" aria-label="View all days" (click)="workWeek()" *ngIf="workWeekDetail">
+      <ion-button fill="clear" strong="true" color="primary" shape="round" mode="ios" size="small"
+        aria-label="View all days" (click)="workWeek()" *ngIf="workWeekDetail">
         <ion-icon name="chevron-forward" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-list-header>
     <ion-item lines="none" class="weekDaysItem" [detail]="false" mode="ios">
       <ion-label class="ion-text-wrap">
         <ng-container *ngIf="workWeekDetail">
-          <ion-chip
-            [color]="offDays.includes(day) ? 'danger' : 'success'"
-            *ngFor="let day of weekArray"
-            >{{day.slice(0,2)}}</ion-chip
-          >
+          <ion-chip [color]="offDays.includes(day) ? 'danger' : 'success'"
+            *ngFor="let day of weekArray">{{day.slice(0,2)}}</ion-chip>
         </ng-container>
         <ng-container *ngIf="!workWeekLoaded">
           <ion-skeleton-text animated="true" style="width: 90%; height: 10px"></ion-skeleton-text>
           <ion-buttons class="d-flex">
-            <ion-skeleton-text animated="true" style="width: 100px; height: 30px" *ngFor="let item of [0,1,2,3,4,5,6]"></ion-skeleton-text>
+            <ion-skeleton-text animated="true" style="width: 100px; height: 30px"
+              *ngFor="let item of [0,1,2,3,4,5,6]"></ion-skeleton-text>
           </ion-buttons>
         </ng-container>
         <ng-container *ngIf="!workWeekDetail && workWeekLoaded">
@@ -281,23 +354,30 @@
     </ion-item>
   </ion-list>
 
-  <ion-list mode="ios" lines="none" class="addresses ion-margin-bottom" *ngIf="!dataLoaded || employeeDetail && isAvailableAddress()">
+  <ion-list mode="ios" lines="none" class="addresses ion-margin-bottom"
+    *ngIf="!dataLoaded || employeeDetail && isAvailableAddress()">
     <ion-list-header mode="ios" *ngIf="employeeDetail && isAvailableAddress()">
       <ion-label class="ion-text-wrap">
         <h2 *ngIf="employeeDetail">Address</h2>
-        <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 50%; height: 12px"></ion-skeleton-text>
-        <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 90%; height: 7px"></ion-skeleton-text>
+        <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true"
+          style="width: 50%; height: 12px"></ion-skeleton-text>
+        <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true"
+          style="width: 90%; height: 7px"></ion-skeleton-text>
       </ion-label>
     </ion-list-header>
-    <ion-item [detail]="false" class="addressItem settingBtns_item" *ngIf="employeeDetail && getAddress(employeeDetail.currentAddress) !== ''">
-      <ion-icon name="location" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
+    <ion-item [detail]="false" class="addressItem settingBtns_item"
+      *ngIf="employeeDetail && getAddress(employeeDetail.currentAddress) !== ''">
+      <ion-icon name="location" aria-hidden="true" aria-label="Marital status" slot="start" size="small"
+        color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h6>Current Address</h6>
         <p>{{getAddress(employeeDetail.currentAddress)}}</p>
       </ion-label>
     </ion-item>
-    <ion-item [detail]="false" class="addressItem settingBtns_item" *ngIf="employeeDetail && getAddress(employeeDetail.permanentAddress) !== ''">
-      <ion-icon name="location" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="medium"></ion-icon>
+    <ion-item [detail]="false" class="addressItem settingBtns_item"
+      *ngIf="employeeDetail && getAddress(employeeDetail.permanentAddress) !== ''">
+      <ion-icon name="location" aria-hidden="true" aria-label="Marital status" slot="start" size="small"
+        color="medium"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h6>Permanent Address</h6>
         <p>{{getAddress(employeeDetail.permanentAddress)}}</p>
@@ -316,30 +396,36 @@
     </ng-container>
   </ion-list>
 
-  <ion-list mode="ios" lines="none" class="ion-margin-bottom" *ngIf="employeeDetail && (employeeDetail.linkedinUrl || employeeDetail.facebookUrl || employeeDetail.twitterUrl)">
+  <ion-list mode="ios" lines="none" class="ion-margin-bottom"
+    *ngIf="employeeDetail && (employeeDetail.linkedinUrl || employeeDetail.facebookUrl || employeeDetail.twitterUrl)">
     <ion-list-header mode="ios">
       <ion-label class="ion-text-wrap">
         <h2 *ngIf="employeeDetail">Social Media</h2>
-        <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 50%; height: 12px"></ion-skeleton-text>
-        <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true" style="width: 90%; height: 7px"></ion-skeleton-text>
+        <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true"
+          style="width: 50%; height: 12px"></ion-skeleton-text>
+        <ion-skeleton-text *ngIf="!employeeDetail" [animated]="true"
+          style="width: 90%; height: 7px"></ion-skeleton-text>
       </ion-label>
     </ion-list-header>
     <ion-item [detail]="false" class="settingBtns_item socialLink" *ngIf="employeeDetail.linkedinUrl">
-      <ion-icon name="logo-linkedin" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="primary"></ion-icon>
+      <ion-icon name="logo-linkedin" aria-hidden="true" aria-label="Marital status" slot="start" size="small"
+        color="primary"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h6>Linkedin</h6>
         <a href="{{employeeDetail.linkedinUrl}}" target="_blank">{{employeeDetail.linkedinUrl}}</a>
       </ion-label>
     </ion-item>
     <ion-item [detail]="false" class="settingBtns_item socialLink" *ngIf="employeeDetail.facebookUrl">
-      <ion-icon name="logo-facebook" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="primary"></ion-icon>
+      <ion-icon name="logo-facebook" aria-hidden="true" aria-label="Marital status" slot="start" size="small"
+        color="primary"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h6>Facebook</h6>
         <a href="{{employeeDetail.facebookUrl}}" target="_blank">{{employeeDetail.facebookUrl}}</a>
       </ion-label>
     </ion-item>
     <ion-item [detail]="false" class="settingBtns_item socialLink" *ngIf="employeeDetail.twitterUrl">
-      <ion-icon name="logo-twitter" aria-hidden="true" aria-label="Marital status" slot="start" size="small" color="secondary"></ion-icon>
+      <ion-icon name="logo-twitter" aria-hidden="true" aria-label="Marital status" slot="start" size="small"
+        color="secondary"></ion-icon>
       <ion-label class="ion-text-wrap">
         <h6>Twitter</h6>
         <a href="{{employeeDetail.twitterUrl}}" target="_blank">{{employeeDetail.twitterUrl}}</a>
@@ -358,15 +444,18 @@
     </ng-container>
   </ion-list>
 
-  <ion-list mode="ios" class="ion-padding-vertical" *ngIf="userRole === 'Admin' || userRole === 'HR' || !employeeDetail">
+  <ion-list mode="ios" class="ion-padding-vertical"
+    *ngIf="userRole === 'Admin' || userRole === 'HR' || !employeeDetail">
     <ng-container *ngIf="employeeDetail">
-      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" class="settingBtns_item" (click)="editProfile()">
+      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" class="settingBtns_item"
+        (click)="editProfile()">
         <ion-chip slot="start" color="medium">
           <ion-icon name="pencil" aria-hidden="true" aria-label="Edit Profile" size="small"></ion-icon>
         </ion-chip>
         <ion-label>Edit Profile</ion-label>
       </ion-item>
-      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" class="settingBtns_item" (click)="monthStatus()">
+      <ion-item lines="none" type="button" [button]="true" [detail]="true" mode="ios" class="settingBtns_item"
+        (click)="monthStatus()">
         <ion-chip slot="start" color="medium">
           <ion-icon name="list" aria-hidden="true" aria-label="Attendance" size="small"></ion-icon>
         </ion-chip>
@@ -378,11 +467,12 @@
         </ion-chip>
         <ion-label>{{workDetail ? 'Update' : 'Add'}} Work Info</ion-label>
       </ion-item> -->
-      
+
     </ng-container>
 
     <ng-container *ngIf="!employeeDetail">
-      <ion-item lines="none" [detail]="false" mode="ios" class="settingBtns_item logoutBtn" *ngFor="let item of [0,1,2]">
+      <ion-item lines="none" [detail]="false" mode="ios" class="settingBtns_item logoutBtn"
+        *ngFor="let item of [0,1,2]">
         <ion-avatar slot="start">
           <ion-skeleton-text [animated]="true" style="width: 100%; height: 100%"></ion-skeleton-text>
         </ion-avatar>

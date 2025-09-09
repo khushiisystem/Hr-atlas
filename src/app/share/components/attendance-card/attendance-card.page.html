@@ -3,22 +3,30 @@
     <div>
       <ion-card-title>{{attendanceData.created_date | date:'EEE, dd MMM'}}</ion-card-title>
       <ion-card-subtitle
-        *ngIf="workDurationString.trim() === '0h 0m 0s' || regularization?.status === 'Accept'">{{attendanceData.status}}</ion-card-subtitle>
+        *ngIf="workDurationString.trim() === '0h 0m 0s' || regularization?.status === 'Accept' || attendanceData.status">{{attendanceData.status}}</ion-card-subtitle>
       <ion-note *ngIf="workDurationString.trim() !== '0h 0m 0s' && attendanceData.status !== 'Absent'"><ion-icon
           name="time-outline" size="small"
           style="vertical-align: middle; margin-right: 5px;"></ion-icon>{{workDurationString}}</ion-note>
     </div>
 
-    <!-- <ion-button [shape]="'round'" [mode]="'ios'" [size]="'small'" [fill]="'clear'" [color]="'medium'" *ngIf="attendanceData.attendanceData.length > 0 || attendanceData.leaveData != null" class="expandBtn">
-      <ion-icon [name]="openCard ? 'chevron-up-outline' : 'chevron-down-outline'" slot="icon-only" [size]="'small'"></ion-icon>
-    </ion-button> -->
-
-    <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Admin' || userRole === 'HR' && !isWeekOff && attendanceData.status === 'Absent'" (click)="markPresent($event)" class="ion-no-margin ion-text-center btnChip">Make Present</ion-chip> -->
     <ion-chip color="tertiary"
-      *ngIf="(userRole === 'Employee' && !isWeekOff && !regularization?.status ) && ( attendanceData.status === 'Absent'  ||  (attendanceData.status === 'Leave' && leaveStartDay === 'Half Day'))"
+      *ngIf="(userRole === 'Employee' && !isWeekOff && !regularization?.status ) && ( attendanceData.status === 'Absent' || attendanceData.status === 'Half Day' ||  (attendanceData.status === 'Leave' && leaveDay ))"
       class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="openModal()">Regularization</ion-chip>
-    <!-- <ion-chip color="tertiary" *ngIf="userRole === 'Employee' && !isWeekOff && attendanceData.status === 'Absent'" class="ion-no-margin ion-text-center btnChip" id="open-modal" (click)="triggerModal()">Regularization</ion-chip> -->
+    <div class="ion-no-margin ion-text-center btnChip" *ngIf="userRole !== 'Employee'">
 
+      <ion-select *ngIf="(userRole !== 'Employee' && !isWeekOff)" placeholder="Select" interface="popover"
+        class="day-select" [disabled]="selectedDay !== null" (ionChange)="selectDay($event, attendanceData)">
+        <ion-select-option *ngIf="isStatusNot(attendanceData.status, AttendaceStatus.PRESENT)" class="full-day-button"
+          value="full day">Present</ion-select-option>
+
+        <ion-select-option *ngIf="isStatusNot(attendanceData.status, AttendaceStatus.HALF_DAY)" class="half-day-button"
+          value="half day">Half Day</ion-select-option>
+
+        <ion-select-option *ngIf="isStatusNot(attendanceData.status, AttendaceStatus.ABSENT)" class="half-day-button"
+          value="absent">Absent</ion-select-option>
+
+      </ion-select>
+    </div>
   </ion-card-header>
 
   <ion-card-content [class.show]="openCard && isAllGood && !isWeekOff">
@@ -47,6 +55,14 @@
         </tr>
       </tbody>
     </table>
+
+    <div *ngIf="attendanceData.attendanceData.length > 0" class="clock-status-container">
+      <ion-text [color]="clockInStatus.status">{{clockInStatus.str}}</ion-text>
+      <ion-text *ngIf="clockOutStatus.status" [color]="clockOutStatus.status">
+        {{clockOutStatus.str}}
+      </ion-text>
+    </div>
+
     <div *ngIf="attendanceData.leaveData != null">
       <div class="ion-margin-top leaveDate">
         <ion-label color="tertiary" class="ion-text-wrap" *ngIf="attendanceData.leaveData.startDate">
@@ -69,14 +85,23 @@
       </p> -->
       <ion-text *ngIf="attendanceData.leaveData.isUnplanned" color="warning">Unplanned leave</ion-text>
       <p class="purpose">
-        <b>Leave Purpose : </b><read-more-text [textString]="attendanceData.leaveData.purpose" [maxLength]="100"></read-more-text>
+        <b>Leave Purpose : </b><read-more-text [textString]="attendanceData.leaveData.purpose"
+          [maxLength]="100"></read-more-text>
       </p>
       <div class="ion-text-end">
-        <ion-chip style="cursor: default;"
+        <ion-chip style="cursor: default;" *ngIf="attendanceData.leaveData.status !== 'Pending' || userRole === 'Employee' "
           [color]="attendanceData.leaveData.status === 'Accept' ? 'success' : attendanceData.leaveData.status === 'Pending' ? 'warning' : 'danger' ">
           {{attendanceData.leaveData.status === 'Accept' ? 'Accepted' : attendanceData.leaveData.status === 'Pending' ?
           'Pending' : attendanceData.leaveData.status === 'Reject' ? 'Rejected' : attendanceData.leaveData.status}}
         </ion-chip>
+      </div>
+      <div class="ion-text-end">
+        <ng-container *ngIf="userRole === 'Admin' || userRole === 'HR'">
+          <ion-button type="button" color="danger" fill="clear" [strong]="true" size="small"
+            *ngIf="attendanceData.leaveData.status === 'Pending'" (click)="leaveAction('Reject')">Reject</ion-button>
+          <ion-button type="button" color="primary" fill="clear" [strong]="true" size="small"
+            *ngIf="attendanceData.leaveData.status === 'Pending'" (click)="leaveAction('Accept')">Approve</ion-button>
+        </ng-container>
       </div>
     </div>
   </ion-card-content>
@@ -95,7 +120,7 @@
           <h2>Name: {{regularization.user.firstName}} {{regularization!.user!.lastName}}</h2>
         </ion-text> -->
         <ion-button size="small"
-          *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'  && regularization.status ==='Pending'"
+          *ngIf="userRole.trim() !== 'Admin' && userRole.trim() !== 'HR'  && regularization.status ==='Pending' || regularization.status ==='Review'"
           (click)="handleModalAction(regularization);"><ion-icon name="create-outline"
             id="open-modal"></ion-icon></ion-button>
         <!-- <ion-button size="small" *ngIf="userRole.trim() !== 'Admin' && regularization.status ==='Pending'" (click)="triggerModal(regularization);"><ion-icon name="create-outline" id="open-modal"></ion-icon></ion-button -->
@@ -120,13 +145,17 @@
           <h2>Description: {{regularization.description}}</h2>
         </ion-text>
         <ion-text>
-          <h2><b>Status: </b><span [ngClass]="getStatusClass(regularization.status)">{{regularization.status}}</span></h2>
+          <h2><b>Status: </b><span [ngClass]="getStatusClass(regularization.status)">{{regularization.status}}</span>
+          </h2>
         </ion-text>
       </div>
       <div class="regBtn" *ngIf="userRole === 'Admin' || userRole === 'HR'">
         <ion-chip color="success" class="ion-no-margin ion-text-center btnChip ion-margin-end"
           *ngIf="regularization.status === 'Pending'"
           (click)="approveReject('accept', regularization.guid)">Approve</ion-chip>
+        <ion-chip color="primary" class="ion-no-margin ion-text-center btnChip ion-margin-end"
+          *ngIf="regularization.status === 'Pending'"
+          (click)="approveReject('review', regularization.guid)">Review</ion-chip>
         <ion-chip color="danger" class="ion-no-margin ion-text-center btnChip"
           *ngIf="regularization.status === 'Pending'"
           (click)="approveReject('reject', regularization.guid)">Reject</ion-chip>

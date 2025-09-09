@@ -21,13 +21,14 @@ export class ProfilePage implements OnInit {
   employeeDetail!: IEmployeeResponse;
   workDetail!: IEmployeeWrokResponse;
   workWeekDetail!: IEmplpoyeeWorWeek;
-  activeTab: string[] = ["experience", "Personal", "Employment", "workWeek", "Contact", "Address", "Social_info"];
+  activeTab: string[] = ["experience","Account", "Personal", "Employment", "workWeek", "Contact", "Address", "Social_info"];
   weekArray: string[] = [];
   offDays: string[] = [];
   dataLoaded: boolean = false;
   workLoaded: boolean = false;
   workWeekLoaded: boolean = false;
   expandedAccordion: string = "Personal";
+  today : any = new Date().toISOString();
 
   constructor(
     private router: Router,
@@ -86,7 +87,7 @@ export class ProfilePage implements OnInit {
   getWorkWeek(){
     this.workWeekLoaded = false;
     this.offDays = [];
-    this.shareServ.employeeAssignedWorkWeek(this.employeeId).subscribe(res => {
+    this.shareServ.employeeAssignedWorkWeekWithDate(this.employeeId, this.today).subscribe(res => {
       if(res) {
         this.workWeekDetail = res;
         this.weekArray = moment.weekdays();

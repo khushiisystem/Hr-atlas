@@ -5,7 +5,7 @@ import { IState } from "../interfaces/request/IGlobalState";
 @Injectable({
   providedIn: "root",
 })
-export class RoleStateService<T = "Admin" | "Employee" | string> implements IState<T>{
+export class RoleStateService<T = "Admin" | "Employee" | "HR" | string> implements IState<T>{
   public content = new BehaviorSubject<T>(null as any);
 
   constructor() {}

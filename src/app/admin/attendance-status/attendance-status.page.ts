@@ -1,12 +1,18 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
-import { NavigationExtras, Router } from '@angular/router';
-import { IonInfiniteScroll, IonToggle } from '@ionic/angular';
-import { IRoles } from 'src/app/interfaces/enums/IRoles';
-import { AttendaceStatus } from 'src/app/interfaces/enums/leaveCreditPeriod';
-import { IClockInResponce } from 'src/app/interfaces/response/IAttendanceSetup';
-import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
-import { AdminService } from 'src/app/services/admin.service';
-import { RoleStateService } from 'src/app/services/roleState.service';
+import {
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import { NavigationExtras, Router } from "@angular/router";
+import { IonInfiniteScroll, IonToggle } from "@ionic/angular";
+import { IRoles } from "src/app/interfaces/enums/IRoles";
+import { AttendaceStatus } from "src/app/interfaces/enums/leaveCreditPeriod";
+import { IClockInResponce } from "src/app/interfaces/response/IAttendanceSetup";
+import { IEmployeeResponse } from "src/app/interfaces/response/IEmployee";
+import { AdminService } from "src/app/services/admin.service";
+import { RoleStateService } from "src/app/services/roleState.service";
 
 interface InfiniteScrollCustomEvent extends CustomEvent {
   target: HTMLIonInfiniteScrollElement;
@@ -21,14 +27,15 @@ export interface IEmpSelect {
 }
 
 @Component({
-  selector: 'app-attendance-status',
-  templateUrl: './attendance-status.page.html',
-  styleUrls: ['./attendance-status.page.scss'],
+  selector: "app-attendance-status",
+  templateUrl: "./attendance-status.page.html",
+  styleUrls: ["./attendance-status.page.scss"],
 })
 export class AttendanceStatusPage implements OnInit {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
   @Output() employee: EventEmitter<IEmpSelect> = new EventEmitter<IEmpSelect>();
   employeeList: IEmployeeResponse[] = [];
+  filterEmployeeList: IEmployeeResponse[] = [];
   attendanceList: IClockInResponce[] = [];
   isDataLoaded: boolean = false;
   isMoreData: boolean = true;
@@ -39,16 +46,18 @@ export class AttendanceStatusPage implements OnInit {
   selectedEmployee: any[] = [];
   attendanceDate: Date = new Date();
   today: Date = new Date();
-  userRole: string = 'Admin';
+  userRole: string = "Admin";
   userId: string = "";
+  empType: "All" | "Active" | "InActive" | "Resigned" | "Both" = "Active";
 
-  constructor(
-    private adminServ: AdminService,
-    private router: Router,
-  ) { }
+  constructor(private adminServ: AdminService, private router: Router) {}
 
   ngOnInit() {
-    this.today.setFullYear(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
+    this.today.setFullYear(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.today.getDate()
+    );
     this.attendanceDate = this.today;
     this.getEmployeeList();
   }
@@ -62,40 +71,77 @@ export class AttendanceStatusPage implements OnInit {
     if (this.pageIndex < 1) {
       this.employeeList = [];
     }
-    this.adminServ.getEmployees('Both', this.pageIndex * 30, 30).subscribe(res => {
-      if (res) {
-        const data: IEmployeeResponse[] = res;
-        for (let i = 0; i < data.length; i++) {
-          this.employeeList.push(res[i]);
+    this.adminServ
+      .getEmployees(this.empType, this.pageIndex * 30, 30)
+      .subscribe(
+        (res) => {
+          if (res) {
+            const data: IEmployeeResponse[] = res.sort((a, b) =>
+              a.firstName.localeCompare(b.firstName)
+            );
+            for (let i = 0; i < data.length; i++) {
+              this.employeeList.push(res[i]);
+            }
+            this.filterEmployeeList = [...this.employeeList];
+            this.isMoreData = res.length > 29;
+          }
+          this.today.setHours(0, 0, 0);
+          const localDate = new Date(
+            this.attendanceDate.getTime() -
+              this.attendanceDate.getTimezoneOffset() * 60000
+          );
+          this.getTodayAttendance(localDate.toISOString());
+        },
+        (error) => {
+          this.isMoreData = false;
+          this.isDataLoaded = true;
+          this.infiniteScroll.complete();
         }
-        this.isMoreData = res.length > 29;
-      }
-      this.today.setHours(0, 0, 0);
-      const localDate = new Date(this.attendanceDate.getTime() - this.attendanceDate.getTimezoneOffset() * 60000);
-      this.getTodayAttendance(localDate.toISOString());
-    }, (error) => {
-      this.isMoreData = false;
-      this.isDataLoaded = true;
-      this.infiniteScroll.complete();
-    });
+      );
   }
 
+  onSearch() {
+    // this.searchSubject.next(this.searchString);
+    // console.log(this.searchString);
+    const term = this.searchString.toLowerCase().trim();
+    this.filterEmployeeList = this.employeeList.filter((employee) => {
+      // Check if firstname exists and contains the search term
+      const firstname = employee.firstName
+        ? employee.firstName.toLowerCase()
+        : "";
+
+      const lastname = employee.lastName ? employee.lastName.toLowerCase() : "";
+
+      return (
+        firstname.includes(term) ||
+        firstname.startsWith(term) ||
+        lastname.includes(term) ||
+        lastname.startsWith(term)
+      );
+    });
+  }
+ 
   getTodayAttendance(dateStr: string) {
     this.attendanceLoaded = false;
-    this.adminServ.getDailyAttendance(dateStr, this.pageIndex * 60, 60).subscribe(res => {
-      if (res.length < 1) {
-        this.isDataLoaded = true;
-        this.attendanceLoaded = true;
-        return;
-      } else {
-        this.attendanceList = [...this.attendanceList, ...res];
-        this.isDataLoaded = true;
-        this.attendanceLoaded = true;
-      }
-    }, (error) => {
-      this.isDataLoaded = true;
-      this.attendanceLoaded = true;
-    });
+    this.adminServ
+      .getDailyAttendance(dateStr, this.pageIndex * 60, 60)
+      .subscribe(
+        (res) => {
+          if (res.length < 1) {
+            this.isDataLoaded = true;
+            this.attendanceLoaded = true;
+            return;
+          } else {
+            this.attendanceList = [...this.attendanceList, ...res];
+            this.isDataLoaded = true;
+            this.attendanceLoaded = true;
+          }
+        },
+        (error) => {
+          this.isDataLoaded = true;
+          this.attendanceLoaded = true;
+        }
+      );
   }
 
   loadData(event: InfiniteScrollCustomEvent) {
@@ -108,7 +154,7 @@ export class AttendanceStatusPage implements OnInit {
   }
 
   getName(employee: IEmployeeResponse) {
-    if (employee.lastName && employee.lastName.trim() !== '') {
+    if (employee.lastName && employee.lastName.trim() !== "") {
       return `${employee.firstName.slice(0, 1)}`;
     } else {
       return `${employee.firstName.slice(0, 1)}`;
@@ -130,7 +176,9 @@ export class AttendanceStatusPage implements OnInit {
   }
 
   selectEmployee(empData: IEmployeeResponse) {
-    this.router.navigate([`tabs/attendance/${empData.guid}`], { state: { tab: "listView" } });
+    this.router.navigate([`tabs/attendance/${empData.guid}`], {
+      state: { tab: "listView" },
+    });
   }
 
   selectAttendanceDate(event: any) {
@@ -142,7 +190,9 @@ export class AttendanceStatusPage implements OnInit {
     }
   }
   selectDate(event: Date) {
-    const localDate = new Date(event.getTime() - event.getTimezoneOffset() * 60000);
+    const localDate = new Date(
+      event.getTime() - event.getTimezoneOffset() * 60000
+    );
     this.attendanceList = [];
     this.getTodayAttendance(localDate.toISOString());
   }
@@ -152,12 +202,23 @@ export class AttendanceStatusPage implements OnInit {
     this.attendanceList = [];
   }
 
-  goBack() { history.back(); }
+  goBack() {
+    history.back();
+  }
 
   handleRefresh(event: any) {
     setTimeout(() => {
       this.getEmployeeList();
       event.target.complete();
     }, 2000);
+  }
+
+  getTypedEmployee(etype: "All" | "Active" | "InActive" | "Resigned" | "Both") {
+    // console.log("e type : ", etype);
+    this.empType = etype;
+    this.pageIndex = 0;
+    this.employeeList = [];
+    this.filterEmployeeList = [];
+    this.getEmployeeList();
   }
 }

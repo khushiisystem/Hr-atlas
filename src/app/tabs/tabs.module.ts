@@ -57,6 +57,7 @@ import { TimesheetFormPage } from "../employee/time-sheet/timesheet-form/timeshe
 import { AdminTimesheetsPage } from "../admin/admin-timesheets/admin-timesheets.page";
 import { RegularizationPage } from "../share/components/regularization/regularization.page";
 import { PdfDetailsPage } from "../share/components/pdf-details/pdf-details.page";
+import { DownloadPayslipPage } from "../admin/download-payslip/download-payslip.page";
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { PdfDetailsPage } from "../share/components/pdf-details/pdf-details.page
     TimesheetFormPage,
     AdminTimesheetsPage,
     RegularizationPage,
-    PdfDetailsPage
+    PdfDetailsPage,
+    DownloadPayslipPage
   ],
   imports: [
     ReadMorePageModule,

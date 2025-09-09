@@ -47,7 +47,7 @@ export class AddEmployeePage implements OnInit {
       subDepartment: ['Project Management']
     }, {
       name: 'Development Department',
-      subDepartment: ['Frontend Development', 'Backend Development', 'UI / UX', 'DevOps']
+      subDepartment: ['Frontend Developer', 'Backend Developer', 'UI / UX', 'DevOps', 'Full Stack Developer', 'Quality Assurance']
     }, {
       name: 'Sales Department',
       subDepartment: ['Bussiness Development']
@@ -91,7 +91,7 @@ export class AddEmployeePage implements OnInit {
       status: ['Active', Validators.required],
       joiningDate: ['', Validators.required],
       resignationDate: [''],
-      work_experience: 0,
+      work_experience: 0, 
       workLocation: [''],
       probationPeriod: ['', Validators.required],
       designation: ['', Validators.required],

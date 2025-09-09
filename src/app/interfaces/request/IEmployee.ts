@@ -28,13 +28,21 @@ export interface IEmployeeRequest {
   designation: string,
   department: string,
   subDepartment: string
+  accountInfo?: IAccountInfo,
 }
 
 export interface IAddress {
   addressLine1: string;
-  addressLine2: string;
+  addressLine2?: string;
   city: string;
   state: string;
   country: string;
   zipCode: string;
+}
+
+export interface IAccountInfo {
+  bankName: string;
+  accountHolderName: string;
+  accountNumber: string;
+  ifscCode: string;
 }

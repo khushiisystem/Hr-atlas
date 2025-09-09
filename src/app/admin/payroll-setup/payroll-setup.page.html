@@ -21,9 +21,9 @@
   </ion-refresher>
 
   <ng-container *ngIf="!employee && employeeId.trim() === ''">
-    <app-employees [isChecklist]="true" [isPayroll]="true" (employee)="selectEmploye($event)"></app-employees>
+    <app-employees [isChecklist]="true" [isPayroll]="true" [payslipDate]="payslipDate" (payslipDateChange)="onPayslipDateChange($event)" (employee)="selectEmploye($event)" [payrollSetup]="true"></app-employees>
   </ng-container>
 
-  <app-employee-payroll *ngIf="employee" [employee]="employee" (createSalary)="formSubmited($event)"></app-employee-payroll>
+  <app-employee-payroll *ngIf="employee && userRole === 'Admin'" [employee]="employee" [payrollDate]="payslipDate" (createSalary)="formSubmited($event)"></app-employee-payroll>
 
 </ion-content>

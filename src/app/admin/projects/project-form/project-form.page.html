@@ -13,14 +13,23 @@
 
 <ion-content [fullscreen]="true">
   <form [formGroup]="projectsForm">
-    <ion-item [detail]="false" fill="solid" class="ion-padding"> 
-      <ion-input labelPlacement="floating" formControlName="title" type="text" maxlength="120" minlength="2" inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
+    <ion-item [detail]="false" fill="solid" class="ion-padding">
+      <ion-input labelPlacement="floating" formControlName="title" type="text" maxlength="120" minlength="2"
+        inputmode="text" enterkeyhint="next" autocomplete="name" autofocus="true">
         <div slot="label">Project Name <ion-text color="danger">*</ion-text></div>
       </ion-input>
     </ion-item>
-    <ion-text color="danger" class="error_txt ion-padding-start" *ngIf="projectsForm.controls['title'].touched && projectsForm.controls['title'].errors">project name is required</ion-text>
+    <ion-text color="danger" class="error_txt ion-padding-start"
+      *ngIf="projectsForm.controls['title'].touched && projectsForm.controls['title'].errors">project name is
+      required</ion-text>
+    <!-- Checkbox for default project -->
+    <ion-item lines="none" class="">
+      <ion-checkbox slot="start" formControlName="isDefault"></ion-checkbox>
+      <ion-label color="medium">Set as default project</ion-label>
+    </ion-item>
   </form>
-  <ion-button mode="md" type="submit" class="ion-padding" expand="block" color="primary" [disabled]="projectsForm.invalid || isInProgress" (click)="submit()" expand="full" shape="round">
+  <ion-button mode="md" type="submit" class="ion-padding" expand="block" color="primary"
+    [disabled]="projectsForm.invalid || isInProgress" (click)="submit()" expand="full" shape="round">
     {{action === 'add' ? 'Add' : 'update' | titlecase}} Project
   </ion-button>
 </ion-content>

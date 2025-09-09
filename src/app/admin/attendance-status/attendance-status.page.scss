@@ -4,28 +4,33 @@
 .list-item {
     --ripple-color: var(--ion-color-tertiary);
     --background-hover: var(--ion-color-tertiary);
-    & .employee_img {width: 40px; height: 40px;}
-    
-    & .skeleton_thumb{
+
+    & .employee_img {
+        width: 40px;
+        height: 40px;
+    }
+
+    & .skeleton_thumb {
         width: 30px;
         height: 30px;
         margin-top: 10px;
         margin-bottom: 10px;
     }
 }
-.employee_data{
+
+.employee_data {
     display: flex;
     flex-direction: column;
     row-gap: 5px;
     width: 100%;
 
-    & .role{
+    & .role {
         color: var(--ion-color-primary);
     }
 }
 
-.roleToggle{
-    .label-text-wrapper{
+.roleToggle {
+    .label-text-wrapper {
         margin-inline: 6px 0;
     }
 }
@@ -40,11 +45,12 @@ ion-list-header ion-label {
     background-color: #fff;
     padding-top: 10px;
     padding-bottom: 10px;
-    
+
     & ion-input {
         min-height: 40px;
     }
 }
+
 app-custom-callendar {
     position: sticky;
     top: -50px;
@@ -56,4 +62,41 @@ app-custom-callendar {
     --padding-start: 0.7em;
     --padding-end: 0.7em;
     aspect-ratio: 1;
+}
+
+.optbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-right: 16px;
+    transition: all 0.5s ease;
+
+    & ion-button {
+        --box-shadow: none;
+        text-transform: capitalize;
+        // min-height: 32px;
+        transition: all 0.3s ease;
+    }
+
+    & ion-item {
+        --min-height: 30px;
+        // --background: var(--ion-color-light);
+        // border-radius: 50px;
+        flex: 1 1 0%;
+        transition: all 0.3s ease;
+
+        & .startIcon {
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-right: 10px;
+        }
+
+        & ion-input {
+            min-height: 40px;
+            outline: none;
+            border: none;
+            font-size: 14px;
+            --highlight-color-valid: var(--ion-color-tertiary);
+        }
+    }
 }

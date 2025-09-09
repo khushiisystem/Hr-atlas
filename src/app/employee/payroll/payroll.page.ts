@@ -23,7 +23,7 @@ export class PayrollPage implements OnInit {
   advanceLoaded: boolean = false;
   advanceLogs: ICreditLogsResponse[] = [];
   dateModal: boolean = false;
-  payslipDate: Date = new Date();
+  payslipDate: string = "";
   today: Date = new Date();
   activeTab: string = "payslip";
   employeeId: string = "";
@@ -44,7 +44,7 @@ export class PayrollPage implements OnInit {
   ngOnInit() {
     this.employeeId = this.activeRoute.snapshot.params?.["id"];
     // this.today.setFullYear(this.today.getFullYear(), this.today.getMonth() - 1, this.today.getDate());
-    this.payslipDate = this.today;
+    this.payslipDate = this.today.toISOString();
     if (this.employeeId.trim() !== "") {
       this.getPaySlip();
       this.getSalaryStructure();
@@ -148,7 +148,7 @@ export class PayrollPage implements OnInit {
     // Generate the receipt content
     const receiptContent = `Spundan Consultancy & IT Solutions Pvt Ltd\n3rd Floor, 315.Sai, Ram Plaza, 63 Mangal Nagar Road, Vishnu Puri Colony Indor, Madhya Pradesh-152001\nMonth: ${
       this.selectedMonthName
-    } ${this.payslipDate.getFullYear()}\nWorking Days: ${
+    } ${new Date(this.payslipDate).getFullYear()}\nWorking Days: ${
       this.workingDays
     }\nLOP: 0\nLeaves Credited: 1.5\nSalary: ${this.salary}`;
 

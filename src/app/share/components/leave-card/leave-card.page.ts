@@ -90,6 +90,7 @@ export class LeaveCardPage implements OnInit, AfterViewInit {
   leaveAction(action: 'Reject' | 'Accept' | 'Cancel') {
     if (action === "Cancel" && this.leaveItem.guid) {
       this.cancelLeave(this.leaveItem.guid);
+      return;
     }
     this.actionReturn.emit({ action: action, leaveId: this.leaveItem.guid });
   }

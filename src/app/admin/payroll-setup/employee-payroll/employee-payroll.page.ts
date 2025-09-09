@@ -1,38 +1,63 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnInit, Output, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { GestureController, GestureDetail } from '@ionic/angular';
-import * as moment from 'moment';
-import { ICreditLogsRequest, ICreditLogsResponse } from 'src/app/interfaces/request/IPayrollSetup';
-import { IEmployeeResponse } from 'src/app/interfaces/response/IEmployee';
-import { ISalarySetupResponse } from 'src/app/interfaces/response/ISalaryResponse';
-import { IPayslipResponse } from 'src/app/interfaces/response/payslipResponse';
-import { AdminService } from 'src/app/services/admin.service';
-import { LoaderService } from 'src/app/services/loader.service';
-import { ShareService } from 'src/app/services/share.service';
-import { IEmpSelect } from 'src/app/share/employees/employees.page';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import { GestureController, GestureDetail } from "@ionic/angular";
+import * as moment from "moment";
+import {
+  ICreditLogsRequest,
+  ICreditLogsResponse,
+} from "src/app/interfaces/request/IPayrollSetup";
+import { IEmployeeResponse } from "src/app/interfaces/response/IEmployee";
+import { ISalarySetupResponse } from "src/app/interfaces/response/ISalaryResponse";
+import { IPayslipResponse } from "src/app/interfaces/response/payslipResponse";
+import { AdminService } from "src/app/services/admin.service";
+import { LoaderService } from "src/app/services/loader.service";
+import { ShareService } from "src/app/services/share.service";
+import { IEmpSelect } from "src/app/share/employees/employees.page";
 
 @Component({
-  selector: 'app-employee-payroll',
-  templateUrl: './employee-payroll.page.html',
-  styleUrls: ['./employee-payroll.page.scss'],
+  selector: "app-employee-payroll",
+  templateUrl: "./employee-payroll.page.html",
+  styleUrls: ["./employee-payroll.page.scss"],
 })
 export class EmployeePayrollPage implements OnInit, AfterViewInit {
   @Input() employee!: IEmpSelect;
-  @Output() createSalary: EventEmitter<'confirm' | 'cancel'> = new EventEmitter();
-  @ViewChild('tabsContent', { read: ElementRef }) tabsContent!: ElementRef<HTMLIonCardElement>;
-  employeeId: string = '';
+  @Output() createSalary: EventEmitter<"confirm" | "cancel"> =
+    new EventEmitter();
+  @ViewChild("tabsContent", { read: ElementRef })
+  tabsContent!: ElementRef<HTMLIonCardElement>;
+  employeeId: string = "";
   extraIncomeForm!: FormGroup;
   inProgress: boolean = false;
   openCalendar: boolean = false;
   salaryStructureLoaded: boolean = false;
   historyLoaded: boolean = false;
   today: Date = new Date();
-  payrollDate: string = "";
+  @Input() payrollDate?: Date | string;
   previousLog!: ICreditLogsResponse;
   logHistory: ICreditLogsResponse[] = [];
   salaryStructure!: ISalarySetupResponse;
-  tabs: Array<{value: string, label: string}> = [{label: "Earning", value: "earning"}, {label: "Deductions", value: "deductions"}, {label: "History", value: "history"}]
-  activeTab: string = 'earning';
+  tabs: Array<{ value: string; label: string }> = [
+    { label: "Earning", value: "earning" },
+    { label: "Deductions", value: "deductions" },
+    { label: "History", value: "history" },
+  ];
+  activeTab: string = "earning";
   private isTabChangeTriggered = false;
 
   constructor(
@@ -42,14 +67,18 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
     private loaderServ: LoaderService,
     private gestureCtrl: GestureController,
     private cdRef: ChangeDetectorRef,
-    private zone: NgZone,
-  ) { }
+    private zone: NgZone
+  ) {}
 
   ngOnInit() {
     this.today = new Date();
-    this.today.setFullYear(this.today.getFullYear(), this.today.getMonth(), this.today.getDate());
+    this.today.setFullYear(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.today.getDate()
+    );
     this.employeeId = this.employee.guid;
-    this.payrollDate = this.today.toISOString();
+    // this.payrollDate = this.today.toISOString();
 
     this.extraIncomeForm = this.fb.group({
       bonus: 0,
@@ -57,10 +86,10 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       compOff: 0,
       deductionAmount: 0,
       otherDeduction: 0,
-      description: '',
+      description: "",
     });
 
-    if(this.employeeId.trim() !== ''){
+    if (this.employeeId.trim() !== "") {
       this.getPayStructure();
       this.getLogHistory();
     }
@@ -73,7 +102,7 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       onStart: () => this.onStart(),
       onMove: (detail) => this.onMove(detail),
       onEnd: () => this.onEnd(),
-      gestureName: 'change-tab-in-payslip',
+      gestureName: "change-tab-in-payslip",
     });
 
     gesture.enable();
@@ -82,39 +111,42 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
 
   loadPdf() {
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://drive.google.com/file/d/1pRSZZnXUheRDpvKqcFyG3wEsnI-uZrud/view?usp=drive_link', true);
-    xhr.responseType = 'blob';
+    xhr.open(
+      "GET",
+      "https://drive.google.com/file/d/1pRSZZnXUheRDpvKqcFyG3wEsnI-uZrud/view?usp=drive_link",
+      true
+    );
+    xhr.responseType = "blob";
 
     xhr.onload = (e: any) => {
       console.log(xhr);
       if (xhr.status === 200) {
-        const blob = new Blob([xhr.response], { type: 'application/pdf' });
+        const blob = new Blob([xhr.response], { type: "application/pdf" });
       }
     };
 
     xhr.send();
   }
   onFileSelected() {
-    let $img: any = document.querySelector('#file');
-  
-    if (typeof (FileReader) !== 'undefined') {
+    let $img: any = document.querySelector("#file");
+
+    if (typeof FileReader !== "undefined") {
       let reader = new FileReader();
-  
-      reader.onload = (e: any) => {
-      };
-  
+
+      reader.onload = (e: any) => {};
+
       reader.readAsArrayBuffer($img.files[0]);
     }
   }
   afterLoadComplete(pdf: any) {
     this.zone.run(() => {
-      console.log('PDF loaded', pdf);
+      console.log("PDF loaded", pdf);
     });
   }
-  
+
   handleLoadError(error: any) {
     this.zone.run(() => {
-      console.error('Error loading PDF', error);
+      console.error("Error loading PDF", error);
     });
   }
 
@@ -122,19 +154,21 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
     this.isTabChangeTriggered = false;
     this.cdRef.detectChanges();
   }
-  
+
   private onMove(detail: GestureDetail) {
-    if(this.isTabChangeTriggered){return;}
+    if (this.isTabChangeTriggered) {
+      return;
+    }
     const tabIndex = this.tabs.findIndex((tab) => tab.value === this.activeTab);
-    
-    if(detail.deltaX < -90 && tabIndex < this.tabs.length-1){
-      this.activeTab = this.tabs[tabIndex+1].value;
+
+    if (detail.deltaX < -90 && tabIndex < this.tabs.length - 1) {
+      this.activeTab = this.tabs[tabIndex + 1].value;
       this.isTabChangeTriggered = true;
-    } else if(detail.deltaX > 90 && tabIndex > 0){
-      this.activeTab = this.tabs[tabIndex-1].value;
+    } else if (detail.deltaX > 90 && tabIndex > 0) {
+      this.activeTab = this.tabs[tabIndex - 1].value;
       this.isTabChangeTriggered = true;
     }
-    
+
     // const { type, currentX, deltaX, velocityX } = detail;
     // this.debug.nativeElement.innerHTML = `
     //   <div>Type: ${type}</div>
@@ -149,52 +183,81 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
   }
 
   getName(employee: IEmployeeResponse) {
-    if(employee.lastName && employee.lastName.trim() !== ''){
-      return `${employee.firstName.slice(0,1)}${employee.lastName.slice(0,1)}`;
+    if (employee.lastName && employee.lastName.trim() !== "") {
+      return `${employee.firstName.slice(0, 1)}${employee.lastName.slice(
+        0,
+        1
+      )}`;
     } else {
-      return `${employee.firstName.slice(0,2)}`;
+      return `${employee.firstName.slice(0, 2)}`;
     }
   }
 
-  getPayStructure(){
-    this.loaderServ.present('');
+  getPayStructure() {
+    this.loaderServ.present("");
     this.salaryStructureLoaded = false;
-    this.adminServ.getEmloyeePayStructure(this.employeeId, moment.utc(this.payrollDate).format()).subscribe(res => {
-      if(res){
-        this.salaryStructure = res;
-        this.salaryStructureLoaded = true;
-        this.loaderServ.dismiss();
-      }
-    }, (error) => {
-      this.salaryStructure = null as any;
-      this.shareServ.presentToast(error.error.message, 'top', 'danger');
-      this.salaryStructureLoaded = true;
-      this.loaderServ.dismiss();
-    });
+    this.adminServ
+      .getEmloyeePayStructure(
+        this.employeeId,
+        moment.utc(this.payrollDate).format()
+      )
+      .subscribe(
+        (res) => {
+          if (res) {
+            this.salaryStructure = res;
+            this.salaryStructureLoaded = true;
+            this.loaderServ.dismiss();
+          }
+        },
+        (error) => {
+          this.salaryStructure = null as any;
+          this.shareServ.presentToast(error.error.message, "top", "danger");
+          this.salaryStructureLoaded = true;
+          this.loaderServ.dismiss();
+        }
+      );
 
     this.fetchAdvance();
   }
 
-  getLogHistory(){
+  getLogHistory() {
     this.historyLoaded = false;
-    this.adminServ.getLogHistoryByEmployeeId(this.employeeId).subscribe(res => {
-      if(res){
-        this.logHistory = res.sort((item1, item2) => moment(item1.payslipDate).diff(moment(item2.payslipDate)));
-        this.fetchAdvance();
+    this.adminServ.getLogHistoryByEmployeeId(this.employeeId).subscribe(
+      (res) => {
+        if (res) {
+          this.logHistory = res.sort((item1, item2) =>
+            moment(item2.payslipDate).diff(moment(item1.payslipDate))
+          );
+          this.fetchAdvance();
+          this.historyLoaded = true;
+          this.loaderServ.dismiss();
+        }
+      },
+      (error) => {
         this.historyLoaded = true;
         this.loaderServ.dismiss();
       }
-    }, (error) => {
-      this.historyLoaded = true;
-      this.loaderServ.dismiss();
-    });
+    );
   }
 
-  fetchAdvance(){
-    const matchedIndex = this.logHistory.reverse().findIndex((item) => this.checkDate(item.payslipDate, this.payrollDate));
-    if(matchedIndex > -1){
-      this.previousLog = this.logHistory.reverse()[matchedIndex];
+  fetchAdvance() {
+    // console.log("payslip date : ", this.payrollDate);
+    // console.log("payroll date : ", this.payrollDate);
+    // console.log("log history : ", this.logHistory)
+
+    const reversedLogHistory = [...this.logHistory].reverse();
+
+    const matchedIndex = reversedLogHistory.findIndex((item) =>
+      this.checkDate(item.payslipDate, this.payrollDate)
+    );
+
+    console.log("matched index : ", matchedIndex);
+
+    if (matchedIndex > -1) {
+      this.previousLog = reversedLogHistory[matchedIndex];
+      // console.log("previou logs : ", this.previousLog);
       this.extraIncomeForm.patchValue(this.previousLog);
+      // console.log("extraIncomeForm : ", this.extraIncomeForm);
     } else {
       this.previousLog = this.logHistory.reverse()[0];
       this.extraIncomeForm.patchValue({
@@ -203,41 +266,46 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
         compOff: 0,
         deductionAmount: 0,
         otherDeduction: 0,
-        description: '',
+        description: "",
       });
     }
   }
 
-  checkDate(date1: Date | string, date2: string | Date){
-    return moment(date1).isSame(date2, "year") && moment(date1).isSame(date2, "month");
+  checkDate(date1: Date | string, date2: any) {
+    return (
+      moment(date1).isSame(date2, "year") &&
+      moment(date1).isSame(date2, "month")
+    );
   }
 
   get basicSalary(): number {
-    return this.salaryStructure ? (this.salaryStructure.current_ctc / 12) : 0;
+    return this.salaryStructure ? this.salaryStructure.current_ctc / 12 : 0;
   }
   get currentCtc(): number {
     return this.salaryStructure ? this.salaryStructure.current_ctc : 0;
   }
 
-  getFormValue(ctrlName: string){
+  getFormValue(ctrlName: string) {
     const value = this.extraIncomeForm.controls[ctrlName].value;
-    if(value === null || value.toString().trim() === ""){
-      return 0
-    } else{
+    if (value === null || value.toString().trim() === "") {
+      return 0;
+    } else {
       return value;
     }
   }
 
-  checkFormValidation(){
-    return this.getFormValue("bonus") === 0 
-      && this.getFormValue("advanceAmount") === 0 
-      && this.getFormValue("otherDeduction") === 0 
-      && this.getFormValue("deductionAmount") === 0 
-      && this.getFormValue("compOff") === 0;
+  checkFormValidation() {
+    return (
+      this.getFormValue("bonus") === 0 &&
+      this.getFormValue("advanceAmount") === 0 &&
+      this.getFormValue("otherDeduction") === 0 &&
+      this.getFormValue("deductionAmount") === 0 &&
+      this.getFormValue("compOff") === 0
+    );
   }
 
-  submit(){    
-    if(this.extraIncomeForm.invalid){
+  submit() {
+    if (this.extraIncomeForm.invalid) {
       return;
     } else {
       const reqData: ICreditLogsRequest = {
@@ -249,29 +317,40 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
         compOff: this.getFormValue("compOff"),
         description: this.extraIncomeForm.controls["description"].value,
         payslipDate: moment(this.payrollDate).utc().format(),
-      }
-      
-      this.loaderServ.present('');
-      this.adminServ.createPayrollLog(reqData).subscribe(res => {
-        if(res){
-          this.getLogHistory();
-          this.activeTab = 'history';
-          this.shareServ.presentToast('Logs created successfully.', 'top', 'success');
+      };
+
+      this.loaderServ.present("");
+      this.adminServ.createPayrollLog(reqData).subscribe(
+        (res) => {
+          if (res) {
+            this.getLogHistory();
+            this.activeTab = "history";
+            this.shareServ.presentToast(
+              "Logs created successfully.",
+              "top",
+              "success"
+            );
+            this.loaderServ.dismiss();
+            this.extraIncomeForm.patchValue({
+              bonus: 0,
+              advanceAmount: 0,
+              compOff: 0,
+              deductionAmount: 0,
+              otherDeduction: 0,
+              description: "",
+            });
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.shareServ.presentToast(
+            error.error.errorMessage || "Something is wrong.",
+            "bottom",
+            "danger"
+          );
           this.loaderServ.dismiss();
-          this.extraIncomeForm.patchValue({
-            bonus: 0,
-            advanceAmount: 0,
-            compOff: 0,
-            deductionAmount: 0,
-            otherDeduction: 0,
-            description: '',
-          });
         }
-      }, (error) =>{
-        console.log(error);
-        this.shareServ.presentToast(error.error.errorMessage || 'Something is wrong.', 'bottom', 'danger');
-        this.loaderServ.dismiss();
-      });
+      );
     }
   }
 }

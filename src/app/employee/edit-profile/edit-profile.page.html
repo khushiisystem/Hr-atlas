@@ -48,8 +48,10 @@
               <ion-icon [name]="'person'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
               <ion-input labelPlacement="floating" formControlName="lastName" placeholder="last Name" type="text"
                 enterkeyhint="next" inputmode="text" (ionChange)="toTitleCaseAndTrim($event, 'lastName')">
-                <div slot="label">Last Name</div>
+                <div slot="label">Last Name <ion-text color="danger">*</ion-text></div>
               </ion-input>
+              <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
+                *ngIf="employeeForm.controls['lastName'].touched && employeeForm.controls['firstName'].errors"></ion-icon>
             </ion-item>
             <ion-item detail="false" id="dob">
               <ion-icon [name]="'calendar-number'" aria-hidden="true" slot="start" [color]="'medium'"></ion-icon>
@@ -107,7 +109,9 @@
             </ion-list-header>
             <ion-item detail="false">
               <ion-icon name="call" aria-hidden="true" slot="start" color="medium"></ion-icon>
-              <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Mobile Number" type="tel" inputmode="numeric" pattern="[0-9]*" maxlength="10" (ionInput)="restrictToNumbers($event)" [readonly]="false">
+              <ion-input labelPlacement="floating" formControlName="mobileNumber" placeholder="Mobile Number" type="tel"
+                inputmode="numeric" pattern="[0-9]*" maxlength="10" (ionInput)="restrictToNumbers($event)"
+                [readonly]="false">
                 <div slot="label">Mobile Number </div>
               </ion-input>
               <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'"
@@ -116,8 +120,8 @@
             <ion-item detail="false">
               <ion-icon name="call" aria-hidden="true" slot="start" color="medium"></ion-icon>
               <ion-input labelPlacement="floating" formControlName="alternateMobileNumber"
-                placeholder="Alternate Mobile Number" type="tel" maxlength="10" inputmode="tel" [enterkeyhint]="'next'" (ionInput)="restrictToNumbers($event)"
-                autocomplete="alternateMobileNumber">
+                placeholder="Alternate Mobile Number" type="tel" maxlength="10" inputmode="tel" [enterkeyhint]="'next'"
+                (ionInput)="restrictToNumbers($event)" autocomplete="alternateMobileNumber">
                 <div slot="label">Emergency Phone Number<ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon [name]="'alert-circle'" aria-hidden="true" slot="end" [color]="'danger'"
@@ -143,13 +147,70 @@
         </div>
 
         <div class="listItem">
+          <ion-list mode="ios" inset="true" class="miniList" formGroupName="accountInfo">
+            <ion-list-header>
+              <ion-label>
+                <h2>Account Info</h2>
+              </ion-label>
+            </ion-list-header>
+
+            <!-- Bank Name -->
+            <ion-item detail="false">
+              <ion-input labelPlacement="floating" formControlName="bankName" placeholder="Bank Name" type="text"
+                inputmode="text">
+                <div slot="label">Bank Name<ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <ion-icon name="alert-circle" slot="end" color="danger"
+                *ngIf="getGroup('accountInfo').controls['bankName'].touched && getGroup('accountInfo').controls['bankName'].errors">
+              </ion-icon>
+            </ion-item>
+
+            <!-- Account Holder Name -->
+            <ion-item detail="false">
+              <ion-input labelPlacement="floating" formControlName="accountHolderName" placeholder="Account Holder Name"
+                type="text" inputmode="text">
+                <div slot="label">Account Holder Name<ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <ion-icon name="alert-circle" slot="end" color="danger"
+                *ngIf="getGroup('accountInfo').controls['accountHolderName'].touched && getGroup('accountInfo').controls['accountHolderName'].errors">
+              </ion-icon>
+            </ion-item>
+
+            <!-- Account Number -->
+            <ion-item detail="false">
+              <ion-input labelPlacement="floating" formControlName="accountNumber" placeholder="Account Number"
+                type="text" inputmode="numeric" maxlength="18">
+                <div slot="label">Account Number<ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <ion-icon name="alert-circle" slot="end" color="danger"
+                *ngIf="getGroup('accountInfo').controls['accountNumber'].touched && getGroup('accountInfo').controls['accountNumber'].errors">
+              </ion-icon>
+            </ion-item>
+
+            <!-- IFSC Code -->
+            <ion-item detail="false">
+              <ion-input labelPlacement="floating" formControlName="ifscCode" placeholder="IFSC Code" type="text"
+                inputmode="text" maxlength="11">
+                <div slot="label">IFSC Code<ion-text color="danger">*</ion-text></div>
+              </ion-input>
+              <ion-icon name="alert-circle" slot="end" color="danger"
+                *ngIf="getGroup('accountInfo').controls['ifscCode'].touched && getGroup('accountInfo').controls['ifscCode'].errors">
+              </ion-icon>
+            </ion-item>
+
+          </ion-list>
+        </div>
+
+
+        <div class="listItem">
           <ion-list mode="ios" class="miniList" inset="true" formGroupName="currentAddress">
             <ion-list-header>
               <ion-label>Current Address</ion-label>
             </ion-list-header>
             <ion-item detail="false">
               <ion-input labelPlacement="floating" formControlName="addressLine1" placeholder="Address Line 1"
-                type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line1" required="true" (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.addressLine1')">
+                type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line1" required="true"
+                (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.addressLine1')">
                 <div slot="label">Address Line 1 <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -157,7 +218,8 @@
             </ion-item>
             <ion-item detail="false">
               <ion-input labelPlacement="floating" formControlName="addressLine2" placeholder="Address Line 2"
-                type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2" (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.addressLine2')">
+                type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2"
+                (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.addressLine2')">
                 <div slot="label">Address Line 2</div>
               </ion-input>
               <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -165,7 +227,8 @@
             </ion-item>
             <ion-item detail="false">
               <ion-input labelPlacement="floating" formControlName="city" placeholder="City" type="text"
-                inputmode="text" [enterkeyhint]="'next'" autocomplete="city" required="true" (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.city')">
+                inputmode="text" [enterkeyhint]="'next'" autocomplete="city" required="true"
+                (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.city')">
                 <div slot="label">City <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -173,7 +236,8 @@
             </ion-item>
             <ion-item detail="false">
               <ion-input labelPlacement="floating" formControlName="state" placeholder="State" type="text"
-                inputmode="text" [enterkeyhint]="'next'" autocomplete="state" required="true" (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.state')">
+                inputmode="text" [enterkeyhint]="'next'" autocomplete="state" required="true"
+                (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.state')">
                 <div slot="label">State <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -181,7 +245,8 @@
             </ion-item>
             <ion-item detail="false">
               <ion-input labelPlacement="floating" formControlName="country" placeholder="Country" type="text"
-                inputmode="text" [enterkeyhint]="'next'" autocomplete="country" required="true" (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.country')">
+                inputmode="text" [enterkeyhint]="'next'" autocomplete="country" required="true"
+                (ionChange)="toTitleCaseAndTrim($event, 'currentAddress.country')">
                 <div slot="label">Country <ion-text color="danger">*</ion-text></div>
               </ion-input>
               <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -213,7 +278,8 @@
             <ion-item-group [ngClass]="checkSameAddress() ? 'deactive' : ''">
               <ion-item detail="false">
                 <ion-input labelPlacement="floating" formControlName="addressLine1" placeholder="Address Line 1"
-                  type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line1" required="true" (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.addressLine1')">
+                  type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line1" required="true"
+                  (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.addressLine1')">
                   <div slot="label">Address Line 1 <ion-text color="danger">*</ion-text></div>
                 </ion-input>
                 <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -221,7 +287,8 @@
               </ion-item>
               <ion-item detail="false">
                 <ion-input labelPlacement="floating" formControlName="addressLine2" placeholder="Address Line 2"
-                  type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2" (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.addressLine2')">
+                  type="text" inputmode="text" [enterkeyhint]="'next'" autocomplete="address-line2"
+                  (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.addressLine2')">
                   <div slot="label">Address Line 2 </div>
                 </ion-input>
                 <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -229,7 +296,8 @@
               </ion-item>
               <ion-item detail="false">
                 <ion-input labelPlacement="floating" formControlName="city" placeholder="City" type="text"
-                  inputmode="text" [enterkeyhint]="'next'" autocomplete="city" required="true" (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.city')">
+                  inputmode="text" [enterkeyhint]="'next'" autocomplete="city" required="true"
+                  (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.city')">
                   <div slot="label">City <ion-text color="danger">*</ion-text></div>
                 </ion-input>
                 <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -237,7 +305,8 @@
               </ion-item>
               <ion-item detail="false">
                 <ion-input labelPlacement="floating" formControlName="state" placeholder="State" type="text"
-                  inputmode="text" [enterkeyhint]="'next'" autocomplete="state" required="true" (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.state')">
+                  inputmode="text" [enterkeyhint]="'next'" autocomplete="state" required="true"
+                  (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.state')">
                   <div slot="label">State <ion-text color="danger">*</ion-text></div>
                 </ion-input>
                 <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"
@@ -245,7 +314,8 @@
               </ion-item>
               <ion-item detail="false">
                 <ion-input labelPlacement="floating" formControlName="country" placeholder="Country" type="text"
-                  inputmode="text" [enterkeyhint]="'next'" autocomplete="country" required="true" (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.country')">
+                  inputmode="text" [enterkeyhint]="'next'" autocomplete="country" required="true"
+                  (ionChange)="toTitleCaseAndTrim($event, 'permanentAddress.country')">
                   <div slot="label">Country <ion-text color="danger">*</ion-text></div>
                 </ion-input>
                 <ion-icon name="alert-circle" aria-hidden="true" slot="end" color="danger"

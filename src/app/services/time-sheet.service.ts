@@ -107,6 +107,10 @@ export class TimeSheetService {
     return this._http.get<any>(environment.Api + `api/timesheet/getDayTimesheet?date=${date}`);
   }
 
+  getTodayAttendanceTime() {
+    return this._http.get<any>(environment.Api + `api/timesheet/today-attendance-time`);
+  }
+
   getTimesheetMonth(date: string) {
     return this._http.get<any>(environment.Api + `api/timesheet/getMonthTimesheet?date=${date}`);
   }
@@ -147,8 +151,8 @@ export class TimeSheetService {
   //   return this._http.get<any[]>(environment.Api + `api/assign-project?skip=${pageIndex}&limit=${pagesize}`);
   // }
 
-  getAssignProjectById(userId: string): Observable<any> {
-    return this._http.get<any[]>(environment.Api + `api/assign-project/${userId}`);
+  getAssignProjectById(userId: string, date: string): Observable<any> {
+    return this._http.get<any[]>(environment.Api + `api/assign-project/${userId}?date=${date}`);
   }
 
   updateAssignProject(id: string, data: any): Observable<any> {

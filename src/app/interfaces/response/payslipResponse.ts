@@ -22,4 +22,6 @@ export interface IPayslipResponse extends IGeneric {
   compOff: number;
   netPayInWords: string;
   monthSalary: number;
+  bankName?: string;
+  accountNo?: string;
 }

@@ -1,7 +1,8 @@
 <ion-header [translucent]="true" mode="md">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button mode="md" fill="clear" class="noBg noRipple" [routerDirection]="'back'" [routerDirection]="'back'" (click)="goBack()">
+      <ion-button mode="md" fill="clear" class="noBg noRipple" [routerDirection]="'back'" [routerDirection]="'back'"
+        (click)="goBack()">
         <ion-icon name="chevron-back-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -39,19 +40,23 @@
           </ion-card>
         </ng-container>
 
-        <ion-list inset="true" mode="ios" class="ion-padding-bottom" [lines]="'none'" *ngFor="let workWeekItem of workWeekList">
+        <ion-list inset="true" mode="ios" class="ion-padding-bottom" [lines]="'none'"
+          *ngFor="let workWeekItem of workWeekList">
           <ion-list-header (click)="expandCard(workWeekItem.title)">
             <ion-label class="ion-text-wrap" color="primary">
               <h2>{{workWeekItem.title}}</h2>
               <p>{{workWeekItem.employeeDetails ? workWeekItem.employeeDetails.length : 'No'}} Employees</p>
             </ion-label>
             <ion-button fill="clear" color="primary" class="expandBtn" aria-label="Expand" mode="ios" size="small">
-              <ion-icon aria-label="Expand" [name]="(expandedCard === workWeekItem.title) && workWeekItem.employeeDetails ? 'chevron-up' : 'chevron-down'" slot="icon-only"></ion-icon>
+              <ion-icon aria-label="Expand"
+                [name]="(expandedCard === workWeekItem.title) && workWeekItem.employeeDetails ? 'chevron-up' : 'chevron-down'"
+                slot="icon-only"></ion-icon>
             </ion-button>
           </ion-list-header>
           <ion-item mode="ios" *ngIf="(expandedCard === workWeekItem.title) && workWeekItem.employeeDetails">
             <ion-label class="ion-text-wrap listLbl">
-              <ion-chip color="primary" *ngFor="let employee of workWeekItem.employeeDetails">{{employee.firstName | titlecase}} {{employee.lastName || "" | titlecase}}</ion-chip>
+              <ion-chip color="primary" *ngFor="let employee of workWeekItem.employeeDetails">{{employee.firstName |
+                titlecase}} {{employee.lastName || "" | titlecase}}</ion-chip>
             </ion-label>
           </ion-item>
         </ion-list>
@@ -63,27 +68,36 @@
                 <h2>Create New</h2>
               </ion-label>
               <ion-button fill="clear" color="primary" class="expandBtn" aria-label="Expand" mode="ios" size="small">
-                <ion-icon aria-label="Expand" [name]="expandedCard === 'new' ? 'chevron-up' : 'chevron-down'" slot="icon-only"></ion-icon>
+                <ion-icon aria-label="Expand" [name]="expandedCard === 'new' ? 'chevron-up' : 'chevron-down'"
+                  slot="icon-only"></ion-icon>
               </ion-button>
             </ion-list-header>
             <ng-container *ngIf="expandedCard === 'new'">
               <ion-item mode="ios" lines="none">
-                <ion-input label="Title" labelPlacement="floating" placeholder="Title" formControlName="title" required="true" [errorText]="workWeekForm.controls['title'].touched && workWeekForm.controls['title'].errors ? 'Please enter a valid title.' : 'Title is required'"></ion-input>
+                <ion-input label="Title" labelPlacement="floating" placeholder="Title" formControlName="title"
+                  required="true"
+                  [errorText]="workWeekForm.controls['title'].touched && workWeekForm.controls['title'].errors ? 'Please enter a valid title.' : 'Title is required'"></ion-input>
               </ion-item>
               <ion-item mode="ios">
-                <ion-select label="Week Off" labelPlacement="floating" [justify]="'space-between'" placeholder="Select days" interface="action-sheet" [multiple]="true" formControlName="weekOff" [required]="true" [compareWith]="compareWeek">
+                <ion-select label="Week Off" labelPlacement="floating" [justify]="'space-between'"
+                  placeholder="Select days" interface="action-sheet" [multiple]="true" formControlName="weekOff"
+                  [required]="true" [compareWith]="compareWeek">
                   <ion-select-option *ngFor="let week of weekArray" [value]="week">{{week}}</ion-select-option>
                 </ion-select>
               </ion-item>
-              <ion-item-divider *ngIf="workWeekForm.controls['weekOff'].touched && workWeekForm.controls['weekOff'].errors" color="light">
+              <ion-item-divider
+                *ngIf="workWeekForm.controls['weekOff'].touched && workWeekForm.controls['weekOff'].errors"
+                color="light">
                 <!-- <ion-label color="danger" class="ion-text-wrap"> -->
-                  <ion-text color="danger" class="error_txt">Weeks are required.</ion-text>
+                <ion-text color="danger" class="error_txt">Weeks are required.</ion-text>
                 <!-- </ion-label> -->
               </ion-item-divider>
             </ng-container>
             <ion-buttons class="ion-padding-horizontal" *ngIf="expandedCard === 'new'">
-              <ion-button type="reset" color="danger" fill="solid" mode="ios" shape="round" class="formBtn" (click)="expandedCard = ''; workWeekForm.reset()">Cancel</ion-button>
-              <ion-button type="submit" color="primary" fill="solid" mode="ios" shape="round" class="formBtn" [disabled]="workWeekForm.invalid" (click)="createNewWorks()">Save</ion-button>
+              <ion-button type="reset" color="danger" fill="solid" mode="ios" shape="round" class="formBtn"
+                (click)="expandedCard = ''; workWeekForm.reset()">Cancel</ion-button>
+              <ion-button type="submit" color="primary" fill="solid" mode="ios" shape="round" class="formBtn"
+                [disabled]="workWeekForm.invalid" (click)="createNewWorks()">Save</ion-button>
             </ion-buttons>
           </ion-list>
         </form>
@@ -94,33 +108,54 @@
           <div class="optbar">
             <ion-item detail="false" lines="none" mode="md">
               <ion-icon name="search" aria-hidden="true" size="small" slot="start" class="startIcon"></ion-icon>
-              <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true" [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
+              <ion-input placeholder="Search" [clearOnEdit]="true" color="tertiary" [clearInput]="true"
+                [(ngModel)]="searchString" (ionInput)="onSearch()"></ion-input>
             </ion-item>
-            <ion-button fill="clear" mode="md" color="tertiary" shape="round" aria-label="Option" id="filterPop" class="ion-margin-start ion-no-padding" [disabled]="!isEmployeeLoaded">
-              <ion-icon name="ellipsis-vertical" aria-hidden="true" aria-label="Option"></ion-icon>
-            </ion-button>
+            <div style="margin-top: 12px;">
+              <ion-chip mode="ios"
+                [ngClass]="selectedEmployee.length > (employeeList.length-1) ? 'chipBtn filled' : 'chipBtn'"
+                color="tertiary" aria-label="mark all" (click)="markAll()">
+                <ion-icon name="checkmark" aria-hidden="true" aria-label="mark all"></ion-icon>
+                <ion-label>Mark All</ion-label>
+              </ion-chip>
+              <ion-chip mode="ios" class="chipBtn" color="tertiary" [disabled]="selectedEmployee.length == 0"
+                (click)="unMarkAll()">Unmark All</ion-chip>
+              <ion-button mode="md" color="tertiary" class="" fill="solid" shape="round" size="small"
+                (click)="openCalendar = true">
+                <ion-label>{{workWeekDate | date:'MMM, y'}}</ion-label>
+                <ion-icon slot="end" name="calendar-number-outline"></ion-icon>
+              </ion-button>
+            </div>
           </div>
         </div>
 
-        <ion-popover trigger="filterPop" dismissOnSelect="true" size="auto" side="bottom" alignment="end" class="filter" showBackdrop="false">
+        <ion-modal [isOpen]="openCalendar" #dateModal [initialBreakpoint]=".65" [keepContentsMounted]="true" mode="ios"
+          [backdropDismiss]="false" [showBackdrop]="true" (didDismiss)="openCalendar = false;">
           <ng-template>
             <ion-content>
-              <ion-item lines="none" detail="false" type="button" button="true" [disabled]="selectedEmployee.length === employeeList.length" mode="ios" (click)="markAll()">Select All</ion-item>
-              <ion-item lines="none" detail="false" type="button" button="true" [disabled]="selectedEmployee.length < 1" mode="ios" (click)="unMarkAll()">Unmark All</ion-item>
+              <ion-datetime presentation="month-year" size="cover" mode="md" [firstDayOfWeek]="1" #yearMonth
+                [max]="today.toISOString()" (ionChange)="selectWorkWeekDate($any($event))">
+                <ion-label slot="title">Select Year and Month</ion-label>
+                <ion-buttons slot="buttons">
+                  <ion-button mode="md" color="danger"
+                    (click)="yearMonth.cancel();dateModal.dismiss()">Cancel</ion-button>
+                  <ion-button mode="md" color="primary" [disabled]="!workWeekDate"
+                    (click)="yearMonth.confirm();dateModal.dismiss();">Done</ion-button>
+                </ion-buttons>
+              </ion-datetime>
             </ion-content>
           </ng-template>
-        </ion-popover>
-
-        <!-- <div class="ion-text-center ion-margin">
-          <ion-spinner color="primary"></ion-spinner>
-        </div> -->
+        </ion-modal>
 
         <ion-list mode="ios">
-          <ion-item type="button" [button]="true" [detail]="false" class="list-item" *ngFor="let employee of employeeList; index as i;">
+          <ion-item type="button" [button]="true" [detail]="false" class="list-item"
+            *ngFor="let employee of employeeList; index as i;">
             <div slot="start" class="check_container" (click)="selectEmployee(employee.guid)">
               <ion-avatar class="employee_img">
-                <app-name-img [name]="getName(employee)" [classes]="'sm'" *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
-                <img alt="imployee" *ngIf="employee.imageUrl.trim() !== ''" [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
+                <app-name-img [name]="getName(employee)" [classes]="'sm'"
+                  *ngIf="employee.imageUrl.trim() === ''"></app-name-img>
+                <img alt="imployee" *ngIf="employee.imageUrl.trim() !== ''"
+                  [src]="employee.imageUrl || 'https://ionicframework.com/docs/img/demos/avatar.svg'" />
               </ion-avatar>
               <div class="custom_checkbox" *ngIf="isChecked(employee.guid)">
                 <span class="checkmark"></span>
@@ -128,12 +163,13 @@
             </div>
             <div class="employee_data" (click)="selectWrokWeek([employee.guid])">
               <ion-label>{{employee.firstName | titlecase}} {{employee.lastName || "" | titlecase}}</ion-label>
-              <ion-text class="role"><small>{{employeeWorkWeek(employee.workWeek)}}</small></ion-text>
+              <ion-text class="role"><small>{{employeeWorkWeek(employee.employeeId)}}</small></ion-text>
             </div>
           </ion-item>
 
           <ng-container *ngIf="!isEmployeeLoaded">
-            <ion-item type="button" [button]="true" [detail]="false" class="list-item" *ngFor="let employee of [0,1,2,3,4];">
+            <ion-item type="button" [button]="true" [detail]="false" class="list-item"
+              *ngFor="let employee of [0,1,2,3,4];">
               <ion-avatar slot="start">
                 <ion-skeleton-text animated="true" style="width: 100%; height: 100%;"></ion-skeleton-text>
               </ion-avatar>
@@ -153,7 +189,8 @@
           <ion-button mode="md" fill="solid" [color]="!isMoreEmployee ? 'medium' : 'primary'" class="ion-text-wrap paginateBtn" [disabled]="!isMoreEmployee" (click)="next()">Next</ion-button>
         </ion-buttons> -->
         <div class="sticky_div" *ngIf="selectedEmployee.length >= 1">
-          <ion-button class="big_assign_btn" shape="round" mode="md" fill="solid" expand="block" [strong]="true" size="large" (click)="selectWrokWeek(selectedEmployee)">Assign Week</ion-button>
+          <ion-button class="big_assign_btn" shape="round" mode="md" fill="solid" expand="block" [strong]="true"
+            size="large" (click)="selectWrokWeek(selectedEmployee)">Assign Week</ion-button>
         </div>
 
 

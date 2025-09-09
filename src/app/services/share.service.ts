@@ -35,7 +35,7 @@ export class ShareService {
 
 
   // APIs for employee
-  getAllEmployee(empType: 'All' | 'Active' | 'InActive', pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
+  getAllEmployee(empType: "All" | "Active" | "InActive" | "Resigned", pageIndex: number, pageSize: number): Observable<IEmployeeResponse[]>{
     return this.http.get<IEmployeeResponse[]>(environment.Api + `api/user?isDeleted=${empType}&skip=${pageIndex}&limit=${pageSize}`);
   }
   getEmployeeById(empId: string): Observable<IEmployeeResponse>{
@@ -135,6 +135,11 @@ export class ShareService {
   employeeAssignedWorkWeek(emplId: string) : Observable<IEmplpoyeeWorWeek> {
     return this.http.get<IEmplpoyeeWorWeek>(environment.Api + `api/workWeekEmployee/employeeId/${emplId}`);
   }
+
+  employeeAssignedWorkWeekWithDate(emplId: string, date: Date) : Observable<IEmplpoyeeWorWeek> {
+    return this.http.get<IEmplpoyeeWorWeek>(environment.Api + `api/workWeekEmployee/employeeId/${emplId}?date=${date}`);
+  }
+  
   getEventHollyday(selectedYear: string | number): Observable<IHollydayResponse[]> {
     return this.http.get<IHollydayResponse[]>(environment.Api + `api/hollyday/allHollyday?date=${selectedYear}`);
   }
@@ -162,5 +167,9 @@ export class ShareService {
   // APPROVE REJECT REGULARIZATION
   approveRegularization(data: IApproveRegularizationReq): Observable<any> {
     return this.http.put<any>(environment.Api + `api/regularization/approveRegu`,data);
+  }
+
+  markAttendance(data: any): Observable<any> {
+    return this.http.put<any>(environment.Api + `api/regularization/markattendance`,data);
   }
 }

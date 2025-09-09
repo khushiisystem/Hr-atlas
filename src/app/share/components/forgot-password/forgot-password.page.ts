@@ -67,6 +67,8 @@ export class ForgotPasswordPage implements OnInit {
       this.loader.present('');
       this.shareServ.getOTP(this.getOTPForm.value).subscribe(res => {
         if(res) {
+          //change
+          console.log("send otp to emial id")
           this.shareServ.presentToast('OTP sent in your registered email.', 'top', 'success');
           this.activeEvent = 'getOTP';
           this.loader.dismiss();

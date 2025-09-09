@@ -1,3 +1,18 @@
+// import { Component, OnInit } from '@angular/core';
+
+// @Component({
+//   selector: 'app-download-payslip',
+//   templateUrl: './download-payslip.page.html',
+//   styleUrls: ['./download-payslip.page.scss'],
+// })
+// export class DownloadPayslipPage implements OnInit {
+
+//   constructor() { }
+
+//   ngOnInit() {
+//   }
+
+// }
 import {
   Component,
   EventEmitter,
@@ -31,16 +46,12 @@ export interface IEmpSelect {
 }
 
 @Component({
-  selector: "app-employees",
-  templateUrl: "./employees.page.html",
-  styleUrls: ["./employees.page.scss"],
+  selector: "app-download-payslip",
+  templateUrl: "./download-payslip.page.html",
+  styleUrls: ["./download-payslip.page.scss"],
 })
-export class EmployeesPage implements OnInit, OnDestroy {
+export class DownloadPayslipPage implements OnInit, OnDestroy {
   @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
-  @Input() isChecklist: boolean = false;
-  @Input() isPayroll?: boolean;
-  @Output() employee: EventEmitter<IEmpSelect> = new EventEmitter<IEmpSelect>();
-  @Output() payslipDateChange = new EventEmitter<Date>();
   employeeList: IEmployeeResponse[] = [];
   isDataLoaded: boolean = false;
   isMoreData: boolean = true;
@@ -50,8 +61,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   searchString: string = "";
   empType: "All" | "Active" | "InActive" | "Resigned" = "Active";
   selectedEmployee: any[] = [];
-  @Input() payslipDate?: Date;
-  @Input() payrollSetup?: boolean;
+  payslipDate?: Date = new Date();
   today: Date = new Date();
   private searchSubject = new Subject<string>();
   private readonly debounceTimeMs = 1500;
@@ -78,9 +88,6 @@ export class EmployeesPage implements OnInit, OnDestroy {
       this.today.getMonth(),
       this.today.getDate()
     );
-    if (this.payrollSetup) {
-      this.payslipDate = this.today;
-    }
     this.getEmployeeList();
     this.searchSubject
       .pipe(debounceTime(this.debounceTimeMs))
@@ -89,17 +96,24 @@ export class EmployeesPage implements OnInit, OnDestroy {
       });
   }
 
+  naviagateToPayslip(userId: string) {
+    this.loader.present("").then(() => {
+      this.loader.dismiss().then(() => {
+        this.router.navigate([`/tabs/payroll/${userId}`]);
+      });
+    });
+  }
+
   getEmployeeList() {
     this.isDataLoaded = false;
     if (this.pageIndex < 1) {
       this.employeeList = [];
     }
-    this.adminServ
-      .getPayrollEmployees(
+    this.shareServ
+      .getAllEmployee(
         this.empType,
         this.pageIndex * 10,
-        10,
-        moment(this.payslipDate).utc().format()
+        10
       )
       .subscribe(
         (res) => {
@@ -146,7 +160,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
 
   allSelect() {
     this.employeeList.forEach((e: IEmployeeResponse, index) => {
-      if (!this.selectedEmployee.includes(e.guid) && e.salaryStatus) {
+      if (!this.selectedEmployee.includes(e.guid)) {
         this.selectedEmployee.push(e.guid);
       }
     });
@@ -155,21 +169,14 @@ export class EmployeesPage implements OnInit, OnDestroy {
     this.selectedEmployee = [];
   }
 
-  checkEmployee(employee: string, salaryStatus?: boolean) {
-    if (this.userRole !== "Admin") return;
-    if (!salaryStatus) return;
-
-    console.log("emp data : ", salaryStatus);
-    if (this.isChecklist) {
-      const index = this.selectedEmployee.findIndex(
-        (e: string) => e === employee
-      );
-      console.log("index : ", index);
-      if (index !== -1) {
-        this.selectedEmployee.splice(index, 1);
-      } else {
-        this.selectedEmployee.push(employee);
-      }
+  checkEmployee(employee: string) {
+    const index = this.selectedEmployee.findIndex(
+      (e: string) => e === employee
+    );
+    if (index !== -1) {
+      this.selectedEmployee.splice(index, 1);
+    } else {
+      this.selectedEmployee.push(employee);
     }
   }
 
@@ -178,12 +185,9 @@ export class EmployeesPage implements OnInit, OnDestroy {
   }
 
   selectEmployee(empData: IEmpSelect) {
-    if (this.userRole !== "Admin") return;
-
     if (this.selectedEmployee.length > 0) {
       this.checkEmployee(empData.guid);
     } else {
-      this.employee.emit(empData);
     }
   }
 
@@ -195,26 +199,17 @@ export class EmployeesPage implements OnInit, OnDestroy {
         status: this.empType,
       };
       this.employeeList = [];
-      this.adminServ
-        .searchEmployees(
-          this.empType,
-          this.pageIndex * 10,
-          10,
-          moment(this.payslipDate).utc().format(),
-          data
-        )
-        .subscribe(
-          (res) => {
-            if (res) {
-              this.employeeList = res;
-              this.isDataLoaded = true;
-            }
-          },
-          (error) => {
-            console.log(error, "search error");
+      this.shareServ.searchEmployee(data).subscribe(
+        (res) => {
+          if (res) {
+            this.employeeList = res;
             this.isDataLoaded = true;
           }
-        );
+        },
+        (error) => {
+          this.isDataLoaded = true;
+        }
+      );
     } else if (searchValue.trim() === "") {
       this.pageIndex = 0;
       this.getEmployeeList();
@@ -256,36 +251,46 @@ export class EmployeesPage implements OnInit, OnDestroy {
   selectPayslipDate(event: any) {
     if (event.detail.value) {
       this.payslipDate = new Date(event.detail.value);
-      this.pageIndex = 0;
-      this.employeeList = [];
-      this.getEmployeeList();
-      this.payslipDateChange.emit(this.payslipDate);
+      // this.pageIndex = 0;
+      // this.employeeList = [];
+      // this.getEmployeeList();
     }
   }
 
   generatePaySlip(event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    this.loader.present("");
-    this.adminServ
-      .createPayslip({
-        employeeIds: this.selectedEmployee,
-        payslipDate: moment.utc(this.payslipDate).format(),
-      })
-      .subscribe(
-        (result) => {
-          this.shareServ.presentToast("Payslip generated", "top", "success");
-          this.selectedEmployee = [];
-          this.loader.dismiss();
-          this.router.navigateByUrl(
-            `/tabs/pdf-details?date=${moment(this.payslipDate).utc().format()}`
-          );
-        },
-        (error) => {
-          console.log(error);
-          this.shareServ.presentToast(error.error.message, "top", "danger");
-          this.loader.dismiss();
-        }
-      );
+    // this.loader.present("");
+    // this.adminServ
+    //   .createPayslip({
+    //     employeeIds: this.selectedEmployee,
+    //     payslipDate: moment.utc(this.payslipDate).format(),
+    //   })
+    //   .subscribe(
+    //     (result) => {
+    //       this.shareServ.presentToast("Payslip generated", "top", "success");
+    //       this.selectedEmployee = [];
+    //       this.loader.dismiss();
+    //       this.router.navigateByUrl(
+    //         `/tabs/pdf-details?date=${moment(this.payslipDate).utc().format()}`
+    //       );
+    //     },
+    //     (error) => {
+    //       this.shareServ.presentToast(error.error.message, "top", "danger");
+    //       this.loader.dismiss();
+    //     }
+    //   );
+  }
+
+  goBack() {
+    // history.back();
+    this.router.navigateByUrl("/tabs/home");
+  }
+
+  handleRefresh(event: any) {
+    setTimeout(() => {
+      window.location.reload();
+      event.target.complete();
+    }, 2000);
   }
 }
