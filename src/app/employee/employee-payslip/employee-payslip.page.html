@@ -89,6 +89,7 @@
             <span *ngIf="payslipData.deductionAmount">{{payslipData.deductionAmount | currency:'INR'}}</span>
           </td>
         </tr>
+
         <tr *ngIf="payslipData && payslipData.compOff">
           <td>
             <span>CompOff</span>
@@ -99,6 +100,51 @@
           <td></td>
           <td></td>
         </tr>
+
+        <tr *ngIf="payslipData && payslipData.relocationAllowance">
+          <td>
+            <span>Relocation Allowance </span>
+          </td>
+          <td>
+            <span>{{payslipData.relocationAllowance| currency:"INR"}}</span>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+        
+        <tr *ngIf="payslipData && payslipData.allowances">
+          <td>
+            <span>Allowances </span>
+          </td>
+          <td>
+            <span>{{payslipData.allowances | currency:"INR"}}</span>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <tr *ngIf="payslipData && payslipData.travelAllowance">
+          <td>
+            <span>Travel Allowance </span>
+          </td>
+          <td>
+            <span>{{payslipData.travelAllowance | currency:"INR"}}</span>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+
+        <tr *ngIf="payslipData && payslipData.reimbursement">
+          <td>
+            <span>Reimbursement </span>
+          </td>
+          <td>
+            <span>{{payslipData.reimbursement | currency:"INR"}}</span>
+          </td>
+          <td></td>
+          <td></td>
+        </tr>
+
       </tbody>
       <tfoot>
         <tr style="background-color: rgba(var(--ion-color-medium-rgb), 0.2)">

@@ -1,7 +1,7 @@
 <ion-card mode="md" class="historyCard">
   <ion-card-header>
     <ion-card-title *ngIf="advancePayDetail">{{advancePayDetail.remainingAmount || 0 | currency:"INR"}}</ion-card-title>
-    <ion-card-subtitle *ngIf="advancePayDetail">Total Advance &middot; {{getDate() | date}}</ion-card-subtitle>
+    <ion-card-subtitle *ngIf="advancePayDetail">Total Advance &middot; {{getDate() | date:'MMM y'}}</ion-card-subtitle>
     <ion-skeleton-text *ngIf="!advancePayDetail" animated="true" style="width: 50%; height: 20px;"></ion-skeleton-text>
     <p *ngIf="!advancePayDetail"><ion-skeleton-text animated="true" style="width: 80%; height: 12px;" *ngFor="let item of [1,2]"></ion-skeleton-text></p>
   </ion-card-header>
@@ -27,11 +27,33 @@
         <ion-label>Other deduction</ion-label>
         <ion-note>{{advancePayDetail.otherDeduction || 0 | currency:'INR'}}</ion-note>
       </ion-item>
+
+       <ion-item *ngIf="advancePayDetail.relocationAllowance" [detail]="false">
+        <ion-label>Relocation Allowance</ion-label>
+        <ion-note>{{advancePayDetail.relocationAllowance || 0 | currency:'INR'}}</ion-note>
+      </ion-item>
+
+       <ion-item *ngIf="advancePayDetail.allowances" [detail]="false">
+        <ion-label>Allowances</ion-label>
+        <ion-note>{{advancePayDetail.allowances || 0 | currency:'INR'}}</ion-note>
+      </ion-item>
+
+       <ion-item *ngIf="advancePayDetail.reimbursement" [detail]="false">
+        <ion-label>Reimbursement</ion-label>
+        <ion-note>{{advancePayDetail.reimbursement || 0 | currency:'INR'}}</ion-note>
+      </ion-item>
+
+       <ion-item *ngIf="advancePayDetail.travelAllowance" [detail]="false">
+        <ion-label>Travel Allowance</ion-label>
+        <ion-note>{{advancePayDetail.travelAllowance || 0 | currency:'INR'}}</ion-note>
+      </ion-item>
+
       <ion-item [detail]="false" *ngIf="advancePayDetail.description && advancePayDetail.description.trim() !== ''">
         <ion-label class="ion-text-wrap">
           <ion-note>{{advancePayDetail.description}}</ion-note>
         </ion-label>
       </ion-item>
+      
     </ion-list>
   </ion-card-content>
 </ion-card>

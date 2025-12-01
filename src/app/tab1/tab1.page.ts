@@ -91,6 +91,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   todayWorkingTime: number = 0;
   timesheetTimeFlag: boolean = false;
   todayWorkingTimeFlag: boolean = false;
+  isFisrtLogin: boolean = false;
 
   constructor(
     private router: Router,
@@ -106,9 +107,15 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
     private timesheetSer: TimeSheetService
   ) {
     this.isSwitchable = false;
+    this.isFisrtLogin = localStorage.getItem('isFirstRefresh') === 'true' ? true : false;
   }
 
   ngOnInit() {
+
+    if(localStorage.getItem('isFirstRefresh') === 'true'){
+      localStorage.setItem('isFirstRefresh', 'false');
+    }
+    
     this.userId = localStorage.getItem("userId") || "";
     this.getStates();
 
@@ -779,6 +786,7 @@ export class Tab1Page implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async tutorialModal(setup: "leave" | "attendance") {
+    if(!this.isFisrtLogin) return;
     const tutorialPopover = this.popoverCtrl.create({
       component: AdminTutorialsPage,
       cssClass: "tutorialPopover",

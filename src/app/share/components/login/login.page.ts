@@ -55,6 +55,7 @@ export class LoginPage implements OnInit {
             }
             localStorage.setItem('isFirst' , String(true))
           });
+          localStorage.setItem('isFirstRefresh', 'true');
           this.router.navigate(['/tabs/home'], {replaceUrl: true});
           this.shareServ.presentToast('Login successful.', 'top', 'success');
           this.isInProgress = false;

@@ -79,7 +79,8 @@ export class EmployeesPage implements OnInit, OnDestroy {
       this.today.getDate()
     );
     if (this.payrollSetup) {
-      this.payslipDate = this.today;
+      const storedDate = localStorage.getItem("payslipDate");
+      this.payslipDate = storedDate ? new Date(storedDate) : this.today;
     }
     this.getEmployeeList();
     this.searchSubject
@@ -256,6 +257,7 @@ export class EmployeesPage implements OnInit, OnDestroy {
   selectPayslipDate(event: any) {
     if (event.detail.value) {
       this.payslipDate = new Date(event.detail.value);
+      localStorage.setItem("payslipDate", this.payslipDate.toString());
       this.pageIndex = 0;
       this.employeeList = [];
       this.getEmployeeList();

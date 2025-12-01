@@ -87,6 +87,10 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
       deductionAmount: 0,
       otherDeduction: 0,
       description: "",
+      relocationAllowance: 0,
+      allowances: 0,
+      reimbursement: 0,
+      travelAllowance: 0
     });
 
     if (this.employeeId.trim() !== "") {
@@ -267,6 +271,10 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
         deductionAmount: 0,
         otherDeduction: 0,
         description: "",
+        relocationAllowance: 0,
+        allowances: 0,
+        reimbursement: 0,
+        travelAllowance: 0
       });
     }
   }
@@ -317,6 +325,10 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
         compOff: this.getFormValue("compOff"),
         description: this.extraIncomeForm.controls["description"].value,
         payslipDate: moment(this.payrollDate).utc().format(),
+        relocationAllowance: this.getFormValue("relocationAllowance"),
+        allowances: this.getFormValue("allowances"),
+        reimbursement: this.getFormValue("reimbursement"),
+        travelAllowance: this.getFormValue("travelAllowance")
       };
 
       this.loaderServ.present("");
@@ -338,6 +350,10 @@ export class EmployeePayrollPage implements OnInit, AfterViewInit {
               deductionAmount: 0,
               otherDeduction: 0,
               description: "",
+              relocationAllowance: 0,
+              allowances: 0,
+              reimbursement: 0,
+              travelAllowance: 0
             });
           }
         },

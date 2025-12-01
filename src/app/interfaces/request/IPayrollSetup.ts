@@ -8,6 +8,10 @@ export interface ICreditLogsRequest {
     deductionAmount: number,
     otherDeduction: number,
     payslipDate: string | Date,
+    relocationAllowance: number,
+    allowances: number,
+    reimbursement: number,
+    travelAllowance: number
 }
 
 export interface ICreditLogsResponse extends IGeneric, ICreditLogsRequest {
