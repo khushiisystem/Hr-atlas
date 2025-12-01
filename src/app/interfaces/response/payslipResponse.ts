@@ -24,4 +24,8 @@ export interface IPayslipResponse extends IGeneric {
   monthSalary: number;
   bankName?: string;
   accountNo?: string;
+  relocationAllowance?: number;
+  allowances?: number;
+  reimbursement?: number;
+  travelAllowance?: number;
 }
