@@ -1,4 +1,4 @@
-name: SonarQube Code Analysis
+name: CI with SonarQube
 
 on:
   push:
@@ -7,33 +7,59 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  sonar:
+  sonar-analysis:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # -----------------------------
+      # Checkout Code
+      # -----------------------------
+      - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
+      # -----------------------------
+      # Start SonarQube in Docker
+      # -----------------------------
+      - name: Start SonarQube Server
+        run: |
+          docker run -d --name sonarqube \
+            -p 9000:9000 \
+            sonarqube:lts-community
+
+          echo "Waiting for SonarQube to be fully up..."
+          sleep 90  # SonarQube needs time to boot
+
+      # -----------------------------
+      # Install Node
+      # -----------------------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      - name: Install dependencies
+      # -----------------------------
+      # Install Dependencies
+      # -----------------------------
+      - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Skip tests
-        run: echo "Skipping tests (legacy Ionic project)"
+      # -----------------------------
+      # Run Angular Tests (Coverage)
+      # -----------------------------
+      - name: Run Tests with Coverage
+        run: npm run test -- --watch=false --code-coverage
 
-      - name: SonarQube Scan
+      # -----------------------------
+      # Run SonarQube Scanner
+      # -----------------------------
+      - name: Run SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@master
         with:
-          args: >
-            -Dsonar.projectKey=hr-payroll-ui
-            -Dsonar.sources=src
-            -Dsonar.exclusions=node_modules/**
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          host-url: "http://localhost:9000"
+          token: ${{ secrets.SONAR_TOKEN }}
+
+      # -----------------------------
+      # Stop SonarQube
+      # -----------------------------
+      - name: Stop SonarQube
+        run: docker stop sonarqube
