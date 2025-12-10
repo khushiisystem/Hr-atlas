@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - main
+      - develop
 
 jobs:
   sonarqube:
@@ -24,20 +25,30 @@ jobs:
         with:
           node-version: '18'
 
+      # FIX: Install dependencies with legacy peer deps to avoid ERESOLVE errors
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
+      # Run Angular tests & generate coverage
       - name: Run tests with coverage
         run: npm run test -- --watch=false --code-coverage
 
+      # SonarQube Scan
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@master
         with:
           args: >
             -Dsonar.projectKey=hr-payroll-ui
             -Dsonar.sources=src
+            -Dsonar.exclusions=**/*.spec.ts,node_modules/**
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      # OPTIONAL: Enforce Quality Gate (Fail pipeline if SonarQube fails)
+      - name: SonarQube Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@master
+        timeout-minutes: 5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
