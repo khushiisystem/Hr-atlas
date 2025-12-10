@@ -12,21 +12,21 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Install dependencies
         run: npm install
 
-      # 🔥 IMPORTANT: Delete all Angular test files
+      # 🔥 Remove Angular test files
       - name: Remove Angular spec files
         run: rm -rf src/**/*.spec.ts
 
-      # ❗ OPTIONAL: Run tests BUT never fail CI
+      # ❗ Run tests but ignore failures
       - name: Run tests (ignore failures)
         run: |
           echo "Running tests…"
@@ -35,8 +35,9 @@ jobs:
       - name: Build Angular app
         run: npm run build --if-present
 
+      # ✅ NEW: upload-artifact v4 (supported)
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: angular-build
           path: dist/
